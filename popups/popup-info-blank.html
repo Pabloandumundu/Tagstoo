@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Select info option</title>
+
+	<style>
+
+		.r {color: #ff7e33}		
+		.g {color: #a7db0a}
+		.b {color: #2981e4}
+
+		body {
+		  display: flex;
+		  --spin-dur: 4s;
+		  height: 100vh;
+		  margin: 0;
+		}
+		
+		svg {
+		  height: 76vmin;
+		  width: 76vmin;
+		  margin: auto;
+		  display: block;
+		  overflow: visible;
+		}
+		.dot {
+		  fill: currentColor;
+		  stroke: none;
+		  
+		  motion-path: path(
+		    "M-45,0 A45,45 0 0 0 45,0 A45,45 0 0 0 -45,0");
+		  offset-path: circle(45px);
+		  
+		  motion-offset: calc(10% * var(--i));
+		  offset-distance: calc(10% * var(--i));
+		}
+		.loop {
+		  stroke: currentColor;
+		  /*stroke-width: 0.5px;*/
+		  stroke-width: 0;
+
+		  fill: none;
+		}
+		.ring {  
+		  motion-path: path(
+		    "M-8,0 A8,8 0 0 0 8,0 A8,8 0 0 0 -8,0");
+		  offset-path: circle(8px);
+		  motion-rotation: 0deg;
+		  offset-rotation: 0deg;
+		  
+		  animation: fade calc(var(--spin-dur) * 1.8) infinite alternate cubic-bezier(1, 0, 0.5, 0.5) both,
+		    spin var(--spin-dur) infinite linear;
+
+		}
+		@keyframes fade {
+		  from {stroke-opacity: 0;}
+		}
+		@keyframes spin {
+		  to {
+		    motion-offset: 100%;
+		    offset-distance: 100%;
+		  }
+		}
+
+		.ring:nth-of-type(1) {
+		  animation-delay: var(--spin-dur), calc(-1 * var(--spin-dur)/3);
+		}
+		.ring:nth-of-type(2) {
+		  animation-delay: var(--spin-dur), calc(-2 * var(--spin-dur)/3);
+		}
+		.ring:nth-of-type(3) {
+		  animation-delay: var(--spin-dur), 0s;
+		}
+
+	</style>
+
+</head>
+<body>
+
+	<svg viewBox='-50 -50 100 100'>
+	  <g class='ring'>
+	    <circle class='r loop' r='45'></circle>
+	    <circle class='r dot' r='3' style='--i: 0'></circle>
+	    <circle class='r dot' r='3' style='--i: 1'></circle>
+	    <circle class='r dot' r='3' style='--i: 2'></circle>
+	    <circle class='r dot' r='3' style='--i: 3'></circle>
+	    <circle class='r dot' r='3' style='--i: 4'></circle>
+	    <circle class='r dot' r='3' style='--i: 5'></circle>
+	    <circle class='r dot' r='3' style='--i: 6'></circle>
+	    <circle class='r dot' r='3' style='--i: 7'></circle>
+	    <circle class='r dot' r='3' style='--i: 8'></circle>
+	    <circle class='r dot' r='3' style='--i: 9'></circle>
+	  </g>
+	  <g class='ring'>
+	    <circle class='g loop' r='45'></circle>
+	    <circle class='g dot' r='3' style='--i: 0'></circle>
+	    <circle class='g dot' r='3' style='--i: 1'></circle>
+	    <circle class='g dot' r='3' style='--i: 2'></circle>
+	    <circle class='g dot' r='3' style='--i: 3'></circle>
+	    <circle class='g dot' r='3' style='--i: 4'></circle>
+	    <circle class='g dot' r='3' style='--i: 5'></circle>
+	    <circle class='g dot' r='3' style='--i: 6'></circle>
+	    <circle class='g dot' r='3' style='--i: 7'></circle>
+	    <circle class='g dot' r='3' style='--i: 8'></circle>
+	    <circle class='g dot' r='3' style='--i: 9'></circle>
+	  </g>
+	  <g class='ring'>
+	    <circle class='b loop' r='45'></circle>
+	    <circle class='b dot' r='3' style='--i: 0'></circle>
+	    <circle class='b dot' r='3' style='--i: 1'></circle>
+	    <circle class='b dot' r='3' style='--i: 2'></circle>
+	    <circle class='b dot' r='3' style='--i: 3'></circle>
+	    <circle class='b dot' r='3' style='--i: 4'></circle>
+	    <circle class='b dot' r='3' style='--i: 5'></circle>
+	    <circle class='b dot' r='3' style='--i: 6'></circle>
+	    <circle class='b dot' r='3' style='--i: 7'></circle>
+	    <circle class='b dot' r='3' style='--i: 8'></circle>
+	    <circle class='b dot' r='3' style='--i: 9'></circle>
+	  </g>
+	</svg>
+	
+</body>
+</html>

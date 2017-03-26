@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Options</title>
+
+</head>
+<body>
+
+	<div id="popuptitle"><img src="../img/options.png" alt="">DATABASE MANAGER & OPTIONS</div>
+
+	<br>
+	<hr>
+
+	<span>Currently selected database: </span><span id="selecteddb"></span>
+
+	<br>
+
+	<span>That's asociated to drive: </span><span id="selecteddrive"></span><div id="drivedesc"></div>
+
+	<br>
+
+	<div id="databaseoptionsform">
+
+		<span>Change database:</span>
+		<select name="" id="databaseselect"></select>
+
+		<span>Change asociated drive:</span>
+		<select name="unitselect" id="unitselect" form="initialoptions"></select>
+
+		<br>
+
+		<a id="newdatabase" class="medium button green">New database</a><input id="newdatabasename" type="text"><span><em>Select this new database</em></span>		
+
+		<br>
+
+		<!-- Export data -->
+		 <input type="file" id="toexportfile" name="toexportfile" style="display: none;" />
+	     <a id="exportdata" class="medium button yellow">Export data</a><span><em>Export data from selected database to file</em> </span>
+
+		
+		<br>
+
+		<!-- Import Data -->
+		<input type="file" id="toinportfile" name="toinportfile" style="display: none;" />
+	     <a id="inportdata" class="medium button orange">Import data</a><span><em>Import data from file to selected database</em> </span>
+
+		<br>
+		
+		<!-- Delete Database -->
+		<a id="deletedb" class="medium button red">Delete database</a><span><em>Delete selected database</em></span>
+
+		<br>
+
+	</div>
+
+	<hr>
+
+	<span>Confirmation on close program: </span><input type="checkbox" id="closeconfirmation">
+
+	<br>
+
+	<span>Load demo tags when a new database initialize: </span><input type="checkbox" id="demotags">
+
+	<br>
+
+	<span>Preview images on Viewmode 1: </span><input type="checkbox" id="previewimgonviewmode1">
+
+	<br>
+	
+	<span>Preview epubs on Viewmode 1: </span><input type="checkbox" id="previewepubonviewmode1">
+	
+	<hr>
+
+	<a class="medium button green" onclick="saveoptions(); cerrar(); restarttagstoo()">Apply!</a>
+
+	<a class="medium button orange close" onclick="cerrar()">Close</a>
+
+	<script>
+		optionspreload();
+	</script>
+
+</body>
+</html>

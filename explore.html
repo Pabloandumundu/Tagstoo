@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <title>TAGSTOO (Explore)</title>
+
+  <script src="js/jquery-latest.min.js"></script>  
+  <script src="js/jquery-ui.min.js"></script> <!-- para select y dragg -->
+  <script src="js/interact.min.js"></script> <!-- para adaptar anchuras -->
+  <script src="js/jquery.pressAndHold.js"></script>
+  <script src="js/alertify.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/undoactions.js"></script>
+  <script src="js/popups.js"></script>
+  <script src="js/jquery.tinycolorpicker.js"></script>
+  <script src="js/abigimage.jquery.js" defer></script>
+  <script src="js/jqueryFileTree.js"></script>
+  <script src="js/main.js"></script>
+
+  <link href="css/jqueryFileTree.css" rel="stylesheet" type="text/css">
+  <link href="css/tinycolorpicker.css" rel="stylesheet" type="text/css">
+  <link href="css/alertify.core.css" rel="stylesheet" type="text/css">
+  <link href="css/alertify.default.css" rel="stylesheet" type="text/css">
+  <link href="css/tags.css" rel="stylesheet" type="text/css">
+  <link href="css/controlesmedia.css" rel="stylesheet" type="text/css">
+  <link href="css/abigimage.jquery.css" rel="stylesheet" type="text/css">
+  <link href="css/estilos.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>  
+
+  <!-- temporal para desarrollo -->
+  <div id="panel">
+    <button onclick="readAllTags()" draggable="true">List All Tags</button>
+    <button onclick="funciontemporallistarcarpetascontags()">probandotagscarpetas</button>
+    <button onclick="funciontemporallistarfilescontags()">probandotagsarchivos</button>
+    <button onclick="funciontemporallistarcarpetfavoritas()">Listar fav-folders</button>
+    <button id="paneloff">Cerrar panel</button>
+  </div>
+  <!--  -->
+
+  <div id="content">
+
+    <div id="popupbackground"></div>
+    <div id="popup"></div> 
+
+    <div id="treeview">
+
+      <div id="filetreerefresh" onclick="filetreerefresh()"><img src="img/refreshtreeview.png" alt=""></div>          
+      <div id="filetree"></div>
+
+    </div>
+    
+    <div id="locationinfo">
+
+      <div id="locationinfonotfixed">
+
+        <div id="previousnextleft"> 
+
+          <img class="previousnext" src="img/previous.png" alt="Previous" onclick="previouslocation()">
+          <img class="previousnext" src="img/next.png" alt="Previous" onclick="nextlocation()">
+
+        </div>
+
+        <div id="location">&nbsp;</div>
+
+         <div id="previousnextright" style="display: none"> <!-- para cuando no hay anchura para todo el contenido -->
+
+          <img class="previousnext" src="img/previous.png" alt="Previous" onclick="previouslocation()">
+          <img class="previousnext" src="img/next.png" alt="Previous" onclick="nextlocation()">
+
+        </div>
+
+        <a class="small button green" id="addfastacces" onclick="locationtofav()">Add Fast Access</a>
+        <div id="folderreadstatus"></div>
+
+      </div>
+
+      <div id="eraseron"><img src="img/tageraseron3.gif" alt=""></div>
+      <div id="eraser"><a><img src="img/eraser.png" alt=""></a></div>
+      <div id="dirviewrefresh"><img src="img/refresh.png" alt=""></div>
+
+    </div>
+
+    <div id="dirview-wrapper">
+
+      <div id="dirview">
+
+        <div id="directoryview">
+
+        </div>
+
+      </div>
+
+    </div>    
+    
+    <div id="bottom">
+
+      <div id="bottomleft">
+
+        <div id="botonestag">
+
+          <a class="small button green" onclick="newTag()">Add New Tag</a>
+          <a class="small button orange" onclick="editTag()">Edit/Remove Tag</a>
+
+        </div>
+      </div>
+
+      <div id="bottomright">
+
+        <div id="tagpar"></div>
+        <div id="taginpar"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+      
+</body>
+</html>

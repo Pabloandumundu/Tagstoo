@@ -1,0 +1,275 @@
+/* 
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This stylesheet differs from the original by Maksim Krylosov. Is slightly modified to the use on the project Tagstoo */
+
+/**
+ * http://aeqdev.com/tools/js/abigimage/
+ *
+ * MIT License
+ *
+ * Copyright (c) 2014-2016 Maksim Krylosov <aequiternus@gmail.com>
+ */
+
+
+.abigimage-layout {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    height: 0;
+    opacity: 0;
+
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.abigimage-layout-active {
+    height: 100%;
+    opacity: 1;
+}
+
+.abigimage-layout-fadeout {
+    transition: opacity .2s ease-out;
+    opacity: 0;
+}
+
+.abigimage-overlay {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    background-color: rgba(0, 0, 0, .9);
+
+    height: 0;
+    opacity: 0;
+
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.abigimage-overlay-active {
+    height: 100%;
+    opacity: 1;
+}
+
+.abigimage-wrapper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.abigimage-box {
+    position: absolute;
+    width: 312.5%;
+    left: -106.25%;
+    top: 2.5em;
+    bottom: 2.5em;
+}
+
+.abigimage-prevBtnBox,
+.abigimage-closeBtnBox {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.abigimage-prevBtnBox {
+    right: 50%;
+    left: 0;
+}
+
+.abigimage-closeBtnBox {
+    right: 0;
+    left: 50%;
+}
+
+.abigimage-prevBtn,
+.abigimage-nextBtn,
+.abigimage-zoomInBtn,
+.abigimage-zoomOutBtn,
+.abigimage-closeBtn {
+    cursor: pointer;
+    color: #fff;
+    opacity: .5;
+    padding: 0 1em;
+    transition: all .2s ease-in-out;
+}
+
+.abigimage-prevBtn,
+.abigimage-nextBtn {
+    float: left;
+}
+
+.abigimage-zoomInBtn,
+.abigimage-zoomOutBtn,
+.abigimage-closeBtn {
+    float: right;
+}
+
+.abigimage-prevBtn:hover, .abigimage-prevBtn-hover,
+.abigimage-nextBtn:hover, .abigimage-nextBtn-hover,
+.abigimage-closeBtn:hover, .abigimage-closeBtn-hover,
+.abigimage-zoomInBtn:hover, .abigimage-zoomOutBtn:hover {
+    opacity: 1;
+}
+
+.abigimage-img,
+.abigimage-imgNext,
+.abigimage-imgPrev {
+    position: absolute;
+    margin: auto;
+    width: auto;
+    top: 0;
+    bottom: 0;
+    display: block;
+    max-width: 32%;
+    max-height: 100%;
+
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.abigimage-img {
+    right: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.abigimage-imgNext {
+    right: 0;
+    left: 68%;
+}
+
+.abigimage-imgPrev {
+    right: 68%;
+    left: 0;
+}
+
+.abigimage-layout-zoom .abigimage-imgNext,
+.abigimage-layout-zoom .abigimage-imgPrev {
+    display: none !important;
+}
+
+.abigimage-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #fff;
+    line-height: 2.5;
+    transition: all .2s ease-in-out;
+    background-color: #000;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.abigimage-counter {
+    color: white;
+    text-align: center;
+    opacity: .5;
+    transition: all .2s ease-in-out;
+    float: left;
+    padding: 0 1em;
+}
+
+.abigimage-counter:hover {
+    opacity: 1;
+}
+
+.abigimage-filename {
+    color: white;
+    text-align: center;
+    opacity: .5;
+    transition: all .2s ease-in-out;
+    float: left;
+    padding: 0 1em;
+}
+
+.abigimage-filename:hover {
+    opacity: 1;
+}
+.abigimage-bottomBox {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2.5em;
+}
+
+.abigimage-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    color: #fff;
+    line-height: 2.5;
+    background-color: #000;
+    opacity: .5;
+    transition: all .2s ease-in-out;
+    text-align: center;
+    padding: 0 1em;
+}
+
+.abigimage-bottom:hover {
+    opacity: 1;
+}
+
+.abigimage-layout-full .abigimage-bottom,
+.abigimage-layout-full .abigimage-top {
+    opacity: 0;
+}
+
+.abigimage-layout-full .abigimage-box {
+    top: 0;
+    bottom: 0;
+}
+.abigimage-top,
+.abigimage-box,
+.abigimage-prevBtn,
+.abigimage-nextBtn,
+.abigimage-zoomInBtn,
+.abigimage-zoomOutBtn,
+.abigimage-closeBtn {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

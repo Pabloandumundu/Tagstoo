@@ -1,0 +1,457 @@
+/* 
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+.fttags { /* del filetree */
+
+    height: 13px;
+    margin-left: 1px;
+}
+
+.fttags div {
+
+    margin-top: 1px;
+}
+
+.viewmode1 .tags {
+
+    height: 1.2em;
+}
+
+.tagticket {
+
+    display: inline-block;
+    position: relative;
+
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    -webkit-mask-clip: no-clip;
+
+    margin-right: 1px;
+    margin-left: 1px;
+}
+
+.footertagticket {
+
+    z-index: 40;
+}
+
+.exploelement.viewmode1 .tagticket {
+
+    /* centrado vertical */   
+    top:50%;
+    transform: translateY(-50%);
+}
+
+.exploelement.viewmode2 .tagticket {
+
+    max-width: 88px; /* por margenes y demás queda bien a 10px menos que el .exploelement.viewmode2 */
+}
+
+.tagticket.ui-selected {
+    
+    background-color: #a7db0a !important; 
+}
+
+.small {
+
+    font-size: 12px;
+    vertical-align: top;
+    font-weight: bold;
+}
+
+.verysmall {
+
+    font-size: 8px;
+    vertical-align: top;
+}
+
+
+/* los tags */
+
+.tag_notification { 
+
+    -webkit-mask-image: url(../img/tags/notification.svg);
+    padding-left: 0.45em;
+    padding-right: 0.88em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+.tag_notification.verysmall {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_funny-cow {
+
+    -webkit-mask-image: url(../img/tags/funny-cow.svg);
+    padding-left: 1.4em;
+    padding-right: 0.8em;
+    padding-bottom: 0.1em;
+}
+.tag_funny-cow.verysmall {
+
+    padding-bottom: 0;
+}
+
+.tag_parallelogram {
+
+    -webkit-mask-image: url(../img/tags/parallelogram.svg);
+    padding-left: 1.1em;
+    padding-right: 1.1em;
+}
+.tag_parallelogram.verysmall {
+
+    /*  ok */
+}
+
+.tag_bird-feather {
+
+    -webkit-mask-image: url(../img/tags/bird-feather.svg);
+    padding-left: 1.3em;
+    padding-right: 1.2em;
+    padding-bottom: 0.2em;
+}
+.tag_bird-feather.verysmall {
+
+    padding-bottom: 0;
+
+}
+
+.tag_cloud {
+
+    -webkit-mask-image: url(../img/tags/cloud.svg);
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    padding-top: 0.1em;
+    padding-bottom: 0;
+}
+.tag_cloud.verysmall {
+
+    padding-top: 0;
+}
+
+.tag_zepeling {
+
+    -webkit-mask-image: url(../img/tags/zepeling.svg);
+    padding-left: 0.4em;
+    padding-right: 0.8em;
+    padding-top: 0;
+    padding-bottom: 0.2em;
+    margin-top: -0.1em;
+}
+.tag_zepeling.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+}
+
+.tag_apple1 {
+
+    -webkit-mask-image: url(../img/tags/apple1.svg);
+    padding-left: 0.5em;
+    padding-right: 0.4em;
+    padding-top: 0;
+    padding-bottom: 0.1em;
+}
+.tag_apple1.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_classicframe1 {
+
+    -webkit-mask-image: url(../img/tags/classicframe1.svg);
+    padding-left: 0.5em;
+    padding-right: 0.4em;
+    padding-bottom: 0.2em;
+}
+.tag_classicframe1.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_maletin {
+
+    -webkit-mask-image: url(../img/tags/maletin.svg);
+    padding-left: 0.25em;
+    padding-right: 0.3em;
+    padding-top: 0.2em;
+    padding-bottom: 0;
+}
+.tag_maletin.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_piggybank {
+
+    -webkit-mask-image: url(../img/tags/piggybank.svg);
+    padding-left: 0.9em;
+    padding-right: 0.7em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+.tag_piggybank.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_cloud310 { 
+
+    -webkit-mask-image: url(../img/tags/cloud310.svg);
+    padding-left: 0.8em;
+    padding-right: 0.7em;
+    padding-top: 0.2em;
+    padding-bottom: 0;
+}
+.tag_cloud310.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_cloud { 
+
+    -webkit-mask-image: url(../img/tags/cloud.svg);
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    padding-top: 0.1em;
+    padding-bottom: 0;
+}
+.tag_cloud.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_circle {
+
+    -webkit-mask-image: url(../img/tags/circle.svg);
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+.tag_circle.verysmall {
+
+    padding-left: 0.7em;
+    padding-left: 0.7em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_cylinder {
+
+    -webkit-mask-image: url(../img/tags/cylinder.svg);
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
+.tag_cylinder.verysmall {
+    
+    padding: 0;
+}
+
+.tag_square-18 {
+
+    -webkit-mask-image: url(../img/tags/square-18.svg);
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.tag_square-18.verysmall {
+
+    padding: 0;
+}
+
+.tag_briefcase {
+
+    -webkit-mask-image: url(../img/tags/briefcase.svg);
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    padding-top: 0.15em;
+    padding-bottom: 0;
+}
+.tag_briefcase.verysmall {
+    
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_fruit { 
+
+    -webkit-mask-image: url(../img/tags/fruit.svg);
+    padding-left: 0.5em;
+    padding-right: 0.4em;
+    padding-top: 0.2em;
+    padding-bottom: 0;
+}
+.tag_fruit.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_tag-icon {
+
+    -webkit-mask-image: url(../img/tags/tag-icon.svg);
+    padding-left: 0.5em;
+    padding-right: 0.15em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+.tag_tag-icon.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_decagon {
+
+    -webkit-mask-image: url(../img/tags/decagon.svg);
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+.tag_decagon.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_octagon { 
+
+    -webkit-mask-image: url(../img/tags/octagon.svg);
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+.tag_octagon.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_blacksheep {
+
+    -webkit-mask-image: url(../img/tags/blacksheep.svg);
+    padding-left: 0.4em;
+    padding-right: 0.8em;
+    padding-top: 0;
+    padding-bottom: 0.1em;
+}
+.tag_blacksheep.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_apple2 { 
+
+    -webkit-mask-image: url(../img/tags/apple2.svg);
+    padding-left: 0.5em;
+    padding-right: 0.4em;
+    padding-top: 0.2em;
+    padding-bottom: 0;
+}
+.tag_apple2.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_calendar {
+
+    -webkit-mask-image: url(../img/tags/calendar.svg);
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    padding-top: 0.2em;
+    padding-bottom: 0;
+}
+.tag_calendar.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_gear {
+
+    -webkit-mask-image: url(../img/tags/gear.svg);
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+.tag_gear.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_cindrella {
+
+    -webkit-mask-image: url(../img/tags/cindrella.svg);
+    padding-left: 0.6em;
+    padding-right: 0.3em;
+    padding-top: 0.2em;
+    padding-bottom: 0em;
+}
+.tag_cindrella.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_piggy-bank {
+
+    -webkit-mask-image: url(../img/tags/piggy-bank.svg);
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0em;
+    padding-bottom: 0.2em;
+}
+.tag_piggy-bank.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.tag_flower {
+
+    -webkit-mask-image: url(../img/tags/flower.svg);
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+    padding-top: 0.2em;
+    padding-bottom: 0;
+}
+.tag_flower.verysmall {
+
+    padding-top: 0;
+    padding-bottom: 0;
+}

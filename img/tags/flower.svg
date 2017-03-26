@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100%"
+   preserveAspectRatio="none"
+   viewBox="0 0 27.030375 26.581142"
+   id="svg4165"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="flower.svg">
+  <defs
+     id="defs4167" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="20.979837"
+     inkscape:cy="14.170053"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="749"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata4170">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-323.62767,-793.35732)">
+    <g
+       transform="matrix(-1,0,0,-1.00334,352.00404,1091.9291)"
+       id="g4">
+      <g
+         style="fill:#e2c733;stroke:none"
+         transform="matrix(0.1,0,0,-0.1,0,299)"
+         id="g6">
+        <g
+           transform="matrix(0.1,0,0,-0.1,0,299)"
+           id="g8">
+          <path
+             inkscape:connector-curvature="0"
+             d="m 1354,2826 c -152,-41 -267,-136 -337,-279 -61,-124 -70,-268 -27,-395 l 19,-53 -30,25 c -16,14 -64,42 -106,63 l -77,38 -140,0 c -128,0 -146,-2 -196,-24 -62,-28 -120,-66 -167,-109 -45,-42 -120,-155 -128,-194 -4,-18 -12,-39 -19,-47 -16,-20 -15,-266 2,-282 6,-7 12,-21 12,-30 0,-17 55,-129 68,-139 4,-3 15,-18 25,-33 21,-33 124,-111 182,-137 55,-25 166,-50 222,-50 l 46,0 -39,-28 C 585,1094 516,1003 477,902 458,854 455,826 455,719 c 0,-77 4,-131 11,-140 6,-8 14,-27 18,-43 22,-91 152,-234 259,-284 83,-39 133,-51 218,-52 98,0 172,17 251,58 123,64 228,191 262,315 8,29 15,44 15,34 2,-28 48,-131 80,-179 33,-49 107,-123 142,-144 139,-79 271,-103 411,-73 61,14 165,66 223,114 35,28 125,145 125,161 0,3 10,26 23,52 20,42 22,62 22,188 l 0,141 -42,85 c -35,70 -57,100 -119,157 l -76,71 45,0 c 68,0 175,28 242,63 63,33 195,156 195,182 0,8 4,15 9,15 5,0 13,10 17,23 3,12 15,42 26,66 35,78 34,320 -2,366 -4,6 -11,20 -15,33 -13,42 -83,139 -132,181 -26,23 -82,58 -123,79 l -75,37 -145,0 c -139,0 -148,-1 -205,-28 -33,-16 -73,-39 -90,-51 -53,-40 -54,-39 -40,7 21,72 28,181 15,259 -18,107 -61,190 -145,274 -81,82 -155,123 -264,148 -93,20 -136,19 -237,-8 z m 279,-1125 c 63,-36 87,-61 120,-124 35,-65 43,-139 23,-216 -35,-137 -143,-222 -282,-222 -38,0 -83,4 -100,9 -82,25 -155,97 -190,188 -25,67 -16,196 18,249 24,37 66,81 111,115 64,48 216,49 300,1 z"
+             id="path10" />
+        </g>
+      </g>
+      <g
+         style="fill:#6ed732;stroke:none"
+         transform="matrix(0.1,0,0,-0.1,0,299)"
+         id="g12">
+        <g
+           transform="matrix(0.1,0,0,-0.1,0,299)"
+           id="g14">
+          <path
+             inkscape:connector-curvature="0"
+             d="m 1398,1727 c -49,-14 -62,-22 -117,-71 -64,-59 -84,-102 -89,-194 -5,-93 9,-142 58,-211 32,-43 94,-87 144,-103 17,-5 62,-9 100,-9 139,0 247,85 282,222 20,77 12,151 -23,216 -33,63 -57,88 -120,124 -63,36 -161,47 -235,26 z"
+             id="path16" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

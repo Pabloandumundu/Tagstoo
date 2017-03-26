@@ -1,0 +1,561 @@
+/* 
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+#content{
+
+	position: absolute;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 99.9%;
+}
+
+#searchlocationinfonotfixed {
+
+	width: calc(100% - 65px);
+}
+
+#searchlocationinfonotfixed > div {
+
+	display: inline-block;
+	white-space: nowrap;
+}
+
+#searchlocationinfonotfixed >span:first-child { 
+
+	margin-left: 4px;
+}
+
+
+#eraser {
+
+	position: fixed;
+	top: 60px;
+	right: 25px !important;
+	z-index: 20;
+}
+
+#eraser .activated {
+	
+	animation:bounceOut .5s linear;
+	animation-iteration-count:infinite;
+}
+@keyframes bounceOut {
+	0% {
+		opacity: 1;
+	}
+	25% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+	75% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+#eraseron {
+
+	right: 48px;
+}
+
+#searchview {
+
+	position: relative;
+	float: left;
+	top: 56px;	
+	height: calc(100% - 112px);
+	width: 24.8%;
+	box-sizing: border-box;
+	border-right: 1px solid black;
+	overflow-y: scroll;
+	direction: rtl;
+	background: none;
+	padding-top: 2px;
+}
+
+#searchdirview-wrapper {
+
+	position: relative;
+	top: 56px;	
+	height: calc(100% - 130px); /* se hace un calc y se resta la altura del header (60) y el bottom (70) */
+	width: 75%;
+	box-sizing: border-box;
+	vertical-align: top;
+	background-color: white;
+	overflow-y: auto;
+	overflow-x: hidden;
+	user-select: none; /* para que no se pueda seleccionar texto */
+
+}
+
+#searchdirview{
+
+	overflow-y: none;
+	overflow-x: none;
+	z-index: 1;
+	padding-bottom: 5px;
+}
+
+.holdButtonProgress {
+
+	height: 100%; 
+	width: 100%;
+	position: absolute; 
+	top: 0; 
+	left: -100%; 
+	padding: 0;
+	margin: 0; 
+	background-color: #ff0000; 
+	opacity: 0.6;
+}
+
+#searchdirectoryview {margin: 0; position: relative; }
+
+.placehold2 { /* para rutas de archivos */
+
+	color: #Cfcfcf;
+	margin: 0 auto;
+	display: inline-block;
+	padding-left: 3px;
+}
+
+
+/* todos los css para los exploelement en main.css */
+/* excepto ... */
+
+.exploelement.viewmode1 {
+
+	margin-top: 2px !important;
+	margin-bottom: 3px !important;
+}
+
+.exploelement span {
+
+	display: inline-block;
+}
+
+.exploelement div {
+
+	margin-bottom: 0px !important;   
+}
+
+.exploelement .video {
+
+	padding-bottom: 6px !important;
+}
+
+.exploelement .mmcontrols {
+
+	margin-bottom: 6px !important;
+}
+
+.exploelement .seek-bar {
+
+	margin-top: 6px !important;
+}
+
+
+/* para Viewmode1 */
+.exploelement .imgmode1 { 
+
+	vertical-align: top !important;
+	padding-top: 2px;  
+}
+
+.exploelement .imgmode1 a {
+
+	vertical-align: middle;
+}
+
+.imgmode1 img {
+
+	margin-top: 0 !important;
+}
+
+.imagename1 {
+
+	padding-left: 1px;
+	margin-right: -1px;
+}
+
+
+/* para los demás Viewmodes */
+.exploelement.viewmode2,  
+.exploelement.viewmode3, 
+.exploelement.viewmode4, 
+.exploelement.viewmode5, 
+.exploelement.viewmode6,
+.exploelement.viewmode7, 
+.exploelement.viewmode8, 
+.exploelement.viewmode9 {
+
+	padding-bottom: 3px !important;
+}
+
+.exploelement .imgmode2, 
+.exploelement .imgmode3, 
+.exploelement .imgmode4, 
+.exploelement .imgmode5, 
+.exploelement .imgmode6,
+.exploelement .imgmode7,
+.exploelement .imgmode8, 
+.exploelement .imgmode9 {
+
+	margin-bottom: 4px !important;
+}
+
+.viewmode2 .tagticket, 
+.viewmode3 .tagticket, 
+.viewmode4 .tagticket, 
+.viewmode5 .tagticket, 
+.viewmode6 .tagticket,
+.viewmode7 .tagticket,
+.viewmode8 .tagticket, 
+.viewmode9 .tagticket{
+
+	margin-top: 4px;
+}
+
+
+
+/* Panel izquierdo */
+
+#search {
+
+	direction: ltr;
+	background: none;
+	padding-left: 1px;
+	overflow: hidden;
+	user-select: none; /* para que no se pueda seleccionar texto */
+}
+
+#selectfolder {
+
+	margin: 2px 6px;
+}
+
+#searchin {
+
+	margin-bottom: 2px;
+}
+
+#searchin > div {
+
+	background-color: #99ddee;
+	margin-right: 10px;
+	border-radius: 8px;
+	padding-left: 1px;
+	margin-left: 1px;
+	word-wrap: break-word;
+	border-top: 1px solid #A8AAC1;
+}
+
+#searchfor div {
+
+	display: inline-block;
+}
+
+
+/* Para los Radio buttons */
+
+.container {
+
+	margin-bottom: 10px;
+	padding-left: 30px;
+	white-space: nowrap;
+}
+
+.container label {
+
+	position: relative;
+}
+
+/* Base styles for spans */
+.container span::before,
+.container span::after {
+
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+}
+
+.container span.radio:hover {
+
+	cursor: pointer;
+}
+
+.container span.radio::before {
+
+	left: -52px;
+	width: 45px;
+	height: 25px;
+	background-color: #A8AAC1;
+	border-radius: 50px;
+}
+
+.container span.radio::after {
+
+	left: -49px;
+	width: 17px;
+	height: 17px;
+	border-radius: 10px;
+	background-color: #6C788A;
+	transition: left .25s, background-color .25s;
+}
+
+input[type="radio"]:checked + label span.radio::after {
+
+	left: -27px;
+	background-color: #F0FF6B; /* amarillo */
+}
+
+#tagstosearch {
+
+	width: 100%;
+}
+
+#taginput1, #taginput2, #taginput3, #taginput4 {
+
+	width: 90%;
+	min-height: 40px;
+	padding: 2px 1px 1px 1px;
+	border: 1px solid grey;
+}
+
+#cleartagfiled1, #cleartagfiled2, #cleartagfiled3, #cleartagfiled4 {
+
+	margin-bottom: 10px;
+	display: inline-block;
+}
+
+#searchaction {
+
+	margin-top: 5px;
+	left: calc(83% - 50px);
+}
+
+.hide {
+
+	top: -9999px;
+	left: -9999px;
+}
+
+
+/* POPUPS */
+
+/* estilo para el aviso con tiempo, se lanza con función customAlert del utils.js */
+.timepopup {
+
+	top: 0;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,0.15);
+	z-index: 1000;
+}
+
+.tpopup_tagfolder {
+
+	position: fixed;
+	display: initial;
+	left: calc(50% - 150px);
+	top: 23%;
+	width: 300px;
+	height: auto;
+	max-height: calc(100% - 160px);
+
+	text-align: center;
+	font-size: 14px;
+	font-family: Trebuchet, Arial, sans-serif;
+	font-weight: bold;
+	padding: 13px 5px 13px 5px;
+	background-image: url("../img/wood_pattern.png");
+	color: #444; 
+	-webkit-border-radius: 7px;
+	-webkit-box-shadow: inset 0px 0px 8px 0px #331a00;
+	border: 1px dashed #444;
+	text-shadow:
+		1px 1px 2px rgba(000,000,000,0.1),
+		0 1px 0 rgba(255,255,255,0.8);
+	overflow-y: auto;
+}
+
+
+/* para varios popups */
+#popupbackground {
+
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	opacity: 0.3;
+	position: fixed;
+	z-index: 20;
+	display: none;
+}
+
+#popupbackground.display {
+	display: initial;
+}
+
+#toppopupbackground {
+
+	width: 100%;
+	height: 58px;
+	background-color: white;
+	opacity: 0.3;
+	position: fixed;
+	z-index: 20;
+	display: none;
+
+}
+
+#toppopupbackground.display {
+	display: initial;
+}
+
+
+#popup {
+
+	display: none;
+	position: fixed;
+	z-index: 25;
+	cursor: default;
+	padding: 13px 5px 13px 5px;
+	padding: 12px;
+	background-image: url("../img/wood_pattern.png");
+	color: #111; 
+	-webkit-border-radius: 7px;
+	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
+	
+	text-shadow:
+	1px 1px 2px rgba(000,000,000,0.1),
+	0px 1px 0px rgba(255,255,255,0.8);
+
+	height: auto;
+	max-height: calc(100% - 160px);
+	overflow-y: auto;
+
+}
+
+#popup > div {
+
+	display: inline-block;
+}
+
+#popup div span {
+
+	display: block;
+}
+
+#popuptitle {
+
+	font-size: 14px;
+	font-family: Trebuchet, Arial, sans-serif;
+	font-weight: bold;
+	margin: 4px 2px;
+	color: #5d7a06;
+}
+
+.close {
+
+	margin-left: 10px;
+}
+.savetag {
+
+	margin-bottom: 10px;
+}
+
+#popup.tagfolder {
+
+	display: initial;
+	left: calc(50% - 150px);
+	top: 20%;
+	width: 300px;
+	-webkit-box-shadow: inset 0px 0px 8px 0px #331a00;
+}
+
+#popup.newtag {
+
+	display: initial;
+	top: 15%;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	width: 40%;
+	max-width: 520px;
+	min-width: 450px;
+}
+
+#popup.edittag {
+
+	display: initial;
+	top: 15%;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	width: 40%;
+	max-width: 550px;
+	min-width: 450px;
+}
+
+#popup.options {
+	
+	display: initial;
+	top: 15%;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	width: 40%;
+	max-width: 550px;
+	min-width: 450px;
+}
+
+#popup.info {
+	
+	display: initial;
+	top: 60px;
+	height: calc(100% - 130px);
+	max-height: calc(100% - 130px);
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	max-width: 1100px;
+	min-width: 600px;
+}
+
+
+/* popup newtag, edittag styles */
+#preview {  /* ATENCION esto solo para el popup cuando se lanza desde searcher */
+
+	position: absolute;
+	margin-top: -3px;
+}

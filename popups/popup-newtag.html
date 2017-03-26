@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>New tag</title>
+		
+	<script type="text/javascript">
+		$(document).ready(function()
+	    {
+			var $box = $('#colorPicker');
+	        $box.tinycolorpicker();
+
+	        box = $box.data("plugin_tinycolorpicker");
+
+		});
+	</script>
+
+</head>
+<body>
+
+	<div id="popuptitle">ADD NEW TAG</div>
+
+	<br>
+	<hr>
+
+	<div>Select Shape:</div>
+	<div id="tagforms-wrap"><div id="tagforms"></div></div>
+
+	<div id="selectcolor">
+		<span>Select Color:</span>
+	    <div id="colorPicker">
+	        <a class="color"><div class="colorInner"></div></a>
+	        <div class="track"></div>
+	        <ul class="dropdown"><li></li></ul>
+	        <input type="hidden" class="colorInput"/>
+	    </div>
+    </div>
+
+	<div id="selecttext">
+	    <span>Text of the tag:</span>
+	    <input type="text" id="tagtext">
+    </div>
+
+    <div id="preview">
+	    <span>Preview:</span>
+		<div id="tagpreview">
+			<div class="tagticket small">&nbsp;</div>
+		</div>
+	</div>
+
+	<br />
+	<hr />
+
+	<a class="medium button green" onclick="createnewtag()">Create tag!</a>
+
+	<a class="medium button orange close" onclick="cerrar()">Close</a>
+
+	<script>
+		newtagpreload();
+	</script>
+
+</body>
+</html>

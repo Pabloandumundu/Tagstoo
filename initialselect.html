@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>TAGSTOO</title>
+
+	<script src="js/jquery-latest.min.js"></script>
+	<script src="js/alertify.js"></script>  
+	<script src="js/initialselect.js"></script>
+
+	<link href="css/alertify.core.css" rel="stylesheet" type="text/css">
+	<link href="css/alertify.default.css" rel="stylesheet" type="text/css">
+	<link href="css/estilos.css" rel="stylesheet" type="text/css">
+
+
+</head>
+<body id="initialbody">
+
+	<script>
+
+    	// tamaño de la ventana
+     	var ngui = require('nw.gui');
+      	var nwin = ngui.Window.get();
+		nwin.setPosition("center")
+		nwin.resizeTo(680, 403);
+		nwin.setResizable(false); // para que no se pueda cambiar
+
+ 	</script>
+
+ 	<div id="logo-wrapper">
+
+ 		<img src="img/tagstoo56b.png" alt="">
+
+ 	</div>
+
+	<div id="initalselect">
+
+		<div id="popuptitle">INITIAL DATABASE OPTIONS</div>
+		<div id="initalhelp">
+			<a href="popups/popup-info-help.html#1" target="_blank">
+				<img src="img/info.png" alt="">
+			</a>
+		</div>
+
+		<hr>
+
+		<span>Currently selected database: </span><span id="selecteddb"></span>
+
+		<br>
+
+		<span>That's asociated to drive: </span><span id="selecteddrive"></span><div id="drivedesc" style="display: inline-block;"></div>
+
+		<br>
+
+		<span>Change database:</span>
+		<select name="" id="databaseselect"></select>
+
+		<span>Change asociated drive:</span>
+		<select name="unitselect" id="unitselect" form="initialoptions"></select>
+
+		<br>
+
+		<a id="newdatabase" class="medium button green">New database</a><input id="newdatabasename" type="text"><span><em>Select this new database</em></span>	
+
+		<br>
+
+		<!-- Import Data -->
+		<input type="file" id="toinportfile" name="toinportfile" style="display: none;" />
+	     <a id="inportdata" class="medium button orange">Import data</a><span><em>Import data from file to selected database</em> </span>
+
+		<br>		
+
+		<a id="deletedb" class="medium button red">Delete database</a><span><em>Delete selected database</em></span>
+
+		<hr>
+
+		<a id="launch" class="large button green" onclick="starttagstoo()">Launch!</a>
+
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+/* 
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+.mmcontrols {
+    display: inline-block;
+    width: 100%;
+}
+
+.mmcontrols .playpause {
+    background-image:url("../img/play.png");
+    background-repeat:no-repeat;
+    cursor: pointer;
+    outline : none; /* quitar reborde cuando click */
+    border-radius: 50%;
+    height: 29px;
+    width: 29px;
+    border: 2px solid #42d3d7;
+}
+
+.mmcontrols .playpause.down {
+    background-image:url("../img/pause.png");
+    background-repeat:no-repeat;
+}
+
+.mmcontrols .volume{
+    -webkit-appearance: none;
+    width: 50px;    
+}
+
+.mmcontrols .volume::-webkit-slider-runnable-track {
+    height: 5px;
+    background: #99ddee;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 2px #3acfd5;
+}
+
+.mmcontrols .volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 10px;
+    width: 5px;
+    background: rgb(241,97,0);
+    margin-top: -4px;
+}
+
+.mmcontrols .volume:focus {
+    outline: none;
+}
+
+.mmcontrols .volume:focus::-webkit-slider-runnable-track {
+    /*background: #ccc;*/
+}
+
+.mmcontrols .seek-bar{
+    -webkit-appearance: none;
+    width: 100%;
+}
+
+.mmcontrols .seek-bar::-webkit-slider-runnable-track {
+    height: 5px;
+    background: #99ddee;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 2px #3acfd5;
+}
+
+.mmcontrols .seek-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: rgb(241,97,0);
+    margin-top: -5px;
+}
+
+.mmcontrols .seek-bar:focus {
+    outline: none;
+}
+
+.mmcontrols .seek-bar:focus::-webkit-slider-runnable-track {
+    /*background: #ccc;*/
+}

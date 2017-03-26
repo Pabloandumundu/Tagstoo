@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TAGSTOO</title>
+
+	<script src="js/jquery-latest.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/alertify.js"></script>
+	<script src="js/main-menu.js"></script>
+
+	<link href="css/alertify.core.css" rel="stylesheet" type="text/css">
+	<link href="css/alertify.default.css" rel="stylesheet" type="text/css">
+	<link href="css/abigimage.jquery.css" rel="stylesheet" type="text/css">
+	<link href="css/estilos.css" rel="stylesheet" type="text/css">
+
+</head>
+<body id="mainbody">
+
+	<script>
+
+		//maximizar la ventana al inicio
+		var ngui = require('nw.gui');
+		var nwin = ngui.Window.get();
+		nwin.setResizable(true);
+		nwin.maximize();
+
+	</script>
+
+
+	<header>
+		
+		<div id="toppopupbackground"></div>
+
+		<div id="topbloque1">
+
+			<div id="logotipo"><img src="img/tagstoo30b.png" alt=""></div>
+		
+			<div class="animatedtabs"> 
+
+				<ul class="tabs">
+
+					<li class="tab-link current" data-tab="tab-1" id="exploretab"><span>EXPLORE</span></li>
+					<li class="tab-link" data-tab="tab-2"><span>SEARCH</span></li>
+
+				</ul>
+
+			</div>
+
+			<div>
+
+				<a href="#" class="action-button shadow animate blue" id="paste">PASTE</a>
+
+			</div>
+
+			<div class="onoffswitch" id="pasteaction">
+
+				<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" >
+				<label class="onoffswitch-label" for="myonoffswitch" >
+						<span class="onoffswitch-inner"></span>
+						<span class="onoffswitch-switch"></span>
+				</label>
+
+			</div>
+
+			<div id="delete">
+
+				<a href="#" class="action-button shadow animate red" id="deletebutton">DELETE</a>
+
+			</div>
+
+			<!-- para desarrollo -->
+			<!-- <button id="panelon" style="display: inline-block; position: fixed; left:0; top:0">Panel</button> -->
+			<!--  -->
+
+			<div id="fastaccess-wrapp">
+
+				<div>
+
+					<span class="toptext">Fast access folders: </span><br>
+					<select name="" id="favfolders"></select>
+
+				</div>
+
+				<div>
+
+					<a class="small button orange" id="removefolderselect">Remove selected</a><br>
+					<a class="small button green" id="gotofolderselect">Go to selected</a>
+				</div>
+
+			</div>
+
+			<div id="viewmode-wrap">
+
+				<span class="toptext">Viewmode: <span id="viewmodenumber">1 ...</span></span><br>
+				<input id="viewmode" type="range" min="1" max="9" step="1" value="1"> 
+
+			</div>
+
+			<div id="order-wrap">
+
+				<span class="toptext">Order by:</span><br>
+				<select id="order">
+					<option value="nameasc" selected>Name A-Z</option>
+					<option value="namedesc">Name Z-A</option>
+					<option value="extasc">Extension A-Z</option>
+					<option value="extdesc">Extension Z-A</option>
+					<option value="sizeasc">Size Small-Big</option>
+					<option value="sizedesc">Size Big-Small</option>
+					<option value="lastdesc">LastMod New-Old</option>
+					<option value="lastasc">LastMod Old-New</option>
+				</select>
+
+			</div>
+
+			<div id="undo-wrap">
+
+				<div>
+
+					<a href="#" class="action-button shadow animate yellow tooltip-right" id="undo" data-tooltip="UNDO (not undo action)">UNDO</a>        
+				</div>
+
+				<img id="options" src="img/options.png" alt="">
+				<img id="info" src="img/info.png" alt="">
+
+			</div>
+
+		</div>
+		
+	</header>
+
+	<div id="tab-1" class="tab-content current">
+
+		<iframe id="explorer" class="iframestyle" src="explore.html" name="explorer"></iframe>
+
+	</div>
+
+	<div id="tab-2" class="tab-content">
+
+		<iframe id="searcher" class="iframestyle" src="search.html" name="searcher"></iframe>
+
+	</div>
+
+	<script>
+
+		if(localStorage["closeconfirmation"]=="no") {
+			window.closeconfirmation = localStorage["closeconfirmation"];
+		} else {
+			window.closeconfirmation = "yes";
+		}
+
+		if (closeconfirmation == "yes") {
+			
+			var win = nw.Window.get();
+
+			// para quitar un defecto de que si se había recargado la página a la hora de cerrar pedía confirmación tantas veces como recargadas
+			setTimeout(function() {
+
+				$.each(win.__proto__.outerEventCBs.close, function(i) {          
+					delete win.__proto__.outerEventCBs.close[i]; 
+				});
+
+			}, 500);
+
+			// la función propia para pedir confirmación a la hora de cerrar
+			win.on('close', function() {
+
+				alertify.confirm( "Close application ?", function (e) {
+					if (!e) {
+						x = "You pressed Cancel!";
+						console.log(x);                 
+					} else {                  
+						x = "You pressed OK!";
+						console.log(x)
+						win.close(true);
+					}
+
+				});
+
+			});
+
+		}
+
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100%"
+   preserveAspectRatio="none"
+   viewBox="0 0 18.547189 17.247824"
+   id="svg5789"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="apple1.svg">
+  <defs
+     id="defs5791" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="-342.72298"
+     inkscape:cy="165.76677"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="749"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5794">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-387.86926,-680.88115)">
+    <path
+       d="m 392.02517,690.78207 -1.31125,-0.0462 c 0.25625,0.67125 0.69875,1.215 1.37,1.5275 -0.1325,-0.44875 -0.1375,-0.95375 -0.0587,-1.48125 z m -0.9025,-5.1175 c -0.555,1.3375 -0.84875,2.96125 -0.61875,4.295 l 1.685,0.06 c 0.32625,-1.2075 0.96125,-2.4425 1.40125,-3.33 l -2.4675,-1.025 0,0 z m 3.3125,-2.1525 c 0.22875,0.0762 0.45125,0.14125 0.66625,0.1975 -1.035,-1.9275 -1.9675,-2.27625 -4.74625,-2.59625 2.85875,-0.45 4.73625,-0.345 5.97375,1.2275 l 0.0925,-1.1275 1.1875,0 0.1325,1.29 c 1.23375,-1.7275 3.14125,-1.85625 6.09625,-1.39 -2.805,0.32375 -3.72875,0.67625 -4.77625,2.65375 0.32375,-0.07 0.655,-0.15625 1.00375,-0.255 2.8425,-0.7975 4.78125,0.84625 5.71625,3.0975 2.37375,5.71625 -2.2775,10.8525 -7.81625,11.465 -3.425,0.3775 -6.97125,-1.19125 -9.20875,-5.28125 -2.38125,-4.3475 0.205,-11.06625 5.67875,-9.28125 l 0,0"
+       style="fill:#100f0d;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="path892"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

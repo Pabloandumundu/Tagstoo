@@ -1,0 +1,206 @@
+<!-- <!DOCTYPE HTML> -->
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <title>TAGSTOO (Search)</title>
+
+  <script src="js/jquery-latest.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script> <!-- para select y drag -->
+  <script src="js/interact.min.js"></script> <!-- para adaptar anchuras -->
+  <script src="js/jquery.pressAndHold.js"></script>
+  <script src="js/alertify.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/undoactions.js"></script>
+  <script src="js/popups.js"></script>
+  <script src="js/jquery.tinycolorpicker.js"></script>
+  <script src="js/abigimage.jquery.js" defer></script>
+  <script src="js/searcher.js"></script>
+
+  <link href="css/tinycolorpicker.css" rel="stylesheet" type="text/css">
+  <link href="css/alertify.core.css" rel="stylesheet" type="text/css">
+  <link href="css/alertify.default.css" rel="stylesheet" type="text/css">
+  <link href="css/tags.css" rel="stylesheet" type="text/css">
+  <link href="css/controlesmedia.css" rel="stylesheet" type="text/css">
+  <link href="css/abigimage.jquery.css" rel="stylesheet" type="text/css">
+  <link href="css/estilos.css" rel="stylesheet" type="text/css">
+  <link href="css/searcher.css" rel="stylesheet" type="text/css">
+
+
+
+</head>
+<body>
+
+
+  <!-- temporal para desarrollo -->
+  <div id="panel">
+    <button id="undo">Undo</button>
+    <button onclick="readAllTags()" draggable="true">List All Tags</button>
+    <button onclick="newTag()">Add Tag</button>
+    <button onclick="deleteTag(12)">Delete Tag</button>
+    <button onclick="resetTags()">Reset All tags</button>
+    <button onclick="populateTags()">Populate Tags</button>
+    <button onclick="funciontemporallistarcarpetascontags()">probandotagscarpetas</button>
+    <button onclick="funciontemporallistarfilescontags()">probandotagsarchivos</button>
+    <button onclick="funciontemporallistarcarpetfavoritas()">Listar fav-folders</button>
+    <button id="paneloff">Cerrar panel</button>
+  </div>
+  <!--  -->
+        
+  <div id="popupbackground"></div>
+  <div id="popup"></div>
+
+  <div id="searchview">
+
+    <div id="search">
+      
+      <input type="file" id="selectedFold" name="selectedFolder" nwdirectory style="display: none;" onchange="selectedafolder()" />
+      <a id="selectFolder" class="medium button yellow" onclick="document.getElementById('selectedFold').click();">Select to searh in..</a>
+
+      <div id="searchin">Search in: <div></div></div>
+
+      <div id="searchfor">
+
+        <label>Search for:</label><br>            
+        
+        <div class="container">
+
+          <input type = "radio"
+                 name = "searchfor"
+                 id = "folders"
+                 value = "folders"
+                 checked = "checked" />
+          <label for = "folders"><span class="radio">Folders</span></label>
+
+        </div>
+
+        <div class="container">
+
+          <input type = "radio"
+                 name = "searchfor"
+                 id = "files"
+                 value = "files" />
+          <label for = "files"><span class="radio">Files</span></label>
+
+        </div>
+
+        <div class="container">
+
+          <input type = "radio"
+                 name = "searchfor"
+                 id = "foldersandfiles"
+                 value = "foldersandfiles"/>
+          <label for = "foldersandfiles"><span class="radio">Folders and Files</span></label>
+
+        </div> 
+      
+        <div id="tagstosearch">
+            
+          <span>With tag(s): (max 4 tags)</span>
+
+          <div id="taginput1" class="taginput" value=""></div>
+          <a id="cleartagfiled1" class="small button red">Clear field</a><br>
+
+          <span>..or tag(s): (max 4 tags)</span>
+
+          <div id="taginput2" class="taginput" value=""></div>
+          <a id="cleartagfiled2" class="small button red">Clear field</a><br>
+
+          <span>..or tag(s): (max 4 tags)</span>
+
+          <div id="taginput3" class="taginput" value=""></div>
+          <a id="cleartagfiled3" class="small button red">Clear field</a><br>
+
+          <span>..or tag(s): (max 4 tags)</span>
+
+          <div id="taginput4" class="taginput" value=""></div>
+          <a id="cleartagfiled4" class="small button red">Clear field</a><br>      
+         
+          <a id="searchaction" class="large button green">Search</a>
+        
+        </div>
+
+      </div>
+
+    </div>
+
+  </div> <!-- fin #searchview -->
+
+  <div id="locationinfo">
+
+    <div id="searchlocationinfonotfixed">
+
+      <span id="numeroderesultadoscarpetas"></span><span id="numeroderesultadosarchivos"></span>
+      <label for="searchviewmode">Search Viewmode: <span id="viewmodenumber">1.</span></label>
+      <input id="searchviewmode" name="searchviewmode" type="range" min="1" max="9" step="1" value="1">
+      <span class="toptext">Search Order by: </span>
+
+      <select id="searchorder">
+        <option value="nameasc" selected>Name A-Z</option>
+        <option value="namedesc">Name Z-A</option>
+        <option value="extasc">Extension A-Z</option>
+        <option value="extdesc">Extension Z-A</option>
+        <option value="sizeasc">Size Small-Big</option>
+        <option value="sizedesc">Size Big-Small</option>
+        <option value="lastdesc">LastMod New-Old</option>
+        <option value="lastasc">LastMod Old-New</option>
+      </select>
+
+    </div>
+
+  </div>
+
+  <div id="eraseron"><img src="img/tageraseron3.gif" alt=""></div>
+  <div id="eraser"><img src="img/eraser.png" alt=""></div>
+
+  <div id="searchdirview-wrapper">
+
+    <div id="searchdirview">
+      <div id="searchdirectoryview">        
+      </div>      
+    </div>
+
+  </div>
+
+  <div id="bottom" class="searcherbottom">
+
+    <div id="bottomleft">
+      <div id="botonestag">
+        <a class="small button green" onclick="newTag()">Add New Tag</a>
+        <a class="small button orange" onclick="editTag()">Edit/Remove Tag</a>
+      </div>
+
+    </div>
+
+    <div id="bottomright">
+
+      <div id="tagpar"></div>
+      <div id="taginpar"></div>
+
+    </div>
+
+  </div>      
+
+</body>
+</html>

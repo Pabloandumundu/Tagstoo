@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Help &amp; product info</title>
+	
+</head>
+<body>
+
+	<div id="popuptitle"><img src="../img/info.png" alt="" style="margin-top: 1px">HELP &amp; PRODUCT INFO</div>
+
+	<br>
+	<hr>
+
+	<div id="infopanel">
+
+		<a id="showhelp" class="medium button blue">HELP</a><span><em>Show Help!</em> </span>		
+
+		<hr>
+		
+	    <a id="showabout" class="medium button yellow">About this</a><span><em>&nbsp;Program version, author and license.</em> </span>
+		
+		<br>
+
+	    <a id="showlicenses" class="medium button yellow">Libraries licenses</a><span><em>&nbsp;Licenses of used libraries.</em> </span>
+
+		<br>
+
+		<a id="showlicenses_nwjs" class="medium button yellow">NW.JS licenses</a><span><em>&nbsp;Licenses of libraries used by NW.JS (the core).</em></span>
+
+		<br>	
+		<hr>
+
+	</div>
+	
+	<iframe id="infoiframe" src="popups/popup-info-blank.html" frameborder="0" ></iframe>	
+
+	<a class="medium button orange close" onclick="cerrar()" style="margin-bottom: 3px">Close</a>
+
+	<script>
+		infopreload();
+	</script>
+
+</body>
+</html>
