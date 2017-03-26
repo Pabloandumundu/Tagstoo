@@ -4,7 +4,7 @@ With this application you can tag folders and files; create tags with various sh
 
 ![](https://tagstoo.sourceforge.io/demoimage1lq.png)
 
-Very precise search possibilities, with various imput fields, allowing to add all the necessary tags that you want. For example, in one field you can add tags ‘cat’ and ‘white’ and in another field you can add tags ‘dog’ and ‘brown’, so the search result will return all white cats and brown dogs.
+Very precise search possibilities, with various input fields, allowing to add all the necessary tags that you want. For example, in one field you can add tags ‘cat’ and ‘white’ and in another field you can add tags ‘dog’ and ‘brown’, so the search result will return all white cats and brown dogs.
 
 Multimedia file preview in both explorer and search results cards. Cover image of epubs also are shown.
 
