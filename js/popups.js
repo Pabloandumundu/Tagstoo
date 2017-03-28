@@ -511,7 +511,7 @@ function drawedittagtags() { // visual del tag que se está editando
 
 function savetag() { // guardar tag
 
-	var updatetag=[];
+	var updatetag={};
 
 	if (selectedtag!="") {
 
