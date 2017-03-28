@@ -4,7 +4,7 @@ With this application you can tag folders and files; create tags with various sh
 
 ![](https://tagstoo.sourceforge.io/demoimage1lq.png)
 
-Very precise search possibilities, with various input fields, allowing to add all the necessary tags that you want. For example, in one field you can add tags ‘cat’ and ‘white’ and in another field you can add tags ‘dog’ and ‘brown’, so the search result will return all white cats and brown dogs.
+Precise search possibilities, with various input fields, allowing to add all the necessary tags that you want. For example, in one field you can add tags ‘cat’ and ‘white’ and in another field you can add tags ‘dog’ and ‘brown’, so the search result will return all white cats and brown dogs.
 
 Multimedia file preview in both explorer and search results cards. Cover image of epubs also are shown.
 
@@ -12,7 +12,7 @@ For images both system's default image viewer and program's new internal viewer 
 
 Usual file management actions by dragging and dropping or pressing buttons; copy, move, delete, rename. And undo action button.
 
-It is possible to export/import tagging data to a file, so data will be available in any computer.
+It is possible to export/import tagging data to a file, so data is available in any computer.
 
 FEATURES
 
