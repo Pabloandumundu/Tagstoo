@@ -205,6 +205,11 @@
         closeBtn.removeClass(cssCloseBtnHover);
     });
 
+    box.contextmenu(function(event) { // para salir al hacer click derecho
+        prevent(event);
+        if (current) current.close();
+    })
+
     prevBtn.click(function(event) {
         prevent(event);
         if (current) current.prev();
