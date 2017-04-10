@@ -553,6 +553,20 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 			window.previewepubonviewmode1 = localStorage["previewepubonviewmode1"];
 		}
 		
+		if (!localStorage["autoslideshow"]) {
+			window.autoslideshow = "no";
+		} else {
+			window.autoslideshow = localStorage["autoslideshow"]
+		}
+
+		if (!localStorage["autoslideshowtime"]) {
+			window.autoslideshowtime = "6";
+		} else {
+			window.autoslideshowtime = localStorage["autoslideshowtime"]
+		}
+
+
+
 		window.rootdirectory = "\/";
 		window.dirtoexec="";
 

@@ -2016,6 +2016,17 @@ header h1 {
 	padding: 1px !important;
 }
 
+#autoslideshowtime {
+	max-width: 26px;
+	text-align: right;
+}
+
+#autoslideshowtime::-webkit-outer-spin-button,
+#autoslideshowtime::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
 
 /* popup inital select */
 

@@ -35,6 +35,7 @@
 
     var last,
         current,
+        timer = 0,
 
         //overscroll  = $('<div>').addClass('abigimage-overscroll') .appendTo('body'),
         overlay     = $('<div>').addClass('abigimage-overlay')    .appendTo(parent.$("body")),
@@ -125,6 +126,18 @@
             $(this).unbind('click.abigimage').bind('click.abigimage', function(event) {
                 prevent(event);
                 plugin.open(i);
+
+                // el autoslideshow
+                if (autoslideshow=="yes") {
+                    if (timer) {
+                        clearTimeout(timer); //cancel the previous timer.
+                        timer = null;
+                    }
+                    timer= setTimeout(function() {
+                    // ((sel && sel._abigimage) || current || last).next();
+                    $.abigimage.next();
+                    }, autoslideshowtime * 1000);
+                }
             });
         });
     };
@@ -171,7 +184,7 @@
         //under:       under,
 
         open: function(src, index, sel) {            
-            ((sel && sel._abigimage) || current || last).open(src, index);
+            ((sel && sel._abigimage) || current || last).open(src, index);            
         },
         close: function(sel) {
             ((sel && sel._abigimage) || current || last).close();            

@@ -113,6 +113,23 @@ function saveoptions() {
 		window.previewepubonviewmode1 = "no";
 	}
 
+	if ($("#autoslideshow").is(":checked")) {
+		selectedtime = $("#autoslideshowtime").val()
+		if (+selectedtime == 0) {
+			alert("Time between images must be more than 0!. Time not saved.");
+		} else {
+			localStorage["autoslideshow"] = "yes";
+			window.autoslideshow = "yes";
+			localStorage["autoslideshowtime"] = selectedtime;
+			window.autoslideshowtime = selectedtime;
+		}
+
+	}
+	else {
+		localStorage["autoslideshow"] = "no";
+		window.autoslideshow = "no";
+	}
+
 }
 
 
@@ -1747,6 +1764,19 @@ function optionspreload() {
 	    }
 
 
+	    if (localStorage["autoslideshow"]=="yes") {
+	    	$('#autoslideshow').prop('checked', true);
+	    } else {
+	    	$('#autoslideshow').prop('checked', false);
+	    }
+
+	    if (!localStorage["autoslideshowtime"]) {
+	    	$('#autoslideshowtime').val("6")
+	    } else {
+	    	$('#autoslideshowtime').val(localStorage["autoslideshowtime"])
+	    }
+
+
 		$("#databaseselect").change(function() {
 
 			$('#selecteddb').html($("#databaseselect").val());
@@ -2151,6 +2181,23 @@ function optionspreload() {
 			});
 
 		});
+
+		// para prevenir la introducción de letras en el autoslideshowtime
+		$("#autoslideshowtime").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A, Command+A
+            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+             // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
 		
 	};
 
