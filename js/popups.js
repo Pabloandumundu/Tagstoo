@@ -459,7 +459,7 @@ function getalltags(callback) {
 	};
 }
 function SortTagsByPosAsc(a, b){
-	return ((a.tagpos < b.tagpos) ? -1 : ((a.tagpos > b.tagpos) ? 1 : 0));
+	return ((+a.tagpos < +b.tagpos) ? -1 : ((+a.tagpos > +b.tagpos) ? 1 : 0));
 }
 
 function drawedittagtags() { // visual del tag que se está editando

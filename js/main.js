@@ -8136,7 +8136,7 @@ function getalltags(callback) {
 }
 
 function SortTagsByPosAsc(a, b){
-	return ((a.tagpos < b.tagpos) ? -1 : ((a.tagpos > b.tagpos) ? 1 : 0));
+	return ((+a.tagpos < +b.tagpos) ? -1 : ((+a.tagpos > +b.tagpos) ? 1 : 0));
 }
 
 function drawfootertags() {
@@ -8153,11 +8153,11 @@ function drawfootertags() {
 
 			if (items[i].tagpos % 2 == 0) { // si la posición es un numero par
 
-				footertagsdivspar += "<div class='footertagticket' value='"+ items[i].tagid + "' position='" + items[i].tagpos + "'> " + items[i].tagid +  "</div>" ;
+				footertagsdivspar += "<div class='footertagticket' value='"+ items[i].tagid + "' position='" + items[i].tagpos + "'> " + items[i].tagid +  "</div>";
 
 			} else { // si la posición es impar
 
-				footertagsdivsinpar += "<div class='footertagticket' value='"+ items[i].tagid + "' position='" + items[i].tagpos + "'> " + items[i].tagid +  "</div>" ;
+				footertagsdivsinpar += "<div class='footertagticket' value='"+ items[i].tagid + "' position='" + items[i].tagpos + "'> " + items[i].tagid +  "</div>";
 			}
 
 		}
