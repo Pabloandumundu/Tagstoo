@@ -1,4 +1,4 @@
-/* 
+/*
 * Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
@@ -18,545 +18,835 @@
 */
 
 
-var fs=require('fs');
 
-// si no existe unidad utilizada por última vez, se selecciona la primera disponible
-if (!localStorage["lastuseddriveunit"]) {
+var fs=require('fs-extra');
+var Sniffr = require("sniffr");
+var agent = navigator.userAgent;
+window.s = "";
+s = new Sniffr();
+s.sniff(agent);
+console.log(s.os.name);
 
-	var availabledrives=[];
-	var toselectfromdrives=[];
-	var drivelist = require('drivelist');
+$(document).ready(function() {
 
-	var t="";
-	var tdesc="";
+  //unos estilos personalizados para linux
+  if (s.os.name == "linux") {
+    $('#initalselect').css("margin","0 auto 49px auto");
+    $('#initalhelp').css("bottom","65px")
+  }
 
-	availabledrives = drivelist.list((error, drives) => {
-		
-		if (error) {
-			throw error;
-		}
+  // si no existe unidad utilizada por última vez, se selecciona la primera disponible
+  if (!localStorage["lastuseddriveunit"]) {
 
-		drives.forEach((drive, i) => {
+  	var availabledrives=[];
+  	var toselectfromdrives=[];
 
-			toselectfromdrives.push(drive.mountpoints["0"].path)
+  	if (s.os.name == "windows") {
 
-		});
+  		var drivelist = require('drivelist');
 
-		window.driveunit = toselectfromdrives["0"];
+  		var t="";
+  		var tdesc="";
 
-		$('#selecteddrive').html(driveunit)
+  		availabledrives = drivelist.list((error, drives) => {
 
-		// console.log(driveunit)
-		initialoptionspreload();
+  			if (error) {
+  				throw error;
+  			}
 
-	});
+  			drives.forEach((drive, i) => {
 
-}
-else {
+  				toselectfromdrives.push(drive.mountpoints["0"].path)
 
-	driveunit = localStorage["lastuseddriveunit"];
-	initialoptionspreload();
+  			});
 
-}
+  			window.driveunit = toselectfromdrives["0"];
 
+  			$('#selecteddrive').html(driveunit)
 
-function initialoptionspreload() {
+  			// console.log(driveunit)
+  			initialoptionspreload();
 
-	// tomar nombres de las bases de datos indexeddb:
-	indexedDB.webkitGetDatabaseNames().onsuccess = function(sender,args) { 
+  		});
 
-		var currentlydatabaseused = localStorage["currentlydatabaseused"];
+  	}
 
-		var listadocompletodeDB = sender.target.result
-		var listadofiltradodeDB = [];
-		window.listadofiltradodeDB_toshow = [];
+  	if (s.os.name == "linux") {
 
-		$.each(listadocompletodeDB, function(i){
 
-			 if (listadocompletodeDB[i].substring(0, 8) == "tagstoo_") {
+        window.driveunit = " ";
+        $('#selecteddrive').html("/" + driveunit)
 
-				listadofiltradodeDB.push(listadocompletodeDB[i])
+        initialoptionspreload();
 
-		 	}
+    }
 
-		});
+  }
+  else {
 
-		if (!currentlydatabaseused) {
+  	driveunit = localStorage["lastuseddriveunit"];
+  	initialoptionspreload();
 
-			if(!listadofiltradodeDB[0]) {
-				alertify.alert("There is not previously used database. You must enter a new name for a new database.")
-			} else {
-				alertify.alert("There is not previously used database. You must enter a new name for a new database, or select one from the available (previously created) database list.")
-			}
-		}
+  }
 
-		if (currentlydatabaseused) {
-			currentlydatabaseused_toshow = currentlydatabaseused.replace("tagstoo_", "");
 
-			$('#selecteddb').html(currentlydatabaseused_toshow)
-		
-		}
+  function initialoptionspreload() {
 
-		$.each(listadofiltradodeDB, function(i){
+  	// tomar nombres de las bases de datos indexeddb:
+  	indexedDB.webkitGetDatabaseNames().onsuccess = function(sender,args) {
 
-			listadofiltradodeDB_toshow.push(listadofiltradodeDB[i].replace("tagstoo_", ""));
+  		var currentlydatabaseused = localStorage["currentlydatabaseused"];
 
-		})
+  		var listadocompletodeDB = sender.target.result
+  		var listadofiltradodeDB = [];
+  		window.listadofiltradodeDB_toshow = [];
 
-		loaddatabaseselect();
-		loaddriveslist();
+  		$.each(listadocompletodeDB, function(i){
 
-		if (driveunit) {
-			$('#selecteddrive').html(driveunit)
-		}
+  			 if (listadocompletodeDB[i].substring(0, 8) == "tagstoo_") {
 
-		$("#databaseselect").change(function() {
+  				listadofiltradodeDB.push(listadocompletodeDB[i])
 
-			$('#selecteddb').html($("#databaseselect").val());
+  		 	}
 
-		});
-		
-		$("#unitselect").change(function() {
+  		});
 
-			$('#selecteddrive').html($("#unitselect").val());
+  		if (!currentlydatabaseused) {
 
-			var availabledrives=[];
-			var drivelist = require('drivelist');
-			var driveLetters = require('windows-drive-letters');
+  			if(!listadofiltradodeDB[0]) {
+  				alertify.alert("There is not previously used database. You must enter a new name for a new database.")
+  			} else {
+  				alertify.alert("There is not previously used database. You must enter a new name for a new database, or select one from the available (previously created) database list.")
+  			}
+  		}
 
-			var t="";
-			var tdesc="";
+  		if (currentlydatabaseused) {
+  			currentlydatabaseused_toshow = currentlydatabaseused.replace("tagstoo_", "");
 
-			availabledrives = drivelist.list((error, drives) => {
-				if (error) {
-					throw error;
-				}
+  			$('#selecteddb').html(currentlydatabaseused_toshow)
 
-				drives.forEach((drive, i) => {
+  		}
 
-					i= i+1;
+  		$.each(listadofiltradodeDB, function(i){
 
-					t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
-					tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
+  			listadofiltradodeDB_toshow.push(listadofiltradodeDB[i].replace("tagstoo_", ""));
 
-				});
+  		})
 
-				// para detectar unidades virtuales en windows y añadirlas a la lista
-				try {
-					letters = driveLetters.usedLettersSync();
-					// console.log(letters); // => ['C', 'D', ...] 
-				} catch (err) {};
+  		loaddatabaseselect();
+  		loaddriveslist();
 
-				$.each (letters, function(i){
+  		if (driveunit) {
+        if (s.os.name == "windows") {
+  			     $('#selecteddrive').html(driveunit)
+        }
+        if (s.os.name == "linux") {
+             if(driveunit == " "){
+  			          $('#selecteddrive').html("/" + driveunit)
+             } else {
+                $('#selecteddrive').html(driveunit)
+             }
+        }
 
-					unidadvirtual = "si";
-					drives.forEach((drive, u) => {
+  		}
 
-						if (letters[i]+":" == drive.mountpoints["0"].path ) {
-							unidadvirtual = "no";
-						}
+  		$("#databaseselect").change(function() {
 
-					});
+  			$('#selecteddb').html($("#databaseselect").val());
 
-					if (unidadvirtual == "si") {
-						t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
-						tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
-					}
+  		});
 
+      // on change
 
-				});
+  		$("#unitselect").change(function() {
 
-				$("#unitselect").html(t);
-				$("#unitselect").val($('#selecteddrive').html());
+        if (s.os.name == "windows") {
 
-				$("#drivedesc").css("display","none")
-				$("#drivedesc").html("("+tdesc+")");
+         var availabledrives=[];
 
-				// se pintará solo la info del drive seleccionado
-				$.each($("#drivedesc div"), function(n) {
+         $('#selecteddrive').html($("#unitselect").val());
 
-					if($(this).attr("value") != $("#selecteddrive").html()) {	
+    			var drivelist = require('drivelist');
+    			var driveLetters = require('windows-drive-letters');
 
-						$(this).remove()
+    			var t="";
+    			var tdesc="";
 
-					}
+    			availabledrives = drivelist.list((error, drives) => {
+    				if (error) {
+    					throw error;
+    				}
 
-				});
+    				drives.forEach((drive, i) => {
 
-				$("#drivedesc").css("display","inline-block");
+    					i= i+1;
 
-			});
+    					t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
+    					tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
 
-		})
+    				});
 
-		$("#newdatabase").on('click', function(){
+    				// para detectar unidades virtuales en windows y añadirlas a la lista
+    				try {
+    					letters = driveLetters.usedLettersSync();
+    					// console.log(letters); // => ['C', 'D', ...]
+    				} catch (err) {};
 
-			if($("#newdatabasename").val() != "" ){
+    				$.each (letters, function(i){
 
-				var preexistingname = "no";
+    					unidadvirtual = "si";
+    					drives.forEach((drive, u) => {
 
-				$.each (listadofiltradodeDB_toshow, function(i) {
-					if (listadofiltradodeDB_toshow[i] == $("#newdatabasename").val()) {
-						preexistingname = "yes";
-					}
+    						if (letters[i]+":" == drive.mountpoints["0"].path ) {
+    							unidadvirtual = "no";
+    						}
 
-				});
+    					});
 
-				if(preexistingname=="no") {
+    					if (unidadvirtual == "si") {
+    						t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
+    						tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
+    					}
 
-					$('#selecteddb').html($("#newdatabasename").val())
-				}
-				else {
-					alertify.alert("The name you chosen already exists, first delete the database that use this name if you want to use it.")
-				}
 
-			}
-			else {
-				alertify.alert("You must enter a name for the database first.")
-			}
+    				});
 
-		});
-		// lo mismo si se pulsa enter..
-		$('#newdatabasename').on('keypress', function (e) {
-     		if(e.which === 13){
+    				$("#unitselect").html(t);
+    				$("#unitselect").val($('#selecteddrive').html());
 
-     			if($("#newdatabasename").val() != "" ){
+    				$("#drivedesc").css("display","none")
+    				$("#drivedesc").html("("+tdesc+")");
 
-					var preexistingname = "no";
+    				// se pintará solo la info del drive seleccionado
+    				$.each($("#drivedesc div"), function(n) {
 
-					$.each (listadofiltradodeDB_toshow, function(i) {
-						if (listadofiltradodeDB_toshow[i] == $("#newdatabasename").val()) {
-							preexistingname = "yes";
-						}
+    					if($(this).attr("value") != $("#selecteddrive").html()) {
 
-					});
+    						$(this).remove()
 
-					if(preexistingname=="no") {
+    					}
 
-						$('#selecteddb').html($("#newdatabasename").val())
-					}
-					else {
-						alertify.alert("The name you chosen already exists, first delete the database that use this name if you want to use it.")
-					}
+    				});
 
-				}
-				else {
-					alertify.alert("You must enter a name for the database first.")
-				}
+    				$("#drivedesc").css("display","inline-block");
 
-     		};
-     	});
+    			});
 
+        }
 
-		$("#inportdata").on('click', function(){
+        if (s.os.name == "linux") {
 
-			if ($('#selecteddb').html() != "") {
+          console.log($("#unitselect").val())
 
-				alertify.alert("A file open dialog will be open, you can either select a pre existing file or create a new one (right mouse button), be careful, data in the selected file will be overwritten.", function () { 
+          if ($("#unitselect").val() != "") {
+            $('#selecteddrive').html( "/" + $("#unitselect").val() );
+          } else {
+            $('#selecteddrive').html("/")
+          }
 
-					document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
+          drives = [""];
 
-					document.getElementById('toinportfile').click()
+          // Detectar y añadir unidades externas a la lista
 
-					$('#toinportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..);
+          const username = require('username');
 
-					$('#toinportfile').on('change', function() {
+          username().then(username => {
 
-						var file = $('#toinportfile')["0"].value
-			
-						fs.readFile(file, 'utf8', function (err,data) {
-							if (err) {
-								return console.log(err);
-							}
-			
-							try { 
-								// se comprueba si es json
-								JSON.parse(data);
-								// console.log("is JSON");
+            var dirtoread = "/media/" + username // la carpeta donde se montan las unidades externas
+            var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
 
-								// y continua
-								alertify.confirm("Attention, data in selected database, <em>'" + $('#selecteddb').html() + "'</em>,  will be overwritten by the content of file <em>'" + file + "'</em>, are you sure?", function (e) {
-									if (!e) {
-										x = "You pressed Cancel!";
-										console.log(x);                 
-									} else {                  
-										x = "You pressed OK!";
-										console.log(x)
-										
-										// habrimos la bd
-										var tooverwritedb = [];
-										var request = window.indexedDB.open("tagstoo_" + $('#selecteddb').html(), 1);
-										request.onerror = function(event) {
-											console.log("error: database not loaded");
-										};
+            var directoryelement = [];
+        		var directorycontent = [];
+            window.directoryarchives = [];
+        		window.directoryfolders = [];
 
-										// aquí realizamos algunas operaciones previas con la bd porque luego si no puede dar fallos a la hora de escribir si está no se ha abierto nunca...
-										request.onupgradeneeded = function(event) {
+            var readedElements = fs.readdirSync(dirtoread)
+            var iteratentimes = readedElements.length;
 
-											var objectStore;
-											var db = event.target.result;
+        		for (i = 0; i < iteratentimes; i++) {
 
-											tagData = [
-												{ tagtext: "Demo1", tagpos: 0, tagcolor: "66B032", tagform: "tag_fruit" },
-												{ tagtext: "DemoTag2", tagpos: 1, tagcolor: "3D01A4", tagform: "tag_classicframe1" },
-												{ tagtext: "DemoTag3", tagpos: 2, tagcolor: "0391CE", tagform: "tag_cylinder" },
-												{ tagtext: "Demo4", tagpos: 3, tagcolor: "FE2914", tagform: "tag_piggybank" },
-												{ tagtext: "DemoTag5", tagpos: 4, tagcolor: "FD5308", tagform: "tag_maletin" }
-											];
+        			var ext = re.exec(readedElements[i])[1];
+        			if (!ext) {
+        				ext="&nbsp;";
+        			}
 
-											objectStore = db.createObjectStore("tags", { keyPath: "tagid", autoIncrement:true });
-											objectStore.createIndex("tagtext", "tagtext", { unique: false });
-											objectStore.createIndex("tagpos", "tagpos", { unique: false });
-											objectStore.createIndex("tagcolor", "tagcolor", { unique: false });
-											objectStore.createIndex("tagform", "tagform", { unique: false });
-											if(localStorage["demotags"]=="no") {
-												window.demotags = localStorage["demotags"];
-											} else {
-												window.demotags = "yes";
-											}
-											if (demotags == "yes") {
-												for (var i in tagData) {
-													objectStore.add(tagData[i]);
-												}
-											}
+        			// comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+        			var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
 
-											objectStore = db.createObjectStore("folders", { keyPath: "folderid", autoIncrement:true });
-											objectStore.createIndex("folder", "folder", { unique: true });
-											objectStore.createIndex("foldertags", "foldertags", { unique: false, multiEntry: true });
-							
-											objectStore = db.createObjectStore("files", { keyPath: "fileid", autoIncrement:true });
-											objectStore.createIndex("filefolder", "filefolder", { unique: false });
-											objectStore.createIndex("filename", "filename", { unique: false });
-											objectStore.createIndex("fileext", "fileext", { unique: false });
-											objectStore.createIndex("filetags", "filetags", { unique: false });
-								
-											objectStore = db.createObjectStore("favfolds", { keyPath: "favfoldid", autoIncrement:true });
-											objectStore.createIndex("favfoldname", "favfoldname", { unique: true });
+        			try {
+        				var arorfo = "i_am_an_archive";
+        				var arorfo = fs.readdirSync(dirtoreadcheck);
+        			}
+        			catch(exception) {};
 
+        			directoryelement.name = readedElements[i]
 
-										};
+        			var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+        			directorycontent[i] = copied_directoryelement;
+        		};
 
-										request.onsuccess = function(event) {
+        		// separa carpetas y archivos en dos objetos
+        		var i = 0;
+        		var ii = 0;
+        		var iii = 0;
 
-											var db = event.target.result;
+        		$.each(directorycontent, function(i) {
 
-											tooverwritedb = request.result;						
+        			if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+        				directoryfolders[ii] = directorycontent[i];
 
-											var idbExportImport = require("indexeddb-export-import"); // to save and load the contents of an IndexedDB database
-											// se vaciá y después se escribe en la base de datos
-											idbExportImport.clearDatabase(tooverwritedb, function(err) {
-															
-												if(err) {
-													console.log(err)
-												} else {
-													console.log("data cleared");
+        				ii++;
+        			} else {
+        				directoryarchives[iii] = directorycontent[i];
+        				iii++;
+        			};
+        		});
 
-													idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
+            // se añaden las carpetas detectadas como unidades externas disponibles
+            $.each(directoryfolders, function(i) {
+              drives.push("media/" + username + "/" + directoryfolders[i].name);
+            });
 
-													alertify.alert("Data successfully imported.");							
+            var t="";
+            var tdesc="";
 
-												}
-												
-											});
+            $.each (drives, function(i){
 
-										}
+              if (drives[i] == ""){
+                t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
+                tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+              } else {
+                t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
+                tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+              }
 
-									}
+            });
 
-								});
+            $("#unitselect").html(t);
+            $("#unitselect").val("");
 
-							} catch (e) {
-								console.log("not JSON");
-								alertify.alert("It appears that <em>'" +file+ "'</em> do not have a valid data format, please select a valid data file.", function () { 
-									document.getElementById('toinportfile').click();
-								});
+            $("#drivedesc").css("display","none")
+            $("#drivedesc").html("("+tdesc+")");
 
-							}
-							
-						});
+            // se pintará solo la info del drive seleccionado
+        		$.each($("#drivedesc div"), function(n) {
 
-					});
-				});
+        			if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
 
-			} else {
-				alertify.alert("You must select a database from where to import first.");
-			}
+        				$(this).remove()
 
-		}); // --fin importdata onclick
+        			}
 
-		$("#deletedb").on('click', function(){
+        		});
 
-			if ($('#selecteddb').html() != "") {
+        		$("#drivedesc").css("display","inline-block");
 
-				alertify.confirm("Attention, you select to delete <em>'"+$('#selecteddb').html()+"'</em>, are you sure?", function (e) {
-					if (!e) {
-						x = "You pressed Cancel!";
-						console.log(x);                 
-					} else {                  
-						x = "You pressed OK!";
-						console.log(x)
-						
-						var DBDeleteRequest = window.indexedDB.deleteDatabase("tagstoo_" + $('#selecteddb').html());
+          });
 
-						DBDeleteRequest.onerror = function(event) {
-						  console.log("Error deleting database.");
-						};
-						 
-						DBDeleteRequest.onsuccess = function(event) {
-						  // console.log("Database deleted successfully");
+        }
 
-						  // se borra del localstorage si la base de datos borrada es la que estaba señalizada en el localstorage
-						  if (localStorage["currentlydatabaseused"] == "tagstoo_" + $('#selecteddb').html()) {			  	
-						  	 localStorage.removeItem("currentlydatabaseused");
-						  }
+  		});
 
-						  alertify.alert("Database deleted successfully.", function () { 
-						  	location.reload();
-						  });
 
-						};						
+  		$("#newdatabase").on('click', function(){
 
-					}
+  			if($("#newdatabasename").val() != "" ){
 
-				});
-			} else {
-				alertify.alert("You must select a database to delete first.");
-			}
+  				var preexistingname = "no";
 
-		});
+  				$.each (listadofiltradodeDB_toshow, function(i) {
+  					if (listadofiltradodeDB_toshow[i] == $("#newdatabasename").val()) {
+  						preexistingname = "yes";
+  					}
 
-	};
+  				});
 
-}
+  				if(preexistingname=="no") {
 
+  					$('#selecteddb').html($("#newdatabasename").val())
+  				}
+  				else {
+  					alertify.alert("The name you chosen already exists, first delete the database that use this name if you want to use it.")
+  				}
 
-function loaddatabaseselect() {
+  			}
+  			else {
+  				alertify.alert("You must enter a name for the database first.")
+  			}
 
-	$("#databaseselect").find('option').remove().end(); // con esto se vacían las opciones del select para volver a llenarlo con las lineas de abajo
+  		});
+  		// lo mismo si se pulsa enter..
+  		$('#newdatabasename').on('keypress', function (e) {
+       		if(e.which === 13){
 
-	$.each(listadofiltradodeDB_toshow, function(i){
+       			if($("#newdatabasename").val() != "" ){
 
-		var opt = document.getElementById("databaseselect"); 
-		var option = document.createElement("option");
-		option.value = listadofiltradodeDB_toshow[i];                
-		var optionText = document.createTextNode(option.value);                
-		option.appendChild(optionText);
-		opt.appendChild(option);
+  					var preexistingname = "no";
 
-		opt.selectedIndex = -1; // para que ninguna este por defecto seleccionada
-	
-	})	
+  					$.each (listadofiltradodeDB_toshow, function(i) {
+  						if (listadofiltradodeDB_toshow[i] == $("#newdatabasename").val()) {
+  							preexistingname = "yes";
+  						}
 
-}
+  					});
 
-function loaddriveslist() {
+  					if(preexistingname=="no") {
 
-	var availabledrives=[];
-	var drivelist = require('drivelist');
-	var driveLetters = require('windows-drive-letters');
+  						$('#selecteddb').html($("#newdatabasename").val())
+  					}
+  					else {
+  						alertify.alert("The name you chosen already exists, first delete the database that use this name if you want to use it.")
+  					}
 
-	var t="";
-	var tdesc="";
-	var letters=[];
+  				}
+  				else {
+  					alertify.alert("You must enter a name for the database first.")
+  				}
 
-	availabledrives = drivelist.list((error, drives) => {
-		if (error) {
-			throw error;
-		}
+       		};
+       	});
 
-		drives.forEach((drive, i) => {
 
-			i= i+1;
-			t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
-			tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
+  		$("#inportdata").on('click', function(){
 
-		});
+  			if ($('#selecteddb').html() != "") {
 
-		// para detectar unidades virtuales en windows y añadirlas a la lista
-		try {
-			letters = driveLetters.usedLettersSync();
-			// console.log(letters); // => ['C', 'D', ...] 
-		} catch (err) {};
+  				alertify.alert("A file open dialog will be open, you can either select a pre existing file or create a new one (right mouse button), be careful, data in the selected file will be overwritten.", function () {
 
-		$.each (letters, function(i){
+  					document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
 
-			var unidadvirtual = "si";
+  					document.getElementById('toinportfile').click()
 
-			drives.forEach((drive, u) => {
-				if (letters[i]+":" == drive.mountpoints["0"].path ) {
-					unidadvirtual = "no";
-				}
-			});
+  					$('#toinportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..);
 
-			if (unidadvirtual == "si") {
-				t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
-				tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
-			}
+  					$('#toinportfile').on('change', function() {
 
-		});
+  						var file = $('#toinportfile')["0"].value
 
+  						fs.readFile(file, 'utf8', function (err,data) {
+  							if (err) {
+  								return console.log(err);
+  							}
 
-		$("#unitselect").html(t);
-		$("#unitselect").val("");
+  							try {
+  								// se comprueba si es json
+  								JSON.parse(data);
+  								// console.log("is JSON");
 
-		$("#drivedesc").css("display","none")
-		$("#drivedesc").html("("+tdesc+")");
+  								// y continua
+  								alertify.confirm("Attention, data in selected database, <em>'" + $('#selecteddb').html() + "'</em>,  will be overwritten by the content of file <em>'" + file + "'</em>, are you sure?", function (e) {
+  									if (!e) {
+  										x = "You pressed Cancel!";
+  										console.log(x);
+  									} else {
+  										x = "You pressed OK!";
+  										console.log(x)
 
+  										// habrimos la bd
+  										var tooverwritedb = [];
+  										var request = window.indexedDB.open("tagstoo_" + $('#selecteddb').html(), 1);
+  										request.onerror = function(event) {
+  											console.log("error: database not loaded");
+  										};
 
-		// se pintará solo la info del drive seleccionado
-		if ($("#selecteddrive").html()) {
-			$.each($("#drivedesc div"), function(n) {
+  										// aquí realizamos algunas operaciones previas con la bd porque luego si no puede dar fallos a la hora de escribir si está no se ha abierto nunca...
+  										request.onupgradeneeded = function(event) {
 
-				if($(this).attr("value") != $("#selecteddrive").html()) {	
+  											var objectStore;
+  											var db = event.target.result;
 
-					$(this).remove()
+  											tagData = [
+  												{ tagtext: "Demo1", tagpos: 0, tagcolor: "66B032", tagform: "tag_fruit" },
+  												{ tagtext: "DemoTag2", tagpos: 1, tagcolor: "3D01A4", tagform: "tag_classicframe1" },
+  												{ tagtext: "DemoTag3", tagpos: 2, tagcolor: "0391CE", tagform: "tag_cylinder" },
+  												{ tagtext: "Demo4", tagpos: 3, tagcolor: "FE2914", tagform: "tag_piggybank" },
+  												{ tagtext: "DemoTag5", tagpos: 4, tagcolor: "FD5308", tagform: "tag_maletin" }
+  											];
 
-				}
+  											objectStore = db.createObjectStore("tags", { keyPath: "tagid", autoIncrement:true });
+  											objectStore.createIndex("tagtext", "tagtext", { unique: false });
+  											objectStore.createIndex("tagpos", "tagpos", { unique: false });
+  											objectStore.createIndex("tagcolor", "tagcolor", { unique: false });
+  											objectStore.createIndex("tagform", "tagform", { unique: false });
+  											if(localStorage["demotags"]=="no") {
+  												window.demotags = localStorage["demotags"];
+  											} else {
+  												window.demotags = "yes";
+  											}
+  											if (demotags == "yes") {
+  												for (var i in tagData) {
+  													objectStore.add(tagData[i]);
+  												}
+  											}
 
-			});
-		}
-		else { // este caso es para el inicio cuando no le ha dado tiempo a pintar el selecteddrive
-			$.each($("#drivedesc div"), function(n) {
+  											objectStore = db.createObjectStore("folders", { keyPath: "folderid", autoIncrement:true });
+  											objectStore.createIndex("folder", "folder", { unique: true });
+  											objectStore.createIndex("foldertags", "foldertags", { unique: false, multiEntry: true });
 
-				if($(this).attr("value") != driveunit) {	
+  											objectStore = db.createObjectStore("files", { keyPath: "fileid", autoIncrement:true });
+  											objectStore.createIndex("filefolder", "filefolder", { unique: false });
+  											objectStore.createIndex("filename", "filename", { unique: false });
+  											objectStore.createIndex("fileext", "fileext", { unique: false });
+  											objectStore.createIndex("filetags", "filetags", { unique: false });
 
-					$(this).remove()
+  											objectStore = db.createObjectStore("favfolds", { keyPath: "favfoldid", autoIncrement:true });
+  											objectStore.createIndex("favfoldname", "favfoldname", { unique: true });
 
-				}
 
-			});
+  										};
 
-		}
+  										request.onsuccess = function(event) {
 
-		if($("#drivedesc").html() == "()") {
-			$("#drivedesc").html("(Can't load this drive, select available one.)")
-		}
+  											var db = event.target.result;
 
-		$("#drivedesc").css("display","inline-block");
+  											tooverwritedb = request.result;
 
-	});
+  											var idbExportImport = require("indexeddb-export-import"); // to save and load the contents of an IndexedDB database
+  											// se vaciá y después se escribe en la base de datos
+  											idbExportImport.clearDatabase(tooverwritedb, function(err) {
 
-};
+  												if(err) {
+  													console.log(err)
+  												} else {
+  													console.log("data cleared");
 
+  													idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
 
+  													alertify.alert("Data successfully imported.");
+
+  												}
+
+  											});
+
+  										}
+
+  									}
+
+  								});
+
+  							} catch (e) {
+  								console.log("not JSON");
+  								alertify.alert("It appears that <em>'" +file+ "'</em> do not have a valid data format, please select a valid data file.", function () {
+  									document.getElementById('toinportfile').click();
+  								});
+
+  							}
+
+  						});
+
+  					});
+  				});
+
+  			} else {
+  				alertify.alert("You must select a database from where to import first.");
+  			}
+
+  		}); // --fin importdata onclick
+
+  		$("#deletedb").on('click', function(){
+
+  			if ($('#selecteddb').html() != "") {
+
+  				alertify.confirm("Attention, you select to delete <em>'"+$('#selecteddb').html()+"'</em>, are you sure?", function (e) {
+  					if (!e) {
+  						x = "You pressed Cancel!";
+  						console.log(x);
+  					} else {
+  						x = "You pressed OK!";
+  						console.log(x)
+
+  						var DBDeleteRequest = window.indexedDB.deleteDatabase("tagstoo_" + $('#selecteddb').html());
+
+  						DBDeleteRequest.onerror = function(event) {
+  						  console.log("Error deleting database.");
+  						};
+
+  						DBDeleteRequest.onsuccess = function(event) {
+  						  // console.log("Database deleted successfully");
+
+  						  // se borra del localstorage si la base de datos borrada es la que estaba señalizada en el localstorage
+  						  if (localStorage["currentlydatabaseused"] == "tagstoo_" + $('#selecteddb').html()) {
+  						  	 localStorage.removeItem("currentlydatabaseused");
+  						  }
+
+  						  alertify.alert("Database deleted successfully.", function () {
+  						  	location.reload();
+  						  });
+
+  						};
+
+  					}
+
+  				});
+  			} else {
+  				alertify.alert("You must select a database to delete first.");
+  			}
+
+  		});
+
+  	};
+
+  }
+
+
+  function loaddatabaseselect() {
+
+  	$("#databaseselect").find('option').remove().end(); // con esto se vacían las opciones del select para volver a llenarlo con las lineas de abajo
+
+  	$.each(listadofiltradodeDB_toshow, function(i){
+
+  		var opt = document.getElementById("databaseselect");
+  		var option = document.createElement("option");
+  		option.value = listadofiltradodeDB_toshow[i];
+  		var optionText = document.createTextNode(option.value);
+  		option.appendChild(optionText);
+  		opt.appendChild(option);
+
+  		opt.selectedIndex = -1; // para que ninguna este por defecto seleccionada
+
+  	})
+
+  }
+
+  function loaddriveslist() {
+
+    if (s.os.name == "windows") {
+
+      var availabledrives=[];
+    	var drivelist = require('drivelist');
+    	var driveLetters = require('windows-drive-letters');
+
+    	var t="";
+    	var tdesc="";
+    	var letters=[];
+
+    	availabledrives = drivelist.list((error, drives) => {
+    		if (error) {
+    			throw error;
+    		}
+
+    		drives.forEach((drive, i) => {
+
+    			i= i+1;
+    			t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
+    			tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
+
+    		});
+
+    		// para detectar unidades virtuales en windows y añadirlas a la lista
+    		try {
+    			letters = driveLetters.usedLettersSync();
+    			// console.log(letters); // => ['C', 'D', ...]
+    		} catch (err) {};
+
+    		$.each (letters, function(i){
+
+    			var unidadvirtual = "si";
+
+    			drives.forEach((drive, u) => {
+    				if (letters[i]+":" == drive.mountpoints["0"].path ) {
+    					unidadvirtual = "no";
+    				}
+    			});
+
+    			if (unidadvirtual == "si") {
+    				t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
+    				tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
+    			}
+
+    		});
+
+
+    		$("#unitselect").html(t);
+    		$("#unitselect").val("");
+
+    		$("#drivedesc").css("display","none")
+    		$("#drivedesc").html("("+tdesc+")");
+
+
+    		// se pintará solo la info del drive seleccionado
+    		if ($("#selecteddrive").html()) {
+    			$.each($("#drivedesc div"), function(n) {
+
+    				if($(this).attr("value") != $("#selecteddrive").html()) {
+
+    					$(this).remove()
+
+    				}
+
+    			});
+    		}
+    		else { // este caso es para el inicio cuando no le ha dado tiempo a pintar el selecteddrive
+    			$.each($("#drivedesc div"), function(n) {
+
+    				if($(this).attr("value") != driveunit) {
+
+    					$(this).remove()
+
+    				}
+
+    			});
+
+    		}
+
+    		if($("#drivedesc").html() == "()") {
+    			$("#drivedesc").html("(Can't load this drive, select available one.)")
+    		}
+
+    		$("#drivedesc").css("display","inline-block");
+
+    	});
+
+    }
+
+    if (s.os.name == "linux") {
+
+      // console.log($("#unitselect").val())
+
+      // if ($("#unitselect").val() != "") {
+      //   $('#selecteddrive').html( "/" + $("#unitselect").val() );
+      // } else {
+      //   $('#selecteddrive').html("/")
+      // }
+
+      drives = [""];
+
+      // Detectar y añadir unidades externas a la lista
+
+      const username = require('username');
+
+      username().then(username => {
+
+        var dirtoread = "/media/" + username // la carpeta donde se montan las unidades externas
+        var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+
+        var directoryelement = [];
+        var directorycontent = [];
+        window.directoryarchives = [];
+        window.directoryfolders = [];
+
+        var readedElements = fs.readdirSync(dirtoread)
+        var iteratentimes = readedElements.length;
+
+        for (i = 0; i < iteratentimes; i++) {
+
+          var ext = re.exec(readedElements[i])[1];
+          if (!ext) {
+            ext="&nbsp;";
+          }
+
+          // comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+          var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+
+          try {
+            var arorfo = "i_am_an_archive";
+            var arorfo = fs.readdirSync(dirtoreadcheck);
+          }
+          catch(exception) {};
+
+          directoryelement.name = readedElements[i]
+
+          var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+          directorycontent[i] = copied_directoryelement;
+        };
+
+        // separa carpetas y archivos en dos objetos
+        var i = 0;
+        var ii = 0;
+        var iii = 0;
+
+        $.each(directorycontent, function(i) {
+
+          if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+            directoryfolders[ii] = directorycontent[i];
+
+            ii++;
+          } else {
+            directoryarchives[iii] = directorycontent[i];
+            iii++;
+          };
+        });
+
+        // se añaden las carpetas detectadas como unidades externas disponibles
+        $.each(directoryfolders, function(i) {
+          drives.push("media/" + username + "/" + directoryfolders[i].name);
+        });
+
+        var t="";
+        var tdesc="";
+
+        $.each (drives, function(i){
+
+          if (drives[i] == ""){
+            t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
+            tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+          } else {
+            t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
+            tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+
+          }
+
+        });
+
+        $("#unitselect").html(t);
+        $("#unitselect").val("");
+
+        $("#drivedesc").css("display","none")
+        $("#drivedesc").html("("+tdesc+")");
+
+        // se pintará solo la info del drive seleccionado
+        $.each($("#drivedesc div"), function(n) {
+
+          if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+
+            $(this).remove()
+
+          }
+
+        });
+
+        $("#drivedesc").css("display","inline-block");
+
+      });
+
+    }
+
+  };
+
+
+
+
+});
 function starttagstoo() {
 
-	if ($("#selecteddb").html() != "") {
-		if($("#drivedesc").html() != "(Can't load this drive, select an available one.)") {
+  if ($("#selecteddb").html() != "") {
+    if($("#drivedesc").html() != "(Can't load this drive, select an available one.)") {
 
-			localStorage["currentlydatabaseused"] = "tagstoo_" + $("#selecteddb").html();
-		    localStorage["selecteddriveunit"] = $("#selecteddrive").html();
-		    localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
+      localStorage["currentlydatabaseused"] = "tagstoo_" + $("#selecteddb").html();
+      if (s.os.name == "windows") {
+        localStorage["selecteddriveunit"] = $("#selecteddrive").html();
+        localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
+      }
+      if (s.os.name == "linux") {
+        if ($("#selecteddrive").html() == "/ "){
+          localStorage["selecteddriveunit"] = $("#selecteddrive").html().slice(2);
+          localStorage["lastuseddriveunit"] = $("#selecteddrive").html().slice(2);
+        } else {
+          localStorage["selecteddriveunit"] = $("#selecteddrive").html();
+          localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
+        }
 
-			window.parent.location.assign("main.html")
+      }
 
-		}
-		else {
-			alertify.alert("Please select an available drive unit.")
-		}
+      window.parent.location.assign("main.html")
 
-	} else {
-		alertify.alert("You must select an existing database or enter a new name for a new database to launch the program.")
-	}
-	
+    }
+    else {
+      alertify.alert("Please select an available drive unit.")
+    }
+
+  } else {
+    alertify.alert("You must select an existing database or enter a new name for a new database to launch the program.")
+  }
+
 };

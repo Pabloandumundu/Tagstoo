@@ -1,4 +1,4 @@
-/* 
+/*
 * Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
@@ -19,8 +19,22 @@
 
 
 fs = require('fs-extra');
+var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
 
 var viewmode = top.explorer.viewmode;  // recogemos el valor viewmode del iframe explorer
+var s = top.explorer.s // el resultado del Sniffr (sistema operativo, etc..)
+
+if (!localStorage["autoslideshow"]) {
+	window.autoslideshow = "no";
+} else {
+	window.autoslideshow = localStorage["autoslideshow"]
+}
+
+if (!localStorage["autoslideshowtime"]) {
+	window.autoslideshowtime = "6";
+} else {
+	window.autoslideshowtime = localStorage["autoslideshowtime"]
+}
 
 var searchviewmode = "1"
 var searchorder = "nameasc"
@@ -29,7 +43,6 @@ var resultadosarchivos=[];
 var searchfor="";
 
 $(document).ready(function () {
-
 
 	// panel de desarrollo ////\\\\
 	$( "#paneloff" ).click(function() {
@@ -86,7 +99,7 @@ $(document).ready(function () {
 		var nd_newwithd = nd_originalwidth + diference;
 		if (nd_newwithd > 400 && nd_newwithd < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo
 			$('#searchview').width(event.rect.width);
-			$('#locationinfo, #searchdirview-wrapper').width(nd_newwithd);			
+			$('#locationinfo, #searchdirview-wrapper').width(nd_newwithd);
 		}
 
 
@@ -108,8 +121,8 @@ $(document).ready(function () {
 		var nd_newwithd = nd_originalwidth + diference;
 		if (originalwidth > 20 && nd_originalwidth > 80) { //esto es solo para poner un tamño minimo
 			$('#bottomleft').width(event.rect.width);
-			$('#bottomright').width(nd_newwithd);			
-		} 
+			$('#bottomright').width(nd_newwithd);
+		}
 		else if (originalwidth <= 20) {
 			$('#bottomleft').css("width","25px");
 			$('#bottomright').css("width","calc(100% - 45px)");
@@ -132,8 +145,8 @@ $(document).ready(function () {
 
 	// --fin bottom
 
-	// las diferentes "columnas" del panel derecho  
-	if (searchviewmode==1){		
+	// las diferentes "columnas" del panel derecho
+	if (searchviewmode==1){
 
 		interact('.explofolder, .explofile')
 
@@ -144,16 +157,16 @@ $(document).ready(function () {
 			.on('resizemove', function (event) {
 
 				var pixelstotalesl = $('.exploelement').width();
-		
+
 				if (event.target.classList.contains("explofolder")) {
 					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.folderelements', '.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					
+
 				}
 				else if (event.target.classList.contains("explofile")) {
 					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					
+
 				}
 				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
 
@@ -169,7 +182,7 @@ $(document).ready(function () {
 					$('.explofolder, .explofile').next("div").width(nd_newwithd);
 				}
 
-				else {						
+				else {
 
 					$('.explofolder, .explofile').width(anchuraespecifica)
 
@@ -189,12 +202,12 @@ $(document).ready(function () {
 				if (event.target.classList.contains("exploext")) {
 					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();7
 					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					
+
 				}
 				else if (event.target.classList.contains("folderelements")) {
 					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					
+
 				}
 				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
 
@@ -204,7 +217,7 @@ $(document).ready(function () {
 				var diference = originalwidth - event.rect.width;
 				var nd_newwithd = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) { 
+				if (sumatoriodepixels + 35 < pixelstotalesl) {
 
 					$('.folderelements, .exploext').width(event.rect.width);
 					$('.folderelements, .exploext').next("div").width(nd_newwithd);
@@ -230,13 +243,13 @@ $(document).ready(function () {
 				if (event.target.parentElement.classList.contains("archive")) {
 					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					
+
 				}
 				else if (event.target.parentElement.classList.contains("folder")) {
 					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-				}				
-						
+				}
+
 				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
 
 				var originalwidth = $('.explosize').width();
@@ -245,7 +258,7 @@ $(document).ready(function () {
 				var diference = originalwidth - event.rect.width;
 				var nd_newwithd = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) { 
+				if (sumatoriodepixels + 35 < pixelstotalesl) {
 
 					$('.explosize').width(event.rect.width);
 					$('.explosize').next("div").width(nd_newwithd);
@@ -270,13 +283,13 @@ $(document).ready(function () {
 				if (event.target.parentElement.classList.contains("archive")) {
 					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.lastmod').width() + $('.duration').width();
-					
+
 				}
 				else if (event.target.parentElement.classList.contains("folder")) {
 					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.lastmod').width() + $('.duration').width();
-				}				
-							
+				}
+
 				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
 
 				var originalwidth = $('.exploelement .tags').width();
@@ -310,13 +323,13 @@ $(document).ready(function () {
 				if (event.target.parentElement.classList.contains("archive")) {
 					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.duration').width();
-					
+
 				}
 				else if (event.target.parentElement.classList.contains("folder")) {
 					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.duration').width();
-				}				
-			
+				}
+
 				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
 
 				var originalwidth = $('.lastmod').width();
@@ -327,7 +340,7 @@ $(document).ready(function () {
 
 
 				if (sumatoriodepixels + 35 < pixelstotalesl) {
-	
+
 					$('.lastmod').width(event.rect.width);
 					$('.lastmod').next("div").width(nd_newwithd);
 
@@ -351,13 +364,13 @@ $(document).ready(function () {
 				if (event.target.parentElement.classList.contains("archive")) {
 					var sumatoriodepixels = $('.exploelement .imgmode1').width() + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = $('.exploelement .imgmode1').width() + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width();
-					
+
 				}
 				else if (event.target.parentElement.classList.contains("folder")) {
 					var sumatoriodepixels = $('.exploelement .imgmode1').width() + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
 					var sumatoriodepixelsotros = $('.exploelement .imgmode1').width() + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width();
-				}				
-				
+				}
+
 				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
 
 				var originalwidth = $('.duration').width();
@@ -367,7 +380,7 @@ $(document).ready(function () {
 				var nd_newwithd = nd_originalwidth + diference;
 
 				if (sumatoriodepixels + 35 < pixelstotalesl) {
-				
+
 					$('.duration').width(event.rect.width);
 					$('.duration').next("div").width(nd_newwithd);
 
@@ -380,7 +393,7 @@ $(document).ready(function () {
 			}); // --fin "columnas"
 
 
-	} // --fin if searchviewmode=1	
+	} // --fin if searchviewmode=1
 
 
 	// searchviewmode
@@ -396,19 +409,19 @@ $(document).ready(function () {
 
 				.resizable({
 					enabled: true
-				})			
+				})
 
 			interact('.folderelements, .exploext')
 
 				.resizable({
 					enabled: true
-				})			
+				})
 
 			interact('.explosize')
 
 				.resizable({
 					enabled: true
-				})		
+				})
 
 			interact('.exploelement .tags')
 
@@ -427,7 +440,7 @@ $(document).ready(function () {
 				.resizable({
 					enabled: true
 				});
-				
+
 		} // --fin if searchviewmode==1
 
 		if (searchviewmode!=1){
@@ -436,19 +449,19 @@ $(document).ready(function () {
 
 				.resizable({
 					enabled: false
-				})			
+				})
 
 			interact('.folderelements, .exploext')
 
 				.resizable({
 					enabled: false
-				})			
+				})
 
 			interact('.explosize')
 
 				.resizable({
 					enabled: false
-				})		
+				})
 
 			interact('.exploelement .tags')
 
@@ -499,7 +512,7 @@ $(document).ready(function () {
 
 	$("#eraser img").click(function() {
 
-		var cursoractual = $(".tags > div").css('cursor'); 
+		var cursoractual = $(".tags > div").css('cursor');
 
 		if (eraseron == "off") {
 
@@ -529,7 +542,7 @@ $(document).ready(function () {
 window.parent.$('#options').on('click', function() {
 
     popup('options');
-    
+
 })
 
 // acceso al popup info
@@ -562,7 +575,11 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 	window.selectedFolder = "\/" ; // valor por defecto
 	window.selectedDriveUnit = driveunit; // valor por defecto
 
-	$("#searchin")["0"].children["0"].innerHTML = driveunit;
+	if (driveunit != "") {
+		$("#searchin")["0"].children["0"].innerHTML = driveunit;
+	} else {
+		$("#searchin")["0"].children["0"].innerHTML = "&nbsp;/";
+	}
 
 	drawfootertags();
 
@@ -572,20 +589,20 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 	$('#taginput1').droppable({
 
 		accept: '.footertagticket',
-	   
+
 		drop: function( event, ui ) {
 
 		    var apaniopar = $( "#tagpar" ).html();
 		    var apanioinpar = $( "#taginpar" ).html();
-			   
+
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
-			
+
 				if ($(this)[0].children.length < 4) { //si previamente hay como máximo 3 tags en el input
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px";
 					ui.draggable["0"].style.left = "0px";
-				 
+
 					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
 					var positiontop = ui.offset.top + 5; // la altura a la que se ha hecho el dropp. (absoluta)
 					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
@@ -645,8 +662,8 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 							var cursor2 = event.target.result;
 							if (cursor2) {
-								$.each(taginput1tags, function(n) {	
-										
+								$.each(taginput1tags, function(n) {
+
 									if (cursor2.value.tagid == taginput1tags[n].attributes[1].value) {
 
 										var color = "#" + cursor2.value.tagcolor;
@@ -668,8 +685,8 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						};
 
 					};
-					
-			    }	
+
+			    }
 		    	else {
 
 		    		alertify.alert("Maximum 4 tags are permitted for each input field.");
@@ -680,7 +697,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
 		    $("#bottomright").css("width", ajustartamanio + "px");
-		
+
 		}
 
 	});
@@ -697,16 +714,16 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 	$('#taginput2').droppable({
 
 		accept: '.footertagticket',
-	   
+
 		drop: function( event, ui ) {
-	   
+
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
 				if ($(this)[0].children.length < 4) {
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px"
-					ui.draggable["0"].style.left = "0px"				 
+					ui.draggable["0"].style.left = "0px"
 
 					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
 					var positiontop = ui.offset.top + 5 // la altura a la que se ha hecho el dropp. (absoluta)
@@ -763,11 +780,11 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						req2.onerror = function(event) {
 							console.log("error: " + event);
 						};
-						req2.onsuccess = function(event) { 
+						req2.onsuccess = function(event) {
 							var cursor2 = event.target.result;
 							if (cursor2) {
-								$.each(taginput2tags, function(n) {	
-										
+								$.each(taginput2tags, function(n) {
+
 									if (cursor2.value.tagid == taginput2tags[n].attributes[1].value) {
 
 										var color = "#" + cursor2.value.tagcolor;
@@ -789,18 +806,18 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 					};
 
-				}	
+				}
 		    	else {
 
 		    		alertify.alert("Maximum 4 tags are permitted for each input field.");
 		    	 	ui.draggable.draggable('option','revert',true);
 		    	}
-				
+
 		    }
 
 		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
-		    $("#bottomright").css("width", ajustartamanio + "px");    
-		
+		    $("#bottomright").css("width", ajustartamanio + "px");
+
 		}
 
 	});
@@ -817,16 +834,16 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 	$('#taginput3').droppable({
 
 		accept: '.footertagticket',
-	   
+
 		drop: function( event, ui ) {
-		   
+
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
 				if ($(this)[0].children.length < 4) {
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px"
-					ui.draggable["0"].style.left = "0px"				 
+					ui.draggable["0"].style.left = "0px"
 
 					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
 					var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta)
@@ -883,11 +900,11 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						req2.onerror = function(event) {
 							console.log("error: " + event);
 						};
-						req2.onsuccess = function(event) { 
+						req2.onsuccess = function(event) {
 							var cursor2 = event.target.result;
 							if (cursor2) {
-								$.each(taginput3tags, function(n) {	
-										
+								$.each(taginput3tags, function(n) {
+
 									if (cursor2.value.tagid == taginput3tags[n].attributes[1].value) {
 
 										var color = "#" + cursor2.value.tagcolor;
@@ -909,18 +926,18 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 					};
 
-				}	
+				}
 		    	else {
 
 		    		alertify.alert("Maximum 4 tags are permitted for each input field.");
 		    	 	ui.draggable.draggable('option','revert',true);
 		    	}
-				
+
 		    }
 
 		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
-		    $("#bottomright").css("width", ajustartamanio + "px");	    
-		
+		    $("#bottomright").css("width", ajustartamanio + "px");
+
 		}
 
 	});
@@ -937,16 +954,16 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 	$('#taginput4').droppable({
 
 		accept: '.footertagticket',
-	   
+
 		drop: function( event, ui ) {
-	   
+
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
 				if ($(this)[0].children.length < 4) {
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px"
-					ui.draggable["0"].style.left = "0px"				 
+					ui.draggable["0"].style.left = "0px"
 
 					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
 					var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta)
@@ -1003,11 +1020,11 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						req2.onerror = function(event) {
 							console.log("error: " + event);
 						};
-						req2.onsuccess = function(event) { 
+						req2.onsuccess = function(event) {
 							var cursor2 = event.target.result;
 							if (cursor2) {
-								$.each(taginput4tags, function(n) {	
-										
+								$.each(taginput4tags, function(n) {
+
 									if (cursor2.value.tagid == taginput4tags[n].attributes[1].value) {
 
 										var color = "#" + cursor2.value.tagcolor;
@@ -1030,22 +1047,22 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 						trans2.oncomplete = function(event) {
 
-						}	
+						}
 
 					};
 
-				}	
+				}
 		    	else {
 
 		    		alertify.alert("Maximum 4 tags are permitted for each input field.");
 		    	 	ui.draggable.draggable('option','revert',true);
 		    	}
-				
+
 		    }
 
 		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
-		    $("#bottomright").css("width", ajustartamanio + "px");    
-		
+		    $("#bottomright").css("width", ajustartamanio + "px");
+
 		}
 
 	});
@@ -1062,12 +1079,12 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 	// Search
 
-	$( "#searchaction" ).click(function() {	
+	$( "#searchaction" ).click(function() {
 
 		window.eraseron = "off";
 		$(".tags > div").css('cursor','pointer');
 		$("#eraser img").removeClass('activated');
-		$("#eraseron").removeClass("on");	
+		$("#eraseron").removeClass("on");
 
 		window.taggroup= [];
 
@@ -1086,12 +1103,12 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 		window.resultadosarchivos=[];
 		window.resultadoscarpetas=[];
-	
+
 		$.each ($(".taginput"), function(u) {
 
 			taggroup[u] = $(".taginput:eq("+u+")")["0"].attributes[2].value
 			if (taggroup[u] != "" ) {
-			
+
 				numerodecamposrellenados ++;
 			}
 
@@ -1139,18 +1156,18 @@ function getalltags(callback) {
 	var trans = db.transaction(["tags"], "readonly");
 	var store = trans.objectStore("tags");
 	var items = [];
- 
-	trans.oncomplete = function(evt) {  
+
+	trans.oncomplete = function(evt) {
 		callback(items);
 	};
- 
+
 	var cursorRequest = store.openCursor();
- 
+
 	cursorRequest.onerror = function(error) {
 		console.log(error);
 	};
- 
-	cursorRequest.onsuccess = function(evt) {                    
+
+	cursorRequest.onsuccess = function(evt) {
 		var cursor = evt.target.result;
 		if (cursor) {
 			items.push(cursor.value);
@@ -1195,18 +1212,18 @@ function drawfootertags() {
 		var trans = db.transaction(["tags"], "readonly");
 		var objectStore = trans.objectStore("tags");
 
-		var tagdelfooter = $("#bottom .footertagticket");		
+		var tagdelfooter = $("#bottom .footertagticket");
 		$.each(tagdelfooter, function(i) {
 
-			var req = objectStore.openCursor(); 
-		
-			req.onerror = function(event) { 
+			var req = objectStore.openCursor();
+
+			req.onerror = function(event) {
 
 				console.log("error: " + event);
 
 			};
 
-			req.onsuccess = function(event) { 
+			req.onsuccess = function(event) {
 
 				var cursor = event.target.result;
 
@@ -1265,7 +1282,7 @@ function footertagsinteractions(){
 	});
 
 	$('.footertagticket').droppable({
-		
+
 		accept: '.footertagticket',
 		drop: function( event, ui ) {
 
@@ -1275,18 +1292,18 @@ function footertagsinteractions(){
 			var droppid = $(this).attr("value"); // el id del dropp
 
 
-			// le ponemos la posición del dropp al dragg	utilizando el id				
+			// le ponemos la posición del dropp al dragg	utilizando el id
 			var trans = db.transaction(["tags"], "readwrite");
 			var objectStore = trans.objectStore("tags");
 			var req = objectStore.openCursor();
 
-			req.onerror = function(event) { 
+			req.onerror = function(event) {
 
 				console.log("error: " + event);
 
 			};
 
-			req.onsuccess = function(event) { 
+			req.onsuccess = function(event) {
 
 				var cursor = event.target.result;
 
@@ -1294,14 +1311,14 @@ function footertagsinteractions(){
 
 					if (cursor.value.tagid == draggid) {
 
-						var updateData = cursor.value;          
-						updateData.tagpos = droppposorig; 
+						var updateData = cursor.value;
+						updateData.tagpos = droppposorig;
 						cursor.update(updateData)
 
 					}
 
 					cursor.continue();
-						
+
 				}
 
 			}
@@ -1313,13 +1330,13 @@ function footertagsinteractions(){
 				var objectStore = trans.objectStore("tags");
 				var req = objectStore.openCursor();
 
-				req.onerror = function(event) { 
+				req.onerror = function(event) {
 
 					console.log("error: " + event);
 
 				};
 
-				req.onsuccess = function(event) { 
+				req.onsuccess = function(event) {
 
 					var cursor = event.target.result;
 
@@ -1327,14 +1344,14 @@ function footertagsinteractions(){
 
 						if (cursor.value.tagid == droppid) {
 
-							var updateData = cursor.value;          
-							updateData.tagpos = draggposorig; 
+							var updateData = cursor.value;
+							updateData.tagpos = draggposorig;
 							cursor.update(updateData)
 
 						}
 
 						cursor.continue();
-							
+
 					}
 
 				}
@@ -1361,23 +1378,39 @@ function selectedafolder() {
 
 	var selectedFold=document.getElementById("selectedFold");
 
+
+
 	selectedFolder = selectedFold.value.replace(/\\/g, "\/"); // se cambia las \ por /
 	selectedDriveUnit= selectedFolder.substr(0, selectedFolder.indexOf('\/')); // se selecciona hasta la primera /
 	selectedFolder = selectedFolder.replace(selectedDriveUnit, ""); // se quita el driveunit de la ruta seleccionada
 
-	if (selectedDriveUnit != "") {
+	console.log(selectedFolder)
+	if (s.os.name == "windows") {
 
-		if (selectedDriveUnit != driveunit) {
+		if (selectedDriveUnit != "") {
 
-			alertify.alert("The folder you selected is in drive <em>'" + selectedDriveUnit + "'</em> while the current database is associated with drive <em>'" + driveunit + "'</em> , please select a folder in the drive associated to database.", function () { 
+			if (selectedDriveUnit != driveunit) {
 
-				$( "#selectFolder" ).trigger( "click" );
-			});
+				alertify.alert("The folder you selected is in drive <em>'" + selectedDriveUnit + "'</em> while the current database is associated with drive <em>'" + driveunit + "'</em> , please select a folder in the drive associated to database.", function () {
+
+					$( "#selectFolder" ).trigger( "click" );
+				});
+			}
+
+			if (selectedDriveUnit == driveunit) {
+
+				$("#searchin")["0"].children["0"].innerHTML = selectedDriveUnit + selectedFolder;
+
+			}
+
 		}
 
-		if (selectedDriveUnit == driveunit) {
+	}
+	if (s.os.name == "linux") {
 
-			$("#searchin")["0"].children["0"].innerHTML = selectedDriveUnit + selectedFolder;
+		if (selectedFolder) {
+
+			$("#searchin")["0"].children["0"].innerHTML = selectedFolder;
 
 		}
 
@@ -1422,9 +1455,9 @@ function searchinfolders() {
 			};
 
 			req.onsuccess = function(event) {
-				
+
 				var cursor = event.target.result;
-				
+
 				if(cursor){
 
 					if (selectedFolder == "\/") {
@@ -1440,7 +1473,7 @@ function searchinfolders() {
 						if (typeof tagsdelelemento[t] == "string") {
 							tagsdelelemento[t] = tagsdelelemento[t].split(",");
 						}
-						
+
 						$.each (tagsdelelemento[t], function(u) {
 
 							if (tagsdelelemento[t][u] == arraydetagsabuscar[t][0]) {
@@ -1481,7 +1514,7 @@ function searchinfolders() {
 					resultsfolders[t].push(resultsfolderstemp[t][u]);
 
 				});
-				
+
 				if (arraydetagsabuscar[t].length < 2) {
 
 					concetradoresultadoscarpetas(resultsfolders[t]);
@@ -1511,12 +1544,12 @@ function searchinfolders() {
 						console.log("error: " + event);
 					};
 
-					req.onsuccess = function(event) {								
+					req.onsuccess = function(event) {
 
-						if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada pues no tiene todos los tags)	
-							
+						if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada pues no tiene todos los tags)
+
 							var cursor = event.target.result;
-							
+
 							if(cursor){
 
 								if (selectedFolder == "\/") {
@@ -1543,8 +1576,8 @@ function searchinfolders() {
 
 									if (coincidetag == "si") {
 
-										// console.log("coincide segundo tag con: " + cursor.value.folder)					
-										
+										// console.log("coincide segundo tag con: " + cursor.value.folder)
+
 										$.each (resultsfolders[t], function(u) {
 
 											if (resultsfolders[t][u].folderid == cursor.value.folderid) {
@@ -1558,11 +1591,11 @@ function searchinfolders() {
 
 								}
 
-								cursor.continue();								
+								cursor.continue();
 
 							}
 
-						}							
+						}
 
 					}
 
@@ -1618,12 +1651,12 @@ function searchinfolders() {
 								console.log("error: " + event);
 							};
 
-							req.onsuccess = function(event) {								
+							req.onsuccess = function(event) {
 
-								if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada pues no tiene todos los tags)									
-									
+								if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada pues no tiene todos los tags)
+
 									var cursor = event.target.result;
-									
+
 									if(cursor){
 
 										if (selectedFolder == "\/") {
@@ -1651,14 +1684,14 @@ function searchinfolders() {
 
 											if (coincidetag == "si") {
 
-												// console.log("coincide tercer tag con: " + cursor.value.folder)				
-												
+												// console.log("coincide tercer tag con: " + cursor.value.folder)
+
 												$.each (resultsfolders[t], function(u) {
 
 													if (resultsfolders[t][u].folderid == cursor.value.folderid) {
 
-														window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento 
-														
+														window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
+
 													}
 
 												});
@@ -1667,11 +1700,11 @@ function searchinfolders() {
 
 										}
 
-										cursor.continue();								
+										cursor.continue();
 
 									}
 
-								}							
+								}
 
 							}
 
@@ -1704,7 +1737,7 @@ function searchinfolders() {
 
 								}
 
-								// a por el 4º tag 										
+								// a por el 4º tag
 
 								else if (arraydetagsabuscar[t].length == 4) { // si hay al menos 4 tags para buscar
 
@@ -1727,12 +1760,12 @@ function searchinfolders() {
 										console.log("error: " + event);
 									};
 
-									req.onsuccess = function(event) {								
+									req.onsuccess = function(event) {
 
-										if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)									
-											
+										if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
+
 											var cursor = event.target.result;
-											
+
 											if(cursor){
 
 												if (selectedFolder == "\/") {
@@ -1761,15 +1794,15 @@ function searchinfolders() {
 
 													if (coincidetag == "si") {
 
-														// console.log("coincide cuarto tag con: " + cursor.value.folder)		
-														
+														// console.log("coincide cuarto tag con: " + cursor.value.folder)
+
 														$.each (resultsfolders[t], function(u) {
 
 															if (resultsfolders[t][u].folderid == cursor.value.folderid) {
 
-																window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento 
+																window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
 
-															}														
+															}
 
 														});
 
@@ -1777,11 +1810,11 @@ function searchinfolders() {
 
 												}
 
-												cursor.continue();								
+												cursor.continue();
 
 											}
 
-										}							
+										}
 
 									}
 
@@ -1855,9 +1888,9 @@ function searchinfiles() {
 	};
 
 	req.onsuccess = function(event) {
-		
+
 		var cursor = event.target.result;
-		
+
 		if(cursor){
 
 			if (selectedFolder == "\/") {
@@ -1877,7 +1910,7 @@ function searchinfiles() {
 
 		}
 
-	}				
+	}
 
 	trans.oncomplete = function(event) {
 
@@ -1892,7 +1925,7 @@ function searchinfiles() {
 
 		$.each (taggroup, function(t) {
 
-			var actualgroup = t;					
+			var actualgroup = t;
 
 			$('#numeroderesultadosarchivos').html("Searching files ...");
 
@@ -1925,9 +1958,9 @@ function searchinfiles() {
 					};
 
 					req.onsuccess = function(event) {
-					
-						var cursor = event.target.result;						
-						
+
+						var cursor = event.target.result;
+
 						if(cursor){
 
 							if (cursor.value.filefolder == folderidintosearch[n]) { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
@@ -1981,20 +2014,20 @@ function searchinfiles() {
 
 												resultsfilestemp[t].push(filetoad);
 
-											}											
+											}
 
 										}
 
-									}					
+									}
 
 
-								})								
+								})
 
 							}
 
 							cursor.continue();
 
-						}								
+						}
 
 					}
 
@@ -2046,11 +2079,11 @@ function searchinfiles() {
 								console.log("error: " + event);
 							};
 
-							req.onsuccess = function(event) {								
+							req.onsuccess = function(event) {
 
-								if (resultsfiles[t].length > 0) { // si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)									
+								if (resultsfiles[t].length > 0) { // si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
 									var cursor = event.target.result;
-									
+
 									if(cursor){
 
 										if (cursor.value.filefolder == folderidintosearch[n]) {
@@ -2075,17 +2108,17 @@ function searchinfiles() {
 
 											if (coincidetag == "si") {
 
-												// console.log("coincide segundo tag con: " + cursor.value.filename)				
-										
+												// console.log("coincide segundo tag con: " + cursor.value.filename)
+
 												$.each (resultsfiles[t], function(u) {
 
 													if (resultsfiles[t][u].fileid == cursor.value.fileid) {
 
-														resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento 
+														resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
 
 														flagg="yes";
 
-													}															
+													}
 
 												});
 
@@ -2093,11 +2126,11 @@ function searchinfiles() {
 
 										}
 
-										cursor.continue();								
+										cursor.continue();
 
 									}
 
-								}							
+								}
 
 							}
 
@@ -2162,12 +2195,12 @@ function searchinfiles() {
 											console.log("error: " + event);
 										};
 
-										req.onsuccess = function(event) {								
+										req.onsuccess = function(event) {
 
-											if (resultsfiles[t].length > 0) { // si hay resultados previos (si no no se añade nada, pues no tiene todos los tags)									
-												
+											if (resultsfiles[t].length > 0) { // si hay resultados previos (si no no se añade nada, pues no tiene todos los tags)
+
 												var cursor = event.target.result;
-												
+
 												if(cursor){
 
 													if (cursor.value.filefolder == folderidintosearch[n]) {
@@ -2192,27 +2225,27 @@ function searchinfiles() {
 
 														if (coincidetag == "si") {
 
-															// console.log("coincide tercer tag con: " + cursor.value.filename)				
+															// console.log("coincide tercer tag con: " + cursor.value.filename)
 															$.each (resultsfiles[t], function(u) {
 
 																if (resultsfiles[t][u].fileid == cursor.value.fileid) {
 
-																	resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento 
+																	resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento
 
 																	flagg = "yes";
 																}
 
-															});																		
+															});
 
-														}	
+														}
 
 													}
 
-													cursor.continue();								
+													cursor.continue();
 
 												}
 
-											}							
+											}
 
 										}
 
@@ -2277,12 +2310,12 @@ function searchinfiles() {
 														console.log("error: " + event);
 													};
 
-													req.onsuccess = function(event) {								
+													req.onsuccess = function(event) {
 
-														if (resultsfiles[t].length > 0) { //si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)									
-															
+														if (resultsfiles[t].length > 0) { //si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
+
 															var cursor = event.target.result;
-															
+
 															if(cursor){
 
 																if (cursor.value.filefolder == folderidintosearch[n]) {
@@ -2308,12 +2341,12 @@ function searchinfiles() {
 																	if (coincidetag == "si") {
 
 																		// console.log("coincide cuarto tag con: " + cursor.value.filename)
-																				
+
 																		$.each (resultsfiles[t], function(u) {
 
 																			if (resultsfiles[t][u].fileid == cursor.value.fileid) {
 
-																				resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento 
+																				resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento
 
 																				flagg="yes";
 																			}
@@ -2328,7 +2361,7 @@ function searchinfiles() {
 
 															}
 
-														}							
+														}
 
 													}
 
@@ -2493,7 +2526,7 @@ function readsearchredresults() {
 
 		try {
 
-			var stats = fs.statSync(driveunit + resultadoscarpetas[n].name);		
+			var stats = fs.statSync(driveunit + resultadoscarpetas[n].name);
 
 			// última modificación
 			var lastmodified = stats["mtime"];
@@ -2513,7 +2546,7 @@ function readsearchredresults() {
 		catch(err) {
 			console.log('An unaccesible folder');
 		}
-		
+
 		var dirtoreadcheck = driveunit + resultadoscarpetas[n].name;
 
 		try {
@@ -2551,7 +2584,7 @@ function readsearchredresults() {
 				resultadosarchivos[n].sizeterm = "Mb";
 				resultadosarchivos[n].sizetodraw = fileSize/1000000.0;
 				resultadosarchivos[n].sizetodraw = resultadosarchivos[n].sizetodraw.toFixed(2);
-			}	 			
+			}
 			if (fileSize == 0) {
 				resultadosarchivos[n].sizeterm = "";
 				resultadosarchivos[n].sizetodraw = "";
@@ -2594,15 +2627,15 @@ function readsearchredresults() {
 		resultadosarchivos[n].arorfo = arorfo;
 
 	});
-	
+
 
 	t = "";
 
 	if (searchfor == "folders") {
-		
+
 		drawSearchFolders(searchviewmode, searchorder);
 		drawSearchAfter();
-	} 
+	}
 
 	else if(searchfor == "files") {
 
@@ -2629,25 +2662,25 @@ function readsearchredresults() {
 
 function SortByNameAsc(a, b){
   var aName = a.name.toLowerCase();
-  var bName = b.name.toLowerCase(); 
+  var bName = b.name.toLowerCase();
   return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
 }
 function SortByNameDesc(a, b){
   var aName = a.name.toLowerCase();
-  var bName = b.name.toLowerCase(); 
+  var bName = b.name.toLowerCase();
   return ((aName > bName) ? -1 : ((aName < bName) ? 1 : 0));
 }
 function SortByExtAsc(a, b){
   try {
 	  var aExt = a.ext.toLowerCase();
-	  var bExt = b.ext.toLowerCase(); 
+	  var bExt = b.ext.toLowerCase();
 	  return ((aExt < bExt) ? -1 : ((aExt > bExt) ? 1 : 0));
   } catch (err) { };
 }
 function SortByExtDesc(a, b){
   try {
 	  var aExt = a.ext.toLowerCase();
-	  var bExt = b.ext.toLowerCase(); 
+	  var bExt = b.ext.toLowerCase();
 	  return ((aExt > bExt) ? -1 : ((aExt < bExt) ? 1 : 0));
   } catch (err) { };
 
@@ -2664,25 +2697,25 @@ function SortByElemDesc(a,b) {
 }
 function SortBySizeAsc(a,b) {
 	var aSize = a.size;
-	var bSize = b.size; 
+	var bSize = b.size;
 	return ((aSize < bSize) ? -1 : ((aSize > bSize) ? 1 : 0));
 
 }
 function SortBySizeDesc(a,b) {
 	var aSize = a.size;
-	var bSize = b.size; 
+	var bSize = b.size;
 	return ((aSize > bSize) ? -1 : ((aSize < bSize) ? 1 : 0));
 
 }
 function SortByLastmodAsc(a,b) {
 	var aLastmod = a.lastmod;
-	var bLastmod = b.lastmod; 
+	var bLastmod = b.lastmod;
 	return ((aLastmod < bLastmod) ? -1 : ((aLastmod > bLastmod) ? 1 : 0));
 
 }
 function SortByLastmodDesc(a,b) {
 	var aLastmod = a.lastmod;
-	var bLastmod = b.lastmod; 
+	var bLastmod = b.lastmod;
 	return ((aLastmod > bLastmod) ? -1 : ((aLastmod < bLastmod) ? 1 : 0));
 }
 
@@ -2783,23 +2816,23 @@ function drawSearchArchives (searchviewmode, order) {
 		$.each(resultadosarchivos, function(i, v) {
 
 			var nameSinBarra = v.name.substring(1);
-				
+
 			if (v.ext) {
 				var exten = v.ext.toLowerCase();
 			}
 			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "jpeg" || exten == "xbm" || exten == "ico") {
-				if (previewimgonviewmode1=="yes") { 
+				if (previewimgonviewmode1=="yes") {
 					// var imagen = "<a href='file:///"+ driveunit + v.filepath + v.name +"'><img data-src='" + driveunit + v.filepath + v.name + "' src='../img/ffffff-0.0.png'></a>";
-					var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img data-src="' + driveunit + v.filepath + v.name + '" src="../img/ffffff-0.0.png"></a>';
+					var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img data-src="file:///' + driveunit + v.filepath + v.name + '" src="../img/ffffff-0.0.png"></a>';
 				} else {
 					// var imagen = "<a href='file:///"+ driveunit + v.filepath + v.name +"'><img data-src='../img/ffffff-16.16.png' src='../img/ffffff-0.0.png'></a>";
 					var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img data-src="../img/ffffff-16.16.png" src="../img/ffffff-0.0.png"></a>';
-				}					
+				}
 				var exploname = "<span class='exploname imagename1'>"+nameSinBarra+"</span>";
 				$(".imgmode1").addClass("conimagen1");
 			}
 			else {
-				
+
 				var imagen="";
 				var exploname = "<span class='exploname'>"+nameSinBarra+"</span>";
 
@@ -2812,11 +2845,11 @@ function drawSearchArchives (searchviewmode, order) {
 	} // --end searchviewmode=1
 
 	if (searchviewmode!=1) {
-	
+
 		$.each(resultadosarchivos, function(i, v) {
 
 			var nameSinBarra = v.name.substring(1);
-				
+
 			if (v.ext) {
 			var exten = v.ext.toLowerCase();
 			}
@@ -2825,7 +2858,7 @@ function drawSearchArchives (searchviewmode, order) {
 				var exploname = "<span class='exploname imagename2'>"+nameSinBarra+"</span>";
 				var imgsrc = encodeURI(driveunit + v.filepath + v.name)
 				// var imagen = "<a href='file:///"+ driveunit + v.filepath + v.name +"'><img src=" + imgsrc + "></a>";
-				var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img src=' + imgsrc + '></a>';
+				var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img src="file:///' + imgsrc + '"></a>';
 
 
 				$(".imgmode"+searchviewmode+"").addClass("conimagen"+searchviewmode+"");
@@ -2847,13 +2880,13 @@ function drawSearchArchives (searchviewmode, order) {
 
 
 
-function drawSearchAfter() {	
+function drawSearchAfter() {
 
 	$('#searchdirectoryview').html(t);
 
 	$("#viewmodenumber").html(searchviewmode + ".")
 
-	$('#numeroderesultados').html("")	
+	$('#numeroderesultados').html("")
 
 	if (resultadoscarpetas.length > 0) {
 		$('#numeroderesultadoscarpetas').html("Found " + resultadoscarpetas.length + " folders. ");
@@ -2867,7 +2900,7 @@ function drawSearchAfter() {
 
 	if (searchviewmode==1) {
 
-		$('.exploelement').addClass('viewmode1');		
+		$('.exploelement').addClass('viewmode1');
 		$('.exploelementfolderup').addClass('viewmode1');
 
 		$('.explofolder').addClass('viewmode1');
@@ -2897,7 +2930,7 @@ function drawSearchAfter() {
 
 	}
 
-	if (searchviewmode==3) {		
+	if (searchviewmode==3) {
 
 		$('.exploelement').addClass('viewmode3');
 
@@ -2912,7 +2945,7 @@ function drawSearchAfter() {
 
 	}
 
-	if (searchviewmode==4) {		
+	if (searchviewmode==4) {
 
 		$('.exploelement').addClass('viewmode4');
 
@@ -2927,7 +2960,7 @@ function drawSearchAfter() {
 
 	}
 
-	if (searchviewmode==5) {		
+	if (searchviewmode==5) {
 
 		$('.exploelement').addClass('viewmode5');
 
@@ -2942,7 +2975,7 @@ function drawSearchAfter() {
 
 	}
 
-	if (searchviewmode==6) {		
+	if (searchviewmode==6) {
 
 		$('.exploelement').addClass('viewmode6');
 
@@ -2957,7 +2990,7 @@ function drawSearchAfter() {
 
 	}
 
-	if (searchviewmode==7) {		
+	if (searchviewmode==7) {
 
 		$('.exploelement').addClass('viewmode7');
 
@@ -2972,7 +3005,7 @@ function drawSearchAfter() {
 
 	}
 
-	if (searchviewmode==8) {		
+	if (searchviewmode==8) {
 
 		$('.exploelement').addClass('viewmode8');
 
@@ -2987,7 +3020,7 @@ function drawSearchAfter() {
 
 	}
 
-	if (searchviewmode==9) {		
+	if (searchviewmode==9) {
 
 		$('.exploelement').addClass('viewmode9');
 
@@ -3007,7 +3040,7 @@ function drawSearchAfter() {
 	$('.exploelement .imgmode'+searchviewmode+' a').abigimage({
 
         onopen: function(target) {
-        	
+
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
             this.filename.html(filenametoshow);
         }
@@ -3017,7 +3050,7 @@ function drawSearchAfter() {
 	$('.exploelement .viewmode'+searchviewmode+' a').abigimage({
 
         onopen: function(target) {
-        	
+
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
             this.filename.html(filenametoshow);
         }
@@ -3043,26 +3076,26 @@ function drawSearchAfter() {
 			alertify.confirm( "Attention, the folder <em>'"+driveunit + $(this)[0].getAttribute("value")+"'</em> is on the search results, but it can´t be read (probably don't exists because is deleted in some way). Do you want to remove it from database?. If you choose Yes, click again on Search to see results.", function (e) {
 	            if (!e) {
 	              	x = "You pressed Cancel!";
-	              	console.log(x);                 
-	            } else {                  
+	              	console.log(x);
+	            } else {
 	              	x = "You pressed OK!";
 	              	console.log(x)
-	             
+
 	            	stopbecausebadfolder="yes"
 					$('#searchdirectoryview').html("");
-		    		
+
 
 		    		var trans2 = db.transaction(["folders"], "readwrite")
-					var objectStore2 = trans2.objectStore("folders")				
-					var req2 = objectStore2.openCursor(); 
-						
-					req2.onerror = function(event) { 
+					var objectStore2 = trans2.objectStore("folders")
+					var req2 = objectStore2.openCursor();
+
+					req2.onerror = function(event) {
 
 						console.log("error: " + event);
 
 					};
 
-					req2.onsuccess = function(event) { 
+					req2.onsuccess = function(event) {
 
 						var cursor2 = event.target.result;
 						if(cursor2){
@@ -3074,14 +3107,14 @@ function drawSearchAfter() {
 
 								request.onsuccess = function(event) {
 
-									$('#searchdirectoryview').html("");						
-								
+									$('#searchdirectoryview').html("");
+
 									// se mirará si había algún archivo asociado a la carpeta eliminada, si lo hay se borra
 									var trans3 = db.transaction(["files"], "readwrite")
 									var objectStore3 = trans3.objectStore("files")
-									var req3 = objectStore3.openCursor(); 
-									
-									req3.onerror = function(event) { 
+									var req3 = objectStore3.openCursor();
+
+									req3.onerror = function(event) {
 
 										console.log("error: " + event);
 
@@ -3089,7 +3122,7 @@ function drawSearchAfter() {
 
 									req3.onsuccess = function(event) {
 
-										var cursor3 = event.target.result; 
+										var cursor3 = event.target.result;
 										if(cursor3){
 
 											if(cursor3.value.filefolder == key) {
@@ -3114,7 +3147,7 @@ function drawSearchAfter() {
 								}
 
 							}
-							
+
 							cursor2.continue();
 
 						}
@@ -3150,12 +3183,12 @@ function drawSearchAfter() {
 
 		            if (!e) {
 		              	x = "You pressed Cancel!";
-		              	console.log(x);                 
-		            } else {                  
+		              	console.log(x);
+		            } else {
 		              	x = "You pressed OK!";
 		              	console.log(x)
 
-			    		$('#searchdirectoryview').html(""); // con esto ya se "anula" cualquier ejecución siguiente basada en el DOM en la presentación de los archivos por eso no es necesario poner ningún condicional de si este test se ha superado o no   		
+			    		$('#searchdirectoryview').html(""); // con esto ya se "anula" cualquier ejecución siguiente basada en el DOM en la presentación de los archivos por eso no es necesario poner ningún condicional de si este test se ha superado o no
 
 			    		var trans = db.transaction(["folders"], "readonly")
 						var objectStore = trans.objectStore("folders")
@@ -3168,8 +3201,8 @@ function drawSearchAfter() {
 
 						req.onsuccess = function(event) {
 
-							var cursor = event.target.result; 
-							
+							var cursor = event.target.result;
+
 							if(cursor){
 
 								if(cursor.value.folder == filepathoffiletodelete){
@@ -3190,7 +3223,7 @@ function drawSearchAfter() {
 							var objectStore2 = trans2.objectStore("files")
 							var req2 = objectStore2.openCursor();
 
-							req2.onerror = function(event) { 
+							req2.onerror = function(event) {
 
 								console.log("error: " + event);
 
@@ -3199,7 +3232,7 @@ function drawSearchAfter() {
 							req2.onsuccess = function(event) {
 
 								var cursor2 = event.target.result;
-			
+
 								if(cursor2){
 
 									if (cursor2.value.filefolder == foderidoffiletodelete){
@@ -3242,8 +3275,8 @@ function drawSearchAfter() {
 
 								req.onsuccess = function(event) {
 
-									var cursor = event.target.result; 
-									
+									var cursor = event.target.result;
+
 									if(cursor){
 
 										if(cursor.value.folderid == foderidoffiletodelete){
@@ -3279,8 +3312,8 @@ function drawSearchAfter() {
 
 										req4.onsuccess = function(event) {
 
-											var cursor4 = event.target.result; 
-											
+											var cursor4 = event.target.result;
+
 											if(cursor4){
 
 												if(cursor4.value.filefolder == foderidoffiletodelete){
@@ -3330,7 +3363,7 @@ function drawSearchAfter() {
 
 		});
 
-	} 
+	}
 	// -- fin sistema detección de carpetas y ficheros inexistente
 
 
@@ -3349,7 +3382,7 @@ function drawSearchAfter() {
 			var ext_video = 0; // mp4, avi, flv, mov, qt, asf, swf
 			var ext_docs = 0; // pdf, epub, doc, docx, odx, odt
 			var ext_www = 0; // html, xhml, css, php, url, xml, js
-			var ext_document = 0; // txt, md, Y TODOS LOS DEMAS 
+			var ext_document = 0; // txt, md, Y TODOS LOS DEMAS
 
 			try {
 
@@ -3425,7 +3458,7 @@ function drawSearchAfter() {
 			    if (maxExtName == "ext_www") {
 
 			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Sites.png">';
-			    }			    
+			    }
 			    if (maxExtName == "ext_document") {
 
 			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Document.png">';
@@ -3472,18 +3505,18 @@ function drawSearchAfter() {
 			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Document.png">'
 			    }
 
-			}		
+			}
 
 		})
 
 	} // --fin pintar carpetas según contenido
-	
+
 
 	if (stopbecausebadfolder=="no") {  // si es superado el test de carpetas inexistentes (si hay archivos inexistentes simplemente no hará nada pues el DOM estará vacío)
-	
+
 
 		// para cargar las imágenes secuencialmente (solo viewmode1)
-		
+
 		if (searchviewmode==1) {
 
 			var numberofimages = $(".imgmode1 img").length;
@@ -3514,7 +3547,7 @@ function drawSearchAfter() {
 
 						loadMyImage(u+1);
 
-					});	
+					});
 
 				} else {
 					$(".imgmode1 img:eq("+u+")").on('load', function() {
@@ -3524,15 +3557,15 @@ function drawSearchAfter() {
 				}
 
 			}
-			
+
 		}
 
 
-		// para el preview de los epubs 
+		// para el preview de los epubs
 
 		if (searchviewmode!=1 || previewepubonviewmode1!="no") {
-			var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
-			
+
+
 			$.each ($(".explofile"), function(u) {
 
 				var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
@@ -3548,22 +3581,37 @@ function drawSearchAfter() {
 						var booktopreview = filepath + filename;
 
 					  	// primero se accede a los ficheros internos del epub (que en realidad es un zip)
-					  	var zip = new AdmZip(booktopreview); 
-						var zipEntries = zip.getEntries();
+					  var zip = new AdmZip(booktopreview);
+						// var zipEntries = zip.getEntries();
 
 						// se extrae el cover.jpg del epub ha una carpeta temporal
-				      	zip.extractEntryTo(/*entry name*/ "OEBPS/Images/cover.jpg", /*target path*/ filepath + "\/temp-epubcover"+u+ filenamesinbarra+"", /*maintainEntryPath*/false, /*overwrite*/true);
+						if (s.os.name == "windows") {
+							zip.extractEntryTo(/*entry name*/ "OEBPS/Images/cover.jpg", /*target path*/ filepath + "\/temp-epubcover"+u+ filenamesinbarra+"", /*maintainEntryPath*/false, /*overwrite*/true);
+
+						}
+						if (s.os.name == "linux") {
+
+							var test = zip.getEntry("OEBPS/Images/cover.jpg")
+							if (test) {
+								console.log(test)
+								zip.extractEntryTo("OEBPS/Images/cover.jpg", filepath + "\/temp-epubcover"+u+ filenamesinbarra+"", false, true);
+							}
+
+						}
+
+
+
 
 				      	var imagesource = filepath + '/temp-epubcover'+u+ filenamesinbarra+'/cover.jpg'
 
 				      	if (searchviewmode==1) {
-				      		$(this)["0"].previousSibling.innerHTML = '<img src="'+imagesource+'">';
+				      		$(this)["0"].previousSibling.innerHTML = '<img src="file:///'+imagesource+'">';
 							$(this)["0"].style.paddingRight = "2.5px"; // para que quede igualada con la misma columna de otros archivos
 				      	}
 
 				      	if (searchviewmode!=1) {
 
-					      	$(this)["0"].previousSibling.innerHTML = '<img src="'+imagesource+'">';
+					      	$(this)["0"].previousSibling.innerHTML = '<img src="file:///'+imagesource+'">';
 
 				      	}
 				      	// se le quita la imagen de fondo
@@ -3573,12 +3621,15 @@ function drawSearchAfter() {
 
 				      	// se borra la carpeta y archivo temporal que habiamos creado
 				      	fs.remove(filepath + '\/temp-epubcover'+u+ filenamesinbarra +'', function (err) {
-								if (err) return console.error(err)
+								if (err) {
+									// console.log(err)
+									// return console.error(err)
+								}
 								// console.log('success!')
 						});
 
 			      	} catch (err) { }
-				      	
+
 				}
 
 			});
@@ -3610,12 +3661,12 @@ function drawSearchAfter() {
 
 					var audiotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
 
-					$(this)["0"].previousSibling.innerHTML = '<audio width="0" class="audio" src="'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'"></audio>'
-					
+					$(this)["0"].previousSibling.innerHTML = '<audio width="0" class="audio" src="file:///'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'"></audio>'
+
 					var audio = $(this)["0"].previousSibling.children["0"]; // el tag audio
 					var duration = $(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling; // el div duracion
 
-					var i = setInterval(function() { 
+					var i = setInterval(function() {
 						if(audio.readyState > 0) {
 							var minutes = parseInt(audio.duration / 60, 10);
 							var seconds = (audio.duration % 60).toFixed(0);
@@ -3661,7 +3712,7 @@ function drawSearchAfter() {
 			}
 			if (searchviewmode==9) {
 				var audiowidth = 420;
-			}		
+			}
 
 			$.each ($(".explofile"), function(u) {
 
@@ -3683,16 +3734,16 @@ function drawSearchAfter() {
 					$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
 					console.log($(this))
 					var audiotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
-					$(this)["0"].previousSibling.children[0].outerHTML = '<audio width="'+audiowidth+'" class="audio" src="'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'" controls></audio><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
+					$(this)["0"].previousSibling.children[0].outerHTML = '<audio width="'+audiowidth+'" class="audio" src="file:///'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'" controls></audio><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 					$(this)["0"].previousSibling.style.backgroundImage = "none";
 			      	$(this)["0"].previousSibling.classList.add("filepreview"); // para quitarle paddings y centrarlo
 
 			      	var audio = $(this)["0"].previousElementSibling.children[0]; // el tag audio
 
 			      	var duration = $(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling; // el div duration
-	      	
+
 					// para recoger el tiempo total del audio, es necesario ponerle un setinterval para que pase un tiempo antes de que intente recoger el dato.
-			      	var i = setInterval(function() { 
+			      	var i = setInterval(function() {
 						if(audio.readyState > 0) {
 							var minutes = parseInt(audio.duration / 60, 10);
 							var seconds = (audio.duration % 60).toFixed(0);
@@ -3705,7 +3756,7 @@ function drawSearchAfter() {
 
 					}, 100);
 
-					var parent = $(this)["0"].parentElement;			      	
+					var parent = $(this)["0"].parentElement;
 
 			      	// controles personalizados
 
@@ -3724,7 +3775,7 @@ function drawSearchAfter() {
 					   	}
 					   	else {
 					      	playpause.title = "play";
-					     	playpause.classList.toggle("down");					      	
+					     	playpause.classList.toggle("down");
 					      	audio.pause();
 					   	}
 					}
@@ -3738,7 +3789,7 @@ function drawSearchAfter() {
 					}
 
 					// el seekbar (para ver posición del playbabk y poder acceder a un tiempo determinado)
-					
+
 					seekbar.addEventListener("change", function() {
 					  // Calculate the new time
 					  var time = audio.duration * (seekbar.value / 100);
@@ -3760,7 +3811,7 @@ function drawSearchAfter() {
 					seekbar.addEventListener("mouseup", function() {
 						if (playpause.title == "pause") { //si ya estaba ejecutándose
 					  		audio.play();
-						}						
+						}
 					})
 					seekbar.onmousedown = function(e) {
 						e.stopPropagation(); // para evitar que actué el trigger action del padre (es decir, el pressandHold), mientras se tenga pulsado el mouse button en este elemento
@@ -3787,16 +3838,16 @@ function drawSearchAfter() {
 
 					if( extension=="m4v") {
 						extension="mp4";
-					}					
+					}
 
 					var videotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
 
-					$(this)["0"].previousSibling.innerHTML = '<video width="0" class="video" src="'+videotopreview+'" type="video/'+extension.toLowerCase()+'"></video>'
-					
+					$(this)["0"].previousSibling.innerHTML = '<video width="0" class="video" src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'"></video>'
+
 					var video = $(this)["0"].previousSibling.children["0"]; // el tag video
 					var duration = $(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling; // el div duration
 
-					var i = setInterval(function() { 
+					var i = setInterval(function() {
 						if(video.readyState > 0) {
 							var minutes = parseInt(video.duration / 60, 10);
 							var seconds = (video.duration % 60).toFixed(0);
@@ -3857,15 +3908,15 @@ function drawSearchAfter() {
 					$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
 
 					var videotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
-					$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video" src="'+videotopreview+'" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
+					$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video" src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 					$(this)["0"].previousSibling.style.backgroundImage = "none";
 			      	$(this)["0"].previousSibling.classList.add("filepreview"); // para quitarle paddings y centrarlo
 
 			      	var video = $(this)["0"].previousElementSibling.children[0]; // el tag video
 			      	var duration = $(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling; // el div duration
-	      	
+
 					// para recoger el tiempo total del video, es necesario ponerle un setinterval para que pase un tiempo antes de que intente recoger el dato.
-			      	var i = setInterval(function() { 
+			      	var i = setInterval(function() {
 						if(video.readyState > 0) {
 							var minutes = parseInt(video.duration / 60, 10);
 							var seconds = (video.duration % 60).toFixed(0);
@@ -3875,7 +3926,7 @@ function drawSearchAfter() {
 						}
 
 					}, 100);
-			      	
+
 			      	var parent = $(this)["0"].parentElement;
 
 			      	// controles personalizados
@@ -3976,7 +4027,7 @@ function drawdirectoryviewtags (){
 	// primero creamos divs independientes para cada tags (pero solo con el id)
 	var trans = db.transaction(["tags"], "readonly")
 	var objectStore = trans.objectStore("tags")
-	
+
 	var elementosdirectorio = $(".exploelement .tags");
 
 	var tagvalue = [];
@@ -3988,7 +4039,7 @@ function drawdirectoryviewtags (){
 		tagsdivs[i]="";
 
 		if (elementosdirectorio[i].attributes[1].nodeValue!=0) {
-			
+
 			tagticket[i] = elementosdirectorio[i].attributes[1].nodeValue.split(',');
 
 			for(var k = 0; k < tagticket[i].length; k += 1){ // recorremos el objeto
@@ -4010,15 +4061,15 @@ function drawdirectoryviewtags (){
 
 		$.each(elementosdirectoriotags, function(i) {
 
-			var req = objectStore.openCursor(); 
-			
-			req.onerror = function(event) { 
+			var req = objectStore.openCursor();
+
+			req.onerror = function(event) {
 
 				console.log("error: " + event);
 
 			};
 
-			req.onsuccess = function(event) { 
+			req.onsuccess = function(event) {
 
 				var cursor = event.target.result;
 
@@ -4033,7 +4084,7 @@ function drawdirectoryviewtags (){
 						} else if (cursor.value.tagcolor == "000000"){
 							var complecolor = "#FFF"
 						} else {
-							var complecolor = hexToComplimentary(color);							
+							var complecolor = hexToComplimentary(color);
 						}
 
 						elementosdirectoriotags[i].className += " small " + cursor.value.tagform;
@@ -4055,7 +4106,7 @@ function drawdirectoryviewtags (){
 				elemetstagdelete(); // activa sistema borrado tags
 
 			}
-			
+
 		});
 
 	}
@@ -4078,9 +4129,9 @@ function interactinsforsearchdir() {
 	$('.exploelement.archive').droppable({
 
 		accept: '.footertagticket',
-	   
+
 		drop: function( event, ui ) {
-			   
+
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
 				// devolvemos tag a posición original
@@ -4097,11 +4148,11 @@ function interactinsforsearchdir() {
 					taganadir = ui.draggable["0"].attributes[1].value;
 
 					var arraydetags=[];
-					
-					var filename = $(this).children('.explofile');		
+
+					var filename = $(this).children('.explofile');
 					filename = filename.attr("value");
 
-					var extension = $(this).children('.exploext');				
+					var extension = $(this).children('.exploext');
 					extension = extension[0].textContent;
 
 					var folder = $(this).children('.explofile');
@@ -4126,13 +4177,13 @@ function interactinsforsearchdir() {
 					req.onsuccess = function(event) {
 
 						var cursor = event.target.result; // posición del cursor
-						
+
 						if(cursor){
 
 							if(cursor.value.folder == folder){ // la carpeta madre ya esta en la base de datos
 
-								isnew="no"; 
-								fileupdate.filefolder = cursor.value.folderid; // para añadir luego 
+								isnew="no";
+								fileupdate.filefolder = cursor.value.folderid; // para añadir luego
 
 							}
 
@@ -4149,14 +4200,14 @@ function interactinsforsearchdir() {
 							var request = trans.objectStore("folders")
 								.put({ folder: folder, foldertags: [] }); // el id no hace falta pues es autoincremental
 
-												 
+
 							request.onerror = function(event){
 
 								console.log("error carpeta madre no añadida: " + event);
-							
+
 							}
 
-							request.onsuccess = function(event){ 
+							request.onsuccess = function(event){
 
 								// console.log("carpeta madre añadida!");
 
@@ -4166,7 +4217,7 @@ function interactinsforsearchdir() {
 									var objectStore = trans.objectStore("folders")
 									var req = objectStore.openCursor();
 
-									req.onerror = function(event) { 
+									req.onerror = function(event) {
 
 										console.log("error: " + event);
 
@@ -4174,11 +4225,11 @@ function interactinsforsearchdir() {
 
 									req.onsuccess = function(event) {
 
-										var cursor = event.target.result; 
-					
+										var cursor = event.target.result;
+
 										if(cursor){
 
-											if(cursor.value.folder == folder){ 
+											if(cursor.value.folder == folder){
 
 												fileupdate.filefolder = cursor.value.folderid;
 
@@ -4196,8 +4247,8 @@ function interactinsforsearchdir() {
 											var trans = db.transaction(["files"], "readwrite")
 											var request = trans.objectStore("files")
 												.add(fileupdate);
-											 
-											request.onerror = function(event) { 
+
+											request.onerror = function(event) {
 
 												console.log("error datos nuevo fichero no añadidos:" + event);
 
@@ -4217,8 +4268,8 @@ function interactinsforsearchdir() {
 												var elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
 												var arraydetags = taganadir // solo hay un tag a añadir
 												elementtagsinview[0].setAttribute("value", arraydetags);
-									
-												// y ahora redibujamos los tags..										
+
+												// y ahora redibujamos los tags..
 												arraydetags = arraydetags.split(','); // volvemos a convertirlo en array (aunque solo haya un tag)
 												var tagsdivs = "";
 												for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
@@ -4237,10 +4288,10 @@ function interactinsforsearchdir() {
 												req2.onerror = function(event) {
 													console.log("error: " + event);
 												};
-												req2.onsuccess = function(event) { 
+												req2.onsuccess = function(event) {
 													var cursor2 = event.target.result;
 													if (cursor2) {
-														$.each(elementosdirectoriotags, function(n) {											
+														$.each(elementosdirectoriotags, function(n) {
 															if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
 
 																var color = "#" + cursor2.value.tagcolor;
@@ -4275,10 +4326,10 @@ function interactinsforsearchdir() {
 								} // -- fin trans (tomar id nueva carpeta)
 
 							} // -- fin onsuccess
-					
+
 						} // -- fin if (si el archivo esta en una nueva carpeta)
 						else { // -- si el archivo esta en una carpeta ya añadida a la base de datos
-						 
+
 							// hay que comprobar que si el fichero es nuevo o no
 
 							isnew="yes"; // valor por defecto (dejar asi, no poner window)
@@ -4299,9 +4350,9 @@ function interactinsforsearchdir() {
 								fileupdate.filename = filename;
 								fileupdate.fileext = extension;
 								fileupdate.filetags = taganadir;
-								
+
 								var cursor = event.target.result;
-								
+
 								if(cursor){
 
 									if (cursor.value.filefolder == fileupdate.filefolder) { // cuando el id del folder coincide
@@ -4312,12 +4363,12 @@ function interactinsforsearchdir() {
 											fileupdate.fileid = cursor.value.fileid; // nos da el id del último success (el fichero añadido)
 											arraydetags = cursor.value.filetags;
 
-										} 
+										}
 
 									}
 
 									cursor.continue();
-								} 
+								}
 
 							}
 
@@ -4338,13 +4389,13 @@ function interactinsforsearchdir() {
 
 											arraydetags = arraydetags.toString();
 											return;
-								
+
 										}
-							
+
 									}
 
 
-									if (isnewtag=="yes") { // si es un nuevo tag para el archivo, se añadirá (si no es, no se mete nada y ya esta)								
+									if (isnewtag=="yes") { // si es un nuevo tag para el archivo, se añadirá (si no es, no se mete nada y ya esta)
 											arraydetags = arraydetags + "," + taganadir;
 
 									}
@@ -4354,8 +4405,8 @@ function interactinsforsearchdir() {
 									var trans = db.transaction(["files"], "readwrite")
 											var request = trans.objectStore("files")
 												.put(fileupdate);
-											 
-									request.onerror = function(event) { 
+
+									request.onerror = function(event) {
 
 										console.log("error datos nuevo fichero no añadidos:" + event);
 
@@ -4376,8 +4427,8 @@ function interactinsforsearchdir() {
 										elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
 										arraydetags = arraydetags.toString() // de array a string
 										elementtagsinview[0].setAttribute("value", arraydetags);
-							
-										// y ahora redibujamos los tags..										
+
+										// y ahora redibujamos los tags..
 										arraydetags = arraydetags.split(','); // volvemos a convertirlo en array
 										tagsdivs = "";
 										for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
@@ -4396,10 +4447,10 @@ function interactinsforsearchdir() {
 										req2.onerror = function(event) {
 											console.log("error: " + event);
 										};
-										req2.onsuccess = function(event) { 
+										req2.onsuccess = function(event) {
 											var cursor2 = event.target.result;
 											if (cursor2) {
-												$.each(elementosdirectoriotags, function(n) {											
+												$.each(elementosdirectoriotags, function(n) {
 													if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
 
 														var color = "#" + cursor2.value.tagcolor;
@@ -4436,7 +4487,7 @@ function interactinsforsearchdir() {
 									var trans = db.transaction(["files"], "readwrite")
 											var request = trans.objectStore("files")
 												.add(fileupdate);
-											 
+
 									request.onerror = function(event) {
 
 										console.log("error datos nuevo fichero no añadidos:" + event);
@@ -4444,7 +4495,7 @@ function interactinsforsearchdir() {
 									};
 									request.onsuccess = function(event) {
 
-										// console.log("datos nuevo fichero añadidos");											
+										// console.log("datos nuevo fichero añadidos");
 
 										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag archive)");
 										undo.class = "tag archive";
@@ -4457,8 +4508,8 @@ function interactinsforsearchdir() {
 										var elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
 										var arraydetags = taganadir // solo hay un tag a añadir
 										elementtagsinview[0].setAttribute("value", arraydetags);
-							
-										// y ahora redibujamos los tags..										
+
+										// y ahora redibujamos los tags..
 										arraydetags = arraydetags.split(','); // volvemos a convertirlo en array (aunque solo haya un tag)
 										var tagsdivs = "";
 										for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
@@ -4477,10 +4528,10 @@ function interactinsforsearchdir() {
 										req2.onerror = function(event) {
 											console.log("error: " + event);
 										};
-										req2.onsuccess = function(event) { 
+										req2.onsuccess = function(event) {
 											var cursor2 = event.target.result;
 											if (cursor2) {
-												$.each(elementosdirectoriotags, function(n) {											
+												$.each(elementosdirectoriotags, function(n) {
 													if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
 
 														var color = "#" + cursor2.value.tagcolor;
@@ -4531,19 +4582,19 @@ function interactinsforsearchdir() {
 	$('.exploelement.folder').droppable({
 
 		accept: '.footertagticket, .exploelement',
-	   
+
 		drop: function( event, ui ) {
-			   
+
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
 				// devolvemos tag a posición original
 				ui.draggable["0"].style.top = "0px";
-				ui.draggable["0"].style.left = "0px";			 
+				ui.draggable["0"].style.left = "0px";
 
 			 	// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
 				var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta), el 5 es un margen necesario
 				var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posicion del limite inferior del wrapper (absoluta)
-				
+
 				if (positiontop < wrapperbottom) {
 
 					window.taganadir = ui.draggable["0"].attributes[1].value;
@@ -4551,7 +4602,7 @@ function interactinsforsearchdir() {
 					var escarpeta = $(this).children().hasClass('explofolder');
 
 					var arraydetags=[];
-					
+
 					//  SI ES CARPETA (no hace falta)
 					if (escarpeta) {
 
@@ -4580,7 +4631,7 @@ function interactinsforsearchdir() {
 						req.onsuccess = function(event) {
 
 							var cursor = event.target.result; // posición del cursor
-							
+
 							if(cursor){
 
 								if(cursor.value.folder == folder){ // si el folder de la posición del cursor es igual al nombre con ruta del folder dibujado
@@ -4591,7 +4642,7 @@ function interactinsforsearchdir() {
 									folderupdate.folder = cursor.value.folder;
 
 									var isnewtag = "yes" // valor por defecto
-									var arraydetags = cursor.value.foldertags; // variable temporal donde se mete el array de tags desde el curso para hacer unas comprobaciones a continuación. El array puede estar vacío                
+									var arraydetags = cursor.value.foldertags; // variable temporal donde se mete el array de tags desde el curso para hacer unas comprobaciones a continuación. El array puede estar vacío
 
 									for (i in arraydetags) { // recorremos los tags que tenia
 
@@ -4608,11 +4659,11 @@ function interactinsforsearchdir() {
 											popup("addtagtosubelements"); // aunque no se añade a la carpeta madre se preguntará como siempre que sea una carpeta si se quiere añadir a subelementos
 
 											return;
-										
+
 										}
-									
+
 									}
-									
+
 									if (isnewtag=="yes") { // si es un un nuevo tag para la carpeta, se añadirá
 
 										if (typeof arraydetags === "string") {
@@ -4621,7 +4672,7 @@ function interactinsforsearchdir() {
 
 										arraydetags.push(taganadir);
 
-									}                
+									}
 									folderupdate.foldertags = arraydetags;
 
 									// ahora que ya tenemos todos los datos del objeto hacemos update con el en la base de datos
@@ -4630,7 +4681,7 @@ function interactinsforsearchdir() {
 									res.onerror = function(event){
 
 										console.log("error tag no añadida: " + event);
-									
+
 									}
 
 									res.onsuccess = function(event){
@@ -4657,15 +4708,15 @@ function interactinsforsearchdir() {
 											}
 
 										});
-							
-										// y ahora redibujamos los tags..										
+
+										// y ahora redibujamos los tags..
 										arraydetags = arraydetags.split(','); // volvemos a convertirlo en array
 										tagsdivs = "";
 										for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
 											tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
 										};
 										elementtagsinview[0].innerHTML = tagsdivs;
-										
+
 										if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 											treeelementtagsinview.innerHTML = tagsdivs;
@@ -4680,10 +4731,10 @@ function interactinsforsearchdir() {
 											req2.onerror = function(event) {
 												console.log("error: " + event);
 											};
-											req2.onsuccess = function(event) { 
+											req2.onsuccess = function(event) {
 												var cursor2 = event.target.result;
 												if (cursor2) {
-													$.each (treeelementosdirectoriotags, function(u) {											
+													$.each (treeelementosdirectoriotags, function(u) {
 														if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
 
 															var color = "#" + cursor2.value.tagcolor;
@@ -4716,10 +4767,10 @@ function interactinsforsearchdir() {
 										req2.onerror = function(event) {
 											console.log("error: " + event);
 										};
-										req2.onsuccess = function(event) { 
+										req2.onsuccess = function(event) {
 											var cursor2 = event.target.result;
 											if (cursor2) {
-												$.each(elementosdirectoriotags, function(n) {											
+												$.each(elementosdirectoriotags, function(n) {
 													if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
 
 														var color = "#" + cursor2.value.tagcolor;
@@ -4735,7 +4786,7 @@ function interactinsforsearchdir() {
 
 												cursor2.continue();
 
-											}											
+											}
 
 										};
 
@@ -4743,17 +4794,17 @@ function interactinsforsearchdir() {
 
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
-					
-											popup("addtagtosubelements");							
+
+											popup("addtagtosubelements");
 
 										}
 
 									}
 
-								} 
+								}
 
 								cursor.continue(); // avanzar posición cursor en base de datos capetas y reiterar
-							  
+
 							} // --fin cursor
 
 						}; // --fin req.onsuccess (del opencursor)
@@ -4766,11 +4817,11 @@ function interactinsforsearchdir() {
 								var request = db.transaction(["folders"], "readwrite")
 									.objectStore("folders")
 									.put({ folder: folder, foldertags: [taganadir] }); // el id no hace falta pues es autoincremental
-													 
+
 								request.onerror = function(event){
 
 									console.log("error tag no añadida: " + event);
-								
+
 								}
 
 								request.onsuccess = function(event){
@@ -4796,8 +4847,8 @@ function interactinsforsearchdir() {
 										}
 
 									});
-						
-									// y ahora redibujamos los tags..										
+
+									// y ahora redibujamos los tags..
 									arraydetags = arraydetags.split(','); // volvemos a convertirlo en array (aunque solo haya un tag)
 									tagsdivs = "";
 									for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
@@ -4819,10 +4870,10 @@ function interactinsforsearchdir() {
 										req2.onerror = function(event) {
 											console.log("error: " + event);
 										};
-										req2.onsuccess = function(event) { 
+										req2.onsuccess = function(event) {
 											var cursor2 = event.target.result;
 											if (cursor2) {
-												$.each (treeelementosdirectoriotags, function(u) {											
+												$.each (treeelementosdirectoriotags, function(u) {
 													if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
 
 														var color = "#" + cursor2.value.tagcolor;
@@ -4855,10 +4906,10 @@ function interactinsforsearchdir() {
 									req2.onerror = function(event) {
 										console.log("error: " + event);
 									};
-									req2.onsuccess = function(event) { 
+									req2.onsuccess = function(event) {
 										var cursor2 = event.target.result;
 										if (cursor2) {
-											$.each(elementosdirectoriotags, function(n) {											
+											$.each(elementosdirectoriotags, function(n) {
 												if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
 
 													var color = "#" + cursor2.value.tagcolor;
@@ -4881,7 +4932,7 @@ function interactinsforsearchdir() {
 									trans2.oncomplete = function(event) {
 
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
-										elemetstagdelete(); // activa sistema borrado tags								
+										elemetstagdelete(); // activa sistema borrado tags
 
 										popup("addtagtosubelements");
 
@@ -4925,13 +4976,37 @@ function interactinsforsearchdir() {
 			var filepath = driveunit + $(this)["0"].attributes[2].nodeValue
 
 			var aejecutar = filepath + toexec;
-			aejecutar = aejecutar.replace(/\&/g, "^&");
-			aejecutar = aejecutar.replace(/\(/g, "^(");
-			aejecutar = aejecutar.replace(/\)/g, "^)");
-			aejecutar = aejecutar.replace(/\,/g, "^,");
-			aejecutar = aejecutar.replace(/\//g, '/'); // se pone \ en vez de / para poder ejecutar varios sistemas
-			aejecutar = aejecutar.replace(/ /g, '^ '); // se añade ^ delante de los espacios para que lea bien
-			require("child_process").exec(aejecutar);
+
+			if (s.os.name == "windows") {
+				aejecutar = aejecutar.replace(/ /g, '^ '); // se añade ^ delante de los espacios para que lea bien
+				aejecutar = aejecutar.replace(/\,/g, "^,");
+				aejecutar = aejecutar.replace(/\&/g, "^&");
+				aejecutar = aejecutar.replace(/\(/g, "^(");
+				aejecutar = aejecutar.replace(/\)/g, "^)");
+				require("child_process").exec(aejecutar);
+			}
+			if (s.os.name == "linux") {
+
+				aejecutar = aejecutar.replace(/ /g, '\\ '); // se añade \ delante de los espacios para que lea bien
+				aejecutar = aejecutar.replace(/,/g, '\\\,');
+				aejecutar = aejecutar.replace(/&/g, '\\\&');
+				aejecutar = aejecutar.replace(/'/g, "\\\'");
+				aejecutar = aejecutar.replace(/\(/g, "\\\(");
+				aejecutar = aejecutar.replace(/\)/g, "\\\)");
+				aejecutar = aejecutar.replace(/\[/g, '\\\[');
+				aejecutar = aejecutar.replace(/\]/g, '\\\]');
+
+				// si se puede visualizar con algul visualizador del sistema se visualizará aquí
+				var sys = require('sys');
+				var exec = require('child_process');
+				exec.exec('xdg-open' + ' ' + aejecutar);
+
+				try { // si es un ejecutable se ejecutará aquí
+					exec.execFile(aejecutar);
+				}
+				catch(exception) { }
+
+			}
 
 		}
 
@@ -4950,7 +5025,7 @@ function interactinsforsearchdir() {
 			var elementsinfolder = $(this)[0].nextSibling.innerText
 			elementsinfolder = +elementsinfolder.replace(" in folder","");
 
-			if (elementsinfolder<100){ 
+			if (elementsinfolder<100){
 				elementsinfolder = 100; // para que el aviso no sea demasiado rapido
 			}
 
@@ -4971,14 +5046,35 @@ function interactinsforsearchdir() {
 				var filepath = driveunit + $(this)["0"].nextElementSibling.attributes[2].nodeValue
 
 				var aejecutar = filepath + toexec;
-				aejecutar = aejecutar.replace(/\&/g, "^&");
-				aejecutar = aejecutar.replace(/\(/g, "^(");
-				aejecutar = aejecutar.replace(/\)/g, "^)");
-				aejecutar = aejecutar.replace(/\,/g, "^,");
-				aejecutar = aejecutar.replace(/\//g, '/'); // se pone \ en vez de / para poder ejecutar varios sistemas
-				aejecutar = aejecutar.replace(/ /g, '^ '); // se añade ^ delante de los espacios para que lea bien
-				console.log(aejecutar);
-				require("child_process").exec(aejecutar);
+				if (s.os.name == "windows") {
+					aejecutar = aejecutar.replace(/ /g, '^ '); // se añade ^ delante de los espacios para que lea bien
+					aejecutar = aejecutar.replace(/\,/g, "^,");
+					aejecutar = aejecutar.replace(/\&/g, "^&");
+					aejecutar = aejecutar.replace(/\(/g, "^(");
+					aejecutar = aejecutar.replace(/\)/g, "^)");
+					require("child_process").exec(aejecutar);
+				}
+				if (s.os.name == "linux") {
+
+					aejecutar = aejecutar.replace(/ /g, '\\ '); // se añade \ delante de los espacios para que lea bien
+					aejecutar = aejecutar.replace(/,/g, '\\\,');
+					aejecutar = aejecutar.replace(/&/g, '\\\&');
+					aejecutar = aejecutar.replace(/'/g, "\\\'");
+					aejecutar = aejecutar.replace(/\(/g, "\\\(");
+					aejecutar = aejecutar.replace(/\)/g, "\\\)");
+					aejecutar = aejecutar.replace(/\[/g, '\\\[');
+					aejecutar = aejecutar.replace(/\]/g, '\\\]');
+
+					// si se puede visualizar con algul visualizador del sistema se visualizará aquí
+					var sys = require('sys');
+					var exec = require('child_process');
+					exec.exec('xdg-open' + ' ' + aejecutar);
+
+					try { // si es un ejecutable se ejecutará aquí
+						exec.execFile(aejecutar);
+					}
+					catch(exception) { }
+				}
 
 			}
 
@@ -4997,7 +5093,7 @@ function interactinsforsearchdir() {
 				var elementsinfolder = $(this)[0].nextSibling.nextSibling.innerText
 				elementsinfolder = +elementsinfolder.replace(" in folder","");
 
-				if (elementsinfolder<100){ 
+				if (elementsinfolder<100){
 					elementsinfolder = 100; // para que el aviso no sea demasiado rapido
 				}
 
@@ -5031,7 +5127,7 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 			window.elementtagorder = $(this).parent().attr("value"); // orden de los tags original
 			window.elementtags = $(this).parent(); // el div tags (para realizar campos en la modificación visual)
-			
+
 			// para que no se vea selección de todo el elemento cuando se hace dragg de los tagticket
 			if ($(this).parent().parent().hasClass("ui-selecting")) {
 				$(this).parent().parent().removeClass("ui-selecting");
@@ -5049,7 +5145,7 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 	$('.tags > div ').droppable({
 
 		accept: '.tags > div',
-	   
+
 		drop: function( event, ui ) {
 
 			if(ui.draggable["0"].classList.contains("tagticket")){
@@ -5106,15 +5202,15 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 				$.each(elementostagsreordenados, function(i) {
 
-					var req = objectStore.openCursor(); 
-					
-					req.onerror = function(event) { 
+					var req = objectStore.openCursor();
+
+					req.onerror = function(event) {
 
 						console.log("error: " + event);
 
 					};
 
-					req.onsuccess = function(event) { 
+					req.onsuccess = function(event) {
 
 						var cursor = event.target.result;
 
@@ -5159,9 +5255,9 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 							};
 
 							req.onsuccess = function(event) {
-								
+
 								var cursor = event.target.result;
-								
+
 								if(cursor){
 
 									if (cursor.value.folder == carpeteacambiartags) {
@@ -5188,13 +5284,13 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 								$.each ($("#filetree span"), function(t) {
 
-									if($("#filetree span:eq("+t+")").attr("rel2") == carpeteacambiartags) {	
+									if($("#filetree span:eq("+t+")").attr("rel2") == carpeteacambiartags) {
 
 										elementtagorder = elementtagorder.toString();
 
 										$("#filetree span:eq("+t+")").attr("value", elementtagorder);
-							
-										// y ahora redibujamos los tags..										
+
+										// y ahora redibujamos los tags..
 										elementtagorder = elementtagorder.split(','); // volvemos a convertirlo en array
 										var fttagsdivs = "";
 										for(var k = 0; k < elementtagorder.length; k += 1){ //recorremos el array
@@ -5214,11 +5310,11 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 										req2.onerror = function(event) {
 											console.log("error: " + event);
 										};
-										req2.onsuccess = function(event) { 
+										req2.onsuccess = function(event) {
 											var cursor2 = event.target.result;
 											if (cursor2) {
-												$.each(tagsdelfolder, function(n) {	
-											
+												$.each(tagsdelfolder, function(n) {
+
 													if (cursor2.value.tagid == tagsdelfolder[n].getAttribute("value")) {
 
 														var color = "#" + cursor2.value.tagcolor;
@@ -5264,9 +5360,9 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 							};
 
 							req.onsuccess = function(event) {
-								
+
 								var cursor = event.target.result;
-								
+
 								if(cursor){
 
 									if (cursor.value.folder == filepathfortags) {
@@ -5296,9 +5392,9 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 								};
 
 								req.onsuccess = function(event) {
-									
+
 									var cursor = event.target.result;
-									
+
 									if(cursor){
 
 										if (cursor.value.filefolder == idcarpetadelarchivo) {
@@ -5328,16 +5424,16 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 								}
 
-							}						
+							}
 
 						}
 
 					} // --fin trans
-					
+
 				}); // --fin each elementostagsreordenados, los tagtickets del elemento
 
 			} // --fin if tagticket --- si se ha droppeado un tag para cambiar el orden
-			
+
 		} // --fin dropp
 
 	}); // --fin droppable
@@ -5366,7 +5462,7 @@ function elemetstagdelete() {
 			var idtagsrestantes = "";
 			var idtagsrestantes = idtagsoriginales.split(",");
 
-			idtagsrestantes = idtagsrestantes.filter(function(item) { 
+			idtagsrestantes = idtagsrestantes.filter(function(item) {
     			return item !== iddeltagaborrar;
 			});
 
@@ -5401,8 +5497,8 @@ function elemetstagdelete() {
 					req.onsuccess = function(event) {
 
 
-						var cursor = event.target.result; 
-						
+						var cursor = event.target.result;
+
 						if(cursor){
 
 							if(cursor.value.folder == nombreelementocontagaborrar){
@@ -5414,7 +5510,7 @@ function elemetstagdelete() {
 								var res2 = cursor.update(updatefolder);
 
 								res2.onerror = function(event){
-									console.log("error: tag de carpeta no eliminada: " + event);									
+									console.log("error: tag de carpeta no eliminada: " + event);
 								}
 
 								res2.onsuccess = function(event){
@@ -5443,12 +5539,12 @@ function elemetstagdelete() {
 
 									});
 
-									// y ahora redibujamos los tags..										
+									// y ahora redibujamos los tags..
 									var tagsdivs = "";
 									for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
 										tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
 									};
-									
+
 									if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 										treeelementtagsinview.innerHTML = tagsdivs;
@@ -5463,10 +5559,10 @@ function elemetstagdelete() {
 										req2.onerror = function(event) {
 											console.log("error: " + event);
 										};
-										req2.onsuccess = function(event) { 
+										req2.onsuccess = function(event) {
 											var cursor2 = event.target.result;
 											if (cursor2) {
-												$.each (treeelementosdirectoriotags, function(u) {											
+												$.each (treeelementosdirectoriotags, function(u) {
 													if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
 
 														var color = "#" + cursor2.value.tagcolor;
@@ -5516,8 +5612,8 @@ function elemetstagdelete() {
 
 					req.onsuccess = function(event) {
 
-						var cursor = event.target.result; 
-						
+						var cursor = event.target.result;
+
 						if(cursor){
 
 							if(cursor.value.folder == nombreelementocontagaborrar){
@@ -5549,8 +5645,8 @@ function elemetstagdelete() {
 
 						req.onsuccess = function(event) {
 
-							var cursor = event.target.result; 
-							
+							var cursor = event.target.result;
+
 							if(cursor){
 
 								if(cursor.value.filefolder == idcarpeta){
@@ -5573,7 +5669,7 @@ function elemetstagdelete() {
 								var trans9 = db.transaction(["folders"], "readwrite")
 								var request9 = trans9.objectStore("folders").delete(idcarpeta);
 
-								request9.onerror = function(event) { 
+								request9.onerror = function(event) {
 
 									console.log("error - no se ha eliminado carpeta de bd:" + event);
 
@@ -5604,12 +5700,12 @@ function elemetstagdelete() {
 
 									});
 
-									// y ahora redibujamos los tags..										
+									// y ahora redibujamos los tags..
 									tagsdivs = "";
 									for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
 										tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
 									};
-									
+
 									if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 										treeelementtagsinview.innerHTML = tagsdivs;
@@ -5624,10 +5720,10 @@ function elemetstagdelete() {
 										req2.onerror = function(event) {
 											console.log("error: " + event);
 										};
-										req2.onsuccess = function(event) { 
+										req2.onsuccess = function(event) {
 											var cursor2 = event.target.result;
 											if (cursor2) {
-												$.each (treeelementosdirectoriotags, function(u) {											
+												$.each (treeelementosdirectoriotags, function(u) {
 													if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
 
 														var color = "#" + cursor2.value.tagcolor;
@@ -5667,8 +5763,8 @@ function elemetstagdelete() {
 
 								req.onsuccess = function(event) {
 
-									var cursor = event.target.result; 
-									
+									var cursor = event.target.result;
+
 									if(cursor){
 
 										if(cursor.value.folder == nombreelementocontagaborrar){
@@ -5680,7 +5776,7 @@ function elemetstagdelete() {
 											var res2 = cursor.update(updatefolder);
 
 											res2.onerror = function(event){
-												console.log("error: tag de carpeta no eliminada: " + event);									
+												console.log("error: tag de carpeta no eliminada: " + event);
 											}
 
 											res2.onsuccess = function(event){
@@ -5709,12 +5805,12 @@ function elemetstagdelete() {
 
 												});
 
-												// y ahora redibujamos los tags..										
+												// y ahora redibujamos los tags..
 												tagsdivs = "";
 												for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
 													tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
 												};
-												
+
 												if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 													treeelementtagsinview.innerHTML = tagsdivs;
@@ -5729,10 +5825,10 @@ function elemetstagdelete() {
 													req2.onerror = function(event) {
 														console.log("error: " + event);
 													};
-													req2.onsuccess = function(event) { 
+													req2.onsuccess = function(event) {
 														var cursor2 = event.target.result;
 														if (cursor2) {
-															$.each (treeelementosdirectoriotags, function(u) {											
+															$.each (treeelementosdirectoriotags, function(u) {
 																if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
 
 																	var color = "#" + cursor2.value.tagcolor;
@@ -5800,8 +5896,8 @@ function elemetstagdelete() {
 
 					req.onsuccess = function(event) {
 
-						var cursor = event.target.result; 
-						
+						var cursor = event.target.result;
+
 						if(cursor){
 
 							if(cursor.value.folder == undo.deltaggfile.folder){
@@ -5832,8 +5928,8 @@ function elemetstagdelete() {
 
 						req.onsuccess = function(event) {
 
-							var cursor = event.target.result; 
-							
+							var cursor = event.target.result;
+
 							if(cursor){
 
 								if(cursor.value.filefolder == idcarpetamadre){
@@ -5849,7 +5945,7 @@ function elemetstagdelete() {
 										var res2 = cursor.update(fileupdate);
 
 										res2.onerror = function(event){
-											console.log("error: tag de archivo no eliminada: " + event);									
+											console.log("error: tag de archivo no eliminada: " + event);
 										}
 
 										res2.onsuccess = function(event){
@@ -5897,8 +5993,8 @@ function elemetstagdelete() {
 
 					req.onsuccess = function(event) {
 
-						var cursor = event.target.result; 
-						
+						var cursor = event.target.result;
+
 						if(cursor){
 
 							if(cursor.value.folder == undo.deltaggfile.folder){
@@ -5929,8 +6025,8 @@ function elemetstagdelete() {
 
 						req.onsuccess = function(event) {
 
-							var cursor = event.target.result; 
-							
+							var cursor = event.target.result;
+
 							if(cursor){
 
 								if(cursor.value.filefolder == idcarpetamadre){
@@ -5942,7 +6038,7 @@ function elemetstagdelete() {
 										var trans9 = db.transaction(["files"], "readwrite")
 										var request9 = trans9.objectStore("files").delete(idelementoaborrar);
 
-										request9.onerror = function(event) { 
+										request9.onerror = function(event) {
 
 											console.log("error - no se ha eliminado archivo de bd:" + event);
 
@@ -5968,15 +6064,15 @@ function elemetstagdelete() {
 
 											req.onsuccess = function(event) {
 
-												var cursor = event.target.result; 
-												
+												var cursor = event.target.result;
+
 												if(cursor){
 
 													if(cursor.value.folderid == idcarpetamadre){
 
 														var tagscarpetamadre = cursor.value.foldertags
 
-														if (tagscarpetamadre.length > 0) {															
+														if (tagscarpetamadre.length > 0) {
 
 															aborrardedb="no";
 
@@ -6007,8 +6103,8 @@ function elemetstagdelete() {
 
 												req.onsuccess = function(event) {
 
-													var cursor = event.target.result; 
-													
+													var cursor = event.target.result;
+
 													if(cursor){
 
 														if(cursor.value.filefolder == idcarpetamadre){
@@ -6034,7 +6130,7 @@ function elemetstagdelete() {
 														var trans9 = db.transaction(["folders"], "readwrite")
 														var request9 = trans9.objectStore("folders").delete(idcarpetamadre);
 
-														request9.onerror = function(event) { 
+														request9.onerror = function(event) {
 
 															console.log("error - no se ha eliminado carpeta de bd:" + event);
 
@@ -6079,10 +6175,10 @@ function elemetstagdelete() {
 function newTag() {
 
 	popup("newtag");
-	
+
 };
 
 function editTag() {
 
-	popup("edittag");	
+	popup("edittag");
 }

@@ -17,7 +17,7 @@ It is possible to export/import tagging data to a file, so data is available in 
 FEATURES
 
 - Tag Folders and files easily by dragging and dropping tags created from a variety of shapes.
-- Does not require installation, it is a standalone and portable executable.
+- Does not require installation (Windows & Linux), in Windows it's a standalone executable.
 - Export/import data to a file.
 - Possible to build up very specific searches.
 - Various Viewmodes; from a list to cards of different sizes to preview folders and files.
@@ -32,8 +32,8 @@ To use the source code (require nw.js to launch):
 
 1. Install NW.JS (SDK edition if you want to use Chome DevTools) in some directory.
 2. Copy the source code to that directory.
-3. If you want video/audio reproduction fully available download the correspondent compiled version of ffmpeg.dll from [https://github.com/iteufel/nwjs-ffmpeg-prebuilt/](https://github.com/iteufel/nwjs-ffmpeg-prebuilt/)releases and overwrite the ffmpeg.dll that came with NW.JS with them.
-4. Execute NW.exe
+3. If you want video/audio reproduction fully available download the correspondent compiled version of ffmpeg.dll from [https://github.com/iteufel/nwjs-ffmpeg-prebuilt/](https://github.com/iteufel/nwjs-ffmpeg-prebuilt/)releases and overwrite the ffmpeg.dll (in Windows) or lib/libffmpeg.so (in Linux)that came with NW.JS with them.
+4. Execute nw.exe (in Windows) or launch ./nw (in Linux)
 
 The code is like a web page, with some html and the /js folder where is the code in Javascript (and jQuery).
 

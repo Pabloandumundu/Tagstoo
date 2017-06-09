@@ -6,6 +6,8 @@
   "dependencies": {
     "drivelist": "^5.0.4",
     "growl": "",
+    "sniffr": "",
+    "username": "^2.3.0",
     "windows-drive-letters": "^3.1.0"
   },
   "window": {

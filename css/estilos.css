@@ -1,4 +1,4 @@
-/* 
+/*
 * Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
@@ -32,11 +32,11 @@
 	  	display: inherit;
 		z-index: 20;
 	}
-  	
+
 /*  */
 
 
-body { 
+body {
 
 	padding: 0;
 	margin: 0;
@@ -91,7 +91,7 @@ header h1 {
 	font-weight: bold;
 	color: #f0f0f0;
 	text-align: center;
-	margin-right: 7px; 
+	margin-right: 7px;
 	vertical-align: bottom;
 	margin-bottom: 2px;
 	border-bottom: 2px solid rgb(231,144,58);
@@ -106,7 +106,7 @@ header h1 {
 
 	list-style-type: none;
 	margin: 0;
-	margin-left: 0; 
+	margin-left: 0;
 	padding: 0;
 }
 
@@ -200,7 +200,7 @@ header h1 {
 	border-radius: 10px;
 	font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
 	color: #FFF;
-	text-decoration: none;  
+	text-decoration: none;
 }
 .action-button:hover{
 
@@ -251,7 +251,7 @@ header h1 {
 	-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 	display: inline-block;
 	margin-top: 11px; /* importante para que deje una altura mínima de la sección (que incluye tabs) en pantallas estrechas */
-	margin-bottom: 11px; /* importante para que deje una altura mínima de la sección (que incluye tabs) en pantallas estrechas */   
+	margin-bottom: 11px; /* importante para que deje una altura mínima de la sección (que incluye tabs) en pantallas estrechas */
 }
 
 .onoffswitch-checkbox {
@@ -300,7 +300,7 @@ header h1 {
 	position: absolute; top: 0; bottom: 0;
 	right: 56px;
 	border: 2px solid #999999; border-radius: 20px;
-	transition: all 0.3s ease-in 0s; 
+	transition: all 0.3s ease-in 0s;
 }
 
 .onoffswitch-checkbox.check + .onoffswitch-label .onoffswitch-inner {
@@ -309,13 +309,13 @@ header h1 {
 }
 .onoffswitch-checkbox.check + .onoffswitch-label .onoffswitch-switch {
 
-	right: 0; 
+	right: 0;
 }
 
 /*  */
 
 #delete {
-	
+
 	margin-right: 6px;
 	margin-left: 10px;
 }
@@ -386,10 +386,10 @@ header h1 {
 /* Botones Genereales */
 
 .button, .button:visited {
-	background: #222 url(../img/overlay.png) repeat-x; 
-	display: inline-block; 
-	padding: 5px 10px 6px; 
-	color: #fff; 
+	background: #222 url(../img/overlay.png) repeat-x;
+	display: inline-block;
+	padding: 5px 10px 6px;
+	color: #fff;
 	text-decoration: none;
 	border-radius: 6px;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.6);
@@ -400,21 +400,21 @@ header h1 {
 	margin: 2px 0;
 	user-select: none;
 }
- 
+
 .button:hover                           { background-color: #111; color: #fff; }
 .button:active                          { top: 1px; }
 .small.button, .small.button:visited            { font-size: 11px}
 .button, .button:visited,
-.medium.button, .medium.button:visited      { font-size: 13px; 
-											  font-weight: bold; 
-											  line-height: 1; 
-											  text-shadow: 0 -1px 1px rgba(0,0,0,0.25); 
+.medium.button, .medium.button:visited      { font-size: 13px;
+											  font-weight: bold;
+											  line-height: 1;
+											  text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
 											  }
-											  
-.large.button, .large.button:visited            { font-size: 14px; 
+
+.large.button, .large.button:visited            { font-size: 14px;
 												  padding: 8px 14px 9px; }
-												  
-.super.button, .super.button:visited            { font-size: 34px; 
+
+.super.button, .super.button:visited            { font-size: 34px;
 												  padding: 8px 14px 9px; }
 
 .pink.button, .magenta.button:visited       { background-color: #e22092; }
@@ -470,7 +470,7 @@ header h1 {
 	background: linear-gradient(#7e9fff, #95c0ff);
 }
 
-#viewmode-wrap input[type='range']::-webkit-slider-thumb, #locationinfo input[type='range']::-webkit-slider-thumb {  
+#viewmode-wrap input[type='range']::-webkit-slider-thumb, #locationinfo input[type='range']::-webkit-slider-thumb {
 
 	margin-top: -0.0625em;
 	box-sizing: border-box;
@@ -534,7 +534,7 @@ header h1 {
 
 .iframestyle {
 
-	display: block; 
+	display: block;
 	border: none;
 	height: 100vh; /* Viewport-relative units */
 	width: 100vw; /* Viewport-relative units */
@@ -545,7 +545,7 @@ header h1 {
 	position: relative;
 	top: 56px;
 	padding-top: 4px;
-	z-index: 10; 
+	z-index: 10;
 	width: 75%;
 	overflow-y: auto;
 	user-select: none;
@@ -599,7 +599,7 @@ header h1 {
 }
 
 #eraser .activated {
-  
+
 	animation: bounceOut .5s linear;
 	animation-iteration-count: infinite;
 }
@@ -698,7 +698,7 @@ header h1 {
 	user-select: none; /* para que no se pueda seleccionar texto */
 }
 
-#dirview{	
+#dirview{
 
 	overflow-y: none;
 	overflow-x: none;
@@ -712,18 +712,18 @@ header h1 {
 
 	height: 100%;
 	width: 100%;
-	position: absolute; 
-	top: 0; 
-	left: -100%; 
+	position: absolute;
+	top: 0;
+	left: -100%;
 	padding: 0;
-	margin: 0; 
-	background-color: #ff0000; 
+	margin: 0;
+	background-color: #ff0000;
 	opacity: 0.6;
 }
 
 #directoryview .ui-selecting {
 
-	background: #7dbde8 !important; 
+	background: #7dbde8 !important;
 }
 
 #directoryview .ui-selected {
@@ -736,7 +736,7 @@ header h1 {
 
 .ui-selectable-helper {position: absolute; z-index: 100; border:1px dotted black;}
 
-.directoryonhover { /* el hover de cuando se hace dragg and dropp*/ 
+.directoryonhover { /* el hover de cuando se hace dragg and dropp*/
 
 	background-color: #ffff46 !important; /* amarillo */
 }
@@ -782,7 +782,7 @@ header h1 {
 
 	display: inline-block;
 	z-index: 1;
-   
+
 }
 .exploelementfolderup {
 
@@ -859,25 +859,25 @@ header h1 {
   	cursor: initial;
 }
 
-.exploelement.viewmode2, .exploelementfolderup.viewmode2, 
+.exploelement.viewmode2, .exploelementfolderup.viewmode2,
 .exploelement.viewmode3, .exploelementfolderup.viewmode3,
 .exploelement.viewmode4, .exploelementfolderup.viewmode4,
 .exploelement.viewmode5, .exploelementfolderup.viewmode5,
 .exploelement.viewmode6, .exploelementfolderup.viewmode6,
 .exploelement.viewmode7, .exploelementfolderup.viewmode7,
-.exploelement.viewmode8, .exploelementfolderup.viewmode8, 
+.exploelement.viewmode8, .exploelementfolderup.viewmode8,
 .exploelement.viewmode9, .exploelementfolderup.viewmode9 {
 
 	display: inline-block;
 	vertical-align: top;
 	border: 1px solid #CCC;
 	padding-top: 2px;
-	padding-bottom: 1px;    
-	border-radius: 3px 3px 10px 10px; 
+	padding-bottom: 1px;
+	border-radius: 3px 3px 10px 10px;
 	text-align: center;
 }
 
-.exploelementfolderup.viewmode2, 
+.exploelementfolderup.viewmode2,
 .exploelementfolderup.viewmode3,
 .exploelementfolderup.viewmode4,
 .exploelementfolderup.viewmode5,
@@ -889,13 +889,13 @@ header h1 {
 	margin-bottom: 0;
 }
 
-.exploelement .explofolder.viewmode2, 
+.exploelement .explofolder.viewmode2,
 .exploelement .explofolder.viewmode3,
 .exploelement .explofolder.viewmode4,
 .exploelement .explofolder.viewmode5,
 .exploelement .explofolder.viewmode6,
 .exploelement .explofolder.viewmode7,
-.exploelement .explofolder.viewmode8, 
+.exploelement .explofolder.viewmode8,
 .exploelement .explofolder.viewmode9 {
 
 	width:100%;
@@ -905,32 +905,32 @@ header h1 {
 	margin-bottom: 2px !important;
 }
 
-.ui-selecting .explofolder.viewmode2, 
+.ui-selecting .explofolder.viewmode2,
 .ui-selecting .explofolder.viewmode3,
 .ui-selecting .explofolder.viewmode4,
 .ui-selecting .explofolder.viewmode5,
 .ui-selecting .explofolder.viewmode6,
 .ui-selecting .explofolder.viewmode7,
-.ui-selecting .explofolder.viewmode8, 
+.ui-selecting .explofolder.viewmode8,
 .ui-selecting .explofolder.viewmode9 {
 
 	background-color: #666;
 }
 
-.ui-selected .explofolder.viewmode2, 
+.ui-selected .explofolder.viewmode2,
 .ui-selected .explofolder.viewmode3,
 .ui-selected .explofolder.viewmode4,
 .ui-selected .explofolder.viewmode5,
 .ui-selected .explofolder.viewmode6,
 .ui-selected .explofolder.viewmode7,
-.ui-selected .explofolder.viewmode8, 
+.ui-selected .explofolder.viewmode8,
 .ui-selected .explofolder.viewmode9 {
 
 	background-color: #444;
 }
 
-.exploelement .explofile.viewmode2, 
-.exploelement .explofile.viewmode3, 
+.exploelement .explofile.viewmode2,
+.exploelement .explofile.viewmode3,
 .exploelement .explofile.viewmode4,
 .exploelement .explofile.viewmode5,
 .exploelement .explofile.viewmode6,
@@ -946,31 +946,31 @@ header h1 {
 	margin-bottom: 2px !important;
 }
 
-.ui-selecting .explofile.viewmode2, 
-.ui-selecting .explofile.viewmode3, 
-.ui-selecting .explofile.viewmode4, 
-.ui-selecting .explofile.viewmode5, 
-.ui-selecting .explofile.viewmode6, 
-.ui-selecting .explofile.viewmode7, 
-.ui-selecting .explofile.viewmode8, 
+.ui-selecting .explofile.viewmode2,
+.ui-selecting .explofile.viewmode3,
+.ui-selecting .explofile.viewmode4,
+.ui-selecting .explofile.viewmode5,
+.ui-selecting .explofile.viewmode6,
+.ui-selecting .explofile.viewmode7,
+.ui-selecting .explofile.viewmode8,
 .ui-selecting .explofile.viewmode9 {
 
   	background-color: #666;
 }
 
-.ui-selected .explofile.viewmode2, 
+.ui-selected .explofile.viewmode2,
 .ui-selected .explofile.viewmode3,
 .ui-selected .explofile.viewmode4,
 .ui-selected .explofile.viewmode5,
 .ui-selected .explofile.viewmode6,
 .ui-selected .explofile.viewmode7,
-.ui-selected .explofile.viewmode8, 
+.ui-selected .explofile.viewmode8,
 .ui-selected .explofile.viewmode9 {
 
   	background-color: #444;
 }
 
-.exploelement .folderelements.viewmode2, 
+.exploelement .folderelements.viewmode2,
 .exploelement .folderelements.viewmode3,
 .exploelement .folderelements.viewmode4,
 .exploelement .folderelements.viewmode5,
@@ -984,31 +984,31 @@ header h1 {
 	position: relative;
 }
 
-.exploelement .exploext.viewmode2, 
+.exploelement .exploext.viewmode2,
 .exploelement .exploext.viewmode3,
 .exploelement .exploext.viewmode4,
 .exploelement .exploext.viewmode5,
 .exploelement .exploext.viewmode6,
 .exploelement .exploext.viewmode7,
-.exploelement .exploext.viewmode8, 
+.exploelement .exploext.viewmode8,
 .exploelement .exploext.viewmode9 {
 
 	width: 100%;
 }
 
-.exploelement .explosize.viewmode2, 
+.exploelement .explosize.viewmode2,
 .exploelement .explosize.viewmode3,
 .exploelement .explosize.viewmode4,
 .exploelement .explosize.viewmode5,
 .exploelement .explosize.viewmode6,
-.exploelement .explosize.viewmode7, 
+.exploelement .explosize.viewmode7,
 .exploelement .explosize.viewmode8,
 .exploelement .explosize.viewmode9 {
 
 	width: 100%;
 }
 
-.exploelement .tags.viewmode2, 
+.exploelement .tags.viewmode2,
 .exploelement .tags.viewmode3,
 .exploelement .tags.viewmode4,
 .exploelement .tags.viewmode5,
@@ -1021,20 +1021,20 @@ header h1 {
   	position: relative;
 }
 
-.exploelement .tags.viewmode2 .tagticket, 
-.exploelement .tags.viewmode3 .tagticket, 
-.exploelement .tags.viewmode4 .tagticket, 
-.exploelement .tags.viewmode5 .tagticket, 
-.exploelement .tags.viewmode6 .tagticket, 
-.exploelement .tags.viewmode7 .tagticket, 
-.exploelement .tags.viewmode8 .tagticket, 
+.exploelement .tags.viewmode2 .tagticket,
+.exploelement .tags.viewmode3 .tagticket,
+.exploelement .tags.viewmode4 .tagticket,
+.exploelement .tags.viewmode5 .tagticket,
+.exploelement .tags.viewmode6 .tagticket,
+.exploelement .tags.viewmode7 .tagticket,
+.exploelement .tags.viewmode8 .tagticket,
 .exploelement .tags.viewmode9 .tagticket {
 
 	white-space: nowrap;
 }
 
-.exploelement .lastmod.viewmode2, 
-.exploelement .lastmod.viewmode3, 
+.exploelement .lastmod.viewmode2,
+.exploelement .lastmod.viewmode3,
 .exploelement .lastmod.viewmode4,
 .exploelement .lastmod.viewmode5,
 .exploelement .lastmod.viewmode6,
@@ -1045,13 +1045,13 @@ header h1 {
 	width: 100%;
 }
 
-.exploelement .duration.viewmode2, 
+.exploelement .duration.viewmode2,
 .exploelement .duration.viewmode3,
 .exploelement .duration.viewmode4,
 .exploelement .duration.viewmode5,
 .exploelement .duration.viewmode6,
 .exploelement .duration.viewmode7,
-.exploelement .duration.viewmode8, 
+.exploelement .duration.viewmode8,
 .exploelement .duration.viewmode9 {
 
 	width: 100%;
@@ -1082,7 +1082,7 @@ header h1 {
 .exploelement .imgmode8,
 .exploelement .imgmode9 {
 
- 	background: url(../img/icons/420px/_blank.png) center top no-repeat; 
+ 	background: url(../img/icons/420px/_blank.png) center top no-repeat;
 }
 
 .exploelement .folder, .exploelementfolderup .folder { background: url(../img/ffffff-0.0.png) center top no-repeat; }
@@ -1194,7 +1194,7 @@ header h1 {
 .imgmode7.folder img, .foldupimgmode7 img,
 .imgmode8.folder img, .foldupimgmode8 img,
 .imgmode9.folder img, .foldupimgmode9 img {
-	  
+
 	  width: 93%;
 }
 
@@ -1205,7 +1205,7 @@ header h1 {
 .exploelement.viewmode2, .exploelementfolderup.viewmode2 {
 
 	width: 98px;
-	margin: 3px;	
+	margin: 3px;
 }
 .imgmode2 img, .foldupimgmode2 img {
 
@@ -1215,7 +1215,7 @@ header h1 {
 
 .imgmode2.jpg, .imgmode2.png, .imgmode2.gif, .imgmode2.bmp, .imgmode2.svg, .imgmode2.xbm, .imgmode2.ico{
 
-	min-width: 98px; 
+	min-width: 98px;
 }
 .exploelement .tags.viewmode2 {
 
@@ -1235,9 +1235,9 @@ header h1 {
 	max-height: 132px;
 }
 
-.imgmode3.jpg, .imgmode3.png, .imgmode3.gif, .imgmode3.bmp, .imgmode3.svg, .imgmode3.xbm, .imgmode3.ico{ 
+.imgmode3.jpg, .imgmode3.png, .imgmode3.gif, .imgmode3.bmp, .imgmode3.svg, .imgmode3.xbm, .imgmode3.ico{
 
-	min-width: 132px; 
+	min-width: 132px;
 }
 
 .exploelement .tags.viewmode3 {
@@ -1258,9 +1258,9 @@ header h1 {
 	max-height: 170px;
 }
 
-.imgmode4.jpg, .imgmode4.png, .imgmode4.gif, .imgmode4.bmp, .imgmode4.svg, .imgmode4.xbm, .imgmode4.ico{ 
+.imgmode4.jpg, .imgmode4.png, .imgmode4.gif, .imgmode4.bmp, .imgmode4.svg, .imgmode4.xbm, .imgmode4.ico{
 
-	min-width: 170px; 
+	min-width: 170px;
 }
 
 .exploelement .tags.viewmode4 {
@@ -1283,7 +1283,7 @@ header h1 {
 
 .imgmode5.jpg, .imgmode5.png, .imgmode5.gif, .imgmode5.bmp, .imgmode5.svg, .imgmode5.xbm, .imgmode5.ico{
 
-	min-width: 212px; 
+	min-width: 212px;
 }
 
 .exploelement .tags.viewmode5 {
@@ -1306,7 +1306,7 @@ header h1 {
 
 .imgmode6.jpg, .imgmode6.png, .imgmode6.gif, .imgmode6.bmp, .imgmode6.svg, .imgmode6.xbm, .imgmode6.ico{
 
-	min-width: 258px; 
+	min-width: 258px;
 }
 
 .exploelement .tags.viewmode6 {
@@ -1327,9 +1327,9 @@ header h1 {
 	max-height: 308px;
 }
 
-.imgmode7.jpg, .imgmode7.png, .imgmode7.gif, .imgmode7.bmp, .imgmode7.svg, .imgmode7.xbm, .imgmode7.ico{ 
+.imgmode7.jpg, .imgmode7.png, .imgmode7.gif, .imgmode7.bmp, .imgmode7.svg, .imgmode7.xbm, .imgmode7.ico{
 
-	min-width: 308px; 
+	min-width: 308px;
 }
 
 .exploelement .tags.viewmode7 {
@@ -1348,9 +1348,9 @@ header h1 {
 	max-width: 362px;
 	max-height: 362px;
 }
-.imgmode8.jpg, .imgmode8.png, .imgmode8.gif, .imgmode8.bmp, .imgmode8.svg, .imgmode8.xbm, .imgmode8.ico{ 
+.imgmode8.jpg, .imgmode8.png, .imgmode8.gif, .imgmode8.bmp, .imgmode8.svg, .imgmode8.xbm, .imgmode8.ico{
 
-	min-width: 362px; 
+	min-width: 362px;
 }
 .exploelement .tags.viewmode8 {
 
@@ -1368,9 +1368,9 @@ header h1 {
 	max-width: 420px;
 	max-height: 420px;
 }
-.imgmode9.jpg, .imgmode9.png, .imgmode9.gif, .imgmode9.bmp, .imgmode9.svg, .imgmode9.xbm, .imgmode9.ico{ 
+.imgmode9.jpg, .imgmode9.png, .imgmode9.gif, .imgmode9.bmp, .imgmode9.svg, .imgmode9.xbm, .imgmode9.ico{
 
-	min-width: 420px; 
+	min-width: 420px;
 }
 .exploelement .tags.viewmode9 {
 
@@ -1400,7 +1400,7 @@ header h1 {
 	white-space: nowrap;
 	overflow: hidden;
 	margin: 0;
-	padding: 0; 
+	padding: 0;
 	border: solid 1px #CCC;
 	height: 20px;
 }
@@ -1419,7 +1419,7 @@ header h1 {
 
 	width: 15%;
 	white-space: nowrap;
-	overflow: hidden;    
+	overflow: hidden;
 	border-right: 2px solid #ff3030;
 	padding-right: 2px;
 }
@@ -1485,10 +1485,10 @@ header h1 {
 
 .archive .imgmode1 {
 
-	padding-right: 17px; 
+	padding-right: 17px;
 }
 
-.imgmode1, .foldupimgmode1 { 
+.imgmode1, .foldupimgmode1 {
 
 	margin: 0 auto;
 	text-align: center;
@@ -1574,7 +1574,7 @@ header h1 {
 .imgmode1.jpg, .imgmode1.jpeg, .imgmode1.png, .imgmode1.gif, .imgmode1.bmp, .imgmode1.svg, .imgmode1.xbm, .imgmode1.ico {
 
 	padding-right: 0;
-	min-width: 17px; 
+	min-width: 17px;
 	display: inline-block;
 }
 
@@ -1622,12 +1622,12 @@ header h1 {
 }
 
 #bottomleft {
-	
-	min-width: 20px; 
+
+	min-width: 20px;
 	width: 205px; /* valor inicial */
 	display: inline-block;
 	height: 50px;
-	float: left; 
+	float: left;
 }
 
 #botonestag {
@@ -1639,7 +1639,7 @@ header h1 {
 
 #bottomright {
 
-	border-left: 1px solid black;    
+	border-left: 1px solid black;
 	display: inline-block;
 	width: calc(100% - 223px);
 	background-color: white;
@@ -1670,7 +1670,7 @@ header h1 {
 }
 
 .searcherbottom #tagpar > div, .searcherbottom #taginpar > div {
-  
+
   	margin-bottom: 2px;
 }
 
@@ -1679,7 +1679,7 @@ header h1 {
 
 /* estilo para el aviso con tiempo, se lanza con función customAlert del utils.js */
 .timepopup {
-	
+
 	top: 0;
 	position: fixed;
 	width: 100%;
@@ -1703,7 +1703,7 @@ header h1 {
 	font-weight: bold;
 	padding: 13px 5px 13px 5px;
 	background-image: url("../img/wood_pattern.png");
-	color: #444; 
+	color: #444;
 	-webkit-border-radius: 7px;
 	-webkit-box-shadow: inset 0px 0px 8px 0px #331a00;
 	border: 1px dashed #444;
@@ -1761,7 +1761,7 @@ header h1 {
 	padding: 13px 5px 13px 5px;
 	padding: 12px;
 	background-image: url("../img/wood_pattern.png");
-	color: #111; 
+	color: #111;
 	-webkit-border-radius: 7px;
 	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
 
@@ -1861,7 +1861,7 @@ header h1 {
 }
 
 #popup.options {
-  
+
 	display: initial;
 	top: 15%;
 	left: 0;
@@ -1874,7 +1874,7 @@ header h1 {
 }
 
 #popup.info {
-  
+
 	display: initial;
 	top: 60px;
 	height: calc(100% - 130px);
@@ -1905,7 +1905,7 @@ header h1 {
 	width: 100%;
 	height: 38px;
 	overflow-x: auto;
-	cursor: pointer;    
+	cursor: pointer;
 }
 
 #tagforms {
@@ -1914,7 +1914,7 @@ header h1 {
 	width: 100%;
 	white-space: nowrap;
 	margin-top: 1px;
-	
+
 }
 
 #tagpreview {
@@ -1924,7 +1924,7 @@ header h1 {
 	padding: 3px 2px 0 2px;
 	border: 1px solid lightblue;
 	min-width: 100px;
-	text-shadow: none;	
+	text-shadow: none;
 }
 
 
@@ -2012,7 +2012,7 @@ header h1 {
 }
 
 #unitselect{
-
+  max-width: 150px;
 	padding: 1px !important;
 }
 
@@ -2040,7 +2040,7 @@ header h1 {
 #logo-wrapper img{
 
    	display:block;
-	margin:7px auto 11px auto;	
+	margin:7px auto 11px auto;
 }
 
 #initalselect {
@@ -2049,7 +2049,7 @@ header h1 {
 	padding: 13px 6px 13px 6px;
 	padding: 12px;
 	background-image: url("../img/wood_pattern.png");
-	color: #111; 
+	color: #111;
 	-webkit-border-radius: 7px;
 	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
 
@@ -2165,15 +2165,15 @@ header h1 {
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
-  -webkit-transition: 
+  -webkit-transition:
 	  opacity 0.2s ease-in-out,
 		visibility 0.2s ease-in-out,
 		-webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-	-moz-transition:    
+	-moz-transition:
 		opacity 0.2s ease-in-out,
 		visibility 0.2s ease-in-out,
 		-moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-	transition:         
+	transition:
 		opacity 0.2s ease-in-out,
 		visibility 0.2s ease-in-out,
 		transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -2274,7 +2274,7 @@ header h1 {
 .tooltip-top:focus:after {
   -webkit-transform: translateY(-12px);
   -moz-transform:    translateY(-12px);
-  transform:         translateY(-12px); 
+  transform:         translateY(-12px);
 }
 
 /* Left */
@@ -2300,7 +2300,7 @@ header h1 {
 .tooltip-left:focus:after {
   -webkit-transform: translateX(-12px);
   -moz-transform:    translateX(-12px);
-  transform:         translateX(-12px); 
+  transform:         translateX(-12px);
 }
 
 /* Bottom */
@@ -2325,7 +2325,7 @@ header h1 {
 .tooltip-bottom:focus:after {
   -webkit-transform: translateY(12px);
   -moz-transform:    translateY(12px);
-  transform:         translateY(12px); 
+  transform:         translateY(12px);
 }
 
 /* Right */
@@ -2349,7 +2349,7 @@ header h1 {
 .tooltip-right:focus:after {
   -webkit-transform: translateX(12px);
   -moz-transform:    translateX(12px);
-  transform:         translateX(12px); 
+  transform:         translateX(12px);
 }
 
 /* Move directional arrows down a bit for left/right tooltips */

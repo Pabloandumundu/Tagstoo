@@ -1,4 +1,4 @@
-/* 
+/*
 * Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
@@ -143,7 +143,7 @@ function cerrar() {
 	$("#popup").removeClass("tagfolder");
 	$("#popup").removeClass("newtag");
 	$("#popup").removeClass("edittag");
-	
+
 	$("#explorer", window.parent.document).contents().find('#popup').removeClass("options");
 	$("#searcher", window.parent.document).contents().find('#popup').removeClass("options");
 
@@ -178,12 +178,12 @@ function newtagpreload() {
 
 			$('#tagpreview .tagticket').alterClass( 'tag_*',  selectedtagform) ; // alterClass es una función externa que esta especificada en utils.js y que permite sustituir de manera sencilla cualquier clase que empiece por .. por otras clase.
 
-			if ($("#tagpreview .tagticket").html() == "" || $("#tagpreview .tagticket").html() == "&nbsp;") {  			
+			if ($("#tagpreview .tagticket").html() == "" || $("#tagpreview .tagticket").html() == "&nbsp;") {
 				$("#tagpreview .tagticket").css("width", "1em");
 			}
 
 			if (selectedtagcolor == "") {
-				$("#tagpreview .tagticket").css("background-color", "grey");  				
+				$("#tagpreview .tagticket").css("background-color", "grey");
 			} else {
 				$("#tagpreview .tagticket").css("background-color", selectedtagcolor);
 			}
@@ -197,7 +197,7 @@ function newtagpreload() {
 		selectedtagcolor = box.colorHex; // el objeto box y sus métodos los creamos con el colorpicker, aquí se recoge el color seleccionado
 		var complecolor = hexToComplimentary(selectedtagcolor);
 
-		$("#tagpreview .tagticket").css("background-color", selectedtagcolor); 
+		$("#tagpreview .tagticket").css("background-color", selectedtagcolor);
 		$("#tagpreview .tagticket").css("color", complecolor);
 
 	});
@@ -210,17 +210,17 @@ function newtagpreload() {
 
 			$("#tagpreview .tagticket").css("width", "auto");
 			$("#tagpreview .tagticket").html(selectedtagtext);
-			
+
 		} else { // vacío
 
 			$("#tagpreview .tagticket").html("&nbsp;")
-			$("#tagpreview .tagticket").css("width", "1em");	
+			$("#tagpreview .tagticket").css("width", "1em");
 		}
 
 		if (!selectedtagtext || selectedtagtext.replace(/^\s+|\s+$/g, "").length == 0) {
 
 			$("#tagpreview .tagticket").html("&nbsp;")
-			$("#tagpreview .tagticket").css("width", "1em");	
+			$("#tagpreview .tagticket").css("width", "1em");
 		}
 
 	});
@@ -243,16 +243,16 @@ function createnewtag() {
 				var request = db.transaction(["tags"], "readwrite")
 							.objectStore("tags")
 							.add({ tagtext: selectedtagtext, tagpos: newposition, tagcolor: selectedtagcolor.substring(1), tagform: selectedtagform });
-											 
+
 				request.onsuccess = function(event) {
 
-					alertify.alert("Tag Added.", function () { 
+					alertify.alert("Tag Added.", function () {
 					top.searcher.drawfootertags();
 					top.explorer.drawfootertags();
 					cerrar();
 					});
 
-				};          
+				};
 				request.onerror = function(event) { /* alert("Tag not added, tag already exists!"); */ };
 			}
 
@@ -279,10 +279,10 @@ function edittagpreload() {
 	window.selectedtagcolor = "";
 	window.selectedtagform = "";
 
-	
+
 	// mostrar los tags previamente creados
 	drawedittagtags();
-	
+
 	$("#existingtags-wrap").selectable({
 
 		selected: function( event, ui ) {
@@ -294,15 +294,15 @@ function edittagpreload() {
 
 			var tagpreview = $("#tagpreview .tagticket")[0];
 
-			var req = objectStore.openCursor(); 
-		
-			req.onerror = function(event) { 
+			var req = objectStore.openCursor();
+
+			req.onerror = function(event) {
 
 				console.log("error: " + event);
 
 			};
 
-			req.onsuccess = function(event) { 
+			req.onsuccess = function(event) {
 
 				var cursor = event.target.result;
 
@@ -338,7 +338,7 @@ function edittagpreload() {
 
 
 	// mostrar las formas disponibles
-	var todisplaytagforms = "";	
+	var todisplaytagforms = "";
 
 	$.each(availabletagforms, function(i) {
 
@@ -360,12 +360,12 @@ function edittagpreload() {
 
 				$('#tagpreview .tagticket').alterClass( 'tag_*',  selectedtagform) ; // alterClass es una función externa que esta especificada en utils.js y que permite sustituir de forma sencilla cualquier clase que empiece por .. por otras clase.
 
-				if ($("#tagpreview .tagticket").html() == "" || $("#tagpreview .tagticket").html() == "&nbsp;") {  			
+				if ($("#tagpreview .tagticket").html() == "" || $("#tagpreview .tagticket").html() == "&nbsp;") {
 					$("#tagpreview .tagticket").css("width", "1em");
 
 				}
 				if (selectedtagcolor == "") {
-					$("#tagpreview .tagticket").css("background-color", "grey");  				
+					$("#tagpreview .tagticket").css("background-color", "grey");
 				} else {
 					$("#tagpreview .tagticket").css("background-color", selectedtagcolor);
 				}
@@ -393,7 +393,7 @@ function edittagpreload() {
 			selectedtagcolor = box.colorHex; // el objeto box y sus métodos los creamos con el colorpicker, aquí se recoge el color seleccionado
 			var complecolor = hexToComplimentary(selectedtagcolor);
 
-			$("#tagpreview .tagticket").css("background-color", selectedtagcolor);	 
+			$("#tagpreview .tagticket").css("background-color", selectedtagcolor);
 			$("#tagpreview .tagticket").css("color", complecolor);
 
 		}
@@ -403,7 +403,7 @@ function edittagpreload() {
 			alertify.alert("Please, first select an existing tag if you want to edit it.");
 			box.close();
 			$("#colorPicker .colorInner").css("background-color","#EFEFEF");
-			
+
 		}
 
 	});
@@ -417,21 +417,21 @@ function edittagpreload() {
 		if (selectedtagtext != "" || selectedtagtext != " ") {
 			$("#tagpreview .tagticket").css("width", "auto");
 			$("#tagpreview .tagticket").html(selectedtagtext);
-			
+
 		} else { // vacío
 
 			$("#tagpreview .tagticket").html("&nbsp;")
-			$("#tagpreview .tagticket").css("width", "1em");	
+			$("#tagpreview .tagticket").css("width", "1em");
 		}
 
 		if (!selectedtagtext || selectedtagtext.replace(/^\s+|\s+$/g, "").length == 0) {
 
 			$("#tagpreview .tagticket").html("&nbsp;")
-			$("#tagpreview .tagticket").css("width", "1em");	
+			$("#tagpreview .tagticket").css("width", "1em");
 		}
 
 	});
-	
+
 }
 
 function getalltags(callback) {
@@ -439,18 +439,18 @@ function getalltags(callback) {
 	var trans = db.transaction(["tags"], "readonly");
 	var store = trans.objectStore("tags");
 	var items = [];
- 
-	trans.oncomplete = function(evt) {  
+
+	trans.oncomplete = function(evt) {
 		callback(items);
 	};
- 
+
 	var cursorRequest = store.openCursor();
- 
+
 	cursorRequest.onerror = function(error) {
 		console.log(error);
 	};
- 
-	cursorRequest.onsuccess = function(evt) {                    
+
+	cursorRequest.onsuccess = function(evt) {
 		var cursor = evt.target.result;
 		if (cursor) {
 			items.push(cursor.value);
@@ -487,15 +487,15 @@ function drawedittagtags() { // visual del tag que se está editando
 
 		$.each(tagdeledit, function(i) {
 
-			var req = objectStore.openCursor(); 
-		
-			req.onerror = function(event) { 
+			var req = objectStore.openCursor();
+
+			req.onerror = function(event) {
 
 				console.log("error: " + event);
 
 			};
 
-			req.onsuccess = function(event) { 
+			req.onsuccess = function(event) {
 
 				var cursor = event.target.result;
 
@@ -543,8 +543,8 @@ function savetag() { // guardar tag
 
 		req.onsuccess = function(event) {
 
-			var cursor = event.target.result; 
-			
+			var cursor = event.target.result;
+
 			if(cursor){
 
 				if(cursor.value.tagid == selectedtag){
@@ -559,15 +559,15 @@ function savetag() { // guardar tag
 
 					res2.onerror = function(event){
 
-						console.log("error: tag no modificado: " + event);									
+						console.log("error: tag no modificado: " + event);
 					}
 
 					res2.onsuccess = function(event){
 
-						alertify.alert("Tag Saved!. Refresh the view if needed.", function () { 
+						alertify.alert("Tag Saved!. Refresh the view if needed.", function () {
 
 							top.searcher.drawfootertags();
-							top.explorer.drawfootertags();				
+							top.explorer.drawfootertags();
 							cerrar();
 
 						});
@@ -599,8 +599,8 @@ function deletetag() { // borrar tag
 		alertify.confirm( "You chosen to delete the selected tag, all the associations to this tag will be unlinked, are you sure?", function (e) {
             if (!e) {
 	            x = "You pressed Cancel!";
-	            console.log(x);                 
-            } else {                  
+	            console.log(x);
+            } else {
               	x = "You pressed OK!";
               	console.log(x);
 
@@ -619,9 +619,9 @@ function deletetag() { // borrar tag
 				};
 
 				req.onsuccess = function(event) {
-				
-					var cursor = event.target.result;						
-						
+
+					var cursor = event.target.result;
+
 					if(cursor) {
 
 						var coincidetag="no";
@@ -653,7 +653,7 @@ function deletetag() { // borrar tag
 						}
 
 						if (tagsdelelemento.length > 0) { // tiene más tags
-							
+
 							// el archivo tiene más tag por lo que solo se sobrescribirá con los tags restantes
 
 							updatefile.fileid = cursor.value.fileid;
@@ -665,7 +665,7 @@ function deletetag() { // borrar tag
 							var res2 = cursor.update(updatefile);
 
 							res2.onerror = function(event){
-								console.log("error: tag de archivo no eliminado: " + event);									
+								console.log("error: tag de archivo no eliminado: " + event);
 							}
 
 							res2.onsuccess = function(event){
@@ -684,7 +684,7 @@ function deletetag() { // borrar tag
 							var res3 = cursor.delete(cursor.value.fileid)
 
 							res3.onerror = function(event){
-								console.log("error: fichero no eliminado de la base de datos: " + event);									
+								console.log("error: fichero no eliminado de la base de datos: " + event);
 							}
 
 							res3.onsuccess = function(event){
@@ -703,8 +703,8 @@ function deletetag() { // borrar tag
 
 								req2.onsuccess = function(event) {
 
-									var cursor2 = event.target.result; 
-									
+									var cursor2 = event.target.result;
+
 									if(cursor2){
 
 										if(cursor2.value.folderid == folderidtocheck){
@@ -725,7 +725,7 @@ function deletetag() { // borrar tag
 
 												req3.onsuccess = function(event) {
 
-													var cursor3 = event.target.result; 
+													var cursor3 = event.target.result;
 
 													if(cursor3){
 
@@ -739,7 +739,7 @@ function deletetag() { // borrar tag
 
 													}
 
-													if (tieneotrosficherosasociados == "no") { 
+													if (tieneotrosficherosasociados == "no") {
 
 														// se borrara la carpeta de la bs al no tener más ficheros asociados
 														var trans = db.transaction(["folders"], "readwrite")
@@ -753,9 +753,9 @@ function deletetag() { // borrar tag
 
 														req.onsuccess = function(event) {
 
-															var cursor = event.target.result; 
-								
-															if(cursor){						
+															var cursor = event.target.result;
+
+															if(cursor){
 
 																if(cursor.value.folderid == folderidtocheck) {
 
@@ -823,9 +823,9 @@ function deletetag() { // borrar tag
 					};
 
 					req.onsuccess = function(event) {
-					
-						var cursor = event.target.result;						
-							
+
+						var cursor = event.target.result;
+
 						if(cursor) {
 
 							var coincidetag="no";
@@ -852,10 +852,10 @@ function deletetag() { // borrar tag
 								var index = tagsdelelemento.indexOf(selectedtag);
 								if (index > -1) {
 									tagsdelelemento.splice(index, 1);
-								}						
+								}
 
 								if (tagsdelelemento.length > 0) { // la carpeta tiene más tags
-									
+
 									// el elemento tiene más tag por lo que solo se sobrescribirá con los tags restantes
 									updatefolder.folderid = cursor.value.folderid;
 									updatefolder.folder = cursor.value.folder;
@@ -864,7 +864,7 @@ function deletetag() { // borrar tag
 									var res2 = cursor.update(updatefolder);
 
 									res2.onerror = function(event){
-										console.log("error: tag de carpeta no eliminado: " + event);									
+										console.log("error: tag de carpeta no eliminado: " + event);
 									}
 
 									res2.onsuccess = function(event){
@@ -910,9 +910,9 @@ function deletetag() { // borrar tag
 							};
 
 							req.onsuccess = function(event) {
-							
-								var cursor = event.target.result;						
-									
+
+								var cursor = event.target.result;
+
 								if(cursor) {
 
 									if(cursor.value.filefolder == foderidtocheckiffiles[i]) {
@@ -946,9 +946,9 @@ function deletetag() { // borrar tag
 									};
 
 									req.onsuccess = function(event) {
-									
-										var cursor = event.target.result;						
-											
+
+										var cursor = event.target.result;
+
 										if(cursor) {
 
 											if(cursor.value.folderid == foderidtocheckiffiles[i]) {
@@ -960,7 +960,7 @@ function deletetag() { // borrar tag
 												var res2 = cursor.update(updatefolder);
 
 												res2.onerror = function(event){
-													console.log("error: tag de carpeta no eliminado: " + event);									
+													console.log("error: tag de carpeta no eliminado: " + event);
 												}
 
 												res2.onsuccess = function(event){
@@ -993,9 +993,9 @@ function deletetag() { // borrar tag
 									};
 
 									req.onsuccess = function(event) {
-									
-										var cursor = event.target.result;						
-											
+
+										var cursor = event.target.result;
+
 										if(cursor) {
 
 											if(cursor.value.folderid == foderidtocheckiffiles[i]) {
@@ -1003,7 +1003,7 @@ function deletetag() { // borrar tag
 												var res2 = cursor.delete(foderidtocheckiffiles[i]);
 
 												res2.onerror = function(event){
-													console.log("error: carpeta no eliminada de la bd: " + event);									
+													console.log("error: carpeta no eliminada de la bd: " + event);
 												}
 
 												res2.onsuccess = function(event){
@@ -1038,9 +1038,9 @@ function deletetag() { // borrar tag
 						};
 
 						req.onsuccess = function(event) {
-						
-							var cursor = event.target.result;						
-								
+
+							var cursor = event.target.result;
+
 							if(cursor) {
 
 								if(cursor.value.tagid == selectedtag) {
@@ -1048,7 +1048,7 @@ function deletetag() { // borrar tag
 									var res2 = cursor.delete(foderidtocheckiffiles[i]);
 
 									res2.onerror = function(event){
-										console.log("error: tag no eliminada de la bd: " + event);									
+										console.log("error: tag no eliminada de la bd: " + event);
 									}
 
 									res2.onsuccess = function(event){
@@ -1068,10 +1068,10 @@ function deletetag() { // borrar tag
 
 						trans.oncomplete = function(event) {
 
-							alertify.alert("Tag Deleted!. Refresh the view if needed.", function () { 
+							alertify.alert("Tag Deleted!. Refresh the view if needed.", function () {
 
 								top.searcher.drawfootertags();
-								top.explorer.drawfootertags();					
+								top.explorer.drawfootertags();
 								cerrar();
 
 							});
@@ -1121,7 +1121,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 	req10.onsuccess = function(event) {
 
 		var cursor10 = event.target.result;
-		
+
 		if(cursor10){
 
 			if (cursor10.value.folder == ffoldertoaddtags) {
@@ -1148,7 +1148,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 			var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
 			for (i = 0; i < breadedElements.length; i++) {
-				
+
 				var ext = re.exec(breadedElements[i])[1];
 
 				// comprobar si es subcarpeta o subarchivo
@@ -1174,11 +1174,11 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 			var i = 0;
 			var ii = 0;
 			var iii = 0;
-							 
+
 			$.each(bdirectorycontent, function(i) {
 
 				if (bdirectorycontent[i].arorfo != "i_am_an_archive" || bdirectorycontent[i].arorfo == undefined || bdirectorycontent[i].name == "Documents and Settings") {
-					bdirectoryfolders[ii] = bdirectorycontent[i];               
+					bdirectoryfolders[ii] = bdirectorycontent[i];
 
 					ii++;
 				} else {
@@ -1206,25 +1206,25 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 				var objectStore = trans.objectStore("folders")
 				$.each(bdirectoryfolders, function(i) {
 
-					var bfolderupdate = {};			
-					
-					var req = objectStore.openCursor(); 
-					
-					req.onerror = function(event) { 
+					var bfolderupdate = {};
+
+					var req = objectStore.openCursor();
+
+					req.onerror = function(event) {
 
 						console.log("error: " + event);
 
 					};
 
-					req.onsuccess = function(event) { 
+					req.onsuccess = function(event) {
 
-						var cursor = event.target.result; 
+						var cursor = event.target.result;
 						if(cursor){
 
 							if(cursor.value.folder == ffoldertoaddtags + bdirectoryfolders[i].name){ // si la subcarpera ya esta en la bd
 
-								bdirectoryfolders[i].tagsid = cursor.value.foldertags; 
-								bdirectoryfolders[i].id = cursor.value.folderid; 
+								bdirectoryfolders[i].tagsid = cursor.value.foldertags;
+								bdirectoryfolders[i].id = cursor.value.folderid;
 
 							}
 							cursor.continue();
@@ -1234,9 +1234,9 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 					trans.oncomplete = function() {
 
-						$.each(bdirectoryfolders, function(i) { 
+						$.each(bdirectoryfolders, function(i) {
 
-							var isnewtagfold = "yes"; // valor por defecto 
+							var isnewtagfold = "yes"; // valor por defecto
 							var barraydetags=[];
 
 							if (bdirectoryfolders[i].id != "") { // si la subcarpeta ya estaba en bd
@@ -1250,9 +1250,9 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 										isnewtagfold = "no";
 										flag2++
 										return;
-									
+
 									}
-								
+
 								}
 
 								if (isnewtagfold == "yes") { // si no es tag nuevo no se hace nada
@@ -1269,14 +1269,14 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									req2.onsuccess = function(event) {
 
 										var cursor2 = event.target.result;
-										
+
 										if(cursor2){
 
 											if(cursor2.value.folderid == bdirectoryfolders[i].id) {
 
 												bfolderupdate.folderid = cursor2.value.folderid;
 												bfolderupdate.folder = cursor2.value.folder;
-												
+
 												if (typeof barraydetags === 'string') {
 													barraydetags = barraydetags.split(",");
 												}
@@ -1288,7 +1288,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 												var res3 = cursor2.update(bfolderupdate);
 
 												res3.onerror = function(event){
-													console.log("error tag no añadida en subcarpetas: " + event);									
+													console.log("error tag no añadida en subcarpetas: " + event);
 												}
 
 												res3.onsuccess = function(event){
@@ -1316,21 +1316,21 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									.put({ folder: ffoldertoaddtags + bdirectoryfolders[i].name, foldertags: [taganadir] }); // el id no hace falta pues es autoincremental
 
 								req2.onerror = function(event){
-									console.log("error tag no añadida en subcarpetas: " + event);						
+									console.log("error tag no añadida en subcarpetas: " + event);
 								}
 
 								req2.onsuccess = function(event){
 
 									// console.log("tags añadidaas a subcarpetas");
-									flag2++	
+									flag2++
 
 								}
 
-							}							
+							}
 
 							// se procesan los valores que luego se pondran en los tags del treeview y del directorio
 							valueoriginal[i] = bdirectoryfolders[i].tagsid;
-							index = valueoriginal[i].indexOf(taganadir); // localizamos el id del tag 
+							index = valueoriginal[i].indexOf(taganadir); // localizamos el id del tag
 
 							if (index == -1) {
 
@@ -1340,7 +1340,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									valueaponer[i] = valueaponer[i] + "," + taganadir;
 								} else {
 									valueaponer[i] = taganadir;
-								}						
+								}
 
 								valueaponer[i] = valueaponer[i].split(','); // de string a array
 
@@ -1373,10 +1373,10 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									req2.onerror = function(event) {
 										console.log("error: " + event);
 									};
-									req2.onsuccess = function(event) { 
+									req2.onsuccess = function(event) {
 										var cursor2 = event.target.result;
 										if (cursor2) {
-											$.each (treeelementtagsinview[i].children, function(u) {											
+											$.each (treeelementtagsinview[i].children, function(u) {
 												if (cursor2.value.tagid == treeelementtagsinview[i].children[u].getAttribute("value")) {
 
 													var color = "#" + cursor2.value.tagcolor;
@@ -1400,15 +1400,15 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 
 								// se redibujan los tags de las subcarpetas si estámos dentro de la carpeta
-								if (dirtoexec == driveunit + ffoldertoaddtags) { 
-									
-									// primero cambiamos el value de la etiqueta tags..								 
+								if (dirtoexec == driveunit + ffoldertoaddtags) {
+
+									// primero cambiamos el value de la etiqueta tags..
 									$.each ($(".explofolder"), function(n) {
 										if ($(".explofolder:eq("+n+")").attr("value") == bdirectoryfolders[i].name) {
 											elementtagsinview[i] = $(".explofolder:eq("+n+")").siblings(".tags")
 										}
 									});
-									
+
 									elementtagsinview[i][0].setAttribute("value", valueaponer[i]);
 									elementtagsinview[i][0].innerHTML = tagsdivs;
 
@@ -1423,10 +1423,10 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									req2.onerror = function(event) {
 										console.log("error: " + event);
 									};
-									req2.onsuccess = function(event) { 
+									req2.onsuccess = function(event) {
 										var cursor2 = event.target.result;
 										if (cursor2) {
-											$.each(elementosdirectoriotags[i], function(n) {											
+											$.each(elementosdirectoriotags[i], function(n) {
 												if (cursor2.value.tagid == elementosdirectoriotags[i][n].getAttribute("value")) {
 
 													var color = "#" + cursor2.value.tagcolor;
@@ -1445,17 +1445,17 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 										}
 
-									};	
+									};
 
 								} //--fin si hay elementos visibles en el directoryview
-		
+
 
 							}
 
 						}); // --fin each directoryfolders
 
 					} // -- fin trans
-				
+
 				}); // --fin each directoryfolders
 
 			elementstagsorder();
@@ -1476,23 +1476,23 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 				$.each(bdirectoryarchives, function(i) {
 
 					var bfileupdate = {};
-					
-					var req11 = objectStore11.openCursor(); 
-					
-					req11.onerror = function(event) { 
+
+					var req11 = objectStore11.openCursor();
+
+					req11.onerror = function(event) {
 
 						console.log("error: " + event);
 
 					};
 
-					req11.onsuccess = function(event) { 
+					req11.onsuccess = function(event) {
 
-						var cursor11 = event.target.result; 
+						var cursor11 = event.target.result;
 						if(cursor11){
 
 							if (cursor11.value.filefolder == ffolderidtoaddtags ) {
 								if (cursor11.value.filename == bdirectoryarchives[i].name){  //entoces el subarchivo ya estaba en la bd
-									bdirectoryarchives[i].tagsid = cursor11.value.filetags; 
+									bdirectoryarchives[i].tagsid = cursor11.value.filetags;
 									bdirectoryarchives[i].id = cursor11.value.fileid;
 
 								}
@@ -1504,12 +1504,12 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 					}
 
 					trans11.oncomplete = function() {
-			
-						$.each(bdirectoryarchives, function(i) { 
 
-							// actualizar visual 							
+						$.each(bdirectoryarchives, function(i) {
+
+							// actualizar visual
 							fvalueoriginal[i] = bdirectoryarchives[i].tagsid;
-							findex = fvalueoriginal[i].indexOf(taganadir); // localizamos el id del tag 
+							findex = fvalueoriginal[i].indexOf(taganadir); // localizamos el id del tag
 
 							if (findex == -1) {
 
@@ -1529,15 +1529,15 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 							}
 
 							// se redibujan los tags de las subcarpetas si estámos dentro de la carpeta
-							if (dirtoexec == driveunit + ffoldertoaddtags) { 
-								
-								// primero cambiamos el value de la etiqueta tags..								 
+							if (dirtoexec == driveunit + ffoldertoaddtags) {
+
+								// primero cambiamos el value de la etiqueta tags..
 								$.each ($(".explofile"), function(n) {
 									if ($(".explofile:eq("+n+")").attr("value") == bdirectoryarchives[i].name) {
 										felementtagsinview[i] = $(".explofile:eq("+n+")").siblings(".tags")
 									}
 								});
-								
+
 								felementtagsinview[i][0].setAttribute("value", fvalueaponer[i]);
 								felementtagsinview[i][0].innerHTML = ftagsdivs;
 
@@ -1552,7 +1552,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 								req2.onerror = function(event) {
 									console.log("error: " + event);
 								};
-								req2.onsuccess = function(event) { 
+								req2.onsuccess = function(event) {
 									var cursor2 = event.target.result;
 									if (cursor2) {
 										$.each(felementosdirectoriotags[i], function(n) {
@@ -1567,7 +1567,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 												felementosdirectoriotags[i][n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
 												felementosdirectoriotags[i][n].innerHTML = cursor2.value.tagtext;
 
-											}	
+											}
 
 										});
 
@@ -1575,11 +1575,11 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 									}
 
-								};	
+								};
 
 							} //--fin si hay elementos visibles en el directoryview
 
-							var isnewtag = "yes" // valor por defecto 
+							var isnewtag = "yes" // valor por defecto
 							var barraydetags=[];
 
 							if (bdirectoryarchives[i].id != "") { // si el subarchivo ya estaba en bd
@@ -1593,9 +1593,9 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 										isnewtag = "no";
 										flag2++
 										return;
-									
+
 									}
-								
+
 								}
 
 								if (isnewtag == "yes") { // nuevo tag, si no es tag nuevo no se hace nada
@@ -1604,15 +1604,15 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									var objectStore3 = trans3.objectStore("files");
 									var req3 = objectStore3.openCursor();
 
-									req3.onerror = function(event) { 
+									req3.onerror = function(event) {
 
 										console.log("error: " + event);
 									};
 
 									req3.onsuccess = function(event) {
 
-										var cursor3 = event.target.result; 
-										
+										var cursor3 = event.target.result;
+
 										if(cursor3){
 
 											if(cursor3.value.fileid == bdirectoryarchives[i].id) {
@@ -1629,15 +1629,15 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 												var trans = db.transaction(["files"], "readwrite")
 												var request = trans.objectStore("files")
 												.put(bfileupdate);
-										 
-												request.onerror = function(event) { 
+
+												request.onerror = function(event) {
 
 													console.log("error tag no añadida en subcarpetas: " + event);
 
 												};
 
 												request.onsuccess = function(event) {
-						
+
 													flag2++
 
 												}
@@ -1661,7 +1661,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									.put({ filefolder: ffolderidtoaddtags, filename: bdirectoryarchives[i].name, filetags: [taganadir], fileext: bdirectoryarchives[i].ext }); // el id no hace falta pues es autoincremental
 
 								req2.onerror = function(event){
-									console.log("error tag no añadida en subarchivos: " + event);						
+									console.log("error tag no añadida en subarchivos: " + event);
 								}
 
 								req2.onsuccess = function(event){
@@ -1672,8 +1672,8 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 								}
 
-							}	
-						
+							}
+
 						}); // --fin each
 					}
 
@@ -1687,7 +1687,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 			} //-- fin directoryarchives length
 
-			
+
 		var msgtime = 1000 + (bdirectorycontent.length * 40)
 		customAlert("(PLEASE, WAIT A MOMENT WHILE TAGS ARE ADDED)...",msgtime);
 
@@ -1702,11 +1702,20 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 
 // para el Popup options
+window.s = ""
 
-function optionspreload() {	
+function optionspreload() {
+
+
+
+	var Sniffr = require("sniffr");
+	var agent = navigator.userAgent
+	s = new Sniffr();
+	s.sniff(agent);
+
 
 	// tomar nombres de las bases de datos indexdb:
-	indexedDB.webkitGetDatabaseNames().onsuccess = function(sender,args) { 
+	indexedDB.webkitGetDatabaseNames().onsuccess = function(sender,args) {
 
 		currentlydatabaseused = localStorage["currentlydatabaseused"];
 
@@ -1727,7 +1736,26 @@ function optionspreload() {
 		var currentlydatabaseused_toshow = currentlydatabaseused.replace("tagstoo_", "");
 
 		$('#selecteddb').html(currentlydatabaseused_toshow)
-		$('#selecteddrive').html(driveunit)
+
+
+		if (driveunit == "") { //esto es un apaño necesário en linux
+			driveunit = " ";
+		}
+
+		if (driveunit) {
+
+			if (s.os.name == "windows") {
+					 $('#selecteddrive').html(driveunit)
+			}
+			if (s.os.name == "linux") {
+					 if(driveunit == " "){
+							$('#selecteddrive').html("/" + driveunit)
+					 } else {
+							$('#selecteddrive').html(driveunit)
+					 }
+			}
+
+		}
 
 		$.each(listadofiltradodeDB, function(i){
 
@@ -1737,6 +1765,8 @@ function optionspreload() {
 
 		loaddatabaseselect();
 		loaddriveslist();
+
+
 
 		// el checkbox closeconfirmation
 		if(localStorage["closeconfirmation"]=="no") {
@@ -1783,77 +1813,195 @@ function optionspreload() {
 
 		});
 
-		
+
 		$("#unitselect").change(function() {
 
-			$('#selecteddrive').html($("#unitselect").val());
+			if (s.os.name == "windows") {
 
-			var availabledrives=[];
-			var drivelist = require('drivelist');
-			var driveLetters = require('windows-drive-letters');
+			 var availabledrives=[];
 
-			var t="";
-			var tdesc="";
+			 $('#selecteddrive').html($("#unitselect").val());
 
-			availabledrives = drivelist.list((error, drives) => {
-				if (error) {
-					throw error;
-				}
+				var drivelist = require('drivelist');
+				var driveLetters = require('windows-drive-letters');
 
-				drives.forEach((drive, i) => {
+				var t="";
+				var tdesc="";
 
-					i= i+1;
-					t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
-					tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
+				availabledrives = drivelist.list((error, drives) => {
+					if (error) {
+						throw error;
+					}
 
-				});
+					drives.forEach((drive, i) => {
 
-				// para detectar unidades virtuales en windows y añadirlas a la lista
-				try {
-					letters = driveLetters.usedLettersSync();
-					// console.log(letters); // => ['C', 'D', ...] 
-				} catch (err) {};
+						i= i+1;
 
-				$.each (letters, function(i){
+						t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
+						tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
 
-					unidadvirtual = "si";
-					drives.forEach((drive, u) => {
+					});
 
-						if (letters[i]+":" == drive.mountpoints["0"].path ) {
-							unidadvirtual = "no";
+					// para detectar unidades virtuales en windows y añadirlas a la lista
+					try {
+						letters = driveLetters.usedLettersSync();
+						// console.log(letters); // => ['C', 'D', ...]
+					} catch (err) {};
+
+					$.each (letters, function(i){
+
+						unidadvirtual = "si";
+						drives.forEach((drive, u) => {
+
+							if (letters[i]+":" == drive.mountpoints["0"].path ) {
+								unidadvirtual = "no";
+							}
+
+						});
+
+						if (unidadvirtual == "si") {
+							t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
+							tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
+						}
+
+
+					});
+
+					$("#unitselect").html(t);
+					$("#unitselect").val($('#selecteddrive').html());
+
+					$("#drivedesc").css("display","none")
+					$("#drivedesc").html("("+tdesc+")");
+
+					// se pintará solo la info del drive seleccionado
+					$.each($("#drivedesc div"), function(n) {
+
+						if($(this).attr("value") != $("#selecteddrive").html()) {
+
+							$(this).remove()
+
 						}
 
 					});
 
-					if (unidadvirtual == "si") {
-						t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
-						tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
-					}
+					$("#drivedesc").css("display","inline-block");
 
 				});
 
-				$("#unitselect").html(t);
-				$("#unitselect").val($('#selecteddrive').html());
+			}
 
-				$("#drivedesc").css("display","none")
-				$("#drivedesc").html("("+tdesc+")");
+			if (s.os.name == "linux") {
 
-				// se pintará solo la info del drive seleccionado
-				$.each($("#drivedesc div"), function(n) {
+				console.log($("#unitselect").val())
 
-					if($(this).attr("value") != $("#selecteddrive").html()) {	
+				if ($("#unitselect").val() != "") {
+					$('#selecteddrive').html( "/" + $("#unitselect").val() );
+				} else {
+					$('#selecteddrive').html("/")
+				}
 
-						$(this).remove()
+				drives = [""];
 
-					}
+				// Detectar y añadir unidades externas a la lista
+
+				const username = require('username');
+
+				username().then(username => {
+
+					var dirtoread = "/media/" + username // la carpeta donde se montan las unidades externas
+					var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+
+					var directoryelement = [];
+					var directorycontent = [];
+					window.directoryarchives = [];
+					window.directoryfolders = [];
+
+					var readedElements = fs.readdirSync(dirtoread)
+					var iteratentimes = readedElements.length;
+
+					for (i = 0; i < iteratentimes; i++) {
+
+						var ext = re.exec(readedElements[i])[1];
+						if (!ext) {
+							ext="&nbsp;";
+						}
+
+						// comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+						var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+
+						try {
+							var arorfo = "i_am_an_archive";
+							var arorfo = fs.readdirSync(dirtoreadcheck);
+						}
+						catch(exception) {};
+
+						directoryelement.name = readedElements[i]
+
+						var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+						directorycontent[i] = copied_directoryelement;
+					};
+
+					// separa carpetas y archivos en dos objetos
+					var i = 0;
+					var ii = 0;
+					var iii = 0;
+
+					$.each(directorycontent, function(i) {
+
+						if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+							directoryfolders[ii] = directorycontent[i];
+
+							ii++;
+						} else {
+							directoryarchives[iii] = directorycontent[i];
+							iii++;
+						};
+					});
+
+					// se añaden las carpetas detectadas como unidades externas disponibles
+					$.each(directoryfolders, function(i) {
+						drives.push("media/" + username + "/" + directoryfolders[i].name);
+					});
+
+					var t="";
+					var tdesc="";
+
+					$.each (drives, function(i){
+
+						if (drives[i] == ""){
+							t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
+							tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+						} else {
+							t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
+							tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+						}
+
+					});
+
+					$("#unitselect").html(t);
+					$("#unitselect").val("");
+
+					$("#drivedesc").css("display","none")
+					$("#drivedesc").html("("+tdesc+")");
+
+					// se pintará solo la info del drive seleccionado
+					$.each($("#drivedesc div"), function(n) {
+
+						if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+
+							$(this).remove()
+
+						}
+
+					});
+
+					$("#drivedesc").css("display","inline-block");
 
 				});
 
-				$("#drivedesc").css("display","inline-block");
+			}
 
-			});
-
-		})
+		});
 
 		$("#newdatabase").on('click', function(){
 
@@ -1912,12 +2060,12 @@ function optionspreload() {
 
      		};
 
-     	});		
+     	});
 
 
 		$("#exportdata").on('click', function(){
 
-			alertify.alert("A file open dialog will be open, you can either select a pre existing file or create a new one (right mouse button), be careful, data in the selected file will be overwritten.", function() { 
+			alertify.alert("A file open dialog will be open, you can either select a pre existing file or create a new one (right mouse button), be careful, data in the selected file will be overwritten.", function() {
 
 				document.getElementById('toexportfile').value = ""; // esto es para que siempre funcione el on change
 
@@ -1947,13 +2095,13 @@ function optionspreload() {
 							if(err)
 								console.error(err);
 							else {
-								
-								// console.log("Exported as JSON: " + jsonString);						
+
+								// console.log("Exported as JSON: " + jsonString);
 								alertify.confirm("Attention, you selected to write in <em>'"+file+ "'</em>, all previous data in file will be overwritten, are you sure?", function (e) {
 						            if (!e) {
 						              	x = "You pressed Cancel!";
-						              	console.log(x);                 
-						            } else {                  
+						              	console.log(x);
+						            } else {
 						              	x = "You pressed OK!";
 						              	console.log(x)
 						            	// se escribe el fichero
@@ -1982,7 +2130,7 @@ function optionspreload() {
 
 		$("#inportdata").on('click', function(){
 
-			alertify.alert("A file open dialog will be open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.", function () { 
+			alertify.alert("A file open dialog will be open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.", function () {
 
 				document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
 
@@ -2007,11 +2155,11 @@ function optionspreload() {
 							alertify.confirm("Attention, data in selected database, <em>'" + $('#selecteddb').html() + "'</em>,  will be overwritten by the content of file <em>'" + file + "'</em>, are you sure?", function (e) {
 					            if (!e) {
 					              	x = "You pressed Cancel!";
-					              	console.log(x);                 
-					            } else {                  
+					              	console.log(x);
+					            } else {
 					              	x = "You pressed OK!";
 					              	console.log(x)
-					              	
+
 									// abrimos la bd
 									var tooverwritedb = [];
 									var request = window.indexedDB.open("tagstoo_" + $('#selecteddb').html(), 1);
@@ -2031,7 +2179,7 @@ function optionspreload() {
 											{ tagtext: "DemoTag3", tagpos: 2, tagcolor: "0391CE", tagform: "tag_cylinder" },
 											{ tagtext: "Demo4", tagpos: 3, tagcolor: "FE2914", tagform: "tag_piggybank" },
 											{ tagtext: "DemoTag5", tagpos: 4, tagcolor: "FD5308", tagform: "tag_maletin" }
-										];											
+										];
 
 										objectStore = db.createObjectStore("tags", { keyPath: "tagid", autoIncrement:true });
 										objectStore.createIndex("tagtext", "tagtext", { unique: false });
@@ -2065,9 +2213,9 @@ function optionspreload() {
 									};
 
 									request.onsuccess = function(event) {
-										
+
 										var iscurrentdb = "no";
-										tooverwritedb = request.result;						
+										tooverwritedb = request.result;
 
 										// esto es solo una pequeña comprobación para luego salir de una manera o otra (recargando)
 										if (db.name == tooverwritedb.name) {
@@ -2079,7 +2227,7 @@ function optionspreload() {
 										var idbExportImport = require("indexeddb-export-import"); // to save and load the contents of an IndexedDB database
 										// se vacía y despues se escribe en la base de datos
 										idbExportImport.clearDatabase(tooverwritedb, function(err) {
-														
+
 											if(err) {
 												console.log(err)
 											} else {
@@ -2089,9 +2237,9 @@ function optionspreload() {
 
 												if(iscurrentdb == "yes") {
 
-													alertify.alert("Data successfully imported. Because data is overwritten in currently active database the program will refresh now.", function () { 
+													alertify.alert("Data successfully imported. Because data is overwritten in currently active database the program will refresh now.", function () {
 
-														cerrar(); 
+														cerrar();
 														restarttagstoo();
 
 													});
@@ -2103,7 +2251,7 @@ function optionspreload() {
 												}
 
 											}
-											
+
 										});
 
 									}
@@ -2113,17 +2261,17 @@ function optionspreload() {
 							});
 
 						} catch (e) { // no es JSON
-							alertify.alert("It appears that <em>'" +file+ "'</em> do not have a valid data format, please select a valid data file.",function () { 
+							alertify.alert("It appears that <em>'" +file+ "'</em> do not have a valid data format, please select a valid data file.",function () {
 								document.getElementById('toinportfile').click();
 							});
 
 						}
-						
+
 					});
 
 				});
 
-			});		
+			});
 
 		}); // --fin importdata onclick
 
@@ -2133,22 +2281,22 @@ function optionspreload() {
 			alertify.confirm("Attention, you select to delete <em>'"+$('#selecteddb').html()+"'</em>, are you sure?", function (e) {
 				if (!e) {
 					x = "You pressed Cancel!";
-					console.log(x);                 
-				} else {                  
+					console.log(x);
+				} else {
 					x = "You pressed OK!";
 					console.log(x)
-					
+
 					// comprobación de si se borra la bd actual para salir de una manera o otra (recargando inicio o no)
 					if (localStorage["currentlydatabaseused"] == "tagstoo_" + $('#selecteddb').html()) {
 
 						alertify.confirm("You chosen to delete database that is currently used, to make it possible you must delete it from the program initial start window, do you want to restart program to make possible to delete it?", function (e) {
 							if (!e) {
 								x = "You pressed Cancel!";
-								console.log(x);                 
-							} else {                  
+								console.log(x);
+							} else {
 								x = "You pressed OK!";
-								console.log(x)										
-								
+								console.log(x)
+
 								window.parent.location.assign("initialselect.html");
 
 							}
@@ -2162,7 +2310,7 @@ function optionspreload() {
 						DBDeleteRequest.onerror = function(event) {
 						  	console.log("Error deleting database.");
 						};
-						 
+
 						DBDeleteRequest.onsuccess = function(event) {
 						  	// console.log("Database deleted successfully");
 				  		  	alertify.alert("Database deleted successfully.", function () {
@@ -2174,7 +2322,7 @@ function optionspreload() {
 
 						};
 
-					}						
+					}
 
 				}
 
@@ -2187,7 +2335,7 @@ function optionspreload() {
         // Allow: backspace, delete, tab, escape, enter and .
         if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
              // Allow: Ctrl+A, Command+A
-            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
              // Allow: home, end, left, right, down, up
             (e.keyCode >= 35 && e.keyCode <= 40)) {
                  // let it happen, don't do anything
@@ -2198,7 +2346,7 @@ function optionspreload() {
             e.preventDefault();
         }
     });
-		
+
 	};
 
 } // --fin optionspreload()
@@ -2209,94 +2357,242 @@ function loaddatabaseselect() {
 
 	$.each(listadofiltradodeDB_toshow, function(i){
 
-		var opt = document.getElementById("databaseselect"); 
+		var opt = document.getElementById("databaseselect");
 		var option = document.createElement("option");
-		option.value = listadofiltradodeDB_toshow[i];                
-		var optionText = document.createTextNode(option.value);                
+		option.value = listadofiltradodeDB_toshow[i];
+		var optionText = document.createTextNode(option.value);
 		option.appendChild(optionText);
 		opt.appendChild(option);
 
 		opt.selectedIndex = -1; // para que ninguna este por defecto seleccionada
-	
-	})	
+
+	})
 
 }
 
 function loaddriveslist() {
 
-	var availabledrives=[];
-	var drivelist = require('drivelist');
-	var driveLetters = require('windows-drive-letters');
+	if (s.os.name == "windows") {
 
-	var t="";
-	var tdesc="";
+		var availabledrives=[];
+		var drivelist = require('drivelist');
+		var driveLetters = require('windows-drive-letters');
 
-	availabledrives = drivelist.list((error, drives) => {
-		if (error) {
-			throw error;
-		}
+		var t="";
+		var tdesc="";
+		var letters=[];
 
-		drives.forEach((drive, i) => {
+		availabledrives = drivelist.list((error, drives) => {
+			if (error) {
+				throw error;
+			}
 
-			i= i+1;
-			t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
-			tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
+			drives.forEach((drive, i) => {
 
-		});
+				i= i+1;
+				t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
+				tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
 
-		// para detectar unidades virtuales en windows y añadirlas a la lista
-		try {
-			letters = driveLetters.usedLettersSync();
-			// console.log(letters); // => ['C', 'D', ...] 
-		} catch (err) {};
+			});
 
-		$.each (letters, function(i){
+			// para detectar unidades virtuales en windows y añadirlas a la lista
+			try {
+				letters = driveLetters.usedLettersSync();
+				// console.log(letters); // => ['C', 'D', ...]
+			} catch (err) {};
 
-			var unidadvirtual = "si";
-			drives.forEach((drive, u) => {
+			$.each (letters, function(i){
 
-				if (letters[i]+":" == drive.mountpoints["0"].path ) {
-					unidadvirtual = "no";
+				var unidadvirtual = "si";
+
+				drives.forEach((drive, u) => {
+					if (letters[i]+":" == drive.mountpoints["0"].path ) {
+						unidadvirtual = "no";
+					}
+				});
+
+				if (unidadvirtual == "si") {
+					t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
+					tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
 				}
 
 			});
 
-			if (unidadvirtual == "si") {
-				t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
-				tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
+
+			$("#unitselect").html(t);
+			$("#unitselect").val("");
+
+			$("#drivedesc").css("display","none")
+			$("#drivedesc").html("("+tdesc+")");
+
+
+			// se pintará solo la info del drive seleccionado
+			if ($("#selecteddrive").html()) {
+				$.each($("#drivedesc div"), function(n) {
+
+					if($(this).attr("value") != $("#selecteddrive").html()) {
+
+						$(this).remove()
+
+					}
+
+				});
 			}
+			else { // este caso es para el inicio cuando no le ha dado tiempo a pintar el selecteddrive
+				$.each($("#drivedesc div"), function(n) {
+
+					if($(this).attr("value") != driveunit) {
+
+						$(this).remove()
+
+					}
+
+				});
+
+			}
+
+			if($("#drivedesc").html() == "()") {
+				$("#drivedesc").html("(Can't load this drive, select available one.)")
+			}
+
+			$("#drivedesc").css("display","inline-block");
 
 		});
 
-		$("#unitselect").html(t);
-		$("#unitselect").val("");
+	}
 
-		$("#drivedesc").css("display","none")
-		$("#drivedesc").html("("+tdesc+")");
+	if (s.os.name == "linux") {
 
-		// se pintará solo la info del drive seleccionado
-		$.each($("#drivedesc div"), function(n) {
+		console.log($("#unitselect").val())
 
-			if($(this).attr("value") != $("#selecteddrive").html()) {	
+		// if ($("#unitselect").val() != "") {
+		// 	$('#selecteddrive').html( "/" + $("#unitselect").val() );
+		// } else {
+		// 	$('#selecteddrive').html("/")
+		// }
 
-				$(this).remove();
+		drives = [""];
 
-			}
+		// Detectar y añadir unidades externas a la lista
+
+		const username = require('username');
+
+		username().then(username => {
+
+			var dirtoread = "/media/" + username // la carpeta donde se montan las unidades externas
+			var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+
+			var directoryelement = [];
+			var directorycontent = [];
+			window.directoryarchives = [];
+			window.directoryfolders = [];
+
+			var readedElements = fs.readdirSync(dirtoread)
+			var iteratentimes = readedElements.length;
+
+			for (i = 0; i < iteratentimes; i++) {
+
+				var ext = re.exec(readedElements[i])[1];
+				if (!ext) {
+					ext="&nbsp;";
+				}
+
+				// comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+				var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+
+				try {
+					var arorfo = "i_am_an_archive";
+					var arorfo = fs.readdirSync(dirtoreadcheck);
+				}
+				catch(exception) {};
+
+				directoryelement.name = readedElements[i]
+
+				var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+				directorycontent[i] = copied_directoryelement;
+			};
+
+			// separa carpetas y archivos en dos objetos
+			var i = 0;
+			var ii = 0;
+			var iii = 0;
+
+			$.each(directorycontent, function(i) {
+
+				if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+					directoryfolders[ii] = directorycontent[i];
+
+					ii++;
+				} else {
+					directoryarchives[iii] = directorycontent[i];
+					iii++;
+				};
+			});
+
+			// se añaden las carpetas detectadas como unidades externas disponibles
+			$.each(directoryfolders, function(i) {
+				drives.push("media/" + username + "/" + directoryfolders[i].name);
+			});
+
+			var t="";
+			var tdesc="";
+
+			$.each (drives, function(i){
+
+				if (drives[i] == ""){
+					t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
+					tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+				} else {
+					t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
+					tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+
+				}
+
+			});
+
+			$("#unitselect").html(t);
+			$("#unitselect").val("");
+
+			$("#drivedesc").css("display","none")
+			$("#drivedesc").html("("+tdesc+")");
+
+			// se pintará solo la info del drive seleccionado
+			$.each($("#drivedesc div"), function(n) {
+
+				if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+
+					$(this).remove()
+
+				}
+
+			});
+
+			$("#drivedesc").css("display","inline-block");
 
 		});
 
-		$("#drivedesc").css("display","inline-block");
+	}
 
-	});
-
-};
+}
 
 
 function restarttagstoo() {
 
 	localStorage["currentlydatabaseused"] = "tagstoo_" + $("#selecteddb").html();
-	localStorage["selecteddriveunit"] = $("#selecteddrive").html();
-	localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
+	if (s.os.name == "windows") {
+		localStorage["selecteddriveunit"] = $("#selecteddrive").html();
+		localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
+	}
+	if (s.os.name == "linux") {
+		if ($("#selecteddrive").html() == "/ "){
+			localStorage["selecteddriveunit"] = $("#selecteddrive").html().slice(2);
+			localStorage["lastuseddriveunit"] = $("#selecteddrive").html().slice(2);
+		} else {
+			localStorage["selecteddriveunit"] = $("#selecteddrive").html();
+			localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
+		}
+
+	}
 
 	parent.location.reload();
 };
@@ -2315,7 +2611,7 @@ function infopreload() {
 		$("#infoiframe").attr("src", "popups/popup-info-license-aboutthis.html");
 
 	});
-	
+
 	$("#showlicenses").on('click', function(){
 
 		$("#infoiframe").attr("src", "popups/popup-info-license-libs.html");
