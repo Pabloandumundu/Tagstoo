@@ -32,7 +32,7 @@ To use the source code (require nw.js to launch):
 
 1. Install NW.JS (SDK edition if you want to use Chome DevTools) in some directory.
 2. Copy the source code to that directory.
-3. If you want video/audio reproduction fully available download the correspondent compiled version of ffmpeg.dll from [https://github.com/iteufel/nwjs-ffmpeg-prebuilt/](https://github.com/iteufel/nwjs-ffmpeg-prebuilt/)releases and overwrite the ffmpeg.dll (in Windows) or lib/libffmpeg.so (in Linux)that came with NW.JS with them.
+3. If you want video/audio reproduction fully available download the correspondent compiled version of ffmpeg from [https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases](https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases) and overwrite the ffmpeg.dll (in Windows) or lib/libffmpeg.so (in Linux)that came with NW.JS with them.
 4. Execute nw.exe (in Windows) or launch ./nw (in Linux)
 
 The code is like a web page, with some html and the /js folder where is the code in Javascript (and jQuery).
