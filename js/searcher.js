@@ -1076,6 +1076,132 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 	});
 
 
+	$('#nottaginput').droppable({
+
+		accept: '.footertagticket',
+
+		drop: function( event, ui ) {
+
+			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
+
+				if ($(this)[0].children.length < 1) {
+
+					// devolvemos tag a posición original
+					ui.draggable["0"].style.top = "0px"
+					ui.draggable["0"].style.left = "0px"
+
+					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
+					var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta)
+					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
+
+					if (positiontop < wrapperbottom) {
+
+						var nottaginput = $("#nottaginput")["0"];
+						var taganadir = ui.draggable["0"].attributes[1].value;
+
+						if (nottaginput.getAttribute("value") == "") {
+
+							nottaginput.setAttribute("value", taganadir);
+
+						} else {
+
+							var arraydetags = nottaginput.getAttribute("value").split(",");
+							var isapreviostag = "no";
+
+							$.each(arraydetags, function(n) {
+
+								if (arraydetags[n] == taganadir) {
+
+									isapreviostag = "yes";
+								}
+
+							});
+
+							if (isapreviostag == "no") {
+
+								nottaginput.setAttribute("value", nottaginput.getAttribute("value") + "," + taganadir);
+
+							}
+
+						}
+
+						// dibujamos los tags
+						arraydetags = nottaginput.getAttribute("value").split(',');
+
+						var tagsdivs = "";
+						for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
+							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+						};
+						nottaginput.innerHTML = tagsdivs;
+
+						// para aplicarles los estilos a los tags hay que recurrir a la bd
+						var trans2 = db.transaction(["tags"], "readonly")
+						var objectStore2 = trans2.objectStore("tags")
+
+						var nottaginputtags = $("#nottaginput")["0"].children; // los tagtickets del taginput
+
+						var req2 = objectStore2.openCursor();
+
+						req2.onerror = function(event) {
+							console.log("error: " + event);
+						};
+						req2.onsuccess = function(event) {
+							var cursor2 = event.target.result;
+							if (cursor2) {
+								$.each(nottaginputtags, function(n) {
+
+									if (cursor2.value.tagid == nottaginputtags[n].attributes[1].value) {
+
+										var color = "#" + cursor2.value.tagcolor;
+										var complecolor = hexToComplimentary(color);
+
+										nottaginputtags[n].className += " small " + cursor2.value.tagform;
+										nottaginputtags[n].setAttribute("value", cursor2.value.tagid);
+										nottaginputtags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+										nottaginputtags[n].innerHTML = cursor2.value.tagtext;
+
+									}
+
+								});
+
+								cursor2.continue();
+
+							}
+
+						};
+
+						trans2.oncomplete = function(event) {
+
+						}
+
+					};
+
+				}
+		    	else {
+
+		    		alertify.alert("Only 1 tag is permitted in this input.");
+		    	 	ui.draggable.draggable('option','revert',true);
+		    	}
+
+		    }
+
+		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
+		    $("#bottomright").css("width", ajustartamanio + "px");
+
+		}
+
+	});
+
+	$( "#clearnottagfiled" ).click(function() {
+
+		var taginput4 = $("#nottaginput")["0"];
+		taginput4.setAttribute("value", "");
+		taginput4.innerHTML = "";
+
+	});
+
+
+
 
 	// Search
 
@@ -2455,7 +2581,22 @@ function concetradoresultadoscarpetas(entradas) {
 
 				if (aniadir == "yes") {
 
-					resultadoscarpetas.push(concentradorresultadoscarpetas[u][n])
+					var testnotag = true;
+
+					// se comprueba si el campo nottag tiene tag, y si lo tiene no se incluyen en los resultados los elemento que tengan ese tag
+					if ($('#nottaginput div').attr("value")) {
+
+						var tagsacomparar = concentradorresultadoscarpetas[u][n]["tagsid"]
+						$.each (tagsacomparar, function(t) {
+							if (tagsacomparar[t] == $('#nottaginput div').attr("value")) {
+								testnotag = false;
+							}
+						})
+					}
+					if (testnotag) {
+						resultadoscarpetas.push(concentradorresultadoscarpetas[u][n])
+					}
+
 				}
 
 			})
@@ -2501,7 +2642,21 @@ function concetradoresultadosarchivos(entradas) {
 
 				if (aniadir == "yes") {
 
-					resultadosarchivos.push(concentradorresultadosarchivos[u][n])
+					var testnotag = true;
+
+					// se comprueba si el campo nottag tiene tag, y si lo tiene no se incluyen en los resultados los elemento que tengan ese tag
+					if ($('#nottaginput div').attr("value")) {
+
+						var tagsacomparar = concentradorresultadosarchivos[u][n]["tagsid"].split(",")
+						$.each (tagsacomparar, function(t) {
+							if (tagsacomparar[t] == $('#nottaginput div').attr("value")) {
+								testnotag = false;
+							}
+						})
+					}
+					if (testnotag) {
+						resultadosarchivos.push(concentradorresultadosarchivos[u][n])
+					}
 				}
 
 			})

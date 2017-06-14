@@ -1,4 +1,4 @@
-/* 
+/*
 * Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
@@ -38,7 +38,7 @@
 	white-space: nowrap;
 }
 
-#searchlocationinfonotfixed >span:first-child { 
+#searchlocationinfonotfixed >span:first-child {
 
 	margin-left: 4px;
 }
@@ -53,7 +53,7 @@
 }
 
 #eraser .activated {
-	
+
 	animation:bounceOut .5s linear;
 	animation-iteration-count:infinite;
 }
@@ -84,7 +84,7 @@
 
 	position: relative;
 	float: left;
-	top: 56px;	
+	top: 56px;
 	height: calc(100% - 112px);
 	width: 24.8%;
 	box-sizing: border-box;
@@ -98,7 +98,7 @@
 #searchdirview-wrapper {
 
 	position: relative;
-	top: 56px;	
+	top: 56px;
 	height: calc(100% - 130px); /* se hace un calc y se resta la altura del header (60) y el bottom (70) */
 	width: 75%;
 	box-sizing: border-box;
@@ -120,14 +120,14 @@
 
 .holdButtonProgress {
 
-	height: 100%; 
+	height: 100%;
 	width: 100%;
-	position: absolute; 
-	top: 0; 
-	left: -100%; 
+	position: absolute;
+	top: 0;
+	left: -100%;
 	padding: 0;
-	margin: 0; 
-	background-color: #ff0000; 
+	margin: 0;
+	background-color: #ff0000;
 	opacity: 0.6;
 }
 
@@ -158,7 +158,7 @@
 
 .exploelement div {
 
-	margin-bottom: 0px !important;   
+	margin-bottom: 0px !important;
 }
 
 .exploelement .video {
@@ -178,10 +178,10 @@
 
 
 /* para Viewmode1 */
-.exploelement .imgmode1 { 
+.exploelement .imgmode1 {
 
 	vertical-align: top !important;
-	padding-top: 2px;  
+	padding-top: 2px;
 }
 
 .exploelement .imgmode1 a {
@@ -202,37 +202,37 @@
 
 
 /* para los demás Viewmodes */
-.exploelement.viewmode2,  
-.exploelement.viewmode3, 
-.exploelement.viewmode4, 
-.exploelement.viewmode5, 
+.exploelement.viewmode2,
+.exploelement.viewmode3,
+.exploelement.viewmode4,
+.exploelement.viewmode5,
 .exploelement.viewmode6,
-.exploelement.viewmode7, 
-.exploelement.viewmode8, 
+.exploelement.viewmode7,
+.exploelement.viewmode8,
 .exploelement.viewmode9 {
 
 	padding-bottom: 3px !important;
 }
 
-.exploelement .imgmode2, 
-.exploelement .imgmode3, 
-.exploelement .imgmode4, 
-.exploelement .imgmode5, 
+.exploelement .imgmode2,
+.exploelement .imgmode3,
+.exploelement .imgmode4,
+.exploelement .imgmode5,
 .exploelement .imgmode6,
 .exploelement .imgmode7,
-.exploelement .imgmode8, 
+.exploelement .imgmode8,
 .exploelement .imgmode9 {
 
 	margin-bottom: 4px !important;
 }
 
-.viewmode2 .tagticket, 
-.viewmode3 .tagticket, 
-.viewmode4 .tagticket, 
-.viewmode5 .tagticket, 
+.viewmode2 .tagticket,
+.viewmode3 .tagticket,
+.viewmode4 .tagticket,
+.viewmode5 .tagticket,
 .viewmode6 .tagticket,
 .viewmode7 .tagticket,
-.viewmode8 .tagticket, 
+.viewmode8 .tagticket,
 .viewmode9 .tagticket{
 
 	margin-top: 4px;
@@ -345,6 +345,14 @@ input[type="radio"]:checked + label span.radio::after {
 	padding: 2px 1px 1px 1px;
 	border: 1px solid grey;
 }
+#nottaginput {
+	/*width: calc(90% - 90px);*/
+	width: 60%;
+	min-height: 20px;
+	padding: 2px 1px 1px 1px;
+	border: 1px solid grey;
+
+}
 
 #cleartagfiled1, #cleartagfiled2, #cleartagfiled3, #cleartagfiled4 {
 
@@ -394,7 +402,7 @@ input[type="radio"]:checked + label span.radio::after {
 	font-weight: bold;
 	padding: 13px 5px 13px 5px;
 	background-image: url("../img/wood_pattern.png");
-	color: #444; 
+	color: #444;
 	-webkit-border-radius: 7px;
 	-webkit-box-shadow: inset 0px 0px 8px 0px #331a00;
 	border: 1px dashed #444;
@@ -447,10 +455,10 @@ input[type="radio"]:checked + label span.radio::after {
 	padding: 13px 5px 13px 5px;
 	padding: 12px;
 	background-image: url("../img/wood_pattern.png");
-	color: #111; 
+	color: #111;
 	-webkit-border-radius: 7px;
 	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
-	
+
 	text-shadow:
 	1px 1px 2px rgba(000,000,000,0.1),
 	0px 1px 0px rgba(255,255,255,0.8);
@@ -525,7 +533,7 @@ input[type="radio"]:checked + label span.radio::after {
 }
 
 #popup.options {
-	
+
 	display: initial;
 	top: 15%;
 	left: 0;
@@ -538,7 +546,7 @@ input[type="radio"]:checked + label span.radio::after {
 }
 
 #popup.info {
-	
+
 	display: initial;
 	top: 60px;
 	height: calc(100% - 130px);

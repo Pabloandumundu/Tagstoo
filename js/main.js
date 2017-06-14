@@ -636,9 +636,11 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 
 
 // conmutador copy/paste
-window.parent.$(".onoffswitch-inner").bind('click', function() {
+window.parent.$(".onoffswitch-inner, .onoffswitch-switch").bind('click', function() {
 
 	if(pasteaction == "copy") {
+
+		console.log("clias")
 
 		pasteaction = "cut";
 		window.parent.$(".onoffswitch-checkbox").addClass("check");
@@ -3011,7 +3013,7 @@ function drawDirectoryAfter() {
 				}
 
 				var videotopreview = encodeURI(dirtoexec + "\/" + $(this)["0"].innerText);
-				
+
 				$(this)["0"].previousSibling.innerHTML = '<video width="0" class="video" preload="metadata" src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'"></video>'
 
 				var video = $(this)["0"].previousSibling.children["0"]; // el tag video

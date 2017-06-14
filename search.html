@@ -67,14 +67,14 @@
     <button id="paneloff">Cerrar panel</button>
   </div>
   <!--  -->
-        
+
   <div id="popupbackground"></div>
   <div id="popup"></div>
 
   <div id="searchview">
 
     <div id="search">
-      
+
       <input type="file" id="selectedFold" name="selectedFolder" nwdirectory style="display: none;" onchange="selectedafolder()" />
       <a id="selectFolder" class="medium button yellow" onclick="document.getElementById('selectedFold').click();">Select to searh in..</a>
 
@@ -82,8 +82,8 @@
 
       <div id="searchfor">
 
-        <label>Search for:</label><br>            
-        
+        <label>Search for:</label><br>
+
         <div class="container">
 
           <input type = "radio"
@@ -113,10 +113,10 @@
                  value = "foldersandfiles"/>
           <label for = "foldersandfiles"><span class="radio">Folders and Files</span></label>
 
-        </div> 
-      
+        </div>
+
         <div id="tagstosearch">
-            
+
           <span>With tag(s): (max 4 tags)</span>
 
           <div id="taginput1" class="taginput" value=""></div>
@@ -135,10 +135,16 @@
           <span>..or tag(s): (max 4 tags)</span>
 
           <div id="taginput4" class="taginput" value=""></div>
-          <a id="cleartagfiled4" class="small button red">Clear field</a><br>      
-         
+          <a id="cleartagfiled4" class="small button red">Clear field</a><br>
+
+          <span style="display:block">That do not have the tag:</span>
+
+          <div id="nottaginput" class="nottaginput" value=""></div><br>
+          <a id="clearnottagfiled" class="small button red">Clear field</a><br>
+
+
           <a id="searchaction" class="large button green">Search</a>
-        
+
         </div>
 
       </div>
@@ -177,8 +183,8 @@
   <div id="searchdirview-wrapper">
 
     <div id="searchdirview">
-      <div id="searchdirectoryview">        
-      </div>      
+      <div id="searchdirectoryview">
+      </div>
     </div>
 
   </div>
@@ -200,7 +206,7 @@
 
     </div>
 
-  </div>      
+  </div>
 
 </body>
 </html>
