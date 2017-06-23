@@ -117,31 +117,22 @@
 
         <div id="tagstosearch">
 
-          <span>With tag(s): (max 4 tags)</span>
 
-          <div id="taginput1" class="taginput" value=""></div>
-          <a id="cleartagfiled1" class="small button red">Clear field</a><br>
+          <div class="searchinput">
+            <span>With tag(s): (max 5 tags)</span>
 
-          <span>..or tag(s): (max 4 tags)</span>
+            <div class="taginput" value=""></div>
+            <a class="cleartagfield small button red">Remove last</a>
+            <a class="addtagfield small button green" onclick="addtagfield(this)">Add tags input field</a><br>
+          </div>
 
-          <div id="taginput2" class="taginput" value=""></div>
-          <a id="cleartagfiled2" class="small button red">Clear field</a><br>
-
-          <span>..or tag(s): (max 4 tags)</span>
-
-          <div id="taginput3" class="taginput" value=""></div>
-          <a id="cleartagfiled3" class="small button red">Clear field</a><br>
-
-          <span>..or tag(s): (max 4 tags)</span>
-
-          <div id="taginput4" class="taginput" value=""></div>
-          <a id="cleartagfiled4" class="small button red">Clear field</a><br>
-
-          <span style="display:block">That do not have the tag:</span>
-
-          <div id="nottaginput" class="nottaginput" value=""></div><br>
-          <a id="clearnottagfiled" class="small button red">Clear field</a><br>
-
+          <div class="searchnotinput">
+            <span style="display:block">That do not have the tag:</span>
+            
+            <div class="nottaginput" value=""></div><br>
+            <a class="clearnottagfield small button red">Remove last</a>
+            <a class="addtagfield small button green" onclick="addnottagfield(this)">Add input field</a><br>
+          </div>
 
           <a id="searchaction" class="large button green">Search</a>
 

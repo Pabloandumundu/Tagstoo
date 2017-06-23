@@ -640,8 +640,6 @@ window.parent.$(".onoffswitch-inner, .onoffswitch-switch").bind('click', functio
 
 	if(pasteaction == "copy") {
 
-		console.log("clias")
-
 		pasteaction = "cut";
 		window.parent.$(".onoffswitch-checkbox").addClass("check");
 		window.parent.$(".onoffswitch-switch").css("background-color","#d5695d"); //red
@@ -4341,6 +4339,7 @@ function interactions() {
 
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
             this.filename.html(filenametoshow);
+             
         }
 
 	});

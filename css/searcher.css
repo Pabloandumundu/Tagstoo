@@ -338,26 +338,67 @@ input[type="radio"]:checked + label span.radio::after {
 	width: 100%;
 }
 
-#taginput1, #taginput2, #taginput3, #taginput4 {
+.searchinput, .searchnotinput {
+	width: 100%;
+}
+
+.searchnotinput span:first-child {
+	display: block
+}
+
+
+.taginput {
 
 	width: 90%;
 	min-height: 40px;
 	padding: 2px 1px 1px 1px;
 	border: 1px solid grey;
+	margin-right: 10%;
+	min-width: 100px;
+
 }
-#nottaginput {
+.nottaginput {
+	
 	/*width: calc(90% - 90px);*/
 	width: 60%;
 	min-height: 20px;
 	padding: 2px 1px 1px 1px;
 	border: 1px solid grey;
+	min-width: 100px;
 
 }
 
-#cleartagfiled1, #cleartagfiled2, #cleartagfiled3, #cleartagfiled4 {
+.taginput .tagticket, .nottaginput .tagticket {
+	margin-top: 2px;
+}
+
+.cleartagfield, .clearnottagfield {
+
+	margin-bottom: 10px;
+	margin-right: 5px;
+	display: inline-block;
+}
+
+.addtagfield {
 
 	margin-bottom: 10px;
 	display: inline-block;
+}
+
+.removefield {
+	cursor: pointer;
+	margin-left: 2px;
+
+
+	/*font-size: 1.1em;*/
+}
+.removefield img {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.removefield img:hover {
+	filter: brightness(110%);
 }
 
 #searchaction {

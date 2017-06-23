@@ -97,8 +97,10 @@
     position: absolute;
     width: 312.5%;
     left: -106.25%;
-    top: 2.5em;
-    bottom: 2.5em;
+    /*top: 2.5em;*/
+    top: 0.9em;
+    /*bottom: 2.5em;*/
+    bottom: 2.9em;
 }
 
 .abigimage-prevBtnBox,

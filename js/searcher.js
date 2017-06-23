@@ -535,7 +535,9 @@ $(document).ready(function () {
 
 	});
 
+
 }); // --fin on document ready
+
 
 
 // acceso al popup opciones
@@ -586,132 +588,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 	// los tags-input del buscador
 
-	$('#taginput1').droppable({
-
-		accept: '.footertagticket',
-
-		drop: function( event, ui ) {
-
-		    var apaniopar = $( "#tagpar" ).html();
-		    var apanioinpar = $( "#taginpar" ).html();
-
-			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
-
-				if ($(this)[0].children.length < 4) { //si previamente hay como máximo 3 tags en el input
-
-					// devolvemos tag a posición original
-					ui.draggable["0"].style.top = "0px";
-					ui.draggable["0"].style.left = "0px";
-
-					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
-					var positiontop = ui.offset.top + 5; // la altura a la que se ha hecho el dropp. (absoluta)
-					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
-
-					if (positiontop < wrapperbottom) {
-
-						var taginput1 = $("#taginput1")["0"];
-						var taganadir = ui.draggable["0"].attributes[1].value;
-
-						if (taginput1.getAttribute("value") == "") {
-
-							taginput1.setAttribute("value", taganadir);
-
-						} else {
-
-							var arraydetags = taginput1.getAttribute("value").split(",");
-							var isapreviostag = "no";
-
-							$.each(arraydetags, function(n) {
-
-								if (arraydetags[n] == taganadir) {
-
-									isapreviostag = "yes";
-								}
-
-							});
-
-							if (isapreviostag == "no") {
-
-								taginput1.setAttribute("value", taginput1.getAttribute("value") + "," + taganadir);
-
-							}
-
-						}
-
-						// dibujamos los tags
-						arraydetags = taginput1.getAttribute("value").split(',');
-
-						var tagsdivs = "";
-						for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
-							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
-						};
-						taginput1.innerHTML = tagsdivs;
-
-						// para aplicarles los estilos a los tags hay que recurrir a la bd
-						var trans2 = db.transaction(["tags"], "readonly")
-						var objectStore2 = trans2.objectStore("tags")
-
-						var taginput1tags = $("#taginput1")["0"].children; // los tagtickets del taginput
-
-						var req2 = objectStore2.openCursor();
-
-						req2.onerror = function(event) {
-							console.log("error: " + event);
-						};
-						req2.onsuccess = function(event) {
-
-							var cursor2 = event.target.result;
-							if (cursor2) {
-								$.each(taginput1tags, function(n) {
-
-									if (cursor2.value.tagid == taginput1tags[n].attributes[1].value) {
-
-										var color = "#" + cursor2.value.tagcolor;
-										var complecolor = hexToComplimentary(color);
-
-										taginput1tags[n].className += " small " + cursor2.value.tagform;
-										taginput1tags[n].setAttribute("value", cursor2.value.tagid);
-										taginput1tags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-										taginput1tags[n].innerHTML = cursor2.value.tagtext;
-
-									}
-
-								});
-
-								cursor2.continue();
-
-							}
-
-						};
-
-					};
-
-			    }
-		    	else {
-
-		    		alertify.alert("Maximum 4 tags are permitted for each input field.");
-		    	 	ui.draggable.draggable('option','revert',true);
-		    	}
-
-			}
-
-		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
-		    $("#bottomright").css("width", ajustartamanio + "px");
-
-		}
-
-	});
-
-	$( "#cleartagfiled1" ).click(function() {
-
-		var taginput1 = $("#taginput1")["0"];
-		taginput1.setAttribute("value", "");
-		taginput1.innerHTML = "";
-
-	});
-
-
-	$('#taginput2').droppable({
+	$('.taginput').droppable({
 
 		accept: '.footertagticket',
 
@@ -719,127 +596,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
-				if ($(this)[0].children.length < 4) {
-
-					// devolvemos tag a posición original
-					ui.draggable["0"].style.top = "0px"
-					ui.draggable["0"].style.left = "0px"
-
-					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
-					var positiontop = ui.offset.top + 5 // la altura a la que se ha hecho el dropp. (absoluta)
-					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
-
-					if (positiontop < wrapperbottom) {
-
-						var taginput2 = $("#taginput2")["0"];
-						var taganadir = ui.draggable["0"].attributes[1].value;
-
-						if (taginput2.getAttribute("value") == "") {
-
-							taginput2.setAttribute("value", taganadir);
-
-						} else {
-
-							var arraydetags = taginput2.getAttribute("value").split(",");
-							var isapreviostag = "no";
-
-							$.each(arraydetags, function(n) {
-
-								if (arraydetags[n] == taganadir) {
-
-									isapreviostag = "yes";
-								}
-
-							});
-
-							if (isapreviostag == "no") {
-
-								taginput2.setAttribute("value", taginput2.getAttribute("value") + "," + taganadir);
-
-							}
-
-						}
-
-						// dibujamos los tags
-						arraydetags = taginput2.getAttribute("value").split(',');
-
-						var tagsdivs = "";
-						for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
-							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
-						};
-						taginput2.innerHTML = tagsdivs;
-
-						// para aplicarles los estilos a los tags hay que recurrir a la bd
-						var trans2 = db.transaction(["tags"], "readonly")
-						var objectStore2 = trans2.objectStore("tags")
-
-						var taginput2tags = $("#taginput2")["0"].children; // los tagtickets del taginput2
-
-						var req2 = objectStore2.openCursor();
-
-						req2.onerror = function(event) {
-							console.log("error: " + event);
-						};
-						req2.onsuccess = function(event) {
-							var cursor2 = event.target.result;
-							if (cursor2) {
-								$.each(taginput2tags, function(n) {
-
-									if (cursor2.value.tagid == taginput2tags[n].attributes[1].value) {
-
-										var color = "#" + cursor2.value.tagcolor;
-										var complecolor = hexToComplimentary(color);
-
-										taginput2tags[n].className += " small " + cursor2.value.tagform;
-										taginput2tags[n].setAttribute("value", cursor2.value.tagid);
-										taginput2tags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-										taginput2tags[n].innerHTML = cursor2.value.tagtext;
-
-									}
-								});
-
-								cursor2.continue();
-
-							}
-
-						};
-
-					};
-
-				}
-		    	else {
-
-		    		alertify.alert("Maximum 4 tags are permitted for each input field.");
-		    	 	ui.draggable.draggable('option','revert',true);
-		    	}
-
-		    }
-
-		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
-		    $("#bottomright").css("width", ajustartamanio + "px");
-
-		}
-
-	});
-
-	$( "#cleartagfiled2" ).click(function() {
-
-		var taginput2 = $("#taginput2")["0"];
-		taginput2.setAttribute("value", "");
-		taginput2.innerHTML = "";
-
-	});
-
-
-	$('#taginput3').droppable({
-
-		accept: '.footertagticket',
-
-		drop: function( event, ui ) {
-
-			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
-
-				if ($(this)[0].children.length < 4) {
+				if ($(this)[0].children.length < 5) {
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px"
@@ -851,16 +608,16 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 					if (positiontop < wrapperbottom) {
 
-						var taginput3 = $("#taginput3")["0"];
+						var taginput = $(this)["0"];
 						var taganadir = ui.draggable["0"].attributes[1].value;
 
-						if (taginput3.getAttribute("value") == "") {
+						if (taginput.getAttribute("value") == "") {
 
-							taginput3.setAttribute("value", taganadir);
+							taginput.setAttribute("value", taganadir);
 
 						} else {
 
-							var arraydetags = taginput3.getAttribute("value").split(",");
+							var arraydetags = taginput.getAttribute("value").split(",");
 							var isapreviostag = "no";
 
 							$.each(arraydetags, function(n) {
@@ -874,146 +631,26 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 							if (isapreviostag == "no") {
 
-								taginput3.setAttribute("value", taginput3.getAttribute("value") + "," + taganadir);
+								taginput.setAttribute("value", taginput.getAttribute("value") + "," + taganadir);
 
 							}
 
 						}
 
 						// dibujamos los tags
-						arraydetags = taginput3.getAttribute("value").split(',');
-
-						var tagsdivs = "";
-						for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
-							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
-						};
-						taginput3.innerHTML = tagsdivs;
-
-						// para aplicarles los estilos a los tags hay que recurrir a la bd
-						var trans2 = db.transaction(["tags"], "readonly")
-						var objectStore2 = trans2.objectStore("tags")
-
-						var taginput3tags = $("#taginput3")["0"].children; // los tagtickets del taginput3
-
-						var req2 = objectStore2.openCursor();
-
-						req2.onerror = function(event) {
-							console.log("error: " + event);
-						};
-						req2.onsuccess = function(event) {
-							var cursor2 = event.target.result;
-							if (cursor2) {
-								$.each(taginput3tags, function(n) {
-
-									if (cursor2.value.tagid == taginput3tags[n].attributes[1].value) {
-
-										var color = "#" + cursor2.value.tagcolor;
-										var complecolor = hexToComplimentary(color);
-
-										taginput3tags[n].className += " small " + cursor2.value.tagform;
-										taginput3tags[n].setAttribute("value", cursor2.value.tagid);
-										taginput3tags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-										taginput3tags[n].innerHTML = cursor2.value.tagtext;
-
-									}
-								});
-
-								cursor2.continue();
-
-							}
-
-						};
-
-					};
-
-				}
-		    	else {
-
-		    		alertify.alert("Maximum 4 tags are permitted for each input field.");
-		    	 	ui.draggable.draggable('option','revert',true);
-		    	}
-
-		    }
-
-		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
-		    $("#bottomright").css("width", ajustartamanio + "px");
-
-		}
-
-	});
-
-	$( "#cleartagfiled3" ).click(function() {
-
-		var taginput3 = $("#taginput3")["0"];
-		taginput3.setAttribute("value", "");
-		taginput3.innerHTML = "";
-
-	});
-
-
-	$('#taginput4').droppable({
-
-		accept: '.footertagticket',
-
-		drop: function( event, ui ) {
-
-			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
-
-				if ($(this)[0].children.length < 4) {
-
-					// devolvemos tag a posición original
-					ui.draggable["0"].style.top = "0px"
-					ui.draggable["0"].style.left = "0px"
-
-					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
-					var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta)
-					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
-
-					if (positiontop < wrapperbottom) {
-
-						var taginput4 = $("#taginput4")["0"];
-						var taganadir = ui.draggable["0"].attributes[1].value;
-
-						if (taginput4.getAttribute("value") == "") {
-
-							taginput4.setAttribute("value", taganadir);
-
-						} else {
-
-							var arraydetags = taginput4.getAttribute("value").split(",");
-							var isapreviostag = "no";
-
-							$.each(arraydetags, function(n) {
-
-								if (arraydetags[n] == taganadir) {
-
-									isapreviostag = "yes";
-								}
-
-							});
-
-							if (isapreviostag == "no") {
-
-								taginput4.setAttribute("value", taginput4.getAttribute("value") + "," + taganadir);
-
-							}
-
-						}
-
-						// dibujamos los tags
-						arraydetags = taginput4.getAttribute("value").split(',');
+						arraydetags = taginput.getAttribute("value").split(',');
 
 						var tagsdivs = "";
 						for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
 							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
 						};
-						taginput4.innerHTML = tagsdivs;
+						taginput.innerHTML = tagsdivs;
 
 						// para aplicarles los estilos a los tags hay que recurrir a la bd
 						var trans2 = db.transaction(["tags"], "readonly")
 						var objectStore2 = trans2.objectStore("tags")
 
-						var taginput4tags = $("#taginput4")["0"].children; // los tagtickets del taginput
+						var taginputtags = $(this)["0"].children; // los tagtickets del taginput
 
 						var req2 = objectStore2.openCursor();
 
@@ -1023,17 +660,17 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						req2.onsuccess = function(event) {
 							var cursor2 = event.target.result;
 							if (cursor2) {
-								$.each(taginput4tags, function(n) {
+								$.each(taginputtags, function(n) {
 
-									if (cursor2.value.tagid == taginput4tags[n].attributes[1].value) {
+									if (cursor2.value.tagid == taginputtags[n].attributes[1].value) {
 
 										var color = "#" + cursor2.value.tagcolor;
 										var complecolor = hexToComplimentary(color);
 
-										taginput4tags[n].className += " small " + cursor2.value.tagform;
-										taginput4tags[n].setAttribute("value", cursor2.value.tagid);
-										taginput4tags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-										taginput4tags[n].innerHTML = cursor2.value.tagtext;
+										taginputtags[n].className += " small " + cursor2.value.tagform;
+										taginputtags[n].setAttribute("value", cursor2.value.tagid);
+										taginputtags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+										taginputtags[n].innerHTML = cursor2.value.tagtext;
 
 									}
 
@@ -1054,7 +691,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 				}
 		    	else {
 
-		    		alertify.alert("Maximum 4 tags are permitted for each input field.");
+		    		alertify.alert("Maximum 5 tags are permitted for each input field.");
 		    	 	ui.draggable.draggable('option','revert',true);
 		    	}
 
@@ -1067,16 +704,30 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 	});
 
-	$( "#cleartagfiled4" ).click(function() {
+	// boton limpiar campos (undo)
+	$( ".cleartagfield" ).click(function() {
 
-		var taginput4 = $("#taginput4")["0"];
-		taginput4.setAttribute("value", "");
-		taginput4.innerHTML = "";
+		var taginput = $(this).prev(".taginput")["0"]
+
+		var taginputvalue = taginput.getAttribute("value");
+
+		taginputvalue = taginputvalue.split(",");
+
+		if (taginputvalue[0]!="") { //si hay algun tag
+			taginputvalue = taginputvalue.slice(0,-1); //quitar el último
+			taginput.setAttribute("value", taginputvalue);
+		}
+
+		if (taginput.hasChildNodes()){
+			taginput.removeChild(taginput.lastChild);
+		}
 
 	});
 
 
-	$('#nottaginput').droppable({
+
+
+	$('.nottaginput').droppable({
 
 		accept: '.footertagticket',
 
@@ -1096,7 +747,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 					if (positiontop < wrapperbottom) {
 
-						var nottaginput = $("#nottaginput")["0"];
+						var nottaginput = $(this)["0"];
 						var taganadir = ui.draggable["0"].attributes[1].value;
 
 						if (nottaginput.getAttribute("value") == "") {
@@ -1138,7 +789,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						var trans2 = db.transaction(["tags"], "readonly")
 						var objectStore2 = trans2.objectStore("tags")
 
-						var nottaginputtags = $("#nottaginput")["0"].children; // los tagtickets del taginput
+						var nottaginputtags = $(this)["0"].children; // los tagtickets del taginput
 
 						var req2 = objectStore2.openCursor();
 
@@ -1148,6 +799,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						req2.onsuccess = function(event) {
 							var cursor2 = event.target.result;
 							if (cursor2) {
+
 								$.each(nottaginputtags, function(n) {
 
 									if (cursor2.value.tagid == nottaginputtags[n].attributes[1].value) {
@@ -1192,11 +844,13 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 	});
 
-	$( "#clearnottagfiled" ).click(function() {
 
-		var taginput4 = $("#nottaginput")["0"];
-		taginput4.setAttribute("value", "");
-		taginput4.innerHTML = "";
+	$( ".clearnottagfield" ).click(function() {
+
+		// var nottaginput = $(this).prev(".nottaginput")["0"] // no funciona bien asi que utilizo js puro:
+		var nottaginput = $(this).parent().find('.nottaginput')[0];
+		nottaginput.setAttribute("value", "");
+		nottaginput.innerHTML = "";
 
 	});
 
@@ -1213,6 +867,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 		$("#eraseron").removeClass("on");
 
 		window.taggroup= [];
+		window.nottaggroup= []; // para los tags que no devén estar
 
 		window.resultsfolders = [];
 		window.resultsfolderstemp = [];
@@ -1221,6 +876,8 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 		window.arraydetagsabuscar = [];
 
 		window.numerodecamposrellenados = 0;
+		window.numerodecamposrellenadosno = 0; // para los tags que no devén estar
+
 		window.concentradorresultadoscarpetas = [];
 		window.concentradorresultadosarchivos = [];
 
@@ -1232,7 +889,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 		$.each ($(".taginput"), function(u) {
 
-			taggroup[u] = $(".taginput:eq("+u+")")["0"].attributes[2].value
+			taggroup[u] = $(".taginput:eq("+u+")")["0"].attributes[1].value
 			if (taggroup[u] != "" ) {
 
 				numerodecamposrellenados ++;
@@ -1240,9 +897,21 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 		});
 
-		if (numerodecamposrellenados > 0) {
 
-			window.searchfor = $("input:radio[name ='searchfor']:checked").val(); // folder and files, folders or files
+		$.each ($(".nottaginput"), function(u) {
+
+			nottaggroup[u] = $(".nottaginput:eq("+u+")")["0"].attributes[1].value
+
+			if (nottaggroup[u] != "" ) {
+
+				numerodecamposrellenadosno ++;
+			}
+
+		});
+
+		window.searchfor = $("input:radio[name ='searchfor']:checked").val(); // folder and files, folders or files
+
+		if (numerodecamposrellenados > 0) {			
 
 			$('#searchdirectoryview').html("");
 
@@ -1270,11 +939,376 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 			}
 
+		} 
+		// cuando son busquedas donde solo hay definidos tags que no deven incluir los resultados
+		else if (numerodecamposrellenados == 0 && numerodecamposrellenadosno > 0) {
+
+			if (searchfor == "files") {
+
+				searchnoinfiles();
+
+			}
+
+			else if (searchfor == "folders") {
+
+				searchnoinfolders()
+			}
+
+			else if (searchfor == "foldersandfiles") {
+
+				$.when(searchnoinfolders()).done(searchnoinfiles());
+
+			}
+
 		}
 
 	});
 
 }, 500);
+
+
+// botón añadir nuevo tag input field
+
+function addtagfield(thisbutton){
+
+	$(thisbutton).next('span').remove() //se quita la x de eliminar campo para que no se acumule
+	$(thisbutton).remove(); //se quita boton previamente existente
+
+	var lastcleartagbutton = $( ".cleartagfield" ).last();
+	
+	var htmltoadd = '<div class="searchinput"><span>..or tag(s): (max 5 tags)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Add tags input field</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	$(htmltoadd).insertAfter(lastcleartagbutton);
+
+
+	// Aquí hay que volver a activar el dragg and drop en los nuevos input añadidos
+	$('.taginput').droppable({
+
+		accept: '.footertagticket',
+
+		drop: function( event, ui ) {
+
+			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
+
+				if ($(this)[0].children.length < 5) {
+
+					// devolvemos tag a posición original
+					ui.draggable["0"].style.top = "0px"
+					ui.draggable["0"].style.left = "0px"
+
+					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
+					var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta)
+					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
+
+					if (positiontop < wrapperbottom) {
+
+						var taginput = $(this)["0"];
+						var taganadir = ui.draggable["0"].attributes[1].value;
+
+						if (taginput.getAttribute("value") == "") {
+
+							taginput.setAttribute("value", taganadir);
+
+						} else {
+
+							var arraydetags = taginput.getAttribute("value").split(",");
+							var isapreviostag = "no";
+
+							$.each(arraydetags, function(n) {
+
+								if (arraydetags[n] == taganadir) {
+
+									isapreviostag = "yes";
+								}
+
+							});
+
+							if (isapreviostag == "no") {
+
+								taginput.setAttribute("value", taginput.getAttribute("value") + "," + taganadir);
+
+							}
+
+						}
+
+						// dibujamos los tags
+						arraydetags = taginput.getAttribute("value").split(',');
+
+						var tagsdivs = "";
+						for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
+							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+						};
+						taginput.innerHTML = tagsdivs;
+
+						// para aplicarles los estilos a los tags hay que recurrir a la bd
+						var trans2 = db.transaction(["tags"], "readonly")
+						var objectStore2 = trans2.objectStore("tags")
+
+						var taginputtags = $(this)["0"].children; // los tagtickets del taginput
+
+						var req2 = objectStore2.openCursor();
+
+						req2.onerror = function(event) {
+							console.log("error: " + event);
+						};
+						req2.onsuccess = function(event) {
+							var cursor2 = event.target.result;
+							if (cursor2) {
+								$.each(taginputtags, function(n) {
+
+									if (cursor2.value.tagid == taginputtags[n].attributes[1].value) {
+
+										var color = "#" + cursor2.value.tagcolor;
+										var complecolor = hexToComplimentary(color);
+
+										taginputtags[n].className += " small " + cursor2.value.tagform;
+										taginputtags[n].setAttribute("value", cursor2.value.tagid);
+										taginputtags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+										taginputtags[n].innerHTML = cursor2.value.tagtext;
+
+									}
+
+								});
+
+								cursor2.continue();
+
+							}
+
+						};
+
+						trans2.oncomplete = function(event) {
+
+						}
+
+					};
+
+				}
+		    	else {
+
+		    		alertify.alert("Maximum 5 tags are permitted for each input field.");
+		    	 	ui.draggable.draggable('option','revert',true);
+		    	}
+
+		    }
+
+		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
+		    $("#bottomright").css("width", ajustartamanio + "px");
+
+		}
+
+	});
+
+	// boton limpiar campos (nuevos botones)
+	$( ".cleartagfield" ).unbind(); // para que no se acumule
+	$( ".cleartagfield" ).click(function() {
+
+		var taginput = $(this).prev(".taginput")["0"];
+
+		var taginputvalue = taginput.getAttribute("value");
+		taginputvalue = taginputvalue.split(",");
+
+		if (taginputvalue[0]!="") { //si hay algun tag
+			taginputvalue = taginputvalue.slice(0,-1); //quitar el último
+			taginput.setAttribute("value", taginputvalue);
+		}
+
+		if (taginput.hasChildNodes()){
+			taginput.removeChild(taginput.lastChild);
+		}		
+
+	});
+
+};
+
+
+function addnottagfield(thisbutton){
+
+	$(thisbutton).next('span').remove() //se quita la x de eliminar campo para que no se acumule
+	$(thisbutton).remove(); //se quita boton previamente existente
+
+	var lastclearnottagbutton = $( ".clearnottagfield" ).last();
+	
+	var htmltoadd = '<div class="searchnotinput"><span>..and do not have the tag:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Add input field</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	$(htmltoadd).insertAfter(lastclearnottagbutton);
+
+	// Aquí hay que volver a activar el dragg and drop en los nuevos input añadidos
+	$('.nottaginput').droppable({
+
+		accept: '.footertagticket',
+
+		drop: function( event, ui ) {
+
+			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
+
+				if ($(this)[0].children.length < 1) {
+
+					// devolvemos tag a posición original
+					ui.draggable["0"].style.top = "0px"
+					ui.draggable["0"].style.left = "0px"
+
+					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
+					var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta)
+					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
+
+					if (positiontop < wrapperbottom) {
+
+						var nottaginput = $(this)["0"];
+						var taganadir = ui.draggable["0"].attributes[1].value;
+
+						if (nottaginput.getAttribute("value") == "") {
+
+							nottaginput.setAttribute("value", taganadir);
+
+						} else {
+
+							var arraydetags = nottaginput.getAttribute("value").split(",");
+							var isapreviostag = "no";
+
+							$.each(arraydetags, function(n) {
+
+								if (arraydetags[n] == taganadir) {
+
+									isapreviostag = "yes";
+								}
+
+							});
+
+							if (isapreviostag == "no") {
+
+								nottaginput.setAttribute("value", nottaginput.getAttribute("value") + "," + taganadir);
+
+							}
+
+						}
+
+						// dibujamos los tags
+						arraydetags = nottaginput.getAttribute("value").split(',');
+
+						var tagsdivs = "";
+						for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
+							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+						};
+						nottaginput.innerHTML = tagsdivs;
+
+						// para aplicarles los estilos a los tags hay que recurrir a la bd
+						var trans2 = db.transaction(["tags"], "readonly")
+						var objectStore2 = trans2.objectStore("tags")
+
+						var nottaginputtags = $(this)["0"].children; // los tagtickets del taginput
+
+						var req2 = objectStore2.openCursor();
+
+						req2.onerror = function(event) {
+							console.log("error: " + event);
+						};
+						req2.onsuccess = function(event) {
+							var cursor2 = event.target.result;
+							if (cursor2) {
+								
+								$.each(nottaginputtags, function(n) {
+
+									if (cursor2.value.tagid == nottaginputtags[n].attributes[1].value) {
+
+										var color = "#" + cursor2.value.tagcolor;
+										var complecolor = hexToComplimentary(color);
+
+										nottaginputtags[n].className += " small " + cursor2.value.tagform;
+										nottaginputtags[n].setAttribute("value", cursor2.value.tagid);
+										nottaginputtags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+										nottaginputtags[n].innerHTML = cursor2.value.tagtext;
+
+									}
+
+								});
+
+								cursor2.continue();
+
+							}
+
+						};
+
+						trans2.oncomplete = function(event) {
+
+						}
+
+					};
+
+				}
+		    	else {
+
+		    		alertify.alert("Only 1 tag is permitted in this input.");
+		    	 	ui.draggable.draggable('option','revert',true);
+		    	}
+
+		    }
+
+		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
+		    $("#bottomright").css("width", ajustartamanio + "px");
+
+		}
+
+	});
+
+	// boton limpiar campos (nuevos botones)
+	$( ".clearnottagfield" ).unbind(); // para que no se acumule
+	$( ".clearnottagfield" ).click(function() {
+
+		// var nottaginput = $(this).prev(".nottaginput")  // no funciona así, asi que utilizo :
+		var nottaginput = $(this).parent().find('.nottaginput')[0];
+		nottaginput.setAttribute("value", "");
+		nottaginput.innerHTML = "";
+
+	});
+
+};
+
+
+function removetagfield(removebutton) {
+
+	var removebuttonpreviosfieldclear = removebutton.parentElement.previousSibling;
+
+	if ($(".searchinput").length == 2) { // si solo queda este y el 1er field no se le añade la x para borrar
+
+		var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Add tags input field</a>';
+		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
+
+	} else { // si quedan más campos se le añade la x
+
+		var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Add tags input field</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
+
+	}
+
+	// se quita el div
+	var parentelement = removebutton.parentElement;
+	parentelement.parentNode.removeChild(parentelement);
+
+}
+
+
+function removenottagfield(removebutton) {
+
+	var removebuttonpreviosfieldclear = removebutton.parentElement.previousSibling
+
+	if ($(".searchnotinput").length == 2) { // si solo queda este y el 1er field no se le añade la x para borrar
+
+		var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Add input field</a>';
+		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
+
+	} else { // si quedan más campos se le añade la x
+
+		var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Add input field</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
+
+	}
+
+	// se quita el div
+	var parentelement = removebutton.parentElement;
+	parentelement.parentNode.removeChild(parentelement);
+
+}
+
 
 
 function getalltags(callback) {
@@ -1503,8 +1537,6 @@ function footertagsinteractions(){
 function selectedafolder() {
 
 	var selectedFold=document.getElementById("selectedFold");
-
-
 
 	selectedFolder = selectedFold.value.replace(/\\/g, "\/"); // se cambia las \ por /
 	selectedDriveUnit= selectedFolder.substr(0, selectedFolder.indexOf('\/')); // se selecciona hasta la primera /
@@ -1863,13 +1895,13 @@ function searchinfolders() {
 
 								}
 
-								// a por el 4º tag
+								// a por el 4to tag
 
-								else if (arraydetagsabuscar[t].length == 4) { // si hay al menos 4 tags para buscar
+								else if (arraydetagsabuscar[t].length >= 4) { // si hay al menos 4 tags para buscar
 
 									resultadopreviovalido[t] = [];
 
-									if (resultsfolders[t].length > 0) { // si hay resultados previos
+									if (resultsfolders[t].length > 0) { // si  hay resultados previos
 										$.each (resultsfolders[t], function(u) {
 
 											resultadopreviovalido[t][u] = "no"; // valor por defecto
@@ -1888,7 +1920,7 @@ function searchinfolders() {
 
 									req.onsuccess = function(event) {
 
-										if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
+										if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada pues no tiene todos los tags)
 
 											var cursor = event.target.result;
 
@@ -1909,10 +1941,9 @@ function searchinfolders() {
 													}
 													$.each (tagsdelelemento[t], function(u) {
 
-														if (tagsdelelemento[t][u] == arraydetagsabuscar[t][3]) { // el cuarto tag a buscar
+														if (tagsdelelemento[t][u] == arraydetagsabuscar[t][3]) { // el tercer tag a buscar
 
 															coincidetag = "si";
-
 														}
 
 													});
@@ -1920,7 +1951,7 @@ function searchinfolders() {
 
 													if (coincidetag == "si") {
 
-														// console.log("coincide cuarto tag con: " + cursor.value.folder)
+														// console.log("coincide tercer tag con: " + cursor.value.folder)
 
 														$.each (resultsfolders[t], function(u) {
 
@@ -1967,7 +1998,121 @@ function searchinfolders() {
 
 										})
 
-										concetradoresultadoscarpetas(resultsfolders[t]);
+										if (arraydetagsabuscar[t].length < 5) {
+
+											concetradoresultadoscarpetas(resultsfolders[t]);
+
+										}
+
+										// a por el 5º tag
+
+										else if (arraydetagsabuscar[t].length == 5) { // si hay al menos 4 tags para buscar
+
+											resultadopreviovalido[t] = [];
+
+											if (resultsfolders[t].length > 0) { // si hay resultados previos
+												$.each (resultsfolders[t], function(u) {
+
+													resultadopreviovalido[t][u] = "no"; // valor por defecto
+
+												});
+											}
+
+											var trans = db.transaction(["folders"], "readonly")
+											var objectStore = trans.objectStore("folders")
+											var req = objectStore.openCursor();
+
+											req.onerror = function(event) {
+
+												console.log("error: " + event);
+											};
+
+											req.onsuccess = function(event) {
+
+												if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
+
+													var cursor = event.target.result;
+
+													if(cursor){
+
+														if (selectedFolder == "\/") {
+															selectedFolder = ""
+														}
+
+														if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+
+															tagsdelelemento[t] = cursor.value.foldertags;
+
+															var coincidetag = "no";
+
+															if (typeof tagsdelelemento[t] == "string") {
+																tagsdelelemento[t] = tagsdelelemento[t].split(",");
+															}
+															$.each (tagsdelelemento[t], function(u) {
+
+																if (tagsdelelemento[t][u] == arraydetagsabuscar[t][4]) { // el quinto tag a buscar
+
+																	coincidetag = "si";
+
+																}
+
+															});
+
+
+															if (coincidetag == "si") {
+
+																// console.log("coincide cuarto tag con: " + cursor.value.folder)
+
+																$.each (resultsfolders[t], function(u) {
+
+																	if (resultsfolders[t][u].folderid == cursor.value.folderid) {
+
+																		window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
+
+																	}
+
+																});
+
+															}
+
+														}
+
+														cursor.continue();
+
+													}
+
+												}
+
+											}
+
+											trans.oncomplete = function(event) {
+
+												resultsfolderstemp[t] = jQuery.extend({}, resultsfolders[t])
+
+												$.each (resultsfolders[t], function(u) {
+
+													if (resultadopreviovalido[t][u] == "no") {
+
+														resultsfolderstemp[t][u] = undefined;
+													}
+
+												})
+
+												resultsfolders[t]=[];
+
+												$.each (resultsfolderstemp[t], function(u) {
+
+													if (resultsfolderstemp[t][u] != undefined) {
+														resultsfolders[t].push(resultsfolderstemp[t][u]);
+													}
+
+												})
+
+												concetradoresultadoscarpetas(resultsfolders[t]);
+
+											}
+
+										}
 
 									}
 
@@ -1994,6 +2139,67 @@ function searchinfolders() {
 	});
 
 } // --fin searchinfolders()
+
+// búsquedas de todas las carpetas para cuando solo se definen tags que NO deben tener los resultados (luego se filtrarán en el concentrador).
+function searchnoinfolders() {
+
+
+	$('#numeroderesultadoscarpetas').html("Searching folders ...");
+
+	resultsfolders = [];
+	resultsfolderstemp = [];
+
+	var trans = db.transaction(["folders"], "readonly")
+	var objectStore = trans.objectStore("folders")
+	var req = objectStore.openCursor();
+
+	req.onerror = function(event) {
+
+		console.log("error: " + event);
+	};
+
+	req.onsuccess = function(event) {
+
+		var cursor = event.target.result;
+
+		if(cursor){
+
+			if (selectedFolder == "\/") {
+				selectedFolder = ""
+			}
+
+			if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+
+				var foldertoad = [];
+
+
+				foldertoad.folderid = cursor.value.folderid
+				foldertoad.name = cursor.value.folder
+				foldertoad.tagsid = cursor.value.foldertags
+
+				resultsfolderstemp.push(foldertoad);				
+
+			}
+
+			cursor.continue();
+
+		}
+
+	}
+
+	trans.oncomplete = function(event) {
+
+		$.each (resultsfolderstemp, function(u) {
+
+			resultsfolders.push(resultsfolderstemp[u]);
+
+		});
+
+		concetradoresultadoscarpetas(resultsfolders);
+	}
+
+}
+
 
 
 function searchinfiles() {
@@ -2409,10 +2615,9 @@ function searchinfiles() {
 
 											}
 
+											// a por el 4to tag
 
-											// a por el 4º tag
-
-											else if (arraydetagsabuscar[t].length == 4) { // si hay 4 tags para buscar
+											else if (arraydetagsabuscar[t].length >= 4) { // si hay al menos 4 tags para buscar
 
 												resultadopreviovalido[t] = [];
 
@@ -2438,7 +2643,7 @@ function searchinfiles() {
 
 													req.onsuccess = function(event) {
 
-														if (resultsfiles[t].length > 0) { //si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
+														if (resultsfiles[t].length > 0) { // si hay resultados previos (si no no se añade nada, pues no tiene todos los tags)
 
 															var cursor = event.target.result;
 
@@ -2466,15 +2671,14 @@ function searchinfiles() {
 
 																	if (coincidetag == "si") {
 
-																		// console.log("coincide cuarto tag con: " + cursor.value.filename)
-
+																		// console.log("coincide tercer tag con: " + cursor.value.filename)
 																		$.each (resultsfiles[t], function(u) {
 
 																			if (resultsfiles[t][u].fileid == cursor.value.fileid) {
 
 																				resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento
 
-																				flagg="yes";
+																				flagg = "yes";
 																			}
 
 																		});
@@ -2496,7 +2700,7 @@ function searchinfiles() {
 														if (actualgroup == totalgroup && flagg=="no") {
 															$('#numeroderesultadosarchivos').html("No files found. ")
 														}
-														flagg = "no";
+														flagg = "no"
 
 														resultsfilestemp[t] = jQuery.extend({}, resultsfiles[t])
 
@@ -2519,14 +2723,135 @@ function searchinfiles() {
 
 														})
 
-														if (arraydetagsabuscar[t].length == 4) {
+														if (arraydetagsabuscar[t].length < 5) {
 
 															concetradoresultadosarchivos(resultsfiles[t]);
 
 														}
 
-													}
+														// a por el 5º tag
 
+														else if (arraydetagsabuscar[t].length == 5) { // si hay 4 tags para buscar
+
+															resultadopreviovalido[t] = [];
+
+															if (resultsfiles[t].length > 0) { // si hay resultados previos
+																$.each (resultsfiles[t], function(u) {
+
+																	resultadopreviovalido[t][u] = "no"; // valor por defecto
+
+																});
+															}
+
+															var trans = db.transaction(["files"], "readonly")
+															var objectStore = trans.objectStore("files")
+
+															$.each (folderidintosearch, function(n) {
+
+																var req = objectStore.openCursor();
+
+																req.onerror = function(event) {
+
+																	console.log("error: " + event);
+																};
+
+																req.onsuccess = function(event) {
+
+																	if (resultsfiles[t].length > 0) { //si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
+
+																		var cursor = event.target.result;
+
+																		if(cursor){
+
+																			if (cursor.value.filefolder == folderidintosearch[n]) {
+
+																				var coincidetag = "no";
+
+																				tagsdelelemento = cursor.value.filetags;
+
+																				if (typeof tagsdelelemento == "string") {
+																					tagsdelelemento = tagsdelelemento.split(",")
+																				}
+
+																				$.each (tagsdelelemento, function(m) {
+
+																					if (tagsdelelemento[m] == arraydetagsabuscar[t][4]) { //el quinto tag a buscar
+
+																						coincidetag = "si"
+																					}
+
+																				});
+
+
+																				if (coincidetag == "si") {
+
+																					// console.log("coincide cuarto tag con: " + cursor.value.filename)
+
+																					$.each (resultsfiles[t], function(u) {
+
+																						if (resultsfiles[t][u].fileid == cursor.value.fileid) {
+
+																							resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento
+
+																							flagg="yes";
+																						}
+
+																					});
+
+																				}
+
+																			}
+
+																			cursor.continue();
+
+																		}
+
+																	}
+
+																}
+
+																trans.oncomplete = function(event) {
+
+																	if (actualgroup == totalgroup && flagg=="no") {
+																		$('#numeroderesultadosarchivos').html("No files found. ")
+																	}
+																	flagg = "no";
+
+																	resultsfilestemp[t] = jQuery.extend({}, resultsfiles[t])
+
+																	$.each (resultsfiles[t], function(u) {
+
+																		if (resultadopreviovalido[t][u] == "no") {
+
+																			resultsfilestemp[t][u] = undefined;
+																		}
+
+																	})
+
+																	resultsfiles[t]=[];
+
+																	$.each (resultsfilestemp[t], function(u) {
+
+																		if (resultsfilestemp[t][u] != undefined) {
+																			resultsfiles[t].push(resultsfilestemp[t][u]);
+																		}
+
+																	})
+
+																	if (arraydetagsabuscar[t].length == 5) {
+
+																		concetradoresultadosarchivos(resultsfiles[t]);
+
+																	}
+
+																}
+
+															});
+
+														}
+
+													}
+												
 												});
 
 											}
@@ -2539,7 +2864,7 @@ function searchinfiles() {
 
 							}
 
-						})
+						});
 
 					}
 
@@ -2554,12 +2879,134 @@ function searchinfiles() {
 } // -- fin searchinfiles()
 
 
+// búsquedas de todos los archivos para cuando solo se definen tags que NO deben tener los resultados (luego se filtrarán en el concentrador).
+function searchnoinfiles() {
+
+	$('#numeroderesultadosarchivos').html("Searching files ...");
+
+	var i=0;
+	var folderidintosearch = [];
+	var foldernametoserach = [];
+
+	var trans = db.transaction(["folders"], "readonly")
+	var objectStore = trans.objectStore("folders")
+	var req = objectStore.openCursor();
+
+	req.onerror = function(event) {
+
+		console.log("error: " + event);
+	};
+
+	req.onsuccess = function(event) {
+
+		var cursor = event.target.result;
+
+		if(cursor){
+
+			if (selectedFolder == "\/") {
+				selectedFolder = "";
+			}
+
+			if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+
+				folderidintosearch[i] = cursor.value.folderid;
+				foldernametoserach[i] = cursor.value.folder;
+
+				i++;
+
+			}
+
+			cursor.continue();
+
+		}
+
+	}
+
+	trans.oncomplete = function(event) {
+
+
+
+		$('#numeroderesultadosarchivos').html("Searching files ...");
+
+		resultsfiles = [];
+		resultsfilestemp = [];
+		var filetoad = [];
+
+		var trans = db.transaction(["files"], "readonly")
+		var objectStore = trans.objectStore("files")
+
+		$.each (folderidintosearch, function(n) {
+
+			$('#numeroderesultadosarchivos').html("Searching files ...");
+
+			var req = objectStore.openCursor();
+
+			req.onerror = function(event) {
+
+				console.log("error: " + event);
+			};
+
+			req.onsuccess = function(event) {
+
+				var cursor = event.target.result;
+
+				if(cursor){
+
+					if (cursor.value.filefolder == folderidintosearch[n]) { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+
+						filetoad = [];
+						var coincidetag = "no";
+						var tagsdelelemento = cursor.value.filetags;
+
+						if (typeof tagsdelelemento == "string") {
+							tagsdelelemento = tagsdelelemento.split(",")
+						}
+
+						filetoad.fileid = cursor.value.fileid;
+						filetoad.name = cursor.value.filename;
+						filetoad.filefolder = cursor.value.filefolder;
+						filetoad.filepath = foldernametoserach[n];
+						filetoad.ext = cursor.value.fileext;
+						filetoad.tagsid = cursor.value.filetags;
+
+						resultsfilestemp.push(filetoad);
+
+					}
+
+					cursor.continue();
+
+				}
+
+
+			}
+			
+
+		});
+
+		trans.oncomplete = function(event) {
+
+
+			$.each (resultsfilestemp, function(u) {
+
+				resultsfiles.push(resultsfilestemp[u]);
+
+			});
+
+			concetradoresultadosarchivos(resultsfiles);
+
+		}
+
+	}
+
+}
+
+
 
 function concetradoresultadoscarpetas(entradas) {
 
 	concentradorresultadoscarpetas.push(entradas);
 
-	if (concentradorresultadoscarpetas.length == numerodecamposrellenados) {
+	if (concentradorresultadoscarpetas.length == numerodecamposrellenados || numerodecamposrellenados == 0) {
 
 		window.resultadoscarpetas=[];
 
@@ -2583,16 +3030,28 @@ function concetradoresultadoscarpetas(entradas) {
 
 					var testnotag = true;
 
-					// se comprueba si el campo nottag tiene tag, y si lo tiene no se incluyen en los resultados los elemento que tengan ese tag
-					if ($('#nottaginput div').attr("value")) {
+					// se comprueba si el/los campos nottag tiene tag, y si los tiene no se incluyen en los resultados los elemento que tengan ese tag
+					$.each ($(".nottaginput"), function(nt) {
 
-						var tagsacomparar = concentradorresultadoscarpetas[u][n]["tagsid"]
-						$.each (tagsacomparar, function(t) {
-							if (tagsacomparar[t] == $('#nottaginput div').attr("value")) {
-								testnotag = false;
+						nottaggroup = $(".nottaginput:eq("+nt+")")["0"].attributes[1].value;
+
+						if (nottaggroup != "" ) {
+
+							// apaño para que no de error pues a veces es string y a veces object (no split)
+							if (typeof(concentradorresultadoscarpetas[u][n]["tagsid"]) == "string") {
+								var tagsacomparar = concentradorresultadoscarpetas[u][n]["tagsid"].split(",")
+							} else {
+								var tagsacomparar = concentradorresultadoscarpetas[u][n]["tagsid"]	
 							}
-						})
-					}
+
+							$.each (tagsacomparar, function(t) {
+								if (tagsacomparar[t] == nottaggroup) {
+									testnotag = false;
+								}
+							})
+						}
+						
+					})
 					if (testnotag) {
 						resultadoscarpetas.push(concentradorresultadoscarpetas[u][n])
 					}
@@ -2620,7 +3079,7 @@ function concetradoresultadosarchivos(entradas) {
 
 	concentradorresultadosarchivos.push(entradas);
 
-	if (concentradorresultadosarchivos.length == numerodecamposrellenados) {
+	if (concentradorresultadosarchivos.length == numerodecamposrellenados || numerodecamposrellenados == 0) {
 
 		window.resultadosarchivos=[];
 
@@ -2644,19 +3103,32 @@ function concetradoresultadosarchivos(entradas) {
 
 					var testnotag = true;
 
-					// se comprueba si el campo nottag tiene tag, y si lo tiene no se incluyen en los resultados los elemento que tengan ese tag
-					if ($('#nottaginput div').attr("value")) {
+					// se comprueba si el/los campos nottag tiene tag, y si los tiene no se incluyen en los resultados los elemento que tengan ese tag
+					$.each ($(".nottaginput"), function(nt) {
 
-						var tagsacomparar = concentradorresultadosarchivos[u][n]["tagsid"].split(",")
-						$.each (tagsacomparar, function(t) {
-							if (tagsacomparar[t] == $('#nottaginput div').attr("value")) {
-								testnotag = false;
+						nottaggroup = $(".nottaginput:eq("+nt+")")["0"].attributes[1].value;
+
+						if (nottaggroup != "" ) {
+
+							// apaño para que no de error pues a veces es string y a veces object (no split)
+							if (typeof(concentradorresultadosarchivos[u][n]["tagsid"]) == "string") {
+								var tagsacomparar = concentradorresultadosarchivos[u][n]["tagsid"].split(",")
+							} else {
+								var tagsacomparar = concentradorresultadosarchivos[u][n]["tagsid"]	
 							}
-						})
-					}
+
+							$.each (tagsacomparar, function(t) {
+								if (tagsacomparar[t] == nottaggroup) {
+									testnotag = false;
+								}
+							})
+						}
+						
+					})
 					if (testnotag) {
 						resultadosarchivos.push(concentradorresultadosarchivos[u][n])
 					}
+
 				}
 
 			})

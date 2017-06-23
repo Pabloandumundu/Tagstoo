@@ -18,7 +18,7 @@
 */
 
 
-/* This javascript differs from the original by Maksim Krylosov. Is very slightly modified to the use on the project Tagstoo */
+/* This javascript differs from the original by Maksim Krylosov. Is slightly modified to the use on the project Tagstoo */
 
 /**
  * http://aeqdev.com/tools/js/abigimage/
@@ -138,6 +138,7 @@
                     $.abigimage.next();
                     }, autoslideshowtime * 1000);
                 }
+
             });
         });
     };
@@ -428,26 +429,29 @@
         }
 
         if (this.onopen) this.onopen.call(this, this.opened);
+
+
+        // a Fullscreen cuando se ve abre el visor
+        var tofullscreen = $(this)["0"].wrapper["0"].parentNode.parentNode.parentNode
+        tofullscreen.webkitRequestFullScreen()
+
     };
 
     ABigImage.prototype.next = function() {
         if (this.distance == this.elements.length - 1) {
+            
             // this.close();
-            this.distance = 0;    
-
+            this.distance = 0;
             this.elements[this.nextIndex()].click();
-        
 
            
         } else {
+            
             ++this.distance;
-    
-
-            this.elements[this.nextIndex()].click();
-        
-
-          
-            //this.open(this.nextIndex());
+            if (this.elements[this.nextIndex()]){
+                this.elements[this.nextIndex()].click();          
+                //this.open(this.nextIndex());
+            }
         }
     };
 
@@ -490,6 +494,12 @@
         this.distance = 0;
 
         current = null;
+
+        // salir de Fullscreen cuando se cierra visor
+        document.webkitExitFullscreen()
+        var gui = require('nw.gui');
+        gui.Window.get().leaveFullscreen()
+
     };
 
     ABigImage.prototype.unbind = function() {
@@ -945,5 +955,6 @@
 
         slideAnimate(x, y, s, transition);
     }
+    
 
 }(jQuery));
