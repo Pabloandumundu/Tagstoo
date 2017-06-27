@@ -5582,25 +5582,114 @@ function interactinsforsearchdir() {
 	}); // --fin añadir tags carpetas
 
 
-	// Press & Hold
+	// Lo siguiente es sustitutivo de press & hold (consume muchos menos recursos)
 
-	$(".explofile, .explofolder, .exploelementfolderup, .imgmode"+searchviewmode+"").pressAndHold({
+	var timeoutId = 0;
+	var elemento = ""
+	var startDate = "";
+	var endDate   = "";
 
-		holdTime: 200,
-		progressIndicatorRemoveDelay: 0,
-		progressIndicatorColor: "blue",
-		progressIndicatorOpacity: 0.3
+
+	$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').on('mousedown', function() {
+
+		elemento = this
+		startDate = new Date();
+
+		if (!$(this).children().hasClass("editing") && !$(this).hasClass("jpg") && !$(this).hasClass("jpeg") && !$(this).hasClass("png") && !$(this).hasClass("gif") && !$(this).hasClass("bmp") && !$(this).hasClass("svg") && !$(this).hasClass("xbm") && !$(this).hasClass("ico")){ //si no se esta editando ni es imagen (que se abrirá con el abigimage)
+
+			$(this).parent()[0].className += " progress-wrap progress";
+			$(this).parent()[0].setAttribute("data-progress-percent", "100");
+			//se añade div hijo para barra
+			var posiciony = $(this).parent()["0"].offsetTop
+			var posicionx = $(this).parent()["0"].offsetLeft
+			var barrahija = document.createElement("div");
+    		$(this).parent()[0].appendChild(barrahija);
+    		$(this).parent()[0].lastChild.className += "progress-bar progress";
+    		$(this).parent()[0].lastChild.innerHTML = "&nbsp;"
+    		$(this).parent()[0].lastChild.style.top = posiciony + "px";
+    		$(this).parent()[0].lastChild.style.left = posicionx + "px";
+
+    		if (viewmode != 1){
+    			$(this).parent()[0].lastChild.style.width = $(this).parent().width() + "px";
+    		} 
+
+    		function moveProgressBar() {
+	      
+		        var getPercent = ($('.progress-wrap').data('progress-percent') / 100);		
+		        var getProgressWrapWidth = $('.progress-wrap').width();
+		        var progressTotal = posicionx + getPercent * getProgressWrapWidth;
+		        var animationLength = 200;
+		        
+		        // on page load, animate percentage bar to data percentage length
+		        // .stop() used to prevent animation queueing
+		        $('.progress-bar').stop().animate({
+		            left: progressTotal
+		        }, animationLength);
+
+		    }
+
+    		moveProgressBar();
+		
+			
+			//para que no se seleccione con el press and hold
+			window.estadoprevioseleccion = "";
+			if ($(this).parent().hasClass("ui-selecting")) {
+				estadoprevioseleccion = "selecting"
+			}
+			else if ($(this).parent().hasClass("ui-selected")) {
+				estadoprevioseleccion = "selected"
+			}
+	    	
+		
+			$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').on('mouseup', function() {
+
+				
+				$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').unbind('mouseup');
+				endDate   = new Date();
+				var diferencia_milisegundos = (endDate.getTime() - startDate.getTime());
+
+				if (diferencia_milisegundos > 200) {
+					presshold()
+				}
+
+				// se quita barra de progrso
+				$(this).parent()[0].classList.remove("progress-wrap");
+				$(this).parent()[0].classList.remove("progress");
+				$(this).parent()[0].removeAttribute("data-progress-percent");
+				$(".progress-bar").remove();
+
+
+			});
+
+		}
 
 	});
 
-	$(".explofile, .explofolder, .exploelementfolderup, .imgmode"+searchviewmode+"").on('complete.pressAndHold', function(event) {
 
-		// console.log("complete");
+	function presshold() {
 
-		if ($(this).hasClass("explofile")) {
+		// para que no se seleccione con el press and hold
+		window.elementoestadoprevioseleccion = $(elemento).parent();
+		setTimeout(function() {
+			if (estadoprevioseleccion == "selecting") {
+				elementoestadoprevioseleccion.addClass("ui-selecting",65)
+			}
+			else if (estadoprevioseleccion == "selected") {
+				elementoestadoprevioseleccion.addClass("ui-selected",65)
+			}
+			else if (estadoprevioseleccion == "") {
+				elementoestadoprevioseleccion.removeClass("ui-selecting",65);
+				elementoestadoprevioseleccion.removeClass("ui-selected",65);
+			}
+		}, 275);
 
-			var toexec = $(this)["0"].attributes[1].nodeValue;
-			var filepath = driveunit + $(this)["0"].attributes[2].nodeValue
+
+		if ($(elemento).hasClass("explofile")) {
+
+			var s = top.explorer.s
+
+			var toexec = $(elemento)["0"].attributes[1].nodeValue;
+			var filepath = driveunit + $(elemento)["0"].attributes[2].nodeValue
 
 			var aejecutar = filepath + toexec;
 
@@ -5637,9 +5726,9 @@ function interactinsforsearchdir() {
 
 		}
 
-		if ($(this).hasClass("explofolder")) {
+		if ($(elemento).hasClass("explofolder")) {
 
-			var carpeta = $(this)["0"].attributes[1].nodeValue;
+			var carpeta = $(elemento)["0"].attributes[1].nodeValue;
 
 			top.explorer.previousornext = "normal"
 			top.explorer.readDirectory(driveunit + carpeta);
@@ -5649,7 +5738,7 @@ function interactinsforsearchdir() {
 			$("#exploretab", top.document).addClass("animateonce");
 
 			// para que el aviso de que se abre en explore, dure dependiendo el numero de archivos a abrir (para que le de tiempo a abrir)
-			var elementsinfolder = $(this)[0].nextSibling.innerText
+			var elementsinfolder = $(elemento)[0].nextSibling.innerText
 			elementsinfolder = +elementsinfolder.replace(" in folder","");
 
 			if (elementsinfolder<100){
@@ -5665,12 +5754,12 @@ function interactinsforsearchdir() {
 		}
 
 
-		if ($(this).hasClass("imgmode"+searchviewmode+"")) {
+		if ($(elemento).hasClass("imgmode"+searchviewmode+"")) {
 
-			if ($(this).next().hasClass("explofile")) {
+			if ($(elemento).next().hasClass("explofile")) {
 
-				var toexec = $(this)["0"].nextElementSibling.attributes[1].nodeValue;
-				var filepath = driveunit + $(this)["0"].nextElementSibling.attributes[2].nodeValue
+				var toexec = $(elemento)["0"].nextElementSibling.attributes[1].nodeValue;
+				var filepath = driveunit + $(elemento)["0"].nextElementSibling.attributes[2].nodeValue
 
 				var aejecutar = filepath + toexec;
 				if (s.os.name == "windows") {
@@ -5705,9 +5794,9 @@ function interactinsforsearchdir() {
 
 			}
 
-			if ($(this).next().hasClass("explofolder")) {
+			if ($(elemento).next().hasClass("explofolder")) {
 
-				var carpeta = $(this)["0"].nextElementSibling.attributes[1].nodeValue;
+				var carpeta = $(elemento)["0"].nextElementSibling.attributes[1].nodeValue;
 
 				top.explorer.previousornext = "normal"
 				top.explorer.readDirectory(driveunit + carpeta);
@@ -5717,7 +5806,7 @@ function interactinsforsearchdir() {
 				$("#exploretab", top.document).addClass("animateonce");
 
 				// para que el aviso de que se abre en explore, dure dependiendo el numero de archivos a abrir (para que le de tiempo a abrir)
-				var elementsinfolder = $(this)[0].nextSibling.nextSibling.innerText
+				var elementsinfolder = $(elemento)[0].nextSibling.nextSibling.innerText
 				elementsinfolder = +elementsinfolder.replace(" in folder","");
 
 				if (elementsinfolder<100){
@@ -5733,9 +5822,7 @@ function interactinsforsearchdir() {
 
 		}
 
-	});
-
-	// --fin Press & Hold
+	} //fin function presshold
 
 } // --fin interactinsforsearchdir()
 

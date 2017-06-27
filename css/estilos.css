@@ -717,9 +717,15 @@ header h1 {
 	left: -100%;
 	padding: 0;
 	margin: 0;
-	background-color: #ff0000;
-	opacity: 0.6;
+	/*background-color: #ffff00;*/
+	/*border-right: 5px solid yellow;*/
+	z-index: 20;
+
+	
+	opacity: 0.8;
+	opacity: 1;
 }
+
 
 #directoryview .ui-selecting {
 
@@ -776,6 +782,31 @@ header h1 {
 }
 
 
+
+/* barra de progreso */
+.progress-wrap {
+
+  background: #7dbde8;
+  overflow: hidden;
+}
+.progress-wrap .progress-bar {
+
+  background: rgba(0, 0, 0, 0);
+  position: absolute;
+  border-left: 5px solid rgba(255, 255, 0, 1);
+  height: auto;
+}
+
+.viewmode1.progress {
+
+  width: 100%;
+}
+.viewmode1.progress-wrap .progress-bar {
+
+  background: rgba(0, 0, 0, 0.1);
+}
+
+
 /* Exploelements.. */
 
 .exploelement, .exploelementfolderup {
@@ -787,6 +818,7 @@ header h1 {
 .exploelementfolderup {
 
   	user-select: none;
+  	cursor: pointer;
 }
 
 .exploelement div, .exploelementfolderup div {
@@ -1184,6 +1216,7 @@ header h1 {
 	width: auto;
 	height: auto;
 	margin: 0 auto;
+	z-index: 3;
 }
 
 .imgmode2.folder img, .foldupimgmode2 img,
@@ -1391,6 +1424,7 @@ header h1 {
 
 	margin: 0; padding: 0; border: solid 1px #CCC;
 	width: 100%;
+	margin-bottom: 5px;
 }
 
 .exploelement.viewmode1 {

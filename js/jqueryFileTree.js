@@ -224,11 +224,19 @@ if(jQuery) (function ($){
 
 								$(this).siblings("ul").children("li").children().on('start.pressAndHold', function(event) {
 
-							        // console.log("start");
+							 		$(this)["0"].children["0"].style.borderRight = "5px solid yellow";
+						
 
 								});
 
-								$(this).siblings("ul").children("li").children().on('complete.pressAndHold', function(event) {
+								$(this).siblings("ul").children("li").children().on('end.pressAndHold', function(event) {
+
+									$(this)["0"].children["0"].style.borderRight = "";
+
+								});
+
+								$(this).siblings("ul").children("li").children().on('complete.pressAndHold', function(event) {						
+
 									if( $(this).parent().hasClass('collapsed') ) {
 										$(this).parent().removeClass('collapsed').addClass('expanded');
 									} else if( $(this).parent().hasClass('expanded') ) {
@@ -363,6 +371,7 @@ if(jQuery) (function ($){
 								}; // -- fin trans oncomplete
 								// -- fin pintar tags
 
+
 								filetreeinteractions(); // activar interacciones para cada uno de los spans añadidos
 
 							// -- fin expandir (si estába colapsado)
@@ -431,9 +440,16 @@ if(jQuery) (function ($){
 
 				$("#filetree li span").on('start.pressAndHold', function(event) {
 
-				        // console.log("start");
+				        $(this)["0"].children["0"].style.borderRight = "5px solid yellow";
 
 				});
+
+				$("#filetree li span").on('end.pressAndHold', function(event) {
+
+				        $(this)["0"].children["0"].style.borderRight = "";
+
+				});
+
 
 				$("#filetree li span").on('complete.pressAndHold', function(event) {
 					if( $(this).parent().hasClass('collapsed') ) {
@@ -596,6 +612,8 @@ function filetrerefreshtags() {
 
 
 function filetreeinteractions() {
+
+
 
 	$('.jqueryFileTree li span').droppable({
 
