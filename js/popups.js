@@ -25,50 +25,49 @@ var dirtoexec =  top.explorer.dirtoexec;
 
 function popup (popupclass, data) {
 
-	if (popupclass == "addtagtosubelements") {
+	switch (popupclass) {
 
-		$( "#popup" ).load( "../popups/popup-tagfolder.html" );
-		$("#popup").addClass("tagfolder");
-		$("#popupbackground").addClass("display");
-		$("#toppopupbackground", window.parent.document).addClass("display");
+		case "addtagtosubelements":
 
-	}
+			$( "#popup" ).load( "../popups/popup-tagfolder.html" );
+			$("#popup").addClass("tagfolder");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;
 
-	if (popupclass == "newtag") {
+		case "newtag":
 
-		$( "#popup" ).load( "../popups/popup-newtag.html" );
-		$("#popup").addClass("newtag");
-		$("#popupbackground").addClass("display");
-		$("#toppopupbackground", window.parent.document).addClass("display");
+			$( "#popup" ).load( "../popups/popup-newtag.html" );
+			$("#popup").addClass("newtag");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;
 
-	}
+		case "edittag":
 
-	if (popupclass == "edittag") {
+			$( "#popup" ).load( "../popups/popup-edittag.html" );
+			$("#popup").addClass("edittag");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;
 
-		$( "#popup" ).load( "../popups/popup-edittag.html" );
-		$("#popup").addClass("edittag");
-		$("#popupbackground").addClass("display");
-		$("#toppopupbackground", window.parent.document).addClass("display");
+		case "options":
 
-	}
+			$( "#popup" ).load( "../popups/popup-options.html" );
+			$("#popup").addClass("options");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;	
 
-	if (popupclass == "options") {
+		case "info":
 
-		$( "#popup" ).load( "../popups/popup-options.html" );
-		$("#popup").addClass("options");
-		$("#popupbackground").addClass("display");
-		$("#toppopupbackground", window.parent.document).addClass("display");
+			$( "#popup" ).load( "../popups/popup-info.html" );
+			$("#popup").addClass("info");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;	
 
-	}
-
-	if (popupclass == "info") {
-
-		$( "#popup" ).load( "../popups/popup-info.html" );
-		$("#popup").addClass("info");
-		$("#popupbackground").addClass("display");
-		$("#toppopupbackground", window.parent.document).addClass("display");
-
-	}
+	}	
 
 }
 

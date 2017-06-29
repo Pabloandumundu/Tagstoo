@@ -17,15 +17,13 @@
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var fs=require('fs-extra');
+var fs = require('fs-extra');
 var Sniffr = require("sniffr");
 var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
 var agent = navigator.userAgent;
 window.s = "";
 s = new Sniffr();
 s.sniff(agent);
-
-fs = require('fs-extra');
 
 window.currentlydatabaseused = localStorage["currentlydatabaseused"];
 
@@ -1671,31 +1669,39 @@ function readDirectory (dirtoread) {
 			window.directoryarchives = []; // en esta variable se meten los archivos
 			window.directoryfolders = []; // en esta variable se meten los directorios
 
-			if (previousornext == "normal") {
+			switch(previousornext){
 
-				if (arraylocationposition < arraylocations.length -1) {
-					// borrar todas las entradas a partir de la posición
-					arraylocations.length = arraylocationposition + 1;
-				}
-				arraylocations.push(dirtoread)
-				arraylocationposition = arraylocations.length -1
-			}
+			    case "normal":
 
-			if (previousornext == "previous") {
-				arraylocationposition = arraylocationposition - 1
-			}
+			        if (arraylocationposition < arraylocations.length -1) {
+						// borrar todas las entradas a partir de la posición
+						arraylocations.length = arraylocationposition + 1;
+					}
+					arraylocations.push(dirtoread);
+					arraylocationposition = arraylocations.length -1;
+					break;
 
-			if (previousornext == "next") {
-				arraylocationposition = arraylocationposition + 1
-			}
+			    case "previous":
 
-			if (previousornext == "refresh") {	};
+			        arraylocationposition = arraylocationposition - 1;
+			        break;
 
-			if (previousornext == "refreshundo") {
+			    case "next":
 
-				arraylocations.length = arraylocationposition;
-				arraylocations.push(dirtoread);
-			};
+			        arraylocationposition = arraylocationposition + 1;
+			        break;
+
+			    case "refresh":
+
+			        break;
+
+			    case "refreshundo":
+
+			        arraylocations.length = arraylocationposition;
+					arraylocations.push(dirtoread);
+					break;
+
+			}			
 
 			var notdeletedvideoerror = "no";
 			var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
@@ -2120,32 +2126,42 @@ function readDirectory (dirtoread) {
 
 			$("#folderreadstatus").html("Can't access selected folder.");
 
-			if (previousornext == "normal") {
+			switch(previousornext){
 
-				if (arraylocationposition < arraylocations.length -1) {
-					// borrar todas las entradas a partir de la posición
-					arraylocations.length = arraylocationposition + 1;
-				}
-				arraylocations.push(dirtoread)
-				arraylocationposition = arraylocations.length -1
+			    case "normal":
+
+			        if (arraylocationposition < arraylocations.length -1) {
+						// borrar todas las entradas a partir de la posición
+						arraylocations.length = arraylocationposition + 1;
+					}
+					arraylocations.push(dirtoread);
+					arraylocationposition = arraylocations.length -1;
+					break;
+
+			    case "previous":
+
+			        arraylocationposition = arraylocationposition - 1;
+			        break;
+
+			    case "next":
+
+			        arraylocationposition = arraylocationposition + 1;
+			        break;
+
+			    case "refresh":
+
+			        break;
+
+			    case "refreshundo":
+
+			        arraylocations.length = arraylocationposition;
+					arraylocations.push(dirtoread);
+					break;
+
 			}
 
-			if (previousornext == "previous") {
-				arraylocationposition = arraylocationposition - 1
-			}
-
-			if (previousornext == "next") {
-				arraylocationposition = arraylocationposition + 1
-			}
-
-			if (previousornext == "refresh") {	};
-
-			if (previousornext == "refreshundo") {
-
-				arraylocations.length = arraylocationposition;
-				arraylocations.push(dirtoread);
-			};
 		}
+
 
 	}, 25);
 
@@ -2210,31 +2226,32 @@ function SortByLastmodDesc(a,b) {
 
 function drawDirectoryFolders (viewmode, order) {
 
-	if (order == "nameasc") {
-		directoryfolders.sort(SortByNameAsc);
+	switch(order){
+		case "nameasc":
+			directoryfolders.sort(SortByNameAsc);
+			break;
+		case "namedesc":
+			directoryfolders.sort(SortByNameDesc);
+			break;	
+		case "extasc":
+			directoryfolders.sort(SortByNameAsc);
+			break;
+		case "extdesc":
+			directoryfolders.sort(SortByNameDesc);
+			break;
+		case "sizeasc":
+			directoryfolders.sort(SortByElemAsc);
+			break;	
+		case "sizedesc":
+			directoryfolders.sort(SortByElemDesc);
+			break;	
+		case "lastasc":
+			directoryfolders.sort(SortByLastmodAsc);
+			break;	
+		case "lastdesc":
+			directoryfolders.sort(SortByLastmodDesc);
+			break;
 	}
-	if (order == "namedesc") {
-		directoryfolders.sort(SortByNameDesc);
-	}
-	if (order == "extasc") {
-		directoryfolders.sort(SortByNameAsc);
-	}
-	if (order == "extdesc") {
-		directoryfolders.sort(SortByNameDesc);
-	}
-	if (order == "sizeasc") {
-		directoryfolders.sort(SortByElemAsc);
-	}
-	if (order == "sizedesc") {
-		directoryfolders.sort(SortByElemDesc);
-	}
-	if (order == "lastasc") {
-		directoryfolders.sort(SortByLastmodAsc);
-	}
-	if (order == "lastdesc") {
-		directoryfolders.sort(SortByLastmodDesc);
-	}
-
 
 	if (viewmode==1) {
 
@@ -2273,29 +2290,31 @@ function drawDirectoryFolders (viewmode, order) {
 
 function drawDirectoryArchives (viewmode, order) {
 
-	if (order == "nameasc") {
-		directoryarchives.sort(SortByNameAsc);
-	}
-	if (order == "namedesc") {
-		directoryarchives.sort(SortByNameDesc);
-	}
-	if (order == "extasc") {
-		directoryarchives.sort(SortByExtAsc);
-	}
-	if (order == "extdesc") {
-		directoryarchives.sort(SortByExtDesc);
-	}
-	if (order == "sizeasc") {
-		directoryarchives.sort(SortBySizeAsc);
-	}
-	if (order == "sizedesc") {
-		directoryarchives.sort(SortBySizeDesc);
-	}
-	if (order == "lastasc") {
-		directoryarchives.sort(SortByLastmodAsc);
-	}
-	if (order == "lastdesc") {
-		directoryarchives.sort(SortByLastmodDesc);
+	switch(order){
+		case "nameasc":
+			directoryarchives.sort(SortByNameAsc);
+			break;
+		case "namedesc":
+			directoryrchives.sort(SortByNameDesc);
+			break;	
+		case "extasc":
+			directoryarchives.sort(SortByExtAsc);
+			break;
+		case "extdesc":
+			directoryarchives.sort(SortByExtDesc);
+			break;
+		case "sizeasc":
+			directoryarchives.sort(SortBySizeAsc);
+			break;	
+		case "sizedesc":
+			directoryarchives.sort(SortBySizeDesc);
+			break;	
+		case "lastasc":
+			directoryarchives.sort(SortByLastmodAsc);
+			break;	
+		case "lastdesc":
+			directoryarchives.sort(SortByLastmodDesc);
+			break;
 	}
 
 
@@ -2383,6 +2402,8 @@ function drawDirectoryAfter() {
 	$("#folderreadstatus").html($('.exploelement').length + " elements in folder.");
 
 	// Estilos para las diferentes vistas
+	
+
 
 	if (viewmode==1) {
 
@@ -2400,134 +2421,21 @@ function drawDirectoryAfter() {
 
 	}
 
-	if (viewmode==2) {
+	else if (viewmode!=1) {
 
-		$('.exploelement').addClass('viewmode2');
-		$('.exploelementfolderup').addClass('viewmode2');
+		$('.exploelement').addClass('viewmode' + viewmode);
+		$('.exploelementfolderup').addClass('viewmode' + viewmode);
 
-		$('.explofolder').addClass('viewmode2');
-		$('.explofile').addClass('viewmode2');
-		$('.folderelements').addClass('viewmode2');
-		$('.exploext').addClass('viewmode2').css("display","none");
-		$('.explosize').addClass('viewmode2').css("display","none");
-		$('.tags').addClass('viewmode2');
-		$('.lastmod').addClass('viewmode2').css("display","none");
-		$('.duration').addClass('viewmode2').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (viewmode==3) {
-
-		$('.exploelement').addClass('viewmode3');
-		$('.exploelementfolderup').addClass('viewmode3');
-
-		$('.explofolder').addClass('viewmode3');
-		$('.explofile').addClass('viewmode3');
-		$('.folderelements').addClass('viewmode3');
-		$('.exploext').addClass('viewmode3').css("display","none");
-		$('.explosize').addClass('viewmode3').css("display","none");
-		$('.tags').addClass('viewmode3');
-		$('.lastmod').addClass('viewmode3').css("display","none");
-		$('.duration').addClass('viewmode3').css("display","none"); // será visible específicamente si es media
+		$('.explofolder').addClass('viewmode' + viewmode);
+		$('.explofile').addClass('viewmode' + viewmode);
+		$('.folderelements').addClass('viewmode' + viewmode);
+		$('.exploext').addClass('viewmode' + viewmode).css("display","none");
+		$('.explosize').addClass('viewmode' + viewmode).css("display","none");
+		$('.tags').addClass('viewmode' + viewmode);
+		$('.lastmod').addClass('viewmode' + viewmode).css("display","none");
+		$('.duration').addClass('viewmode' + viewmode).css("display","none"); // será visible específicamente si es media
 
 	}
-
-	if (viewmode==4) {
-
-		$('.exploelement').addClass('viewmode4');
-		$('.exploelementfolderup').addClass('viewmode4');
-
-		$('.explofolder').addClass('viewmode4');
-		$('.explofile').addClass('viewmode4');
-		$('.folderelements').addClass('viewmode4');
-		$('.exploext').addClass('viewmode4').css("display","none");
-		$('.explosize').addClass('viewmode4').css("display","none");
-		$('.tags').addClass('viewmode4');
-		$('.lastmod').addClass('viewmode4').css("display","none");
-		$('.duration').addClass('viewmode4').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (viewmode==5) {
-
-		$('.exploelement').addClass('viewmode5');
-		$('.exploelementfolderup').addClass('viewmode5');
-
-		$('.explofolder').addClass('viewmode5');
-		$('.explofile').addClass('viewmode5');
-		$('.folderelements').addClass('viewmode5');
-		$('.exploext').addClass('viewmode5').css("display","none");
-		$('.explosize').addClass('viewmode5').css("display","none");
-		$('.tags').addClass('viewmode5');
-		$('.lastmod').addClass('viewmode5').css("display","none");
-		$('.duration').addClass('viewmode5').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (viewmode==6) {
-
-		$('.exploelement').addClass('viewmode6');
-		$('.exploelementfolderup').addClass('viewmode6');
-
-		$('.explofolder').addClass('viewmode6');
-		$('.explofile').addClass('viewmode6');
-		$('.folderelements').addClass('viewmode6');
-		$('.exploext').addClass('viewmode6').css("display","none");
-		$('.explosize').addClass('viewmode6').css("display","none");
-		$('.tags').addClass('viewmode6');
-		$('.lastmod').addClass('viewmode6').css("display","none");
-		$('.duration').addClass('viewmode6').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (viewmode==7) {
-
-		$('.exploelement').addClass('viewmode7');
-		$('.exploelementfolderup').addClass('viewmode7');
-
-		$('.explofolder').addClass('viewmode7');
-		$('.explofile').addClass('viewmode7');
-		$('.folderelements').addClass('viewmode7');
-		$('.exploext').addClass('viewmode7').css("display","none");
-		$('.explosize').addClass('viewmode7').css("display","none");
-		$('.tags').addClass('viewmode7');
-		$('.lastmod').addClass('viewmode7').css("display","none");
-		$('.duration').addClass('viewmode7').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (viewmode==8) {
-
-		$('.exploelement').addClass('viewmode8');
-		$('.exploelementfolderup').addClass('viewmode8');
-
-		$('.explofolder').addClass('viewmode8');
-		$('.explofile').addClass('viewmode8');
-		$('.folderelements').addClass('viewmode8');
-		$('.exploext').addClass('viewmode8').css("display","none");
-		$('.explosize').addClass('viewmode8').css("display","none");
-		$('.tags').addClass('viewmode8');
-		$('.lastmod').addClass('viewmode8').css("display","none");
-		$('.duration').addClass('viewmode8').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (viewmode==9) {
-
-		$('.exploelement').addClass('viewmode9');
-		$('.exploelementfolderup').addClass('viewmode9');
-
-		$('.explofolder').addClass('viewmode9');
-		$('.explofile').addClass('viewmode9');
-		$('.folderelements').addClass('viewmode9');
-		$('.exploext').addClass('viewmode9').css("display","none");
-		$('.explosize').addClass('viewmode9').css("display","none");
-		$('.tags').addClass('viewmode9');
-		$('.lastmod').addClass('viewmode9').css("display","none");
-		$('.duration').addClass('viewmode9').css("display","none"); // será visible específicamente si es media
-
-	}
-
 
 	drawdirectoryviewtags(); // para añadir los divs de los tags
 	interactions(); // activa los eventos de arrastre, click, hold para los elementos añadidos.
@@ -2668,40 +2576,51 @@ function drawDirectoryAfter() {
 		    extNames = ["ext_generic","ext_image","ext_program","ext_audio","ext_video","ext_docs","ext_www","ext_document"],
 		    maxExtName = extNames[extensions.indexOf(maxExt)];
 
-		    if (viewmode==1) {
+		    if (viewmode==1) {		  
 
-			    if (maxExtName == "ext_generic") {
+				switch (maxExtName) {
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_16px/Glossy_Generic.png">'
-			    }
-			    if (maxExtName == "ext_image") {
+			    	case "ext_generic":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_16px/Glossy_Pictures.png">'
-			    }
-			    if (maxExtName == "ext_program") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Generic.png">';
+				    	break;
+				    
+				    case "ext_image":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_16px/Glossy_Smart.png">'
-			    }
-			    if (maxExtName == "ext_audio") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Pictures.png">';
+				    	break;
+				    
+				    case "ext_program":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_16px/Glossy_Music.png">'
-			    }
-			    if (maxExtName == "ext_video") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Smart.png">';
+				    	break;
+				    
+				    case "ext_audio":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_16px/Glossy_Movies.png">'
-			    }
-			    if (maxExtName == "ext_docs") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Music.png">';
+				    	break;
+				    
+				    case "ext_video":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_16px/Glossy_Library.png">'
-			    }
-			    if (maxExtName == "ext_www") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Movies.png">';
+				    	break;
+				    
+				    case "ext_docs":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_16px/Glossy_Sites.png">'
-			    }
-			    if (maxExtName == "ext_document") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Library.png">';
+				    	break;
+				    
+				    case "ext_www":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_16px/Glossy_Document.png">'
-			    }
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Sites.png">';
+				    	break;
+				    
+				    case "ext_document":
+
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Document.png">';
+				    	break;
+				    
+				}
 
 			    $(this)["0"].previousElementSibling.style.marginLeft = "0px";
 
@@ -2709,38 +2628,50 @@ function drawDirectoryAfter() {
 
 		    else if (viewmode!=1) {
 
-			    if (maxExtName == "ext_generic") {
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_420px/Glossy_Generic.png">'
-			    }
-			    if (maxExtName == "ext_image") {
+		    	switch (maxExtName) {
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_420px/Glossy_Pictures.png">'
-			    }
-			    if (maxExtName == "ext_program") {
+			    	case "ext_generic":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_420px/Glossy_Smart.png">'
-			    }
-			    if (maxExtName == "ext_audio") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Generic.png">';
+				    	break;
+				    
+				    case "ext_image":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_420px/Glossy_Music.png">'
-			    }
-			    if (maxExtName == "ext_video") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Pictures.png">';
+				    	break;
+				    
+				    case "ext_program":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_420px/Glossy_Movies.png">'
-			    }
-			    if (maxExtName == "ext_docs") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Smart.png">';
+				    	break;
+				    
+				    case "ext_audio":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_420px/Glossy_Library.png">'
-			    }
-			    if (maxExtName == "ext_www") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Music.png">';
+				    	break;
+				    
+				    case "ext_video":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_420px/Glossy_Sites.png">'
-			    }
-			    if (maxExtName == "ext_document") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Movies.png">';
+				    	break;
+				    
+				    case "ext_docs":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<div class="holdButtonProgress" style="height: 8px; position: fixed; top: 60px; z-index: 100;"></div><img src="../img/icons/folders_420px/Glossy_Document.png">'
-			    }
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Library.png">';
+				    	break;
+				    
+				    case "ext_www":
+
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Sites.png">';
+				    	break;
+				    
+				    case "ext_document":
+
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Document.png">';
+				    	break;
+				    
+				}			    
 
 			}
 
@@ -2860,29 +2791,31 @@ function drawDirectoryAfter() {
 
 	if (viewmode!=1) {
 
-		if (viewmode==2) {
-			var audiowidth = 98;
-		}
-		if (viewmode==3) {
-			var audiowidth = 132;
-		}
-		if (viewmode==4) {
-			var audiowidth = 170;
-		}
-		if (viewmode==5) {
-			var audiowidth = 212;
-		}
-		if (viewmode==6) {
-			var audiowidth = 258;
-		}
-		if (viewmode==7) {
-			var audiowidth = 308;
-		}
-		if (viewmode==8) {
-			var audiowidth = 362;
-		}
-		if (viewmode==9) {
-			var audiowidth = 420;
+		switch (viewmode) {
+			case "2":
+				var audiowidth = 98;
+				break;
+			case "3":
+				var audiowidth = 132;
+				break;
+			case "4":
+				var audiowidth = 170;
+				break;
+			case "5":
+				var audiowidth = 212;
+				break;
+			case "6":
+				var audiowidth = 258;
+				break;
+			case "7":
+				var audiowidth = 308;
+				break;
+			case "8":
+				var audiowidth = 362;
+				break;
+			case "9":
+				var audiowidth = 420;
+				break;
 		}
 
 		// para el preview de los audios
@@ -3039,29 +2972,31 @@ function drawDirectoryAfter() {
 
 	if (viewmode!=1) {
 
-		if (viewmode==2) {
-			var videowidth = 98;
-		}
-		if (viewmode==3) {
-			var videowidth = 132;
-		}
-		if (viewmode==4) {
-			var videowidth = 170;
-		}
-		if (viewmode==5) {
-			var videowidth = 212;
-		}
-		if (viewmode==6) {
-			var videowidth = 258;
-		}
-		if (viewmode==7) {
-			var videowidth = 308;
-		}
-		if (viewmode==8) {
-			var videowidth = 362;
-		}
-		if (viewmode==9) {
-			var videowidth = 420;
+		switch (viewmode) {
+			case "2":
+				var videowidth = 98;
+				break;
+			case "3":
+				var videowidth = 132;
+				break;
+			case "4":
+				var videowidth = 170;
+				break;
+			case "5":
+				var videowidth = 212;
+				break;
+			case "6":
+				var videowidth = 258;
+				break;
+			case "7":
+				var videowidth = 308;
+				break;
+			case "8":
+				var videowidth = 362;
+				break;
+			case "9":
+				var videowidth = 420;
+				break;
 		}
 
 		//para el preview de los videos
@@ -7141,7 +7076,7 @@ function interactions() {
 		elemento = this
 		startDate = new Date();
 
-		if (!$(this).children().hasClass("editing") && !$(this).hasClass("jpg") && !$(this).hasClass("jpeg") && !$(this).hasClass("png") && !$(this).hasClass("gif") && !$(this).hasClass("bmp") && !$(this).hasClass("svg") && !$(this).hasClass("xbm") && !$(this).hasClass("ico")){ //si no se esta editando ni es imagen (que se abrirá con el abigimage)
+		if (!$(this).children().hasClass("editing") && !$(this).hasClass("jpg") && !$(this).hasClass("jpeg") && !$(this).hasClass("png") && !$(this).hasClass("gif") && !$(this).hasClass("bmp") && !$(this).hasClass("svg") && !$(this).hasClass("xbm") && !$(this).hasClass("ico") && !$(this).children().children().hasClass("playpause")){ //si no se esta editando ni es imagen (que se abrirá con el abigimage) ni multimedia (por los controles)
 
 
 			$(this).parent()[0].className += " progress-wrap progress";

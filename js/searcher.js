@@ -3349,29 +3349,32 @@ function SortByLastmodDesc(a,b) {
 
 function drawSearchFolders (searchviewmode, order) {
 
-	if (searchorder == "nameasc") {
-		resultadoscarpetas.sort(SortByNameAsc);
-	}
-	if (searchorder == "namedesc") {
-		resultadoscarpetas.sort(SortByNameDesc);
-	}
-	if (searchorder == "extasc") {
-		resultadoscarpetas.sort(SortByNameAsc);
-	}
-	if (searchorder == "extdesc") {
-		resultadoscarpetas.sort(SortByNameDesc);
-	}
-	if (order == "sizeasc") {
-		resultadoscarpetas.sort(SortByElemAsc);
-	}
-	if (order == "sizedesc") {
-		resultadoscarpetas.sort(SortByElemDesc);
-	}
-	if (order == "lastasc") {
-		resultadoscarpetas.sort(SortByLastmodAsc);
-	}
-	if (order == "lastdesc") {
-		resultadoscarpetas.sort(SortByLastmodDesc);
+	
+	switch(searchorder){
+		case "nameasc":
+			resultadoscarpetas.sort(SortByNameAsc);
+			break;
+		case "namedesc":
+			resultadoscarpetas.sort(SortByNameDesc);
+			break;	
+		case "extasc":
+			resultadoscarpetas.sort(SortByNameAsc);
+			break;
+		case "extdesc":
+			resultadoscarpetas.sort(SortByNameDesc);
+			break;
+		case "sizeasc":
+			resultadoscarpetas.sort(SortByElemAsc);
+			break;	
+		case "sizedesc":
+			resultadoscarpetas.sort(SortByElemDesc);
+			break;	
+		case "lastasc":
+			resultadoscarpetas.sort(SortByLastmodAsc);
+			break;	
+		case "lastdesc":
+			resultadoscarpetas.sort(SortByLastmodDesc);
+			break;
 	}
 
 	if (searchviewmode==1) {
@@ -3412,31 +3415,33 @@ function drawSearchFolders (searchviewmode, order) {
 
 function drawSearchArchives (searchviewmode, order) {
 
-	if (searchorder == "nameasc") {
-		resultadosarchivos.sort(SortByNameAsc);
-	}
-	if (searchorder == "namedesc") {
-		resultadosarchivos.sort(SortByNameDesc);
-	}
-	if (searchorder == "extasc") {
-		resultadosarchivos.sort(SortByExtAsc);
-	}
-	if (searchorder == "extdesc") {
-		resultadosarchivos.sort(SortByExtDesc);
-	}
-	if (order == "sizeasc") {
-		resultadosarchivos.sort(SortBySizeAsc);
-	}
-	if (order == "sizedesc") {
-		resultadosarchivos.sort(SortBySizeDesc);
-	}
-	if (order == "lastasc") {
-		resultadosarchivos.sort(SortByLastmodAsc);
-	}
-	if (order == "lastdesc") {
-		resultadosarchivos.sort(SortByLastmodDesc);
-	}
 
+	switch(searchorder){
+		case "nameasc":
+			resultadosarchivos.sort(SortByNameAsc);
+			break;
+		case "namedesc":
+			directoryrchives.sort(SortByNameDesc);
+			break;	
+		case "extasc":
+			resultadosarchivos.sort(SortByExtAsc);
+			break;
+		case "extdesc":
+			resultadosarchivos.sort(SortByExtDesc);
+			break;
+		case "sizeasc":
+			resultadosarchivos.sort(SortBySizeAsc);
+			break;	
+		case "sizedesc":
+			resultadosarchivos.sort(SortBySizeDesc);
+			break;	
+		case "lastasc":
+			resultadosarchivos.sort(SortByLastmodAsc);
+			break;	
+		case "lastdesc":
+			resultadosarchivos.sort(SortByLastmodDesc);
+			break;
+	}
 
 	if (searchviewmode==1) {
 
@@ -3542,123 +3547,18 @@ function drawSearchAfter() {
 	}
 
 
-	if (searchviewmode==2) {
+	if (searchviewmode!=1) {
 
-		$('.exploelement').addClass('viewmode2');
+		$('.exploelement').addClass('viewmode' + searchviewmode);
 
-		$('.explofolder').addClass('viewmode2');
-		$('.explofile').addClass('viewmode2');
-		$('.folderelements').addClass('viewmode2');
-		$('.exploext').addClass('viewmode2').css("display","none");
-		$('.explosize').addClass('viewmode2').css("display","none");
-		$('.tags').addClass('viewmode2');
-		$('.lastmod').addClass('viewmode2').css("display","none");
-		$('.duration').addClass('viewmode2').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (searchviewmode==3) {
-
-		$('.exploelement').addClass('viewmode3');
-
-		$('.explofolder').addClass('viewmode3');
-		$('.explofile').addClass('viewmode3');
-		$('.folderelements').addClass('viewmode3');
-		$('.exploext').addClass('viewmode3').css("display","none");
-		$('.explosize').addClass('viewmode3').css("display","none");
-		$('.tags').addClass('viewmode3');
-		$('.lastmod').addClass('viewmode3').css("display","none");
-		$('.duration').addClass('viewmode3').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (searchviewmode==4) {
-
-		$('.exploelement').addClass('viewmode4');
-
-		$('.explofolder').addClass('viewmode4');
-		$('.explofile').addClass('viewmode4');
-		$('.folderelements').addClass('viewmode4');
-		$('.exploext').addClass('viewmode4').css("display","none");
-		$('.explosize').addClass('viewmode4').css("display","none");
-		$('.tags').addClass('viewmode4');
-		$('.lastmod').addClass('viewmode4').css("display","none");
-		$('.duration').addClass('viewmode4').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (searchviewmode==5) {
-
-		$('.exploelement').addClass('viewmode5');
-
-		$('.explofolder').addClass('viewmode5');
-		$('.explofile').addClass('viewmode5');
-		$('.folderelements').addClass('viewmode5');
-		$('.exploext').addClass('viewmode5').css("display","none");
-		$('.explosize').addClass('viewmode5').css("display","none");
-		$('.tags').addClass('viewmode5');
-		$('.lastmod').addClass('viewmode5').css("display","none");
-		$('.duration').addClass('viewmode5').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (searchviewmode==6) {
-
-		$('.exploelement').addClass('viewmode6');
-
-		$('.explofolder').addClass('viewmode6');
-		$('.explofile').addClass('viewmode6');
-		$('.folderelements').addClass('viewmode6');
-		$('.exploext').addClass('viewmode6').css("display","none");
-		$('.explosize').addClass('viewmode6').css("display","none");
-		$('.tags').addClass('viewmode6');
-		$('.lastmod').addClass('viewmode6').css("display","none");
-		$('.duration').addClass('viewmode6').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (searchviewmode==7) {
-
-		$('.exploelement').addClass('viewmode7');
-
-		$('.explofolder').addClass('viewmode7');
-		$('.explofile').addClass('viewmode7');
-		$('.folderelements').addClass('viewmode7');
-		$('.exploext').addClass('viewmode7').css("display","none");
-		$('.explosize').addClass('viewmode7').css("display","none");
-		$('.tags').addClass('viewmode7');
-		$('.lastmod').addClass('viewmode7').css("display","none");
-		$('.duration').addClass('viewmode7').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (searchviewmode==8) {
-
-		$('.exploelement').addClass('viewmode8');
-
-		$('.explofolder').addClass('viewmode8');
-		$('.explofile').addClass('viewmode8');
-		$('.folderelements').addClass('viewmode8');
-		$('.exploext').addClass('viewmode8').css("display","none");
-		$('.explosize').addClass('viewmode8').css("display","none");
-		$('.tags').addClass('viewmode8');
-		$('.lastmod').addClass('viewmode8').css("display","none");
-		$('.duration').addClass('viewmode8').css("display","none"); // será visible específicamente si es media
-
-	}
-
-	if (searchviewmode==9) {
-
-		$('.exploelement').addClass('viewmode9');
-
-		$('.explofolder').addClass('viewmode9');
-		$('.explofile').addClass('viewmode9');
-		$('.folderelements').addClass('viewmode9');
-		$('.exploext').addClass('viewmode9').css("display","none");
-		$('.explosize').addClass('viewmode9').css("display","none");
-		$('.tags').addClass('viewmode9');
-		$('.lastmod').addClass('viewmode9').css("display","none");
-		$('.duration').addClass('viewmode9').css("display","none"); // será visible específicamente si es media
+		$('.explofolder').addClass('viewmode' + searchviewmode);
+		$('.explofile').addClass('viewmode' + searchviewmode);
+		$('.folderelements').addClass('viewmode' + searchviewmode);
+		$('.exploext').addClass('viewmode' + searchviewmode).css("display","none");
+		$('.explosize').addClass('viewmode' + searchviewmode).css("display","none");
+		$('.tags').addClass('viewmode' + searchviewmode);
+		$('.lastmod').addClass('viewmode' + searchviewmode).css("display","none");
+		$('.duration').addClass('viewmode' + searchviewmode).css("display","none"); // será visible específicamente si es media
 
 	}
 
@@ -4058,38 +3958,51 @@ function drawSearchAfter() {
 
 		    if (searchviewmode==1) {
 
-			    if (maxExtName == "ext_generic") {
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Generic.png">';
-			    }
-			    if (maxExtName == "ext_image") {
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Pictures.png">';
-			    }
-			    if (maxExtName == "ext_program") {
+		    	switch (maxExtName) {
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Smart.png">';
-			    }
-			    if (maxExtName == "ext_audio") {
+			    	case "ext_generic":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Music.png">';
-			    }
-			    if (maxExtName == "ext_video") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Generic.png">';
+				    	break;
+				    
+				    case "ext_image":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Movies.png">';
-			    }
-			    if (maxExtName == "ext_docs") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Pictures.png">';
+				    	break;
+				    
+				    case "ext_program":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Library.png">';
-			    }
-			    if (maxExtName == "ext_www") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Smart.png">';
+				    	break;
+				    
+				    case "ext_audio":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Sites.png">';
-			    }
-			    if (maxExtName == "ext_document") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Music.png">';
+				    	break;
+				    
+				    case "ext_video":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Document.png">';
-			    }
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Movies.png">';
+				    	break;
+				    
+				    case "ext_docs":
+
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Library.png">';
+				    	break;
+				    
+				    case "ext_www":
+
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Sites.png">';
+				    	break;
+				    
+				    case "ext_document":
+
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Document.png">';
+				    	break;
+				    
+				}			    
 
 			    $(this)["0"].previousElementSibling.style.display = "inline-block";
 			    $(this)["0"].previousElementSibling.style.background = "none";
@@ -4099,38 +4012,49 @@ function drawSearchAfter() {
 
 		    else if (searchviewmode!=1) {
 
-			    if (maxExtName == "ext_generic") {
+		    	switch (maxExtName) {
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Generic.png">'
-			    }
-			    if (maxExtName == "ext_image") {
+			    	case "ext_generic":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Pictures.png">'
-			    }
-			    if (maxExtName == "ext_program") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Generic.png">';
+				    	break;
+				    
+				    case "ext_image":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Smart.png">'
-			    }
-			    if (maxExtName == "ext_audio") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Pictures.png">';
+				    	break;
+				    
+				    case "ext_program":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Music.png">'
-			    }
-			    if (maxExtName == "ext_video") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Smart.png">';
+				    	break;
+				    
+				    case "ext_audio":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Movies.png">'
-			    }
-			    if (maxExtName == "ext_docs") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Music.png">';
+				    	break;
+				    
+				    case "ext_video":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Library.png">'
-			    }
-			    if (maxExtName == "ext_www") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Movies.png">';
+				    	break;
+				    
+				    case "ext_docs":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Sites.png">'
-			    }
-			    if (maxExtName == "ext_document") {
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Library.png">';
+				    	break;
+				    
+				    case "ext_www":
 
-			    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Document.png">'
-			    }
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Sites.png">';
+				    	break;
+				    
+				    case "ext_document":
+
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Document.png">';
+				    	break;
+				    
+				}			    
 
 			}
 
@@ -4314,33 +4238,34 @@ function drawSearchAfter() {
 
 		if (searchviewmode!=1) {
 
+			switch (searchviewmode) {
+				case "2":
+					var audiowidth = 98;
+					break;
+				case "3":
+					var audiowidth = 132;
+					break;
+				case "4":
+					var audiowidth = 170;
+					break;
+				case "5":
+					var audiowidth = 212;
+					break;
+				case "6":
+					var audiowidth = 258;
+					break;
+				case "7":
+					var audiowidth = 308;
+					break;
+				case "8":
+					var audiowidth = 362;
+					break;
+				case "9":
+					var audiowidth = 420;
+					break;
+			}
+			
 			// para el preview de los audios
-
-			if (searchviewmode==2) {
-				var audiowidth = 98;
-			}
-			if (searchviewmode==3) {
-				var audiowidth = 132;
-			}
-			if (searchviewmode==4) {
-				var audiowidth = 170;
-			}
-			if (searchviewmode==5) {
-				var audiowidth = 212;
-			}
-			if (searchviewmode==6) {
-				var audiowidth = 258;
-			}
-			if (searchviewmode==7) {
-				var audiowidth = 308;
-			}
-			if (searchviewmode==8) {
-				var audiowidth = 362;
-			}
-			if (searchviewmode==9) {
-				var audiowidth = 420;
-			}
-
 			$.each ($(".explofile"), function(u) {
 
 				var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
@@ -4495,33 +4420,34 @@ function drawSearchAfter() {
 
 		if (searchviewmode!=1) {
 
-			if (searchviewmode==2) {
-				var videowidth = 98;
+			switch (searchviewmode) {
+				case "2":
+					var videowidth = 98;
+					break;
+				case "3":
+					var videowidth = 132;
+					break;
+				case "4":
+					var videowidth = 170;
+					break;
+				case "5":
+					var videowidth = 212;
+					break;
+				case "6":
+					var videowidth = 258;
+					break;
+				case "7":
+					var videowidth = 308;
+					break;
+				case "8":
+					var videowidth = 362;
+					break;
+				case "9":
+					var videowidth = 420;
+					break;
 			}
-			if (searchviewmode==3) {
-				var videowidth = 132;
-			}
-			if (searchviewmode==4) {
-				var videowidth = 170;
-			}
-			if (searchviewmode==5) {
-				var videowidth = 212;
-			}
-			if (searchviewmode==6) {
-				var videowidth = 258;
-			}
-			if (searchviewmode==7) {
-				var videowidth = 308;
-			}
-			if (searchviewmode==8) {
-				var videowidth = 362;
-			}
-			if (searchviewmode==9) {
-				var videowidth = 420;
-			}
-
+		
 			//para el preview de los videos
-
 			$.each ($(".explofile"), function(u) {
 
 				var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
@@ -5595,7 +5521,7 @@ function interactinsforsearchdir() {
 		elemento = this
 		startDate = new Date();
 
-		if (!$(this).children().hasClass("editing") && !$(this).hasClass("jpg") && !$(this).hasClass("jpeg") && !$(this).hasClass("png") && !$(this).hasClass("gif") && !$(this).hasClass("bmp") && !$(this).hasClass("svg") && !$(this).hasClass("xbm") && !$(this).hasClass("ico")){ //si no se esta editando ni es imagen (que se abrirá con el abigimage)
+		if (!$(this).children().hasClass("editing") && !$(this).hasClass("jpg") && !$(this).hasClass("jpeg") && !$(this).hasClass("png") && !$(this).hasClass("gif") && !$(this).hasClass("bmp") && !$(this).hasClass("svg") && !$(this).hasClass("xbm") && !$(this).hasClass("ico")&& !$(this).children().children().hasClass("playpause")){ //si no se esta editando ni es imagen (que se abrirá con el abigimage) ni multimedia (por los controles)
 
 			$(this).parent()[0].className += " progress-wrap progress";
 			$(this).parent()[0].setAttribute("data-progress-percent", "100");
