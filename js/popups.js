@@ -1743,7 +1743,7 @@ function optionspreload() {
 
 		if (driveunit) {
 
-			if (s.os.name == "windows") {
+			if (s.os.name == "windows" || s.os.name == "macos") {
 					 $('#selecteddrive').html(driveunit)
 			}
 			if (s.os.name == "linux") {
@@ -1999,6 +1999,109 @@ function optionspreload() {
 				});
 
 			}
+
+			if (s.os.name == "macos") {
+
+	          console.log($("#unitselect").val())
+
+	          if ($("#unitselect").val() != "") {
+	            $('#selecteddrive').html( "/" + $("#unitselect").val() );
+	          } else {
+	            $('#selecteddrive').html("/")
+	          }
+
+	          drives = [""];
+
+	          // Detectar y añadir unidades
+
+	          var dirtoread = "/Volumes" ;
+	          var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+
+	          var directoryelement = [];
+	          var directorycontent = [];
+	          window.directoryarchives = [];
+	          window.directoryfolders = [];
+
+	          var readedElements = fs.readdirSync(dirtoread)
+	          var iteratentimes = readedElements.length;
+
+	          for (i = 0; i < iteratentimes; i++) {
+
+	            var ext = re.exec(readedElements[i])[1];
+	            if (!ext) {
+	              ext="&nbsp;";
+	            }
+
+	            // comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+	            var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+
+	            try {
+	              var arorfo = "i_am_an_archive";
+	              var arorfo = fs.readdirSync(dirtoreadcheck);
+	            }
+	            catch(exception) {};
+
+	            directoryelement.name = readedElements[i]
+
+	            var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+	            directorycontent[i] = copied_directoryelement;
+	          };
+
+	          // separa carpetas y archivos en dos objetos
+	          var i = 0;
+	          var ii = 0;
+	          var iii = 0;
+
+	          $.each(directorycontent, function(i) {
+
+	            if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+	              directoryfolders[ii] = directorycontent[i];
+
+	              ii++;
+	            } else {
+	              directoryarchives[iii] = directorycontent[i];
+	              iii++;
+	            };
+	          });
+
+	          // se añaden las carpetas detectadas como unidades externas disponibles
+	          $.each(directoryfolders, function(i) {
+	            drives.push("Volumes/" + directoryfolders[i].name);
+	          });
+
+	          var t="";
+	          var tdesc="";
+
+	          $.each (drives, function(i){
+
+	            if (drives[i] != ""){
+	              t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
+	              tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
+	            }
+
+	          });
+
+	          $("#unitselect").html(t);
+	          $("#unitselect").val("");
+
+	          $("#drivedesc").css("display","none")
+	          $("#drivedesc").html("("+tdesc+")");
+
+	          // se pintará solo la info del drive seleccionado
+	          $.each($("#drivedesc div"), function(n) {
+
+	            if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+
+	              $(this).remove()
+
+	            }
+
+	          });
+
+	          $("#drivedesc").css("display","inline-block");
+
+	        }
+
 
 		});
 
@@ -2571,14 +2674,118 @@ function loaddriveslist() {
 		});
 
 	}
+	if (s.os.name == "macos") {
+
+      // if ($("#unitselect").val() != "") {
+      //   $('#selecteddrive').html( "/" + $("#unitselect").val() );
+      // } else {
+      //   $('#selecteddrive').html("/")
+      // }
+
+      drives = [""];
+
+      // Detectar y añadir unidades
+      
+      var dirtoread = "/Volumes" ;
+      var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+
+      var directoryelement = [];
+      var directorycontent = [];
+      window.directoryarchives = [];
+      window.directoryfolders = [];
+
+      var readedElements = fs.readdirSync(dirtoread)
+      var iteratentimes = readedElements.length;
+
+      for (i = 0; i < iteratentimes; i++) {
+
+        var ext = re.exec(readedElements[i])[1];
+        if (!ext) {
+          ext="&nbsp;";
+        }
+
+        // comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+        var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+
+        try {
+          var arorfo = "i_am_an_archive";
+          var arorfo = fs.readdirSync(dirtoreadcheck);
+        }
+        catch(exception) {};
+
+        directoryelement.name = readedElements[i]
+
+        var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+        directorycontent[i] = copied_directoryelement;
+      };
+
+      // separa carpetas y archivos en dos objetos
+      var i = 0;
+      var ii = 0;
+      var iii = 0;
+
+      $.each(directorycontent, function(i) {
+
+        if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+          directoryfolders[ii] = directorycontent[i];
+
+          ii++;
+        } else {
+          directoryarchives[iii] = directorycontent[i];
+          iii++;
+        };
+      });
+
+      // se añaden las carpetas detectadas como unidades externas disponibles
+      $.each(directoryfolders, function(i) {
+        drives.push("Volumes/" + directoryfolders[i].name);
+      });
+
+      var t="";
+      var tdesc="";
+
+      $.each (drives, function(i){
+
+        if (drives[i] != ""){
+          t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
+          tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
+        }
+
+      });
+
+      $("#unitselect").html(t);
+      $("#unitselect").val("");
+
+      $("#drivedesc").css("display","none")
+      $("#drivedesc").html("("+tdesc+")");
+
+      // se pintará solo la info del drive seleccionado
+      $.each($("#drivedesc div"), function(n) {
+
+        if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+
+          $(this).remove()
+
+        }
+
+      });
+
+      $("#drivedesc").css("display","inline-block");
+
+    }
+
+
+
 
 }
 
 
 function restarttagstoo() {
 
+	console.log($("#selecteddrive").html())
+
 	localStorage["currentlydatabaseused"] = "tagstoo_" + $("#selecteddb").html();
-	if (s.os.name == "windows") {
+	if (s.os.name == "windows" || s.os.name == "macos") {
 		localStorage["selecteddriveunit"] = $("#selecteddrive").html();
 		localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
 	}

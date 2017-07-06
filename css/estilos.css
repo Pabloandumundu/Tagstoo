@@ -2042,11 +2042,13 @@ header h1 {
 #databaseselect{
 
 	padding: 1px !important;
-	max-width: 200px;
+	/*max-width: 200px;*/
+	max-width: 18%;
 }
 
 #unitselect{
-  max-width: 150px;
+  	/*max-width: 150px;*/
+  	max-width: 17%;
 	padding: 1px !important;
 }
 

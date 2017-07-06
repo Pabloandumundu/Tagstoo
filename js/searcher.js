@@ -22,7 +22,13 @@ fs = require('fs-extra');
 var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
 
 var viewmode = top.explorer.viewmode;  // recogemos el valor viewmode del iframe explorer
-var s = top.explorer.s // el resultado del Sniffr (sistema operativo, etc..)
+// var s = top.explorer.s // el resultado del Sniffr (sistema operativo, etc..)
+var Sniffr = require("sniffr");
+var agent = navigator.userAgent;
+window.s = "";
+s = new Sniffr();
+s.sniff(agent);
+
 
 if (!localStorage["autoslideshow"]) {
 	window.autoslideshow = "no";
@@ -1564,7 +1570,7 @@ function selectedafolder() {
 		}
 
 	}
-	if (s.os.name == "linux") {
+	if (s.os.name == "linux" || s.os.name == "macos") {
 
 		if (selectedFolder) {
 
@@ -5609,10 +5615,15 @@ function interactinsforsearchdir() {
 			}
 		}, 275);
 
+		
+
 
 		if ($(elemento).hasClass("explofile")) {
 
-			var s = top.explorer.s
+			// var s = top.explorer.s
+			s = new Sniffr();
+			s.sniff(agent);
+
 
 			var toexec = $(elemento)["0"].attributes[1].nodeValue;
 			var filepath = driveunit + $(elemento)["0"].attributes[2].nodeValue
@@ -5627,7 +5638,7 @@ function interactinsforsearchdir() {
 				aejecutar = aejecutar.replace(/\)/g, "^)");
 				require("child_process").exec(aejecutar);
 			}
-			if (s.os.name == "linux") {
+			if (s.os.name == "linux" || s.os.name == "macos") {
 
 				aejecutar = aejecutar.replace(/ /g, '\\ '); // se añade \ delante de los espacios para que lea bien
 				aejecutar = aejecutar.replace(/,/g, '\\\,');
@@ -5641,7 +5652,12 @@ function interactinsforsearchdir() {
 				// si se puede visualizar con algul visualizador del sistema se visualizará aquí
 				var sys = require('sys');
 				var exec = require('child_process');
-				exec.exec('xdg-open' + ' ' + aejecutar);
+				if (s.os.name == "linux"){
+					exec.exec('xdg-open' + ' ' + aejecutar);
+				} 
+				else if (s.os.name == "macos") {
+					exec.exec('open' + ' ' + aejecutar);
+				}
 
 				try { // si es un ejecutable se ejecutará aquí
 					exec.execFile(aejecutar);
@@ -5684,6 +5700,9 @@ function interactinsforsearchdir() {
 
 			if ($(elemento).next().hasClass("explofile")) {
 
+				s = new Sniffr();
+				s.sniff(agent);
+
 				var toexec = $(elemento)["0"].nextElementSibling.attributes[1].nodeValue;
 				var filepath = driveunit + $(elemento)["0"].nextElementSibling.attributes[2].nodeValue
 
@@ -5696,7 +5715,7 @@ function interactinsforsearchdir() {
 					aejecutar = aejecutar.replace(/\)/g, "^)");
 					require("child_process").exec(aejecutar);
 				}
-				if (s.os.name == "linux") {
+				if (s.os.name == "linux" || s.os.name == "macos") {
 
 					aejecutar = aejecutar.replace(/ /g, '\\ '); // se añade \ delante de los espacios para que lea bien
 					aejecutar = aejecutar.replace(/,/g, '\\\,');
@@ -5710,7 +5729,12 @@ function interactinsforsearchdir() {
 					// si se puede visualizar con algul visualizador del sistema se visualizará aquí
 					var sys = require('sys');
 					var exec = require('child_process');
+					if (s.os.name == "linux"){
 					exec.exec('xdg-open' + ' ' + aejecutar);
+					} 
+					else if (s.os.name == "macos") {
+						exec.exec('open' + ' ' + aejecutar);
+					}
 
 					try { // si es un ejecutable se ejecutará aquí
 						exec.execFile(aejecutar);

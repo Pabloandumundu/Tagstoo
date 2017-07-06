@@ -62,6 +62,12 @@ var treedirecorytolist = driveunit + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WI
 var carpetas = treedirecorytolist;
 var newrefresh="no";
 
+var Sniffr = require("sniffr");
+var agent = navigator.userAgent;
+window.s = "";
+s = new Sniffr();
+s.sniff(agent);
+
 if(jQuery) (function ($){
 
     // el conector transformado en una función, solo se utilizan los folders pero es la misma función de lectura de elementos que la utilizada en el  directoryview
@@ -487,7 +493,11 @@ function filetrerefreshtags() {
 
 	var currentlydatabaseused_toshow = currentlydatabaseused.replace("tagstoo_", "");
 	if (driveunit != "") {
-		$('#filetree ul li:eq(0)').before("<li class='treeviewinfo'>drive: "+driveunit+" &#9881; database: "+currentlydatabaseused_toshow+"</li>");
+		if (s.os.name != "macos") { //esto es porque en macos añadiremos un espacio por tema visual
+			$('#filetree ul li:eq(0)').before("<li class='treeviewinfo'>drive: "+driveunit+" &#9881; database: "+currentlydatabaseused_toshow+"</li>");
+		} else {
+			$('#filetree ul li:eq(0)').before("<li class='treeviewinfo'>drive: "+driveunit+" &#9881;&nbsp; database: "+currentlydatabaseused_toshow+"</li>");
+		}
 	} else {
 		$('#filetree ul li:eq(0)').before("<li class='treeviewinfo'>drive: /"+driveunit+" &#9881; database: "+currentlydatabaseused_toshow+"</li>");
 	}

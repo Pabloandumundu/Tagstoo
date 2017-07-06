@@ -2702,7 +2702,7 @@ function drawDirectoryAfter() {
 
 	      	zip.extractEntryTo(/*entry name*/ "OEBPS/Images/cover.jpg", /*target path*/ extractfolder, /*maintainEntryPath*/false, /*overwrite*/true);
 				}
-				if (s.os.name == "linux") {
+				if (s.os.name == "linux" || s.os.name == "macos") {
 
 					var test = zip.getEntry("OEBPS/Images/cover.jpg")
 					if (test) {
@@ -7180,6 +7180,8 @@ function interactions() {
 			var toexec = $(elemento)["0"].attributes[1].nodeValue;
 			var aejecutar = dirtoexec + toexec;
 
+			// console.log(aejecutar)
+
 			aejecutar = aejecutar.replace(/\//g, '/'); // se pone \ en vez de / para poder ejecutar en varios sistemas
 
 			if (s.os.name == "windows") {
@@ -7190,7 +7192,7 @@ function interactions() {
 				aejecutar = aejecutar.replace(/\)/g, "^)");
 				require("child_process").exec(aejecutar);
 			}
-			if (s.os.name == "linux") {
+			if (s.os.name == "linux" || s.os.name == "macos") {
 
 				aejecutar = aejecutar.replace(/ /g, '\\ '); // se añade \ delante de los espacios para que lea bien
 				aejecutar = aejecutar.replace(/,/g, '\\\,');
@@ -7204,14 +7206,19 @@ function interactions() {
 				// si se puede visualizar con algul visualizador del sistema se visualizará aquí
 				var sys = require('sys');
 				var exec = require('child_process');
-				exec.exec('xdg-open' + ' ' + aejecutar);
+				if (s.os.name == "linux"){
+					exec.exec('xdg-open' + ' ' + aejecutar);
+				} 
+				else if (s.os.name == "macos") {
+					exec.exec('open' + ' ' + aejecutar);
+				}
 
 				try { // si es un ejecutable se ejecutará aquí
 					exec.execFile(aejecutar);
 				}
 				catch(exception) { }
 
-			}
+			}			
 
 			if (dirtoexec == driveunit) {
 				dirtoexec = driveunit + "\/";
@@ -7273,7 +7280,7 @@ function interactions() {
 					aejecutar = aejecutar.replace(/\)/g, "^)");
 					require("child_process").exec(aejecutar);
 				}
-				if (s.os.name == "linux") {
+				if (s.os.name == "linux" || s.os.name == "macos") {
 
 					aejecutar = aejecutar.replace(/ /g, '\\ '); // se añade \ delante de los espacios para que lea bien
 					aejecutar = aejecutar.replace(/,/g, '\\\,');
@@ -7287,7 +7294,12 @@ function interactions() {
 					// si se puede visualizar con algul visualizador del sistema se visualizará aquí
 					var sys = require('sys');
 					var exec = require('child_process');
+					if (s.os.name == "linux"){
 					exec.exec('xdg-open' + ' ' + aejecutar);
+					} 
+					else if (s.os.name == "macos") {
+						exec.exec('open' + ' ' + aejecutar);
+					}
 
 					try { // si es un ejecutable se ejecutará aquí
 						exec.execFile(aejecutar);
