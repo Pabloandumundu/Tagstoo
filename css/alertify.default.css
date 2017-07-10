@@ -63,3 +63,9 @@
 .alertify-buttons #alertify-cancel {
 	margin-right: 21px;
 }
+
+
+/* para link en mensaje "read this" */
+.alertify-message a:link {
+	color: #14559f;
+}

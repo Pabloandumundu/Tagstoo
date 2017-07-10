@@ -146,6 +146,10 @@
 	<p>When application start you must choose or create a new database.</p>
 	<p>If is not the first time you launch the program, last used database is automatically choosed and you can change it by selecting another already created database from ‘change database’ selection list, or alternatively introduce a new name in the input field near to ‘New database’ button and push it or press enter.</p>
 	<p>If is the first time you launch the program you must enter a new name in the mentioned input field.</p>
+
+	<a name="databases14"></a>
+	<p><b><i style="color:#333">Note</i></b> (for previous users of Tagstoo 1.4 and earlier versions)<b><i style="color:#333">:</i></b> <em>From version 1.5 of Tagstoo onwards, new database list load method is used, because of an external imperative. The previous databases will not appear in the list, but don´t worry, to access data simply execute the previous version of Tagstoo that you have (</em><a href="https://tagstoo.sourceforge.io/downloadv14compatibility.html" target="_blank">Here</a><em> you can donwload version 1.4) export the data of the database of your choice to a file and close program, launch the new Tagstoo version and import the data into a new database.</em></p>
+
 	<p>Each database is associated to a drive unit like ‘C:’, ‘D:’, ’G:’, etc.. (in Windows) or ‘/‘, ‘/media/user/externaldrive‘, etc.. (in Linux) but this associated drive can be changed at any time in the options of the program, this is so that if you have the data to be tagged on an external drive everything works correctly even though the system has been able to choose another path to the drive than you used last time.</p>
 	<p>So select a drive unit if you need (by default is selected that from which the program is executed) and press ‘Launch!’ button to start.</p>
 	<p>Another buttons in the Initial options is ‘Import data’ that by clicking on that you can choose a file where a database has been previously exported and import that in the database you choose. And delete, to delete database that you select.</p>
@@ -248,7 +252,7 @@
 
 	<p>To change it press ‘Select to search in..’ button, and folder select window will appear, you must choose a folder that is in the database associated drive letter.</p>
 
-	<p>Note: <em>in Windows, by certain technical difficulties, the message of the select folder says ‘select folder to upload’, but don’t worry, it is nothing to do with internet, but it is very difficult for now  change the text of this window.</em></p>
+	<p><b><i style="color:#333">Note:</i></b> <em>in Windows, by certain technical difficulties, the message of the select folder says ‘select folder to upload’, but don’t worry, it is nothing to do with internet, but it is very difficult for now  change the text of this window.</em></p>
 
 	<p>Another option is what to search; folders, files or folders and files. After choosing and pressing ‘Search’  the search will be done over selected kind of element for the tags you choose.</p>
 
@@ -286,7 +290,7 @@
 
 	<a name="3_1"></a><h3>3.1. Import/export databases</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 	<p>Another option in this window is to import from or export to file database data.</p>
-	<p>Note: <em>The program do not require installation, so one can ask where is the data saved? Where are all tags and their associations saved if the executable don´t change and nothing is saved in the affected folders and files?. The response is: in a database that is saved somewhere inside the route ‘C:\users\%user%\AppData\Local\Google\Chrome\User Data\Default’ (in Windows) or ‘/home/%user%/.config/google-chrome/Default/IndexedDB/’ (in Linux) or ‘/Users/%user%/Library/Application Support/Google/Chrome/Default/IndexedDB/’ (in MacOs) and that is not legible for humans only for the specific program.</em></p>
+	<p><b><i style="color:#333">Note:</i></b> <em>The program do not require installation, so one can ask where is the data saved? Where are all tags and their associations saved if the executable don´t change and nothing is saved in the affected folders and files?. The response is: in a database that is saved somewhere inside the route ‘C:\users\%user%\AppData\Local\Google\Chrome\User Data\Default’ (in Windows) or ‘/home/%user%/.config/google-chrome/Default/IndexedDB/’ (in Linux) or ‘/Users/%user%/Library/Application Support/Google/Chrome/Default/IndexedDB/’ (in MacOs) and that is not legible for humans only for the specific program.</em></p>
 	<p><em>So, data is saved in a location that only will work for the current user in the current machine.</em></p>
 	<p><em>If you want to read the data in another session with another user, or in another machine, or you want to have the data in a file and delete the database for any reason, or simply you want to have a backup, you can export data to a file and import this file later, anywhere you want.</em></p>
 	<p>To export data of the selected database to a file, simply be sure that the database you want to export is the database selected (‘Currently selected database:’) and that not necessarily will by the currently opened database, and press ‘Export data’ and you will prompted to select a file (or in Windows you can also create one by mouse left-button contextual menu) to where export data, file can have any extension you want.</p>
@@ -318,6 +322,13 @@
 					return false;
 				}
 			}
+		});
+
+
+		// para que habra el enlace del help a la v1.4 en el navegador normal
+		$('a[target=_blank]').on('click', function(){
+		   require('nw.gui').Shell.openExternal( this.href );
+		   return false;
 		});
 
 	</script>

@@ -326,7 +326,7 @@ $(document).ready(function () {
 
 									trans2.oncomplete = function(event) {
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");	
 										undo.class == "";
 										elementstagsorder(); // activa posibilidad de cambiar orden en tags
 										elemetstagdelete(); // activa posibilidad de borrar tags
@@ -433,6 +433,8 @@ $(document).ready(function () {
 								trans2.oncomplete = function(event) {
 
 									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+								
+
 									undo.class == "";
 									elementstagsorder(); // activa posibilidad de camgiar orden en tags
 									elemetstagdelete(); // activa posibilidad de borrar tags
@@ -444,6 +446,8 @@ $(document).ready(function () {
 							 else { //si no hay que actualizar visual
 
 								$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+								
+
 								undo.class == "";
 
 							}

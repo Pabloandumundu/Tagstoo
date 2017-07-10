@@ -1701,40 +1701,58 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 
 // para el Popup options
-window.s = ""
+window.s = "";
+window.listadofiltradodeDB = [];
+
 
 function optionspreload() {
-
-
 
 	var Sniffr = require("sniffr");
 	var agent = navigator.userAgent
 	s = new Sniffr();
 	s.sniff(agent);
 
+	listadofiltradodeDB = [];
 
 	// tomar nombres de las bases de datos indexdb:
-	indexedDB.webkitGetDatabaseNames().onsuccess = function(sender,args) {
+	window.databaselistdb = [];
+    var request = window.indexedDB.open("tagstoo_databaselist_1100", 1);
+    request.onerror = function(event) {  };
 
-		currentlydatabaseused = localStorage["currentlydatabaseused"];
+    request.onupgradeneeded = function(event) {
 
-		var listadocompletodeDB = sender.target.result
-		var listadofiltradodeDB = [];
-		window.listadofiltradodeDB_toshow = [];
+      	var objectStore;
+	    databaselistdb = event.target.result;
 
-		$.each(listadocompletodeDB, function(i){
+	    objectStore = databaselistdb.createObjectStore("databases", { keyPath: "dbid", autoIncrement:true });
+	    objectStore.createIndex("dbname", "dbname", { unique: true });
 
-			 if (listadocompletodeDB[i].substring(0, 8) == "tagstoo_") {
+    }
 
-				listadofiltradodeDB.push(listadocompletodeDB[i])
+    request.onsuccess = function(event) {
 
-			}
+	    databaselistdb = request.result;
+	    var objectStore = databaselistdb.transaction("databases").objectStore("databases");
 
-		});
+	    objectStore.openCursor().onsuccess = function(event) {
 
-		var currentlydatabaseused_toshow = currentlydatabaseused.replace("tagstoo_", "");
+	        var cursor = event.target.result;
+	        if (cursor) {
 
-		$('#selecteddb').html(currentlydatabaseused_toshow)
+	          listadofiltradodeDB.push(cursor.value.dbname)
+	          cursor.continue();
+
+	        } 
+
+      	};
+
+      	var currentlydatabaseused = localStorage["currentlydatabaseused"];
+
+		$('#selecteddb').html(currentlydatabaseused);
+
+		if (localStorage["showretroagain"] == "yes") {
+        	alertify.alert(`If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help.html#databases14' target="_blank">read this</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Do not show this message again</span>`);
+      	}
 
 
 		if (driveunit == "") { //esto es un apaño necesário en linux
@@ -1756,11 +1774,6 @@ function optionspreload() {
 
 		}
 
-		$.each(listadofiltradodeDB, function(i){
-
-			listadofiltradodeDB_toshow.push(listadofiltradodeDB[i].replace("tagstoo_", ""));
-
-		})
 
 		loaddatabaseselect();
 		loaddriveslist();
@@ -2111,8 +2124,8 @@ function optionspreload() {
 
 				var preexistingname = "no";
 
-				$.each (listadofiltradodeDB_toshow, function(i) {
-					if (listadofiltradodeDB_toshow[i] == $("#newdatabasename").val()) {
+				$.each (listadofiltradodeDB, function(i) {
+					if (listadofiltradodeDB[i] == $("#newdatabasename").val()) {
 						preexistingname = "yes";
 					}
 
@@ -2140,8 +2153,8 @@ function optionspreload() {
 
 					var preexistingname = "no";
 
-					$.each (listadofiltradodeDB_toshow, function(i) {
-						if (listadofiltradodeDB_toshow[i] == $("#newdatabasename").val()) {
+					$.each (listadofiltradodeDB, function(i) {
+						if (listadofiltradodeDB[i] == $("#newdatabasename").val()) {
 							preexistingname = "yes";
 						}
 
@@ -2389,7 +2402,7 @@ function optionspreload() {
 					console.log(x)
 
 					// comprobación de si se borra la bd actual para salir de una manera o otra (recargando inicio o no)
-					if (localStorage["currentlydatabaseused"] == "tagstoo_" + $('#selecteddb').html()) {
+					if (localStorage["currentlydatabaseused"] == $('#selecteddb').html()) {
 
 						alertify.confirm("You chosen to delete database that is currently used, to make it possible you must delete it from the program initial start window, do you want to restart program to make possible to delete it?", function (e) {
 							if (!e) {
@@ -2407,13 +2420,53 @@ function optionspreload() {
 
 					} else {
 
-						var DBDeleteRequest = window.indexedDB.deleteDatabase("tagstoo_" + $('#selecteddb').html());
+						var DBDeleteRequest = window.indexedDB.deleteDatabase($('#selecteddb').html());
 
 						DBDeleteRequest.onerror = function(event) {
 						  	console.log("Error deleting database.");
 						};
 
 						DBDeleteRequest.onsuccess = function(event) {
+
+
+							// se ha de borrar tambien del listado de bases de datos
+			                var requestdblist = window.indexedDB.open("tagstoo_databaselist_1100", 1);   
+
+			                requestdblist.onsuccess = function(event) {      
+
+			                  var databaselistdb = request.result;
+
+
+			                  var trans = databaselistdb.transaction(["databases"], "readwrite")
+			                  var objectStore = trans.objectStore("databases")
+			                  var req = objectStore.openCursor();
+
+			                  req.onerror = function(event) {
+
+			                    console.log("error: " + event);
+			                  };
+
+			                  req.onsuccess = function(event) {
+
+			                    var cursor = event.target.result;
+
+			                    if(cursor) {
+
+			                      if(cursor.value.dbname == $('#selecteddb').html()) {
+
+			                        var res2 = cursor.delete(cursor.value.dbid);
+
+			                      }
+
+			                      cursor.continue();
+
+			                    }
+
+			                  }
+
+			                }
+
+
 						  	// console.log("Database deleted successfully");
 				  		  	alertify.alert("Database deleted successfully.", function () {
 
@@ -2455,20 +2508,26 @@ function optionspreload() {
 
 function loaddatabaseselect() {
 
+	console.log(listadofiltradodeDB)
+
 	$("#databaseselect").find('option').remove().end(); // con esto se vacían las opciones del select para volver a llenarlo con las lineas de abajo
 
-	$.each(listadofiltradodeDB_toshow, function(i){
+	setTimeout(function () { //necesario para que le de tiempo a cargar la lista.
 
-		var opt = document.getElementById("databaseselect");
-		var option = document.createElement("option");
-		option.value = listadofiltradodeDB_toshow[i];
-		var optionText = document.createTextNode(option.value);
-		option.appendChild(optionText);
-		opt.appendChild(option);
+		$.each(listadofiltradodeDB, function(i){
 
-		opt.selectedIndex = -1; // para que ninguna este por defecto seleccionada
+			var opt = document.getElementById("databaseselect");
+			var option = document.createElement("option");
+			option.value = listadofiltradodeDB[i];
+			var optionText = document.createTextNode(option.value);
+			option.appendChild(optionText);
+			opt.appendChild(option);
 
-	})
+			opt.selectedIndex = -1; // para que ninguna este por defecto seleccionada
+
+		})
+
+	}, 500)
 
 }
 
@@ -2784,7 +2843,7 @@ function restarttagstoo() {
 
 	console.log($("#selecteddrive").html())
 
-	localStorage["currentlydatabaseused"] = "tagstoo_" + $("#selecteddb").html();
+	localStorage["currentlydatabaseused"] = $("#selecteddb").html();
 	if (s.os.name == "windows" || s.os.name == "macos") {
 		localStorage["selecteddriveunit"] = $("#selecteddrive").html();
 		localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
@@ -2831,3 +2890,11 @@ function infopreload() {
 	});
 
 };
+
+function showretroagain() {        
+  if ($('#showretroagain').prop('checked')){
+    localStorage["showretroagain"] = "no"
+  } else {
+    localStorage["showretroagain"] = "yes"
+  }
+}

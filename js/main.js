@@ -592,7 +592,7 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 
 	};
 
-	// en caso de que la base de datos se le mete estructura inicial
+	// en caso de que la base de datos no exista se le mete estructura inicial y se añade la bd a la lista de bds
 	request.onupgradeneeded = function(event) {
 
 		var objectStore;
@@ -626,6 +626,25 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 
 		objectStore = db.createObjectStore("favfolds", { keyPath: "favfoldid", autoIncrement:true });
 		objectStore.createIndex("favfoldname", "favfoldname", { unique: true });
+
+
+		//se añade la bd al listado de bd existentes
+		var requestdbnames = window.indexedDB.open("tagstoo_databaselist_1100", 1);
+	    requestdbnames.onerror = function(event) {
+	      // console.log("error: database not loaded");
+	    };
+
+	    requestdbnames.onsuccess = function(event){
+
+	    	var databaselistdb = requestdbnames.result;
+			var requestdbadd = databaselistdb.transaction(["databases"], "readwrite")
+							.objectStore("databases")
+							.add({ dbname: currentlydatabaseused });
+
+			requestdbadd.onsuccess = function(event) { };
+			requestdbadd.onerror = function(event) { };
+
+	    }
 
 	};
 
@@ -1631,6 +1650,11 @@ window.parent.$('#info').on('click', function() {
 
 
 function readDirectory (dirtoread) {
+
+
+
+
+	$("#deletebutton", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
 
 	$("#folderreadstatus").html("Reading folder ...");
 	$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
