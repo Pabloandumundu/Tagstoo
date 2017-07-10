@@ -526,7 +526,7 @@ $(document).ready(function() {
 
   			if ($('#selecteddb').html() != "") {
 
-  				alertify.alert("A file open dialog will be open, you can either select a pre existing file or create a new one (right mouse button), be careful, data in the selected file will be overwritten.", function () {
+  				alertify.alert("A file open dialog will be open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.", function () {
 
   					document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
 

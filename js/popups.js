@@ -2193,7 +2193,7 @@ function optionspreload() {
 					var file = $('#toexportfile')["0"].value
 
 					// abrimos la bd seleccionada
-					var request = window.indexedDB.open("tagstoo_" + $('#selecteddb').html(), 1);
+					var request = window.indexedDB.open($('#selecteddb').html(), 1);
 					request.onerror = function(event) {
 						// console.log("error: database not loaded");
 					};
@@ -2245,150 +2245,163 @@ function optionspreload() {
 
 		$("#inportdata").on('click', function(){
 
-			alertify.alert("A file open dialog will be open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.", function () {
+  			if ($('#selecteddb').html() != "") {
 
-				document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
+  				alertify.alert("A file open dialog will be open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.", function () {
 
-				document.getElementById('toinportfile').click()
+  					document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
 
-				$('#toinportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..)
+  					document.getElementById('toinportfile').click()
 
-				$('#toinportfile').on('change', function() {
+  					$('#toinportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..);
 
-					var file = $('#toinportfile')["0"].value
+  					$('#toinportfile').on('change', function() {
 
-					fs.readFile(file, 'utf8', function (err,data) {
-						if (err) {
-						return console.log(err);
-						}
+  						var file = $('#toinportfile')["0"].value
 
-						try { // se comprueba si es json
-							JSON.parse(data);
-							console.log("is JSON");
+  						fs.readFile(file, 'utf8', function (err,data) {
+  							if (err) {
+  								return console.log(err);
+  							}
 
-							// y continua
-							alertify.confirm("Attention, data in selected database, <em>'" + $('#selecteddb').html() + "'</em>,  will be overwritten by the content of file <em>'" + file + "'</em>, are you sure?", function (e) {
-					            if (!e) {
-					              	x = "You pressed Cancel!";
-					              	console.log(x);
-					            } else {
-					              	x = "You pressed OK!";
-					              	console.log(x)
+  							try {
+  								// se comprueba si es json
+  								JSON.parse(data);
+  								// console.log("is JSON");
 
-									// abrimos la bd
-									var tooverwritedb = [];
-									var request = window.indexedDB.open("tagstoo_" + $('#selecteddb').html(), 1);
-									request.onerror = function(event) {
-										// console.log("error: database not loaded");
-									};
+  								// y continua
+  								alertify.confirm("Attention, data in selected database, <em>'" + $('#selecteddb').html() + "'</em>,  will be overwritten by the content of file <em>'" + file + "'</em>, are you sure?", function (e) {
+  									if (!e) {
+  										x = "You pressed Cancel!";
+  										console.log(x);
+  									} else {
+  										x = "You pressed OK!";
+  										console.log(x)
 
-									//aqui realizamos algunas operaciones previas con la bd porque luego si no puede dar fallos a la hora de escribir si está no se ha abierto nunca...
-									request.onupgradeneeded = function(event) {
+  										// habrimos la bd
+  										var tooverwritedb = [];
+  										var request = window.indexedDB.open($('#selecteddb').html(), 1);
+  										request.onerror = function(event) {
+  											console.log("error: database not loaded");
+  										};
 
-										var objectStore;
-										var db = event.target.result;
+  										// aquí realizamos algunas operaciones previas con la bd porque luego si no puede dar fallos a la hora de escribir si está no se ha abierto nunca...
+  										request.onupgradeneeded = function(event) {
 
-										tagData = [
-											{ tagtext: "Demo1", tagpos: 0, tagcolor: "66B032", tagform: "tag_fruit" },
-											{ tagtext: "DemoTag2", tagpos: 1, tagcolor: "3D01A4", tagform: "tag_classicframe1" },
-											{ tagtext: "DemoTag3", tagpos: 2, tagcolor: "0391CE", tagform: "tag_cylinder" },
-											{ tagtext: "Demo4", tagpos: 3, tagcolor: "FE2914", tagform: "tag_piggybank" },
-											{ tagtext: "DemoTag5", tagpos: 4, tagcolor: "FD5308", tagform: "tag_maletin" }
-										];
+  											var objectStore;
+  											var db = event.target.result;
 
-										objectStore = db.createObjectStore("tags", { keyPath: "tagid", autoIncrement:true });
-										objectStore.createIndex("tagtext", "tagtext", { unique: false });
-										objectStore.createIndex("tagpos", "tagpos", { unique: false });
-										objectStore.createIndex("tagcolor", "tagcolor", { unique: false });
-										objectStore.createIndex("tagform", "tagform", { unique: false });
-										if(localStorage["demotags"]=="no") {
-											window.demotags = localStorage["demotags"];
-										} else {
-											window.demotags = "yes";
-										}
-										if (demotags == "yes") {
-											for (var i in tagData) {
-												objectStore.add(tagData[i]);
-											}
-										}
+  											tagData = [
+  												{ tagtext: "Demo1", tagpos: 0, tagcolor: "66B032", tagform: "tag_fruit" },
+  												{ tagtext: "DemoTag2", tagpos: 1, tagcolor: "3D01A4", tagform: "tag_classicframe1" },
+  												{ tagtext: "DemoTag3", tagpos: 2, tagcolor: "0391CE", tagform: "tag_cylinder" },
+  												{ tagtext: "Demo4", tagpos: 3, tagcolor: "FE2914", tagform: "tag_piggybank" },
+  												{ tagtext: "DemoTag5", tagpos: 4, tagcolor: "FD5308", tagform: "tag_maletin" }
+  											];
 
-										objectStore = db.createObjectStore("folders", { keyPath: "folderid", autoIncrement:true });
-										objectStore.createIndex("folder", "folder", { unique: true });
-										objectStore.createIndex("foldertags", "foldertags", { unique: false, multiEntry: true });
+  											objectStore = db.createObjectStore("tags", { keyPath: "tagid", autoIncrement:true });
+  											objectStore.createIndex("tagtext", "tagtext", { unique: false });
+  											objectStore.createIndex("tagpos", "tagpos", { unique: false });
+  											objectStore.createIndex("tagcolor", "tagcolor", { unique: false });
+  											objectStore.createIndex("tagform", "tagform", { unique: false });
+  											if(localStorage["demotags"]=="no") {
+  												window.demotags = localStorage["demotags"];
+  											} else {
+  												window.demotags = "yes";
+  											}
+  											if (demotags == "yes") {
+  												for (var i in tagData) {
+  													objectStore.add(tagData[i]);
+  												}
+  											}
 
-										objectStore = db.createObjectStore("files", { keyPath: "fileid", autoIncrement:true });
-										objectStore.createIndex("filefolder", "filefolder", { unique: false });
-										objectStore.createIndex("filename", "filename", { unique: false });
-										objectStore.createIndex("fileext", "fileext", { unique: false });
-										objectStore.createIndex("filetags", "filetags", { unique: false });
+  											objectStore = db.createObjectStore("folders", { keyPath: "folderid", autoIncrement:true });
+  											objectStore.createIndex("folder", "folder", { unique: true });
+  											objectStore.createIndex("foldertags", "foldertags", { unique: false, multiEntry: true });
 
-										objectStore = db.createObjectStore("favfolds", { keyPath: "favfoldid", autoIncrement:true });
-										objectStore.createIndex("favfoldname", "favfoldname", { unique: true });
+  											objectStore = db.createObjectStore("files", { keyPath: "fileid", autoIncrement:true });
+  											objectStore.createIndex("filefolder", "filefolder", { unique: false });
+  											objectStore.createIndex("filename", "filename", { unique: false });
+  											objectStore.createIndex("fileext", "fileext", { unique: false });
+  											objectStore.createIndex("filetags", "filetags", { unique: false });
 
-									};
+  											objectStore = db.createObjectStore("favfolds", { keyPath: "favfoldid", autoIncrement:true });
+  											objectStore.createIndex("favfoldname", "favfoldname", { unique: true });
 
-									request.onsuccess = function(event) {
 
-										var iscurrentdb = "no";
-										tooverwritedb = request.result;
+  										};
 
-										// esto es solo una pequeña comprobación para luego salir de una manera o otra (recargando)
-										if (db.name == tooverwritedb.name) {
+  										request.onsuccess = function(event) {
 
-											iscurrentdb = "yes";
+  											var db = event.target.result;
 
-										}
+  											tooverwritedb = request.result;
 
-										var idbExportImport = require("indexeddb-export-import"); // to save and load the contents of an IndexedDB database
-										// se vacía y despues se escribe en la base de datos
-										idbExportImport.clearDatabase(tooverwritedb, function(err) {
+  											var idbExportImport = require("indexeddb-export-import"); // to save and load the contents of an IndexedDB database
+  											// se vaciá y después se escribe en la base de datos
+  											idbExportImport.clearDatabase(tooverwritedb, function(err) {
 
-											if(err) {
-												console.log(err)
-											} else {
-												// console.log("data cleared");
+  												if(err) {
+  													console.log(err)
+  												} else {
+  													console.log("data cleared");
 
-												idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
+  													idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
 
-												if(iscurrentdb == "yes") {
+  													alertify.alert("Data successfully imported.");
 
-													alertify.alert("Data successfully imported. Because data is overwritten in currently active database the program will refresh now.", function () {
+  												}
 
-														cerrar();
-														restarttagstoo();
+  											});
 
-													});
 
-												} else {
+  											//se añade la bd al listado de bd existentes
+											var requestdbnames = window.indexedDB.open("tagstoo_databaselist_1100", 1);
+										    requestdbnames.onerror = function(event) {
+										      // console.log("error: database not loaded");
+										    };
 
-													alertify.alert("Data successfully imported.");
+										    requestdbnames.onsuccess = function(event){
 
-												}
+										    	var databaselistdb = requestdbnames.result;
+												var requestdbadd = databaselistdb.transaction(["databases"], "readwrite")
+																.objectStore("databases")
+																.add({ dbname: $('#selecteddb').html() });
 
-											}
+												requestdbadd.onsuccess = function(event) {
 
-										});
+													// se vuelve a cargar la lista
+													listadofiltradodeDB.push($('#selecteddb').html())
+													loaddatabaseselect();
+												};
+												requestdbadd.onerror = function(event) { };
 
-									}
+										    }
 
-								}
+  										}
 
-							});
+  									}
 
-						} catch (e) { // no es JSON
-							alertify.alert("It appears that <em>'" +file+ "'</em> do not have a valid data format, please select a valid data file.",function () {
-								document.getElementById('toinportfile').click();
-							});
+  								});
 
-						}
+  							} catch (e) {
+  								console.log("not JSON");
+  								alertify.alert("It appears that <em>'" +file+ "'</em> do not have a valid data format, please select a valid data file.", function () {
+  									document.getElementById('toinportfile').click();
+  								});
 
-					});
+  							}
 
-				});
+  						});
 
-			});
+  					});
+  				});
 
-		}); // --fin importdata onclick
+  			} else {
+  				alertify.alert("You must select a database from where to import first.");
+  			}
+
+  		}); // --fin importdata onclick
 
 
 		$("#deletedb").on('click', function(){
