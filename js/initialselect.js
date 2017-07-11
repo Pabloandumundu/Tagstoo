@@ -196,51 +196,70 @@ $(document).ready(function() {
 
          $('#selecteddrive').html($("#unitselect").val());
 
-    			var drivelist = require('drivelist');
-    			var driveLetters = require('windows-drive-letters');
+          var drivelist = require('drivelist');
+          var driveLetters = require('windows-drive-letters');
 
-    			var t="";
-    			var tdesc="";
+          var t="";
+          var tdesc="";
 
-    			availabledrives = drivelist.list((error, drives) => {
-    				if (error) {
-    					throw error;
-    				}
+          availabledrives = drivelist.list((error, drives) => {
+            if (error) {
+              throw error;
+            }
 
-    				drives.forEach((drive, i) => {
+            drives.forEach((drive, i) => {
 
-    					i= i+1;
+              i= i+1;
 
-    					t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
-    					tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
+              t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
+              tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
 
-    				});
-    				
+            });
+
             // para detectar unidades virtuales en windows y añadirlas a la lista
-    				try {
-    					letters = driveLetters.usedLettersSync();
-    					// console.log(letters); // => ['C', 'D', ...]
-    				} catch (err) {};
+            try {
+              letters = driveLetters.usedLettersSync();
+              // console.log(letters); // => ['C', 'D', ...]
+            } catch (err) {};
 
-    				$.each (letters, function(i){
+            $.each (letters, function(i){
 
-    					unidadvirtual = "si";
-    					drives.forEach((drive, u) => {
+              unidadvirtual = "si";
+              drives.forEach((drive, u) => {
 
-    						if (letters[i]+":" == drive.mountpoints["0"].path ) {
-    							unidadvirtual = "no";
-    						}
+                if (letters[i]+":" == drive.mountpoints["0"].path ) {
+                  unidadvirtual = "no";
+                }
 
-    					});
+              });
 
-    					if (unidadvirtual == "si") {
-    						t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
-    						tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
-    					}
+              if (unidadvirtual == "si") {
+                t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
+                tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
+              }
 
 
-    				});            
-   
+            });
+
+            $("#unitselect").html(t);
+            $("#unitselect").val($('#selecteddrive').html());
+
+            $("#drivedesc").css("display","none")
+            $("#drivedesc").html("("+tdesc+")");
+
+            // se pintará solo la info del drive seleccionado
+            $.each($("#drivedesc div"), function(n) {
+
+              if($(this).attr("value") != $("#selecteddrive").html()) {
+
+                $(this).remove()
+
+              }
+
+            });
+
+            $("#drivedesc").css("display","inline-block");
+
           });
 
         }

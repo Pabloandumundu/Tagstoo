@@ -1651,11 +1651,6 @@ window.parent.$('#info').on('click', function() {
 
 function readDirectory (dirtoread) {
 
-
-
-
-	$("#deletebutton", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
-
 	$("#folderreadstatus").html("Reading folder ...");
 	$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 	$("#location").html(dirtoread);

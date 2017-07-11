@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>Libraries licenses</title>
 <link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
+<script src="../js/jquery-latest.min.js"></script>  <!-- para los links que abre mediante script que usa jquery, (ver final de archivo) -->
 <base target="_blank">
 <style>
 body {
@@ -1295,5 +1296,15 @@ Free for non-commercial use.
 </div>
 <!-- <script src="chrome://resources/js/cr.js"></script>
 <script src="chrome://credits/credits.js"></script> -->
+
+<script>
+
+  // para abrir enlace con navegador por defecto
+  $('a').on('click', function(){
+     require('nw.gui').Shell.openExternal( this.href );
+     return false;
+  });
+
+</script>
 </body>
 </html>

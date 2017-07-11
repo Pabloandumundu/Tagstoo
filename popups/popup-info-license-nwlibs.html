@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>NW.JS licenses</title>
 <link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
+<script src="../js/jquery-latest.min.js"></script>  <!-- para los links que abre mediante script que usa jquery, (ver final de archivo) -->
 <base target="_blank">
 <style>
 body {
@@ -35312,5 +35313,15 @@ mozzconf.h is distributed under the MPL 1.1/GPL 2.0/LGPL 2.1 tri-license.
 </div>
 <!-- <script src="chrome://resources/js/cr.js"></script>
 <script src="chrome://credits/credits.js"></script> -->
+
+<script>
+
+  // para abrir enlace con navegador por defecto
+  $('a').on('click', function(){
+     require('nw.gui').Shell.openExternal( this.href );
+     return false;
+  });
+
+</script>
 </body>
 </html>

@@ -492,9 +492,13 @@ $(document).ready(function () {
 						// quitamos el parentfolder de la dirección de la carpeta para buscarla en el directorio
 						var carpeta = undo.deltaggfold.folder.replace(undo.deltaggfold.parentfolder, "");
 
+						console.log(carpeta)
+
 						var elementtagsinview = $(".explofolder").filter("[value='" + carpeta+ "']").siblings(".tags");
 
 						if (elementtagsinview) {
+
+							console.log("aa")
 
 							elementtagsinview[0].setAttribute("value", undo.deltaggfold.tags);
 
@@ -1236,7 +1240,7 @@ $(document).ready(function () {
 
 				trans.oncomplete = function() {
 
-					if (rootdirectory == folderofarchive) { // si el archivo esta visible
+					if (($(document).has( "#treeview" ).length == 1 && rootdirectory == folderofarchive) || $(document).has( "#treeview" ).length == 0) { // si el archivo esta visible
 
 						// actualizamos visual
 
