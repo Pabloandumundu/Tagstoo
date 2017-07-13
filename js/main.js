@@ -2314,7 +2314,7 @@ function drawDirectoryArchives (viewmode, order) {
 			directoryarchives.sort(SortByNameAsc);
 			break;
 		case "namedesc":
-			directoryrchives.sort(SortByNameDesc);
+			directoryarchives.sort(SortByNameDesc);
 			break;	
 		case "extasc":
 			directoryarchives.sort(SortByExtAsc);
