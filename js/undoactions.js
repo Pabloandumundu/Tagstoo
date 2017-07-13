@@ -140,70 +140,83 @@ $(document).ready(function () {
 
 						// actualizar visual
 
-						var elementtagsinview = $(".explofile").filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
+						if (($(document).has( "#treeview" ).length == 1 && rootdirectory == undo.deltaggfile.folder) || $(document).has( "#treeview" ).length == 0) { // si el archivo esta visible
 
-						if (elementtagsinview[0]) {
+							// actualizamos visual
 
-							elementtagsinview[0].setAttribute("value", undo.deltaggfile.tags);
+							if ($(document).has( "#treeview" ).length == 1){
+								var elementtagsinview = $(".explofile").filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
 
-							// y ahora redibujamos los tags..
-							if (typeof undo.deltaggfile.tags == "string") {								
-								undo.deltaggfile.tags = undo.deltaggfile.tags.split(','); // volvemos a convertirlo en array
+							} 
+							else if ($(document).has( "#treeview" ).length == 0){
+
+								var elementtagsinview = $(".placehold2").filter("[value='" + undo.deltaggfile.folder + "']").parent().filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
 							}
-							var tagsdivs = "";
-							for(var k = 0; k < undo.deltaggfile.tags.length; k += 1){ // recorremos el array
-								tagsdivs += "<div class='tagticket' value='"+ undo.deltaggfile.tags[k] +"'>" + undo.deltaggfile.tags[k] +  "</div>" ;
-							};
-							
-							elementtagsinview[0].innerHTML = tagsdivs;
 
-							//para aplicarles los estilos a los tags hay que recurrir a la bd
-							var trans2 = db.transaction(["tags"], "readonly")
-							var objectStore2 = trans2.objectStore("tags")
+							if (elementtagsinview[0]) {
 
-							var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+								elementtagsinview[0].setAttribute("value", undo.deltaggfile.tags);
 
-							var req2 = objectStore2.openCursor();
+								// y ahora redibujamos los tags..
+								if (typeof undo.deltaggfile.tags == "string") {								
+									undo.deltaggfile.tags = undo.deltaggfile.tags.split(','); // volvemos a convertirlo en array
+								}
+								var tagsdivs = "";
+								for(var k = 0; k < undo.deltaggfile.tags.length; k += 1){ // recorremos el array
+									tagsdivs += "<div class='tagticket' value='"+ undo.deltaggfile.tags[k] +"'>" + undo.deltaggfile.tags[k] +  "</div>" ;
+								};
+								
+								elementtagsinview[0].innerHTML = tagsdivs;
 
-							req2.onerror = function(event) {
-								console.log("error: " + event);
-							};
-							req2.onsuccess = function(event) { 
-								var cursor2 = event.target.result;
-								if (cursor2) {
-									$.each(elementosdirectoriotags, function(n) {											
-										if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
+								//para aplicarles los estilos a los tags hay que recurrir a la bd
+								var trans2 = db.transaction(["tags"], "readonly")
+								var objectStore2 = trans2.objectStore("tags")
 
-											var color = "#" + cursor2.value.tagcolor;
-											var complecolor = hexToComplimentary(color);
+								var elementosdirectoriotags = elementtagsinview.children(".tagticket");
 
-											elementosdirectoriotags[n].className += " small " + cursor2.value.tagform;
-											elementosdirectoriotags[n].setAttribute("value", cursor2.value.tagid);
-											elementosdirectoriotags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-											elementosdirectoriotags[n].innerHTML = cursor2.value.tagtext;
+								var req2 = objectStore2.openCursor();
 
-										}
-									});
+								req2.onerror = function(event) {
+									console.log("error: " + event);
+								};
+								req2.onsuccess = function(event) { 
+									var cursor2 = event.target.result;
+									if (cursor2) {
+										$.each(elementosdirectoriotags, function(n) {											
+											if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
 
-									cursor2.continue();
+												var color = "#" + cursor2.value.tagcolor;
+												var complecolor = hexToComplimentary(color);
+
+												elementosdirectoriotags[n].className += " small " + cursor2.value.tagform;
+												elementosdirectoriotags[n].setAttribute("value", cursor2.value.tagid);
+												elementosdirectoriotags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+												elementosdirectoriotags[n].innerHTML = cursor2.value.tagtext;
+
+											}
+										});
+
+										cursor2.continue();
+
+									}
+
+								};
+
+								trans2.oncomplete = function(event) {
+
+									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+									undo.class == "";
+									elementstagsorder(); // activa posibilidad de cambiar orden en tags
+									elemetstagdelete(); // activa posibilidad de borrar tags
 
 								}
-
-							};
-
-							trans2.oncomplete = function(event) {
+								
+							} else { // si no hay que actualizar visual
 
 								$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
 								undo.class == "";
-								elementstagsorder(); // activa posibilidad de cambiar orden en tags
-								elemetstagdelete(); // activa posibilidad de borrar tags
 
 							}
-							
-						} else { // si no hay que actualizar visual
-
-							$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
-							undo.class == "";
 
 						}
 
@@ -275,7 +288,136 @@ $(document).ready(function () {
 
 								// actualizar visual
 
-								var elementtagsinview = $(".explofile").filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
+								if (($(document).has( "#treeview" ).length == 1 && rootdirectory == undo.deltaggfile.folder) || $(document).has( "#treeview" ).length == 0) { // si el archivo esta visible
+
+									// actualizamos visual
+
+									if ($(document).has( "#treeview" ).length == 1){
+										var elementtagsinview = $(".explofile").filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
+
+									} 
+									else if ($(document).has( "#treeview" ).length == 0){
+
+										var elementtagsinview = $(".placehold2").filter("[value='" + undo.deltaggfile.folder + "']").parent().filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
+									}
+
+									if (elementtagsinview[0]) {
+
+										elementtagsinview[0].setAttribute("value", undo.deltaggfile.tags);
+					
+										// y ahora redibujamos los tags..										
+										undo.deltaggfile.tags = undo.deltaggfile.tags.split(','); // volvemos a convertirlo en array
+										var tagsdivs = "";
+										for(var k = 0; k < undo.deltaggfile.tags.length; k += 1){ // recorremos el array
+											tagsdivs += "<div class='tagticket' value='"+ undo.deltaggfile.tags[k] +"'>" + undo.deltaggfile.tags[k] +  "</div>" ;
+										};
+										
+										elementtagsinview[0].innerHTML = tagsdivs;
+
+										// para aplicarles los estilos a los tags hay que recurrir a la bd
+										var trans2 = db.transaction(["tags"], "readonly")
+										var objectStore2 = trans2.objectStore("tags")
+
+										var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+
+										var req2 = objectStore2.openCursor();
+
+										req2.onerror = function(event) {
+											console.log("error: " + event);
+										};
+										req2.onsuccess = function(event) { 
+											var cursor2 = event.target.result;
+											if (cursor2) {
+												$.each(elementosdirectoriotags, function(n) {											
+													if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+														var color = "#" + cursor2.value.tagcolor;
+														var complecolor = hexToComplimentary(color);
+
+														elementosdirectoriotags[n].className += " small " + cursor2.value.tagform;
+														elementosdirectoriotags[n].setAttribute("value", cursor2.value.tagid);
+														elementosdirectoriotags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														elementosdirectoriotags[n].innerHTML = cursor2.value.tagtext;
+
+													}
+												});
+
+												cursor2.continue();
+
+											}
+
+										};
+
+										trans2.oncomplete = function(event) {
+
+											$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");	
+											undo.class == "";
+											elementstagsorder(); // activa posibilidad de cambiar orden en tags
+											elemetstagdelete(); // activa posibilidad de borrar tags
+
+										}								
+
+									} else { // si no hay que actualizar visual
+										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+										undo.class == "";
+
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+					if (undo.deltaggfile.folderid != undefined) { // si la carpeta madre sí permanecía en la bd
+
+						// añadimos el archivo a la bd
+						var updatefile = {};
+
+						var re = /(?:\.([^.]+))?$/; // expresion regular para detectar si un string tiene extension
+						var ext = re.exec(undo.deltaggfile.file)[1];
+						updatefile.fileext = ext;
+
+						updatefile.filename = undo.deltaggfile.file;
+						updatefile.filefolder = undo.deltaggfile.folderid;
+						updatefile.filetags = undo.deltaggfile.tags;
+
+						var trans = db.transaction(["files"], "readwrite")
+						var request = trans.objectStore("files")
+						.put(updatefile)
+
+						request.onerror = function(event){
+
+							console.log("error archivo no añadido a la bd: " + event);
+						
+						}
+
+						request.onsuccess = function(event){
+
+							// console.log("archivo añadido a la bd");
+
+							//capturamos el id de la carpeta recien añadida
+							undo.deltaggfile.folderid = event.target.result
+
+						}
+
+						trans.oncomplete = function(event) {						
+
+							// actualizar visual
+
+							if (($(document).has( "#treeview" ).length == 1 && rootdirectory == undo.deltaggfile.folder) || $(document).has( "#treeview" ).length == 0) { // si el archivo esta visible
+
+								// actualizamos visual
+
+								if ($(document).has( "#treeview" ).length == 1){
+									var elementtagsinview = $(".explofile").filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
+
+								} 
+								else if ($(document).has( "#treeview" ).length == 0){
+
+									var elementtagsinview = $(".placehold2").filter("[value='" + undo.deltaggfile.folder + "']").parent().filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
+								}
 
 								if (elementtagsinview[0]) {
 
@@ -326,129 +468,25 @@ $(document).ready(function () {
 
 									trans2.oncomplete = function(event) {
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");	
+										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+									
+
 										undo.class == "";
-										elementstagsorder(); // activa posibilidad de cambiar orden en tags
+										elementstagsorder(); // activa posibilidad de camgiar orden en tags
 										elemetstagdelete(); // activa posibilidad de borrar tags
-
-									}								
-
-								} else { // si no hay que actualizar visual
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
-									undo.class == "";
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if (undo.deltaggfile.folderid != undefined) { // si la carpeta madre sí permanecía en la bd
-
-						// añadimos el archivo a la bd
-						var updatefile = {};
-
-						var re = /(?:\.([^.]+))?$/; // expresion regular para detectar si un string tiene extension
-						var ext = re.exec(undo.deltaggfile.file)[1];
-						updatefile.fileext = ext;
-
-						updatefile.filename = undo.deltaggfile.file;
-						updatefile.filefolder = undo.deltaggfile.folderid;
-						updatefile.filetags = undo.deltaggfile.tags;
-
-						var trans = db.transaction(["files"], "readwrite")
-						var request = trans.objectStore("files")
-						.put(updatefile)
-
-						request.onerror = function(event){
-
-							console.log("error archivo no añadido a la bd: " + event);
-						
-						}
-
-						request.onsuccess = function(event){
-
-							// console.log("archivo añadido a la bd");
-
-							//capturamos el id de la carpeta recien añadida
-							undo.deltaggfile.folderid = event.target.result
-
-						}
-
-						trans.oncomplete = function(event) {						
-
-							// actualizar visual
-
-							var elementtagsinview = $(".explofile").filter("[value='" + undo.deltaggfile.file + "']").siblings(".tags");
-
-							if (elementtagsinview[0]) {
-
-								elementtagsinview[0].setAttribute("value", undo.deltaggfile.tags);
-			
-								// y ahora redibujamos los tags..										
-								undo.deltaggfile.tags = undo.deltaggfile.tags.split(','); // volvemos a convertirlo en array
-								var tagsdivs = "";
-								for(var k = 0; k < undo.deltaggfile.tags.length; k += 1){ // recorremos el array
-									tagsdivs += "<div class='tagticket' value='"+ undo.deltaggfile.tags[k] +"'>" + undo.deltaggfile.tags[k] +  "</div>" ;
-								};
-								
-								elementtagsinview[0].innerHTML = tagsdivs;
-
-								// para aplicarles los estilos a los tags hay que recurrir a la bd
-								var trans2 = db.transaction(["tags"], "readonly")
-								var objectStore2 = trans2.objectStore("tags")
-
-								var elementosdirectoriotags = elementtagsinview.children(".tagticket");
-
-								var req2 = objectStore2.openCursor();
-
-								req2.onerror = function(event) {
-									console.log("error: " + event);
-								};
-								req2.onsuccess = function(event) { 
-									var cursor2 = event.target.result;
-									if (cursor2) {
-										$.each(elementosdirectoriotags, function(n) {											
-											if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
-
-												var color = "#" + cursor2.value.tagcolor;
-												var complecolor = hexToComplimentary(color);
-
-												elementosdirectoriotags[n].className += " small " + cursor2.value.tagform;
-												elementosdirectoriotags[n].setAttribute("value", cursor2.value.tagid);
-												elementosdirectoriotags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-												elementosdirectoriotags[n].innerHTML = cursor2.value.tagtext;
-
-											}
-										});
-
-										cursor2.continue();
 
 									}
 
-								};
-
-								trans2.oncomplete = function(event) {
-
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
-								
-
-									undo.class == "";
-									elementstagsorder(); // activa posibilidad de camgiar orden en tags
-									elemetstagdelete(); // activa posibilidad de borrar tags
-
 								}
 
-							}
+								 else { //si no hay que actualizar visual
 
-							 else { //si no hay que actualizar visual
+									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+									
 
-								$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
-								
+									undo.class == "";
 
-								undo.class == "";
+								}
 
 							}
 
@@ -1244,7 +1282,17 @@ $(document).ready(function () {
 
 						// actualizamos visual
 
-						var elementtagsinview = $(".explofile").filter("[value='" + undo.taggaarch.archive + "']").siblings(".tags");
+						if ($(document).has( "#treeview" ).length == 1){
+							var elementtagsinview = $(".explofile").filter("[value='" + undo.taggaarch.archive + "']").siblings(".tags");
+
+						} 
+						else if ($(document).has( "#treeview" ).length == 0){
+
+							var elementtagsinview = $(".placehold2").filter("[value='" + folderofarchive + "']").parent().filter("[value='" + undo.taggaarch.archive + "']").siblings(".tags");
+
+						}
+
+						$('p:contains("Please reply above this line")');
 
 						var carraydetagsorig = elementtagsinview["0"].attributes[1].value; // se coge el value de los tags
 						if (typeof carraydetagsorig == "string"){
@@ -1447,74 +1495,96 @@ $(document).ready(function () {
 							var estabavisible = "no"; // variable auxiliar necesaria para que no haga un splice del arraydetagsoriginal dos veces (una para el directoryview y otra para el treeview)
 							$.each($(".explofolder"), function(i) {	
 
-								var carpeta = $(".explofolder:eq("+i+")").attr("value");								
+								var carpeta = $(".explofolder:eq("+i+")").attr("value");
+								var elementtagsinview = "";
 
-								if (rootdirectory + carpeta == undo.taggfold.folder){ // si la carpeta madre a la que se añadio el tag esta visible en el directorio
 
-									estabavisible = "si";
+								if (($(document).has( "#treeview" ).length == 1 && rootdirectory + carpeta == undo.taggfold.folder) || $(document).has( "#treeview" ).length == 0) { // si el archivo esta visible
 
-									// Actualizar visual
-									var elementtagsinview = $('.explofolder').filter('[value="' + carpeta + '"]').siblings('.tags');
-									if (typeof carraydetagsorig == "string"){
-										carraydetagsorig = carraydetagsorig.split(","); // a array
+									// actualizamos visual
+
+									if ($(document).has( "#treeview" ).length == 1){
+										var elementtagsinviewtemp = $(".explofolder:eq("+i+")").filter("[value='" + carpeta + "']").siblings(".tags");
+
+									} 
+									else if ($(document).has( "#treeview" ).length == 0){
+
+										var elementtagsinviewtemp = $(".explofolder:eq("+i+")").filter("[value='" + undo.taggfold.folder + "']").siblings(".tags");
+
 									}
-									var index = carraydetagsorig.indexOf(undo.taggfold.tagid); //localizamos el id del tag a borrar
-									carraydetagsorig.splice(index, 1); // lo quitamos del array
-									carraydetags = carraydetagsorig.toString() // de array a string
 
-									elementtagsinview[0].setAttribute("value", carraydetags);
-						
-									// y ahora redibujamos los tags..										
-									carraydetags = carraydetags.split(','); //volvemos a convertirlo en array
-									var tagsdivs = "";
-									for(var k = 0; k < carraydetags.length; k += 1){ //recorremos el array
-										tagsdivs += "<div class='tagticket' value='"+ carraydetags[k] +"'>" + carraydetags[k] +  "</div>" ;
-									};
-									
-									elementtagsinview[0].innerHTML = tagsdivs;
+									if (elementtagsinviewtemp[0]) {
+										elementtagsinview = elementtagsinviewtemp
+									}								
 
-									//para aplicarles los estilos a los tags hay que recurrir a la bd
-									var trans2 = db.transaction(["tags"], "readonly")
-									var objectStore2 = trans2.objectStore("tags")
+									if (elementtagsinview){
 
-									var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+										estabavisible = "si";
+										// Actualizar visual
+										// var elementtagsinview = $('.explofolder').filter('[value="' + carpeta + '"]').siblings('.tags');
+										if (typeof carraydetagsorig == "string"){
+											carraydetagsorig = carraydetagsorig.split(","); // a array
+										}
 
-									var req2 = objectStore2.openCursor();
+										var index = carraydetagsorig.indexOf(undo.taggfold.tagid); //localizamos el id del tag a borrar
+										carraydetagsorig.splice(index, 1); // lo quitamos del array
+										carraydetags = carraydetagsorig.toString() // de array a string
 
-									req2.onerror = function(event) {
-										console.log("error: " + event);
-									};
-									req2.onsuccess = function(event) { 
-										var cursor2 = event.target.result;
-										if (cursor2) {
-											$.each(elementosdirectoriotags, function(n) {											
-												if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
+										elementtagsinview[0].setAttribute("value", carraydetags);
+							
+										// y ahora redibujamos los tags..										
+										carraydetags = carraydetags.split(','); //volvemos a convertirlo en array
+										var tagsdivs = "";
+										for(var k = 0; k < carraydetags.length; k += 1){ //recorremos el array
+											tagsdivs += "<div class='tagticket' value='"+ carraydetags[k] +"'>" + carraydetags[k] +  "</div>" ;
+										};
+										
+										elementtagsinview[0].innerHTML = tagsdivs;
 
-													var color = "#" + cursor2.value.tagcolor;
-													var complecolor = hexToComplimentary(color);
+										//para aplicarles los estilos a los tags hay que recurrir a la bd
+										var trans2 = db.transaction(["tags"], "readonly")
+										var objectStore2 = trans2.objectStore("tags")
 
-													elementosdirectoriotags[n].className += " small " + cursor2.value.tagform;
-													elementosdirectoriotags[n].setAttribute("value", cursor2.value.tagid);
-													elementosdirectoriotags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-													elementosdirectoriotags[n].innerHTML = cursor2.value.tagtext;
+										var elementosdirectoriotags = elementtagsinview.children(".tagticket");
 
-												}
-											});
+										var req2 = objectStore2.openCursor();
 
-											cursor2.continue();
+										req2.onerror = function(event) {
+											console.log("error: " + event);
+										};
+										req2.onsuccess = function(event) { 
+											var cursor2 = event.target.result;
+											if (cursor2) {
+												$.each(elementosdirectoriotags, function(n) {											
+													if (cursor2.value.tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+														var color = "#" + cursor2.value.tagcolor;
+														var complecolor = hexToComplimentary(color);
+
+														elementosdirectoriotags[n].className += " small " + cursor2.value.tagform;
+														elementosdirectoriotags[n].setAttribute("value", cursor2.value.tagid);
+														elementosdirectoriotags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														elementosdirectoriotags[n].innerHTML = cursor2.value.tagtext;
+
+													}
+												});
+
+												cursor2.continue();
+
+											}
+
+										};
+
+										trans2.oncomplete = function (event) {
+
+											elementstagsorder();
+											elemetstagdelete()
 
 										}
 
-									};
-
-									trans2.oncomplete = function (event) {
-
-										elementstagsorder();
-										elemetstagdelete()
-
 									}
 
-								} 							
+								}							
 
 							});
 
@@ -1865,6 +1935,10 @@ $(document).ready(function () {
 							treeelementosdirectoriotags = []
 
 							$.each(directoryfolders, function(i) { 
+
+
+
+
 
 
 								// se redibujarán los tags del treeview si están desplegadas las subcarpetas

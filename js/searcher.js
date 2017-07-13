@@ -3476,7 +3476,7 @@ function drawSearchArchives (searchviewmode, order) {
 
 			}
 
-			t += '<div class="exploelement archive"><div class="imgmode1 ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '">'+exploname+' <span class="placehold2">'+ v.filepath +'</span></div><div class="exploext">' + v.ext + '</div><div class="explosize">' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div>';
+			t += '<div class="exploelement archive"><div class="imgmode1 ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '">'+exploname+' <span class="placehold2" value="'+ v.filepath +'">'+ v.filepath +'</span></div><div class="exploext">' + v.ext + '</div><div class="explosize">' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div>';
 
 		});
 
@@ -4710,6 +4710,8 @@ function interactinsforsearchdir() {
 
 					var filename = $(this).children('.explofile');
 					filename = filename.attr("value");
+					var filefoldername = $(this).children().children('.placehold2');
+					filefoldername = filefoldername.attr("value");
 
 					var extension = $(this).children('.exploext');
 					extension = extension[0].textContent;
@@ -4824,7 +4826,7 @@ function interactinsforsearchdir() {
 												undo.taggaarch.tagid = taganadir;
 
 												// Actualizar visual
-												var elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
+												var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");								
 												var arraydetags = taganadir // solo hay un tag a añadir
 												elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -4983,7 +4985,10 @@ function interactinsforsearchdir() {
 										undo.taggaarch.tagid = taganadir;
 
 										// Actualizar visual
-										elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
+										console.log(filefoldername)
+										var prueba = $(".placehold2").filter("[value='" + filefoldername + "']")
+										console.log(prueba)
+										var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");										
 										arraydetags = arraydetags.toString() // de array a string
 										elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -5064,7 +5069,7 @@ function interactinsforsearchdir() {
 										undo.taggaarch.tagid = taganadir;
 
 										// Actualizar visual
-										var elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
+										var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");										
 										var arraydetags = taganadir // solo hay un tag a añadir
 										elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -5232,6 +5237,7 @@ function interactinsforsearchdir() {
 										arraydetags.push(taganadir);
 
 									}
+
 									folderupdate.foldertags = arraydetags;
 
 									// ahora que ya tenemos todos los datos del objeto hacemos update con el en la base de datos
@@ -5293,20 +5299,22 @@ function interactinsforsearchdir() {
 											req2.onsuccess = function(event) {
 												var cursor2 = event.target.result;
 												if (cursor2) {
-													$.each (treeelementosdirectoriotags, function(u) {
-														if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
+													if(treeelementosdirectoriotags){
+														$.each (treeelementosdirectoriotags, function(u) {
+															if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
 
-															var color = "#" + cursor2.value.tagcolor;
-															var complecolor = hexToComplimentary(color);
+																var color = "#" + cursor2.value.tagcolor;
+																var complecolor = hexToComplimentary(color);
 
-															treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
-															treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
-															treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-															treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
+																treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
+																treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
+																treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+																treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
 
-														}
+															}
 
-													});
+														});
+													}
 
 													cursor2.continue();
 												}

@@ -2540,7 +2540,7 @@ function loaddatabaseselect() {
 
 		})
 
-	}, 500)
+	}, 250)
 
 }
 

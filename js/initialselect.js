@@ -783,7 +783,7 @@ $(document).ready(function() {
     		opt.selectedIndex = -1; // para que ninguna este por defecto seleccionada
       })
 
-    }, 500)
+    }, 250)
 
   }
 
