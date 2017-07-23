@@ -727,12 +727,12 @@ header h1 {
 }
 
 
-#directoryview .ui-selecting {
+#directoryview .ui-selecting, #searchdirectoryview .ui-selecting {
 
 	background: #7dbde8 !important;
 }
 
-#directoryview .ui-selected {
+#directoryview .ui-selected, #searchdirectoryview .ui-selected {
 
 	background: #58a6da !important;
 	color: white;

@@ -239,6 +239,12 @@
 }
 
 
+/* una correccion específica para el cuadro de edición en el search viewmode1 */
+.viewmode1 .editing {
+
+	margin-top: -4px;
+}
+
 
 /* Panel izquierdo */
 

@@ -1042,6 +1042,8 @@ function filetreeinteractions() {
 						$("#folderreadstatus").html("Moving ...");
 						$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 
+						$("#filetree ul li span.selected").addClass("animateonce");
+
 						$("#undo", window.parent.document).attr("data-tooltip", "UNDO (move)");
 						undo.class = "move";
 						undo.move.rootfiles = droppedarchive;
@@ -1052,382 +1054,771 @@ function filetreeinteractions() {
 						// trabajamos con las carpetas
 
 						var refescohechoporcarpeta = "no";
+						var destinoenbd = "";
+						var origenenbd="";
 
-						// primero detectamos si la carpeta esta en la base de datos
+						// primero detectamos si las carpetas dropeadas están en la base de datos
 						var trans = db.transaction(["folders"], "readwrite")
 						var objectStore = trans.objectStore("folders")
 						var req = objectStore.openCursor();
 
 						req.onerror = function(event) {
-							console.log("error: " + event);
+							console.log(event);
 						};
 						req.onsuccess = function(event) {
 							var cursor = event.target.result;
-							if (cursor) {
-								$.each(droppedfolder, function(t) {
 
-									folderupdate = {};
+							// primero miramos si hay  en la bd una carpeta con el mismo nombre en destino					
+
+							if (cursor) {
+
+								$.each(droppedfolder, function(t) {
 
 									foldername[t] = droppedfolder[t].children[1].attributes[1].nodeValue;
 
-									if (cursor.value.folder == rootdirectory + foldername[t]) {
+									if (cursor.value.folder == targetfolder + foldername[t]) {
 
-										// si está la carpeta le adjuntamos nuevo valor al nombre
-										folderupdate.folder = targetfolder + foldername[t]
-										folderupdate.folderid = cursor.value.folderid
-										folderupdate.foldertags = cursor.value.foldertags
-
-										var res2 = cursor.update(folderupdate);
-
-										res2.onerror = function(event){
-											console.log("error ruta carpeta no cambiada: " + event);
-										}
-
-										res2.onsuccess = function(event){
-
-											// console.log("ruta carpeta cambiada")
-
-										}
-
-									}
-
-									else if (cursor.value.folder == targetfolder + foldername[t]) { // si la carpeta origen no esta en la base de datos, al hacer el move hay que eliminar los tags de la carpeta destino si los tuviera
-
-										folderupdate.folderid = cursor.value.folderid;
-
-										var res2 = cursor.delete(folderupdate);
-
-										res2.onerror = function(event){
-											console.log("error: carpeta destino no borrada de bd " + event);
-										}
-
-										res2.onsuccess = function(event){
-
-											// console.log("carpeta destino no borrada de bd");
-
-										}
+										destinoenbd = cursor.value.folderid
 
 									}
 
 								});
 
-								cursor.continue();
+
+								cursor.continue()
+
 
 							}
 
 						}
 
-						trans.oncomplete = function(event) {
+						trans.oncomplete = function(event){
+
+							var trans = db.transaction(["folders"], "readwrite")
+							var objectStore = trans.objectStore("folders")
+							var req = objectStore.openCursor();
+
+							req.onerror = function(event) {
+								console.log(event);
+							};
+							req.onsuccess = function(event) {
+								var cursor = event.target.result;
+
+								if (cursor) {
+									$.each(droppedfolder, function(t) {
+
+										var folderupdate = {};
+
+										foldername[t] = droppedfolder[t].children[1].attributes[1].nodeValue;
+
+										if (cursor.value.folder == rootdirectory + foldername[t]) {
+
+											origenenbd = cursor.value.folderid;								
+
+											// si está la carpeta de origen en la bd le adjuntamos nuevo valor al nombre si en destino no hay una ya con el mismo nombre en la bd
+											if (destinoenbd == "") {
+
+												folderupdate.folder = targetfolder + foldername[t]
+												folderupdate.folderid = cursor.value.folderid
+												folderupdate.foldertags = cursor.value.foldertags
+
+												var res2 = cursor.update(folderupdate);
+
+												res2.onerror = function(event){
+													console.log(event); //error ruta carpeta no cambiada
+												}
+
+												res2.onsuccess = function(event){
+
+													// console.log("ruta carpeta cambiada")
+
+												}
+
+											} else { //si en destino ya hay una carpeta con el nombre en la bd le adjuntamos los nuevos tags
+
+												folderupdate.folder = targetfolder + foldername[t]
+												folderupdate.folderid = destinoenbd
+												folderupdate.foldertags = cursor.value.foldertags
 
 
-							// antes de mover físicamente las carpetas vamos a recorrerlas recursivamente para recoger los datos de todas las subcarpetas que contenga
+												var trans = db.transaction(["folders"], "readwrite")
+												var objectStore = trans.objectStore("folders")
+												var req = objectStore.openCursor();
 
-							var arraydecarpetas = [];
-							var arraydearchivos = [];
-							var arraydecarpetasDest = [];
-							var arraydearchivosDest = [];
+												req.onerror = function(event) {
+													console.log(event);
+												};
+												req.onsuccess = function(event) {
+													var cursor = event.target.result;
+													if (cursor) {
 
-							$.each(droppedfolder, function(t) {
+														$.each(droppedfolder, function(t) {
 
-								foldertoread = rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
+															foldername[t] = droppedfolder[t].children[1].attributes[1].nodeValue;
 
-								recursivefolderdata(foldertoread);
+															if (cursor.value.folder == targetfolder + foldername[t]) {
+
+																var res2 = cursor.update(folderupdate);
+
+																res2.onerror = function(event){
+																	console.log(event); //error ruta carpeta no cambiada
+																}
+
+																res2.onsuccess = function(event){
+
+																	// console.log("ruta carpeta cambiada")
+
+																}	
+
+															}
+
+															// y se borra de la bd la carpeta origen
+															if (cursor.value.folder == rootdirectory + foldername[t]) {
+
+																var foldertodelete = cursor.value.folderid;
+
+																var res3 = cursor.delete(foldertodelete);
+
+																res3.onerror = function(event){
+																	console.log("error: carpeta destino no borrada de bd " + event);
+																}
+
+																res3.onsuccess = function(event){
+
+																	// console.log("carpeta destino no borrada de bd");
+
+																}
+
+															}
+
+														});
 
 
-								function recursivefolderdata(foldertoread) {
+														cursor.continue();
 
-									var directoryelement = []
-									var directorycontent = []
-									var directoryfolders = []
-									var directoryarchives = []
 
-									var readedElements = fs.readdirSync(foldertoread)
+													}
 
-									for (i = 0; i < readedElements.length; i++) {
 
-										// comprobar si es carpeta o archivo
-										var dirtoreadcheck = foldertoread + "\/" + readedElements[i];
+												}									
 
-										try {
-											var arorfo = "i_am_an_archive";
-											var arorfo = fs.readdirSync(dirtoreadcheck);
+
+											}
+
+
 										}
-										catch(exception) {};
-
-										directoryelement.name = "\/" + readedElements[i]
-										directoryelement.arorfo = arorfo;
-										directoryelement.id = ""; // se lo metemos después de separar carpetas y archivos (y estará oculto en la vista, de hecho no se utiliza pero se deja porque quizás se utilice en un futuro)
-										directoryelement.tagsid = []; // se lo metemos después de separar carpetas y archivos
-
-										var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
-										directorycontent[i] = copied_directoryelement;
-									};
-
-									// separar carpetas y archivos en dos objetos
-									var i = 0;
-									var ii = 0;
-									var iii = 0;
-
-									$.each(directorycontent, function(i) {
-
-										if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
-											directoryfolders[ii] = directorycontent[i];
-
-											ii++;
-										} else {
-											directoryarchives[iii] = directorycontent[i];
-											iii++;
-										};
-									});
-
-									var nuevoarraydecarpetas = "";
-									$.each(directoryfolders, function(t){
-
-										nuevoarraydecarpetas += foldertoread + directoryfolders[t].name + ",";
-										recursivefolderdata(foldertoread + directoryfolders[t].name);
 
 									});
 
-									arraydecarpetas = arraydecarpetas + nuevoarraydecarpetas;
+									cursor.continue();
+
 								}
-
-							});
-
-							if (arraydecarpetas != "") {
-
-								arraydecarpetas = arraydecarpetas.split(",");
-								arraydecarpetas.pop(); //quitamos el último elemento correspondiente a la última coma que esta vacío
 
 							}
 
-							$.each(arraydecarpetas, function(t){
+							trans.oncomplete = function(event){
 
-								arraydecarpetasDest[t] = arraydecarpetas[t].replace(rootdirectory, targetfolder);
+								var trans = db.transaction(["folders"], "readwrite")
+								var objectStore = trans.objectStore("folders")
+								var req = objectStore.openCursor();
 
-							});
-
-							// console.log("original folders:");
-							// console.log(arraydecarpetas);
-							// console.log("destination folders:");
-							// console.log(arraydecarpetasDest);
-
-							undo.move.subfoldersorig = arraydecarpetas;
-							undo.move.subfoldersnew = arraydecarpetasDest;
-
-							// ahora se mira cada una de las subcarpetas si está en la base de datos y si está le cambiamos la dirección por el de la subcarpeta destino, (los archivos al estar asociados a las carpetas cambiaran automáticamente)
-
-							$.each(arraydecarpetas, function(t) {
-
-								var updatefolder = {};
-
-								var trans10 = db.transaction(["folders"], "readwrite")
-								var objectStore10 = trans10.objectStore("folders")
-								var req10 = objectStore10.openCursor();
-
-								req10.onerror = function(event) {
-									console.log("error: " + event);
+								req.onerror = function(event) {
+									console.log(event);
 								};
-								req10.onsuccess = function(event) {
-									var cursor10 = event.target.result;
-									if (cursor10) {
+								req.onsuccess = function(event) {
+									var cursor = event.target.result;
 
-										if (cursor10.value.folder == arraydecarpetas[t]) {
+									// si la carpeta origen no esta en la base de datos, al hacer el move hay que eliminar los tags de la carpeta destino si los tuviera
+									if (origenenbd == "") {
+										if (destinoenbd != "") {
+											if (cursor) {
 
-											// console.log("coincide")
+												if (cursor.value.folderid == destinoenbd) {
 
-											updatefolder.folder = arraydecarpetasDest[t];
-											updatefolder.folderid = cursor10.value.folderid;
-											updatefolder.foldertags = cursor10.value.foldertags
+													folderupdate.folderid = cursor.value.folderid;
 
-											var res11 = cursor10.update(updatefolder);
+													var res2 = cursor.delete(folderupdate);
 
-											res11.onerror = function(event){
-												console.log("error ruta subcarpeta no cambiada: " + event);
-											}
+													res2.onerror = function(event){
+														console.log("error: carpeta destino no borrada de bd " + event);
+													}
 
-											res11.onsuccess = function(event){
+													res2.onsuccess = function(event){
 
-												// console.log("ruta subcarpetas cambiada")
+														// console.log("carpeta destino no borrada de bd");
 
+													}
+
+												}
+
+												cursor.continue()
 											}
 
 										}
-
-										cursor10.continue();
 
 									}
 
 								}
 
-							});
 
-							// se mueve cada una de las carpetas
-							window.flaggF = 0;
+								trans.oncomplete = function(event) {
 
-							$.each(droppedfolder, function(t) {
 
-								fs.move(driveunit + rootdirectory + foldername[t], driveunit + targetfolder + foldername[t], { clobber: true }, function(err) {
+									// antes de mover físicamente las carpetas vamos a recorrerlas recursivamente para recoger los datos de todas las subcarpetas que contenga
 
-									window.flaggF++;
+									var arraydecarpetas = {};
+									var arraydecarpetasDest = {};
+									var posicion = 0;
 
-									if (window.flaggF == droppedfolder.length && refescohechoporcarpeta == "no" && droppedarchive.length == 0) { // para que haga el refresco tras mover la última carpeta
+									$.each(droppedfolder, function(t) {
 
-										previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-										readDirectory(dirtoexec);
-										refescohechoporcarpeta = "si";
+										foldertoread = rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
 
-										// para actualizar visual del filetree
-										$.each ($("#filetree span"), function(l) {
+										recursivefolderdata(foldertoread);
 
-											if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
 
-												// contraer y volver a expandir
-												$("#filetree span:eq("+l+")").trigger( "click" );
-												$("#filetree span:eq("+l+")").trigger( "click" );
+										function recursivefolderdata(foldertoread) {
+
+											var directoryelement = []
+											var directorycontent = []
+											var directoryfolders = []
+											var directoryarchives = []
+
+											var readedElements = fs.readdirSync(foldertoread)
+
+											for (i = 0; i < readedElements.length; i++) {
+
+												// comprobar si es carpeta o archivo
+												var dirtoreadcheck = foldertoread + "\/" + readedElements[i];
+
+												try {
+													var arorfo = "i_am_an_archive";
+													var arorfo = fs.readdirSync(dirtoreadcheck);
+												}
+												catch(exception) {};
+
+												directoryelement.name = "\/" + readedElements[i]
+												directoryelement.arorfo = arorfo;
+												directoryelement.id = ""; // se lo metemos después de separar carpetas y archivos (y estará oculto en la vista)
+												directoryelement.tagsid = []; //se lo metemos después de separar carpetas y archivos
+
+												var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+												directorycontent[i] = copied_directoryelement;
+											};
+
+											// separa carpetas y archivos en dos objetos
+											var i = 0;
+											var ii = 0;
+											var iii = 0;
+
+											$.each(directorycontent, function(i) {
+
+												if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+													directoryfolders[ii] = directorycontent[i];
+
+													ii++;
+												} else {
+													directoryarchives[iii] = directorycontent[i];
+													iii++;
+												};
+											});
+
+											$.each(directoryfolders, function(t){
+
+												arraydecarpetas[posicion] = foldertoread + directoryfolders[t].name;
+												posicion++
+												recursivefolderdata(foldertoread + directoryfolders[t].name);
+
+											});
+											
+
+										}
+
+									});
+
+									$.each(arraydecarpetas, function(t){
+
+										arraydecarpetasDest[t] = arraydecarpetas[t].replace(rootdirectory, targetfolder);
+
+									});
+
+									// console.log("original folders:");
+									// console.log(arraydecarpetas);
+									// console.log("destination folders:");
+									// console.log(arraydecarpetasDest);
+
+									undo.move.subfoldersorig = arraydecarpetas;
+									undo.move.subfoldersnew = arraydecarpetasDest;
+
+									
+									// se va a mirar si en estino hay una carpeta con el mismo nombre en la base de datos y si está se borra de ella
+
+									$.each(arraydecarpetasDest, function(t) {
+
+										var folderupdate = {};
+
+										var trans11 = db.transaction(["folders"], "readwrite")
+										var objectStore11 = trans11.objectStore("folders")
+										var req11 = objectStore11.openCursor();
+
+										req11.onerror = function(event) {
+											console.log("error: " + event);
+										};
+										req11.onsuccess = function(event) {									
+											var cursor11 = event.target.result;
+											if (cursor11) {
+
+												if (cursor11.value.folder == arraydecarpetasDest[t]) {
+
+													folderupdate.folderid = cursor11.value.folderid;
+
+													var res2 = cursor11.delete(folderupdate);
+
+													res2.onerror = function(event){
+														console.log("error: carpeta destino no borrada de bd " + event);
+													}
+
+													res2.onsuccess = function(event){
+
+														// console.log("carpeta destino no borrada de bd");
+
+													}
+												}
+
+												cursor11.continue();
+											}
+										}
+
+									});
+
+									// ahora miramos cada una de las subcarpetas si está en la base de datos y si está le cambiamos la dirección por el de la subcarpeta destino, (los archivos al estar asociados a las carpetas cambiarán automáticamente)
+
+									$.each(arraydecarpetas, function(t) {
+
+										var updatefolder = {};
+
+										var trans10 = db.transaction(["folders"], "readwrite")
+										var objectStore10 = trans10.objectStore("folders")
+										var req10 = objectStore10.openCursor();
+
+										req10.onerror = function(event) {
+											console.log(event);
+										};
+										req10.onsuccess = function(event) {									
+											var cursor10 = event.target.result;
+											if (cursor10) {
+
+												if (cursor10.value.folder == arraydecarpetas[t]) {
+
+													updatefolder.folder = arraydecarpetasDest[t];
+													updatefolder.folderid = cursor10.value.folderid;
+													updatefolder.foldertags = cursor10.value.foldertags
+
+													var res11 = cursor10.update(updatefolder);
+
+													res11.onerror = function(event){
+														console.log(event); // error ruta subcarpeta no cambiada
+													}
+
+													res11.onsuccess = function(event){
+
+														// console.log("ruta subcarpetas cambiada")
+
+													}
+
+												}
+
+												cursor10.continue();
 
 											}
 
-											if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+										}
 
-												// contraer y volver a expandir
-												$("#filetree span:eq("+l+")").trigger( "click" );
-												$("#filetree span:eq("+l+")").trigger( "click" );
+									});
+
+									// movemos cada una de las carpetas
+									var flagg = 0;
+
+									$.each(droppedfolder, function(t) {
+
+										fs.move(driveunit + rootdirectory + foldername[t], driveunit + targetfolder + foldername[t], { clobber: true }, function(err) {
+
+											flagg++;
+
+											if (flagg == droppedfolder.length && refescohechoporcarpeta == "no" && droppedarchive.length == 0) { // para que haga el refresco tras mover la última carpeta y solo lo haga una vez..
+
+												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+												readDirectory(dirtoexec);
+												refescohechoporcarpeta = "si";
+
+												// para actualizar visual del filetree
+												$.each ($("#filetree span"), function(l) {
+
+													if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
+
+														// contraer y expandir
+														$("#filetree span:eq("+l+")").trigger( "click" );
+														$("#filetree span:eq("+l+")").trigger( "click" );
+
+													}
+
+													if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+														// contraer y expandir
+														$("#filetree span:eq("+l+")").trigger( "click" );
+														$("#filetree span:eq("+l+")").trigger( "click" );
+
+													}
+
+												});
 
 											}
 
 										});
 
+									});
+
+								} //--fin trans
+
+
+								// trabajamos con los archivos
+
+								// primero comprobamos si algún archivo estaba en la base de datos (si tiene tags)
+								var anyarchiveondb = "no";
+								$.each(droppedarchive, function(t) {
+
+									if (droppedarchive[t].children[4].attributes[1].value != "") {
+										anyarchiveondb = "yes";
 									}
 
 								});
 
-							});
+								if (anyarchiveondb == "yes") {
 
-						} //--fin trans
+									// como los archivos (al menos uno) tienen tags se comprueba si la carpeta de destino esta en la bd
+									var destfolderid = "";
+									var originfolderid = "";
 
+									var trans3 = db.transaction(["folders"], "readonly")
+									var objectStore3 = trans3.objectStore("folders")
+									var req3 = objectStore3.openCursor();
 
-						// trabajamos con los archivos
+									req3.onerror = function(event) {
+										console.log("error: " + event);
+									};
+									req3.onsuccess = function(event) {
+										var cursor3 = event.target.result;
+										if (cursor3) {
+											if (cursor3.value.folder == targetfolder) {
 
-						// primero comprobamos si algún archivo estaba en la base de datos (si tiene tags)
+												destfolderid = cursor3.value.folderid;
 
-						var anyarchiveondb = "no";
-						$.each(droppedarchive, function(t) {
+											}
+											// también aprovechamos para sacar el id de la carpeta origen (para luego buscar los archivos en la bd)
+											if(cursor3.value.folder == rootdirectory){
 
-							if (droppedarchive[t].children[4].attributes[1].value != "") {
-								anyarchiveondb = "yes";
-							}
+												originfolderid = cursor3.value.folderid;
 
-						});
+											}
+											cursor3.continue();
 
-						if (anyarchiveondb == "yes") {
-
-							// como los archivo (al menos uno) tienen tags se comprueba si la carpeta de destino esta en la bd
-
-							var destfolderid = "";
-							var originfolderid = "";
-
-							var trans3 = db.transaction(["folders"], "readonly")
-							var objectStore3 = trans3.objectStore("folders")
-							var req3 = objectStore3.openCursor();
-
-							req3.onerror = function(event) {
-								console.log("error: " + event);
-							};
-							req3.onsuccess = function(event) {
-								var cursor3 = event.target.result;
-								if (cursor3) {
-									if (cursor3.value.folder == targetfolder) {
-
-										destfolderid = cursor3.value.folderid;
-
+										}
 									}
-									// también aprovechamos para sacar el id de la carpeta origen (para luego buscar los archivos en la bd)
-									if(cursor3.value.folder == rootdirectory){
+									trans3.oncomplete = function(event) {
 
-										originfolderid = cursor3.value.folderid;
+										var fileupdate = {};
 
-									}
-									cursor3.continue();
+										if (destfolderid == "") { // si la carpeta de destino NO estaba en la base de datos (no tiene id)
 
-								}
-							}
-							trans3.oncomplete = function(event) {
+											// añadimos la carpeta a la bd pues los archivos a pasar tienen tags
+											var trans4 = db.transaction(["folders"], "readwrite")
+											var request4 = trans4.objectStore("folders")
+											.put({ folder: targetfolder, foldertags: [] }); // el id no hace falta pues es autoincremental
 
-								var fileupdate = {};
+											request4.onerror = function(event){
 
-								if (destfolderid == "") { // si la carpeta de destino NO estaba en la base de datos (no tiene id)
+												console.log("error carpeta destino no añadida a bd: " + event);
 
-									// añadimos la carpeta a la bd pues los archivos a pasar tiene tags
+											}
 
-									var trans4 = db.transaction(["folders"], "readwrite")
-									var request4 = trans4.objectStore("folders")
-									.put({ folder: targetfolder, foldertags: [] }); // el id no hace falta pues es autoincremental
+											request4.onsuccess = function(event){
 
-									request4.onerror = function(event){
+												// console.log("carpeta destino añadida a bd!");
+											}
 
-										console.log("error carpeta destino no añadida a bd: " + event);
+											trans4.oncomplete = function(e) { // vamos a tomar el id de la carpeta añadida
 
-									}
+												var trans5 = db.transaction(["folders"], "readonly")
+												var objectStore5 = trans5.objectStore("folders")
+												var req5 = objectStore5.openCursor();
 
-									request4.onsuccess = function(event){
+												req5.onerror = function(event) {
 
-										// console.log("carpeta destino añadida a bd!");
+													console.log("error: " + event);
 
-									}
+												};
 
-									trans4.oncomplete = function(e) { // se toma el id de la carpeta añadida
+												req5.onsuccess = function(event) {
 
-										var trans5 = db.transaction(["folders"], "readonly")
-										var objectStore5 = trans5.objectStore("folders")
-										var req5 = objectStore5.openCursor();
+													var cursor5 = event.target.result;
 
-										req5.onerror = function(event) {
+													if(cursor5){
 
-											console.log("error: " + event);
+														if(cursor5.value.folder == targetfolder){
 
-										};
+															destfolderid = cursor5.value.folderid;
 
-										req5.onsuccess = function(event) {
+														}
 
-											var cursor5 = event.target.result;
+														cursor5.continue();
 
-											if(cursor5){
-
-												if(cursor5.value.folder == targetfolder){
-
-													destfolderid = cursor5.value.folderid;
+													}
 
 												}
 
-												cursor5.continue();
+												trans5.oncomplete = function(event) {
+
+													// ahora se cambia el parámetro filefolder de cada uno de los archivos que movemos y están en la bd poniéndole el id de la carpeta destino
+													var trans6 = db.transaction(["files"], "readwrite")
+													var objectStore6 = trans6.objectStore("files")
+													var req6 = objectStore6.openCursor();
+
+													req6.onerror = function(event) {
+
+														console.log("error: " + event);
+
+													};
+
+													req6.onsuccess = function(event) {
+
+														var fileupdate = {};
+
+														var cursor6 = event.target.result;
+
+														if(cursor6){
+
+															if(cursor6.value.filefolder == originfolderid){
+
+																$.each(droppedarchive, function(t) {
+
+																	if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
+
+																		fileupdate.fileid = cursor6.value.fileid;
+																		fileupdate.filefolder = destfolderid;
+																		fileupdate.filename = cursor6.value.filename;
+																		fileupdate.fileext = cursor6.value.fileext;
+																		fileupdate.filetags = cursor6.value.filetags;
+
+																		// Actualizamos los archivos en la bd con el nuevo filefolder
+																		var res7 = cursor6.update(fileupdate);
+
+																		res7.onerror = function(event){
+																			console.log("error ruta archivo no cambiada: " + event);
+																		}
+
+																		res7.onsuccess = function(event){
+
+																			// console.log("ruta archivo cambiada");
+
+																			// movemos los archivos
+																			var fflagg=0;
+																			$.each(droppedarchive, function(t) {
+
+																				fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+
+																					fflagg++;
+
+																					if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
+
+																						if(droppedfolder.length > 0) {
+
+																							timetowait = droppedfolder.length * 30;
+																							setTimeout(function() {
+																								$.each ($("#filetree span"), function(l) {
+
+																									if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
+
+																										// contraer y expandir
+																										$("#filetree span:eq("+l+")").trigger( "click" );
+																										$("#filetree span:eq("+l+")").trigger( "click" );
+
+																									}
+
+																									if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+																										// contraer y expandir
+																										$("#filetree span:eq("+l+")").trigger( "click" );
+																										$("#filetree span:eq("+l+")").trigger( "click" );
+
+																									}
+
+																								});
+																								previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+																								readDirectory(dirtoexec);
+
+																							}, timetowait);
+
+																						} else {
+																							previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+																							readDirectory(dirtoexec);
+																						}
+
+																					}
+
+																				});
+
+																			});
+
+																		}
+
+																	}
+
+																});
+
+															}
+
+															cursor6.continue();
+														}
+
+													}
+
+													trans6.oncomplete = function(event) {
+
+														// comprobamos si la carpeta origen se queda sin archivos con tags
+														var borrarcarpetaorigenbd = "yes"
+
+														var trans8 = db.transaction(["files"], "readonly")
+														var objectStore8 = trans8.objectStore("files")
+														var req8 = objectStore8.openCursor();
+
+														req8.onerror = function(event) {
+
+															console.log("error: " + event);
+
+														};
+
+														req8.onsuccess = function(event) {
+
+															var cursor8 = event.target.result;
+
+															if(cursor8){
+
+																if(cursor8.value.filefolder == originfolderid){
+
+																	borrarcarpetaorigenbd = "no"
+
+																}
+
+																cursor8.continue();
+															}
+
+														}
+
+														trans8.oncomplete = function() {
+
+															if (borrarcarpetaorigenbd == "yes") {
+
+																var trans9 = db.transaction(["folders"], "readwrite")
+																var request9 = trans9.objectStore("folders").delete(originfolderid);
+
+																request9.onerror = function(event) {
+
+																	console.log("error - no se ha eliminado carpeta de bd:" + event);
+
+																};
+																request9.onsuccess = function(event) {
+
+																	// console.log("eliminada carpeta de la bd");
+
+																}
+
+															}
+
+														}
+
+													}
+
+												}
 
 											}
 
 										}
 
-										trans5.oncomplete = function(event) {
+										else { // si la carpeta de destino ya estaba en la bd
 
-											// Ahora cambiamos el parámetro filefolder de cada uno de los archivos que movemos y están en la bd poniéndole el id de la carpeta destino
+											// primero borramos de la base de datos los archivos que están asociados a la carpeta destino que vamos a sobrescribir con la operación de movimiento
+											$.each(droppedarchive, function(t) {
 
-											var trans6 = db.transaction(["files"], "readwrite")
-											var objectStore6 = trans6.objectStore("files")
-											var req6 = objectStore6.openCursor();
+												var trans6 = db.transaction(["files"], "readwrite")
+												var objectStore6 = trans6.objectStore("files")
+												var req6 = objectStore6.openCursor();
 
-											req6.onerror = function(event) {
+												req6.onerror = function(event) {
 
-												console.log("error: " + event);
+													console.log("error: " + event);
 
-											};
+												};
 
-											req6.onsuccess = function(event) {
+												req6.onsuccess = function(event) {
 
-												var cursor6 = event.target.result;
+													var cursor6 = event.target.result;
 
-												if(cursor6){
+													if(cursor6){
 
-													if(cursor6.value.filefolder == originfolderid){
+														if (cursor6.value.filefolder == destfolderid) {
 
-														$.each(droppedarchive, function(t) {
+															if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
+
+																// se borra el id del archivo de destino
+																var res8 = cursor6.delete(cursor6.value.fileid);
+
+																res8.onerror = function(event) {
+
+																	console.log(event);
+
+																};
+																res8.onsuccess = function(event) {
+
+																	// console.log("fichero destino eliminado de la bd")
+
+																};
+
+															}
+
+														}
+
+														cursor6.continue();
+
+													}
+
+												}
+
+											});
+
+
+											// ahora modificamos los archivos de la base de datos poniendo el destfolderid como el filefolder de cada archivo que este en la bd
+											var refrescohecho2="no";
+											$.each(droppedarchive, function(t) {
+
+												var trans6 = db.transaction(["files"], "readwrite")
+												var objectStore6 = trans6.objectStore("files")
+												var req6 = objectStore6.openCursor();
+
+												req6.onerror = function(event) {
+
+													console.log("error: " + event);
+
+												};
+
+												req6.onsuccess = function(event) {
+
+													var fileupdate = {};
+
+													var cursor6 = event.target.result;
+
+													if(cursor6){
+
+														if(cursor6.value.filefolder == originfolderid){
 
 															if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
 
@@ -1437,7 +1828,7 @@ function filetreeinteractions() {
 																fileupdate.fileext = cursor6.value.fileext;
 																fileupdate.filetags = cursor6.value.filetags;
 
-																// Actualizamos los archivos en la bd con el nuevo filefolder
+																// actualizamos los archivos en la bd con el nuevo filefolder
 																var res7 = cursor6.update(fileupdate);
 
 																res7.onerror = function(event){
@@ -1446,15 +1837,55 @@ function filetreeinteractions() {
 
 																res7.onsuccess = function(event){
 
-																	// console.log("ruta archivo cambiada");
-
 																	// movemos los archivos
-																	window.flaggA=0;
+
+																	var fflagg = 0;
+
 																	$.each(droppedarchive, function(t) {
 
 																		fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
-																			window.flaggA++;
+																			fflagg++;
+
+																			if (fflagg == droppedarchive.length & refrescohecho2=="no") { //para que haga el refresco tras mover la última carpeta
+
+																				// para que refresque el filetree tambien si tuviera carpetas
+																				if(droppedfolder.length > 0) {
+
+																					timetowait = droppedfolder.length * 30;
+																					setTimeout(function() {
+																						$.each ($("#filetree span"), function(l) {
+
+																							if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
+
+																								// contraer y expandir
+																								$("#filetree span:eq("+l+")").trigger( "click" );
+																								$("#filetree span:eq("+l+")").trigger( "click" );
+
+																							}
+
+																							if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+																								// contraer y expandir
+																								$("#filetree span:eq("+l+")").trigger( "click" );
+																								$("#filetree span:eq("+l+")").trigger( "click" );
+
+																							}
+
+																						});
+																						refrescohecho2="si";
+																						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+																						readDirectory(dirtoexec);
+
+																					}, timetowait);
+
+																				} else {
+																					refrescohecho2="si"
+																					previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+																					readDirectory(dirtoexec);
+																				}
+
+																			}
 
 																		});
 
@@ -1464,100 +1895,63 @@ function filetreeinteractions() {
 
 															}
 
-														});
-
-													}
-
-													cursor6.continue();
-												}
-
-											}
-
-											trans6.oncomplete = function(event) {
-
-												if (window.flaggA >= droppedarchive.length) {
-
-													// para que refresque el filetree también si tuviera carpetas
-													if(droppedfolder.length > 0) {
-
-														timetowait = droppedfolder.length * 30;
-														setTimeout(function() {
-															$.each ($("#filetree span"), function(l) {
-
-																if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
-
-																	// contraer y expandir
-																	$("#filetree span:eq("+l+")").trigger( "click" );
-																	$("#filetree span:eq("+l+")").trigger( "click" );
-
-																}
-
-																if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
-
-																	// contraer y expandir
-																	$("#filetree span:eq("+l+")").trigger( "click" );
-																	$("#filetree span:eq("+l+")").trigger( "click" );
-
-																}
-
-															});
-															previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-															readDirectory(dirtoexec);
-
-														}, timetowait);
-
-													} else {
-														previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-														readDirectory(dirtoexec);
-													}
-
-												}
-
-												// comprobamos si la carpeta origen se queda sin archivos con tags
-												var borrarcarpetaorigenbd = "yes";
-
-												var trans8 = db.transaction(["files"], "readonly")
-												var objectStore8 = trans8.objectStore("files")
-												var req8 = objectStore8.openCursor();
-
-												req8.onerror = function(event) {
-
-													console.log("error: " + event);
-
-												};
-
-												req8.onsuccess = function(event) {
-
-													var cursor8 = event.target.result;
-
-													if(cursor8){
-
-														if(cursor8.value.filefolder == originfolderid){
-
-															borrarcarpetaorigenbd = "no";
-
 														}
 
-														cursor8.continue();
+														cursor6.continue();
 													}
 
 												}
 
-												trans8.oncomplete = function() {
+												trans6.oncomplete = function(event) {
 
-													if (borrarcarpetaorigenbd == "yes") {
+													// comprobamos si la carpeta origen se queda sin archivos con tags
+													var borrarcarpetaorigenbd = "yes"
 
-														var trans9 = db.transaction(["folders"], "readwrite")
-														var request9 = trans9.objectStore("folders").delete(originfolderid);
+													var trans8 = db.transaction(["files"], "readonly")
+													var objectStore8 = trans8.objectStore("files")
+													var req8 = objectStore8.openCursor();
 
-														request9.onerror = function(event) {
+													req8.onerror = function(event) {
 
-															console.log("error undo - no se ha eliminado carpeta de bd:" + event);
+														console.log("error: " + event);
 
-														};
-														request9.onsuccess = function(event) {
+													};
 
-															// console.log("undo - eliminada carpeta de la bd");
+													req8.onsuccess = function(event) {
+
+														var cursor8 = event.target.result;
+
+														if(cursor8){
+
+															if(cursor8.value.filefolder == originfolderid){
+
+																borrarcarpetaorigenbd = "no"
+
+															}
+
+															cursor8.continue();
+														}
+
+													}
+
+													trans8.oncomplete = function() {
+
+														if (borrarcarpetaorigenbd == "yes") {
+
+															var trans9 = db.transaction(["folders"], "readwrite")
+															var request9 = trans9.objectStore("folders").delete(originfolderid);
+
+															request9.onerror = function(event) {
+
+																console.log("error - no se ha eliminado carpeta de bd:" + event);
+
+															};
+
+															request9.onsuccess = function(event) {
+
+																// console.log("eliminada carpeta de la bd");
+
+															}
 
 														}
 
@@ -1565,188 +1959,28 @@ function filetreeinteractions() {
 
 												}
 
-											}
+											});
 
 										}
 
 									}
 
 								}
+								else {
 
-								else { // si la carpeta de destino ya estaba en la bd
+									// Se mueven los archivos y ya esta
 
-									// primero borramos de la base de datos los archivos que están asociados a la carpeta destino que vamos a sobrescribir con la operación de movimiento
+									var fflagg = 0;
 
 									$.each(droppedarchive, function(t) {
 
-										var trans6 = db.transaction(["files"], "readwrite")
-										var objectStore6 = trans6.objectStore("files")
-										var req6 = objectStore6.openCursor();
-
-										req6.onerror = function(event) {
-
-											console.log("error: " + event);
-
-										};
-
-										req6.onsuccess = function(event) {
-
-											var cursor6 = event.target.result;
-
-											if(cursor6){
-
-												if (cursor6.value.filefolder == destfolderid) {
-
-													if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
-
-														var res8 = cursor6.delete(cursor6.value.fileid);
-
-														res8.onerror = function(event) {
-
-															console.log(event);
-
-														};
-														res8.onsuccess = function(event) {
-
-															// console.log("fichero destino eliminado de la bd")
-
-														};
-
-													}
-
-												}
-
-												cursor6.continue();
-
-											}
-
-										}
-
-									});
-
-
-									// ahora modificamos los archivos de la base de datos poniendo el destfolderid como el filefolder de cada archivo que este en la bd
-									var refrescohecho2 = "no";
-									$.each(droppedarchive, function(t) {
-
-										var trans6 = db.transaction(["files"], "readwrite")
-										var objectStore6 = trans6.objectStore("files")
-										var req6 = objectStore6.openCursor();
-
-										req6.onerror = function(event) {
-
-											console.log("error: " + event);
-
-										};
-
-										req6.onsuccess = function(event) {
-
-											var cursor6 = event.target.result;
-
-											if(cursor6){
-
-												if(cursor6.value.filefolder == originfolderid){
-
-													if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
-
-														fileupdate.fileid = cursor6.value.fileid;
-														fileupdate.filefolder = destfolderid;
-														fileupdate.filename = cursor6.value.filename;
-														fileupdate.fileext = cursor6.value.fileext;
-														fileupdate.filetags = cursor6.value.filetags;
-
-														// actualizamos los archivos en la bd con el nuevo filefolder
-														var res7 = cursor6.update(fileupdate);
-
-														res7.onerror = function(event){
-															console.log("error ruta archivo no cambiada: " + event);
-														}
-
-														res7.onsuccess = function(event){
-
-														}
-
-													}
-
-												}
-
-												cursor6.continue();
-											}
-
-										}
-
-										trans6.oncomplete = function(event) {
-
-											// comprobamos si la carpeta origen se queda sin archivos con tags
-											var borrarcarpetaorigenbd = "yes";
-
-											var trans8 = db.transaction(["files"], "readonly")
-											var objectStore8 = trans8.objectStore("files")
-											var req8 = objectStore8.openCursor();
-
-											req8.onerror = function(event) {
-
-												console.log("error: " + event);
-
-											};
-
-											req8.onsuccess = function(event) {
-
-												var cursor8 = event.target.result;
-
-												if(cursor8){
-
-													if(cursor8.value.filefolder == originfolderid){
-
-														borrarcarpetaorigenbd = "no"
-
-													}
-
-													cursor8.continue();
-												}
-
-											}
-
-											trans8.oncomplete = function() {
-
-												if (borrarcarpetaorigenbd == "yes") {
-
-													var trans9 = db.transaction(["folders"], "readwrite")
-													var request9 = trans9.objectStore("folders").delete(originfolderid);
-
-													request9.onerror = function(event) {
-
-														console.log("error - no se ha eliminado carpeta de bd:" + event);
-
-													};
-
-													request9.onsuccess = function(event) {
-
-														// console.log("eliminada carpeta de la bd");
-
-													}
-
-												}
-
-											}
-
-										}
-
-									});
-
-									// movemos los archivos
-									fflagg=0;
-
-									$.each(droppedarchive, function(n) {
-
-										fs.rename(driveunit + rootdirectory + droppedarchive[n].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[n].children[1].attributes[1].value, function(err) {
+										fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 											fflagg++;
 
-											if (fflagg == droppedarchive.length && refrescohecho2=="no") { // para que haga el refresco tras mover la última carpeta, y refresco2 para que no lo haga más de una
+											if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
 
-												refrescohecho2="si";
-												// para que refresque el filetree tambien si tuviera carpetas
+												// para que refresque el filetree también si tuviera carpetas
 												if(droppedfolder.length > 0) {
 
 													timetowait = droppedfolder.length * 30;
@@ -1791,63 +2025,6 @@ function filetreeinteractions() {
 							}
 
 						}
-						else { // si los archivos no tienen tag
-
-							// Se mueven los archivos y ya esta
-
-							var fflagg = 0;
-
-							$.each(droppedarchive, function(t) {
-
-								fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
-
-									console.log("pruuarchi4")
-
-									fflagg++;
-
-									if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
-
-										// para que refresque el filetree también si tuviera carpetas
-										if(droppedfolder.length > 0) {
-
-											timetowait = droppedfolder.length * 30;
-											setTimeout(function() {
-												$.each ($("#filetree span"), function(l) {
-
-													if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
-
-														// contraer y expandir
-														$("#filetree span:eq("+l+")").trigger( "click" );
-														$("#filetree span:eq("+l+")").trigger( "click" );
-
-													}
-
-													if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
-
-														// contraer y expandir
-														$("#filetree span:eq("+l+")").trigger( "click" );
-														$("#filetree span:eq("+l+")").trigger( "click" );
-
-													}
-
-												});
-												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-												readDirectory(dirtoexec);
-
-											}, timetowait);
-
-										} else {
-											previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-											readDirectory(dirtoexec);
-										}
-
-									}
-
-								});
-
-							});
-
-						}
 
 					} // --fin si la carpeta origen y destino son las mismas
 
@@ -1859,6 +2036,11 @@ function filetreeinteractions() {
 						readDirectory(dirtoexec);
 
 					}
+
+
+					setTimeout(function myFunction() {
+						$("#filetree ul li span.selected").removeClass("animateonce");
+					}, 1000)
 
 
 				} //-- fin Mover
@@ -2145,10 +2327,9 @@ function filetreeinteractions() {
 
 								// antes de mover físicamente las carpetas vamos a recorrerlas recursivamente para recoger los datos de todas las subcarpetas que contenga
 
-								var arraydecarpetas = [];
-								var arraydearchivos = [];
-								var arraydecarpetasDest = [];
-								var arraydearchivosDest = [];
+								var arraydecarpetas = {};
+								var arraydecarpetasDest = {};
+								var posicion = 0;
 
 								undo.copy.folders = [];
 								undo.copy.originalfolders = [];
@@ -2206,28 +2387,17 @@ function filetreeinteractions() {
 
 										});
 
-										var nuevoarraydecarpetas = "";
-
 										$.each(directoryfolders, function(t){
 
-											nuevoarraydecarpetas += foldertoread + directoryfolders[t].name + ",";
+											arraydecarpetas[posicion] = foldertoread + directoryfolders[t].name;
+											posicion++
 											recursivefolderdata(foldertoread + directoryfolders[t].name);
 
-
 										});
-
-										arraydecarpetas = arraydecarpetas + nuevoarraydecarpetas;
 
 									}
 
 								});
-
-								if (arraydecarpetas.length > 0) {
-
-									arraydecarpetas = arraydecarpetas.split(",");
-									arraydecarpetas.pop(); // quitamos el último elemento correspondiente a la última coma que está vacío
-
-								}
 
 								$.each(arraydecarpetas, function(t){
 
@@ -2927,6 +3097,8 @@ window.parent.$("#paste").on('click', function() {
 				// trabajamos con las carpetas
 
 				var refescohechoporcarpeta = "no";
+				var destinoenbd = "";
+				var origenenbd="";
 
 				// primero detectamos si las carpetas dropeadas están en la base de datos
 				var trans = db.transaction(["folders"], "readwrite")
@@ -2934,374 +3106,765 @@ window.parent.$("#paste").on('click', function() {
 				var req = objectStore.openCursor();
 
 				req.onerror = function(event) {
-					console.log("error: " + event);
+					console.log(event);
 				};
 				req.onsuccess = function(event) {
 					var cursor = event.target.result;
-					if (cursor) {
-						$.each(droppedfolder, function(t) {
 
-							var folderupdate = {};
+					// primero miramos si hay  en la bd una carpeta con el mismo nombre en destino					
+
+					if (cursor) {
+
+						$.each(droppedfolder, function(t) {
 
 							foldername[t] = droppedfolder[t].children[1].attributes[1].nodeValue;
 
-							if (cursor.value.folder == rootdirectory + foldername[t]) {
+							if (cursor.value.folder == targetfolder + foldername[t]) {
 
-								// si está la carpeta le adjuntamos nuevo valor al nombre
-								folderupdate.folder = targetfolder + foldername[t]
-								folderupdate.folderid = cursor.value.folderid
-								folderupdate.foldertags = cursor.value.foldertags
-
-								var res2 = cursor.update(folderupdate);
-
-								res2.onerror = function(event){
-									console.log("error ruta carpeta no cambiada: " + event);
-								}
-
-								res2.onsuccess = function(event){
-
-									// console.log("ruta carpeta cambiada")
-
-								}
-
-							}
-
-							else if (cursor.value.folder == targetfolder + foldername[t]) { // si la carpeta origen no esta en la base de datos, al hacer el move hay que eliminar los tags de la carpeta destino si los tuviera
-
-								folderupdate.folderid = cursor.value.folderid;
-
-								var res2 = cursor.delete(folderupdate);
-
-								res2.onerror = function(event){
-									console.log("error: carpeta destino no borrada de bd " + event);
-								}
-
-								res2.onsuccess = function(event){
-
-									// console.log("carpeta destino no borrada de bd");
-
-								}
+								destinoenbd = cursor.value.folderid
 
 							}
 
 						});
 
-						cursor.continue();
+
+						cursor.continue()
+
 
 					}
 
 				}
 
-				trans.oncomplete = function(event) {
+				trans.oncomplete = function(event){
+
+					var trans = db.transaction(["folders"], "readwrite")
+					var objectStore = trans.objectStore("folders")
+					var req = objectStore.openCursor();
+
+					req.onerror = function(event) {
+						console.log(event);
+					};
+					req.onsuccess = function(event) {
+						var cursor = event.target.result;
+
+						if (cursor) {
+							$.each(droppedfolder, function(t) {
+
+								var folderupdate = {};
+
+								foldername[t] = droppedfolder[t].children[1].attributes[1].nodeValue;
+
+								if (cursor.value.folder == rootdirectory + foldername[t]) {
+
+									origenenbd = cursor.value.folderid;								
+
+									// si está la carpeta de origen en la bd le adjuntamos nuevo valor al nombre si en destino no hay una ya con el mismo nombre en la bd
+									if (destinoenbd == "") {
+
+										folderupdate.folder = targetfolder + foldername[t]
+										folderupdate.folderid = cursor.value.folderid
+										folderupdate.foldertags = cursor.value.foldertags
+
+										var res2 = cursor.update(folderupdate);
+
+										res2.onerror = function(event){
+											console.log(event); //error ruta carpeta no cambiada
+										}
+
+										res2.onsuccess = function(event){
+
+											// console.log("ruta carpeta cambiada")
+
+										}
 
 
-					// antes de mover físicamente las carpetas vamos a recorrerlas recursivamente para recoger los datos de todas las subcarpetas que contenga
 
-					var arraydecarpetas = [];
-					var arraydearchivos = [];
-					var arraydecarpetasDest = [];
-					var arraydearchivosDest = [];
+									} else { //si en destino ya hay una carpeta con el nombre en la bd le adjuntamos los nuevos tags
 
-					$.each(droppedfolder, function(t) {
-
-						foldertoread = rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
-
-						recursivefolderdata(foldertoread);
+										folderupdate.folder = targetfolder + foldername[t]
+										folderupdate.folderid = destinoenbd
+										folderupdate.foldertags = cursor.value.foldertags
 
 
-						function recursivefolderdata(foldertoread) {
+										var trans = db.transaction(["folders"], "readwrite")
+										var objectStore = trans.objectStore("folders")
+										var req = objectStore.openCursor();
 
-							var directoryelement = []
-							var directorycontent = []
-							var directoryfolders = []
-							var directoryarchives = []
+										req.onerror = function(event) {
+											console.log(event);
+										};
+										req.onsuccess = function(event) {
+											var cursor = event.target.result;
+											if (cursor) {
 
-							var readedElements = fs.readdirSync(foldertoread)
+												$.each(droppedfolder, function(t) {
 
-							for (i = 0; i < readedElements.length; i++) {
+													foldername[t] = droppedfolder[t].children[1].attributes[1].nodeValue;
 
-								// comprobar si es carpeta o archivo
-								var dirtoreadcheck = foldertoread + "\/" + readedElements[i];
+													if (cursor.value.folder == targetfolder + foldername[t]) {
 
-								try {
-									var arorfo = "i_am_an_archive";
-									var arorfo = fs.readdirSync(dirtoreadcheck);
+														var res2 = cursor.update(folderupdate);
+
+														res2.onerror = function(event){
+															console.log(event); //error ruta carpeta no cambiada
+														}
+
+														res2.onsuccess = function(event){
+
+															// console.log("ruta carpeta cambiada")
+
+														}	
+
+													}
+
+													// y se borra de la bd la carpeta origen
+													if (cursor.value.folder == rootdirectory + foldername[t]) {
+
+														var foldertodelete = cursor.value.folderid;
+
+														var res3 = cursor.delete(foldertodelete);
+
+														res3.onerror = function(event){
+															console.log("error: carpeta destino no borrada de bd " + event);
+														}
+
+														res3.onsuccess = function(event){
+
+															// console.log("carpeta destino no borrada de bd");
+
+														}
+
+													}
+
+
+												});
+
+
+												cursor.continue()
+
+
+											}
+
+
+										}									
+
+
+									}
+
+
 								}
-								catch(exception) {};
-
-								directoryelement.name = "\/" + readedElements[i]
-								directoryelement.arorfo = arorfo;
-								directoryelement.id = ""; // se lo metemos después de separar carpetas y archivos (y estará oculto en la vista)
-								directoryelement.tagsid = []; //se lo metemos después de separar carpetas y archivos
-
-								var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
-								directorycontent[i] = copied_directoryelement;
-							};
-
-							// separa carpetas y archivos en dos objetos
-							var i = 0;
-							var ii = 0;
-							var iii = 0;
-
-							$.each(directorycontent, function(i) {
-
-								if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
-									directoryfolders[ii] = directorycontent[i];
-
-									ii++;
-								} else {
-									directoryarchives[iii] = directorycontent[i];
-									iii++;
-								};
-							});
-
-							var nuevoarraydecarpetas = "";
-
-							$.each(directoryfolders, function(t){
-
-								nuevoarraydecarpetas += foldertoread + directoryfolders[t].name + ",";
-								recursivefolderdata(foldertoread + directoryfolders[t].name);
-
 
 							});
 
-							arraydecarpetas = arraydecarpetas + nuevoarraydecarpetas;
+							cursor.continue();
 
 						}
 
-					});
-
-					if (arraydecarpetas != "") {
-
-						arraydecarpetas = arraydecarpetas.split(",");
-						arraydecarpetas.pop(); // quitamos el último elemento correspondiente a la última coma que esta vacio
-
 					}
 
-					$.each(arraydecarpetas, function(t){
+					trans.oncomplete = function(event){
 
-						arraydecarpetasDest[t] = arraydecarpetas[t].replace(rootdirectory, targetfolder);
+						var trans = db.transaction(["folders"], "readwrite")
+						var objectStore = trans.objectStore("folders")
+						var req = objectStore.openCursor();
 
-					});
-
-					// console.log("original folders:");
-					// console.log(arraydecarpetas);
-					// console.log("destination folders:");
-					// console.log(arraydecarpetasDest);
-
-					undo.move.subfoldersorig = arraydecarpetas;
-					undo.move.subfoldersnew = arraydecarpetasDest;
-
-					// ahora miramos cada una de las subcarpetas si está en la base de datos y si está le cambiamos la dirección por el de la subcarpeta destino, (los archivos al estar asociados a las carpetas cambiarán automáticamente)
-
-					$.each(arraydecarpetas, function(t) {
-
-						var updatefolder = {};
-
-						var trans10 = db.transaction(["folders"], "readwrite")
-						var objectStore10 = trans10.objectStore("folders")
-						var req10 = objectStore10.openCursor();
-
-						req10.onerror = function(event) {
-							console.log("error: " + event);
+						req.onerror = function(event) {
+							console.log(event);
 						};
-						req10.onsuccess = function(event) {
-							var cursor10 = event.target.result;
-							if (cursor10) {
+						req.onsuccess = function(event) {
+							var cursor = event.target.result;
 
-								if (cursor10.value.folder == arraydecarpetas[t]) {
+							// si la carpeta origen no esta en la base de datos, al hacer el move hay que eliminar los tags de la carpeta destino si los tuviera
+							if (origenenbd == "") {
+								if (destinoenbd != "") {
+									if (cursor) {
 
-									updatefolder.folder = arraydecarpetasDest[t];
-									updatefolder.folderid = cursor10.value.folderid;
-									updatefolder.foldertags = cursor10.value.foldertags
+										if (cursor.value.folderid == destinoenbd) {
 
-									var res11 = cursor10.update(updatefolder);
+											folderupdate.folderid = cursor.value.folderid;
 
-									res11.onerror = function(event){
-										console.log("error ruta subcarpeta no cambiada: " + event);
-									}
+											var res2 = cursor.delete(folderupdate);
 
-									res11.onsuccess = function(event){
+											res2.onerror = function(event){
+												console.log("error: carpeta destino no borrada de bd " + event);
+											}
 
-										// console.log("ruta subcarpetas cambiada")
+											res2.onsuccess = function(event){
 
+												// console.log("carpeta destino no borrada de bd");
+
+											}
+
+										}
+
+										cursor.continue()
 									}
 
 								}
-
-								cursor10.continue();
 
 							}
 
 						}
 
-					});
 
-					// movemos cada una de las carpetas
-					var flagg = 0;
+						trans.oncomplete = function(event) {
 
-					$.each(droppedfolder, function(t) {
 
-						fs.move(driveunit + rootdirectory + foldername[t], driveunit + targetfolder + foldername[t], { clobber: true }, function(err) {
+							// antes de mover físicamente las carpetas vamos a recorrerlas recursivamente para recoger los datos de todas las subcarpetas que contenga
 
-							flagg++;
-							console.log("proood")
+							var arraydecarpetas = {};
+							var arraydecarpetasDest = {};
+							var posicion = 0;
 
-							if (flagg == droppedfolder.length && refescohechoporcarpeta == "no" && droppedarchive.length == 0) { // para que haga el refresco tras mover la última carpeta y solo lo haga una vez..
+							$.each(droppedfolder, function(t) {
 
-								previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-								readDirectory(dirtoexec);
-								refescohechoporcarpeta = "si";
+								foldertoread = rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
 
-								// para actualizar visual del filetree
-								$.each ($("#filetree span"), function(l) {
+								recursivefolderdata(foldertoread);
 
-									if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
 
-										// contraer y expandir
-										$("#filetree span:eq("+l+")").trigger( "click" );
-										$("#filetree span:eq("+l+")").trigger( "click" );
+								function recursivefolderdata(foldertoread) {
+
+									var directoryelement = []
+									var directorycontent = []
+									var directoryfolders = []
+									var directoryarchives = []
+
+									var readedElements = fs.readdirSync(foldertoread)
+
+									for (i = 0; i < readedElements.length; i++) {
+
+										// comprobar si es carpeta o archivo
+										var dirtoreadcheck = foldertoread + "\/" + readedElements[i];
+
+										try {
+											var arorfo = "i_am_an_archive";
+											var arorfo = fs.readdirSync(dirtoreadcheck);
+										}
+										catch(exception) {};
+
+										directoryelement.name = "\/" + readedElements[i]
+										directoryelement.arorfo = arorfo;
+										directoryelement.id = ""; // se lo metemos después de separar carpetas y archivos (y estará oculto en la vista)
+										directoryelement.tagsid = []; //se lo metemos después de separar carpetas y archivos
+
+										var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+										directorycontent[i] = copied_directoryelement;
+									};
+
+									// separa carpetas y archivos en dos objetos
+									var i = 0;
+									var ii = 0;
+									var iii = 0;
+
+									$.each(directorycontent, function(i) {
+
+										if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+											directoryfolders[ii] = directorycontent[i];
+
+											ii++;
+										} else {
+											directoryarchives[iii] = directorycontent[i];
+											iii++;
+										};
+									});
+
+									$.each(directoryfolders, function(t){
+
+										arraydecarpetas[posicion] = foldertoread + directoryfolders[t].name;
+										posicion++
+										recursivefolderdata(foldertoread + directoryfolders[t].name);
+
+									});
+									
+
+								}
+
+							});
+
+							$.each(arraydecarpetas, function(t){
+
+								arraydecarpetasDest[t] = arraydecarpetas[t].replace(rootdirectory, targetfolder);
+
+							});
+
+							// console.log("original folders:");
+							// console.log(arraydecarpetas);
+							// console.log("destination folders:");
+							// console.log(arraydecarpetasDest);
+
+							undo.move.subfoldersorig = arraydecarpetas;
+							undo.move.subfoldersnew = arraydecarpetasDest;
+
+							
+							// se va a mirar si en estino hay una carpeta con el mismo nombre en la base de datos y si está se borra de ella
+
+							$.each(arraydecarpetasDest, function(t) {
+
+								var folderupdate = {};
+
+								var trans11 = db.transaction(["folders"], "readwrite")
+								var objectStore11 = trans11.objectStore("folders")
+								var req11 = objectStore11.openCursor();
+
+								req11.onerror = function(event) {
+									console.log("error: " + event);
+								};
+								req11.onsuccess = function(event) {									
+									var cursor11 = event.target.result;
+									if (cursor11) {
+
+										if (cursor11.value.folder == arraydecarpetasDest[t]) {
+
+											folderupdate.folderid = cursor11.value.folderid;
+
+											var res2 = cursor11.delete(folderupdate);
+
+											res2.onerror = function(event){
+												console.log("error: carpeta destino no borrada de bd " + event);
+											}
+
+											res2.onsuccess = function(event){
+
+												// console.log("carpeta destino no borrada de bd");
+
+											}
+										}
+
+										cursor11.continue();
+									}
+								}
+
+							});
+
+							// ahora miramos cada una de las subcarpetas si está en la base de datos y si está le cambiamos la dirección por el de la subcarpeta destino, (los archivos al estar asociados a las carpetas cambiarán automáticamente)
+
+							$.each(arraydecarpetas, function(t) {
+
+								var updatefolder = {};
+
+								var trans10 = db.transaction(["folders"], "readwrite")
+								var objectStore10 = trans10.objectStore("folders")
+								var req10 = objectStore10.openCursor();
+
+								req10.onerror = function(event) {
+									console.log(event);
+								};
+								req10.onsuccess = function(event) {									
+									var cursor10 = event.target.result;
+									if (cursor10) {
+
+										if (cursor10.value.folder == arraydecarpetas[t]) {
+
+											updatefolder.folder = arraydecarpetasDest[t];
+											updatefolder.folderid = cursor10.value.folderid;
+											updatefolder.foldertags = cursor10.value.foldertags
+
+											var res11 = cursor10.update(updatefolder);
+
+											res11.onerror = function(event){
+												console.log(event); // error ruta subcarpeta no cambiada
+											}
+
+											res11.onsuccess = function(event){
+
+												// console.log("ruta subcarpetas cambiada")
+
+											}
+
+										}
+
+										cursor10.continue();
 
 									}
 
-									if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+								}
 
-										// contraer y expandir
-										$("#filetree span:eq("+l+")").trigger( "click" );
-										$("#filetree span:eq("+l+")").trigger( "click" );
+							});
+
+							// movemos cada una de las carpetas
+							var flagg = 0;
+
+							$.each(droppedfolder, function(t) {
+
+								fs.move(driveunit + rootdirectory + foldername[t], driveunit + targetfolder + foldername[t], { clobber: true }, function(err) {
+
+									flagg++;
+
+									if (flagg == droppedfolder.length && refescohechoporcarpeta == "no" && droppedarchive.length == 0) { // para que haga el refresco tras mover la última carpeta y solo lo haga una vez..
+
+										previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+										readDirectory(dirtoexec);
+										refescohechoporcarpeta = "si";
+
+										// para actualizar visual del filetree
+										$.each ($("#filetree span"), function(l) {
+
+											if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
+
+												// contraer y expandir
+												$("#filetree span:eq("+l+")").trigger( "click" );
+												$("#filetree span:eq("+l+")").trigger( "click" );
+
+											}
+
+											if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+												// contraer y expandir
+												$("#filetree span:eq("+l+")").trigger( "click" );
+												$("#filetree span:eq("+l+")").trigger( "click" );
+
+											}
+
+										});
 
 									}
 
 								});
 
+							});
+
+						} //--fin trans
+
+
+						// trabajamos con los archivos
+
+						// primero comprobamos si algún archivo estaba en la base de datos (si tiene tags)
+						var anyarchiveondb = "no";
+						$.each(droppedarchive, function(t) {
+
+							if (droppedarchive[t].children[4].attributes[1].value != "") {
+								anyarchiveondb = "yes";
 							}
 
 						});
 
-					});
+						if (anyarchiveondb == "yes") {
 
-				} //--fin trans
+							// como los archivos (al menos uno) tienen tags se comprueba si la carpeta de destino esta en la bd
+							var destfolderid = "";
+							var originfolderid = "";
 
+							var trans3 = db.transaction(["folders"], "readonly")
+							var objectStore3 = trans3.objectStore("folders")
+							var req3 = objectStore3.openCursor();
 
-				// trabajamos con los archivos
+							req3.onerror = function(event) {
+								console.log("error: " + event);
+							};
+							req3.onsuccess = function(event) {
+								var cursor3 = event.target.result;
+								if (cursor3) {
+									if (cursor3.value.folder == targetfolder) {
 
-				// primero comprobamos si algún archivo estaba en la base de datos (si tiene tags)
-				var anyarchiveondb = "no";
-				$.each(droppedarchive, function(t) {
+										destfolderid = cursor3.value.folderid;
 
-					if (droppedarchive[t].children[4].attributes[1].value != "") {
-						anyarchiveondb = "yes";
-					}
+									}
+									// también aprovechamos para sacar el id de la carpeta origen (para luego buscar los archivos en la bd)
+									if(cursor3.value.folder == rootdirectory){
 
-				});
+										originfolderid = cursor3.value.folderid;
 
-				if (anyarchiveondb == "yes") {
+									}
+									cursor3.continue();
 
-					// como los archivos (al menos uno) tienen tags se comprueba si la carpeta de destino esta en la bd
-					var destfolderid = "";
-					var originfolderid = "";
-
-					var trans3 = db.transaction(["folders"], "readonly")
-					var objectStore3 = trans3.objectStore("folders")
-					var req3 = objectStore3.openCursor();
-
-					req3.onerror = function(event) {
-						console.log("error: " + event);
-					};
-					req3.onsuccess = function(event) {
-						var cursor3 = event.target.result;
-						if (cursor3) {
-							if (cursor3.value.folder == targetfolder) {
-
-								destfolderid = cursor3.value.folderid;
-
+								}
 							}
-							// también aprovechamos para sacar el id de la carpeta origen (para luego buscar los archivos en la bd)
-							if(cursor3.value.folder == rootdirectory){
+							trans3.oncomplete = function(event) {
 
-								originfolderid = cursor3.value.folderid;
+								var fileupdate = {};
 
-							}
-							cursor3.continue();
+								if (destfolderid == "") { // si la carpeta de destino NO estaba en la base de datos (no tiene id)
 
-						}
-					}
-					trans3.oncomplete = function(event) {
+									// añadimos la carpeta a la bd pues los archivos a pasar tienen tags
+									var trans4 = db.transaction(["folders"], "readwrite")
+									var request4 = trans4.objectStore("folders")
+									.put({ folder: targetfolder, foldertags: [] }); // el id no hace falta pues es autoincremental
 
-						var fileupdate = {};
+									request4.onerror = function(event){
 
-						if (destfolderid == "") { // si la carpeta de destino NO estaba en la base de datos (no tiene id)
+										console.log("error carpeta destino no añadida a bd: " + event);
 
-							// añadimos la carpeta a la bd pues los archivos a pasar tienen tags
-							var trans4 = db.transaction(["folders"], "readwrite")
-							var request4 = trans4.objectStore("folders")
-							.put({ folder: targetfolder, foldertags: [] }); // el id no hace falta pues es autoincremental
+									}
 
-							request4.onerror = function(event){
+									request4.onsuccess = function(event){
 
-								console.log("error carpeta destino no añadida a bd: " + event);
+										// console.log("carpeta destino añadida a bd!");
+									}
 
-							}
+									trans4.oncomplete = function(e) { // vamos a tomar el id de la carpeta añadida
 
-							request4.onsuccess = function(event){
+										var trans5 = db.transaction(["folders"], "readonly")
+										var objectStore5 = trans5.objectStore("folders")
+										var req5 = objectStore5.openCursor();
 
-								// console.log("carpeta destino añadida a bd!");
-							}
+										req5.onerror = function(event) {
 
-							trans4.oncomplete = function(e) { // vamos a tomar el id de la carpeta añadida
+											console.log("error: " + event);
 
-								var trans5 = db.transaction(["folders"], "readonly")
-								var objectStore5 = trans5.objectStore("folders")
-								var req5 = objectStore5.openCursor();
+										};
 
-								req5.onerror = function(event) {
+										req5.onsuccess = function(event) {
 
-									console.log("error: " + event);
+											var cursor5 = event.target.result;
 
-								};
+											if(cursor5){
 
-								req5.onsuccess = function(event) {
+												if(cursor5.value.folder == targetfolder){
 
-									var cursor5 = event.target.result;
+													destfolderid = cursor5.value.folderid;
 
-									if(cursor5){
+												}
 
-										if(cursor5.value.folder == targetfolder){
+												cursor5.continue();
 
-											destfolderid = cursor5.value.folderid;
+											}
 
 										}
 
-										cursor5.continue();
+										trans5.oncomplete = function(event) {
+
+											// ahora se cambia el parámetro filefolder de cada uno de los archivos que movemos y están en la bd poniéndole el id de la carpeta destino
+											var trans6 = db.transaction(["files"], "readwrite")
+											var objectStore6 = trans6.objectStore("files")
+											var req6 = objectStore6.openCursor();
+
+											req6.onerror = function(event) {
+
+												console.log("error: " + event);
+
+											};
+
+											req6.onsuccess = function(event) {
+
+												var fileupdate = {};
+
+												var cursor6 = event.target.result;
+
+												if(cursor6){
+
+													if(cursor6.value.filefolder == originfolderid){
+
+														$.each(droppedarchive, function(t) {
+
+															if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
+
+																fileupdate.fileid = cursor6.value.fileid;
+																fileupdate.filefolder = destfolderid;
+																fileupdate.filename = cursor6.value.filename;
+																fileupdate.fileext = cursor6.value.fileext;
+																fileupdate.filetags = cursor6.value.filetags;
+
+																// Actualizamos los archivos en la bd con el nuevo filefolder
+																var res7 = cursor6.update(fileupdate);
+
+																res7.onerror = function(event){
+																	console.log("error ruta archivo no cambiada: " + event);
+																}
+
+																res7.onsuccess = function(event){
+
+																	// console.log("ruta archivo cambiada");
+
+																	// movemos los archivos
+																	var fflagg=0;
+																	$.each(droppedarchive, function(t) {
+
+																		fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+
+																			fflagg++;
+
+																			if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
+
+																				if(droppedfolder.length > 0) {
+
+																					timetowait = droppedfolder.length * 30;
+																					setTimeout(function() {
+																						$.each ($("#filetree span"), function(l) {
+
+																							if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
+
+																								// contraer y expandir
+																								$("#filetree span:eq("+l+")").trigger( "click" );
+																								$("#filetree span:eq("+l+")").trigger( "click" );
+
+																							}
+
+																							if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+																								// contraer y expandir
+																								$("#filetree span:eq("+l+")").trigger( "click" );
+																								$("#filetree span:eq("+l+")").trigger( "click" );
+
+																							}
+
+																						});
+																						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+																						readDirectory(dirtoexec);
+
+																					}, timetowait);
+
+																				} else {
+																					previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+																					readDirectory(dirtoexec);
+																				}
+
+																			}
+
+																		});
+
+																	});
+
+																}
+
+															}
+
+														});
+
+													}
+
+													cursor6.continue();
+												}
+
+											}
+
+											trans6.oncomplete = function(event) {
+
+												// comprobamos si la carpeta origen se queda sin archivos con tags
+												var borrarcarpetaorigenbd = "yes"
+
+												var trans8 = db.transaction(["files"], "readonly")
+												var objectStore8 = trans8.objectStore("files")
+												var req8 = objectStore8.openCursor();
+
+												req8.onerror = function(event) {
+
+													console.log("error: " + event);
+
+												};
+
+												req8.onsuccess = function(event) {
+
+													var cursor8 = event.target.result;
+
+													if(cursor8){
+
+														if(cursor8.value.filefolder == originfolderid){
+
+															borrarcarpetaorigenbd = "no"
+
+														}
+
+														cursor8.continue();
+													}
+
+												}
+
+												trans8.oncomplete = function() {
+
+													if (borrarcarpetaorigenbd == "yes") {
+
+														var trans9 = db.transaction(["folders"], "readwrite")
+														var request9 = trans9.objectStore("folders").delete(originfolderid);
+
+														request9.onerror = function(event) {
+
+															console.log("error - no se ha eliminado carpeta de bd:" + event);
+
+														};
+														request9.onsuccess = function(event) {
+
+															// console.log("eliminada carpeta de la bd");
+
+														}
+
+													}
+
+												}
+
+											}
+
+										}
 
 									}
 
 								}
 
-								trans5.oncomplete = function(event) {
+								else { // si la carpeta de destino ya estaba en la bd
 
-									// ahora se cambia el parámetro filefolder de cada uno de los archivos que movemos y están en la bd poniéndole el id de la carpeta destino
-									var trans6 = db.transaction(["files"], "readwrite")
-									var objectStore6 = trans6.objectStore("files")
-									var req6 = objectStore6.openCursor();
+									// primero borramos de la base de datos los archivos que están asociados a la carpeta destino que vamos a sobrescribir con la operación de movimiento
+									$.each(droppedarchive, function(t) {
 
-									req6.onerror = function(event) {
+										var trans6 = db.transaction(["files"], "readwrite")
+										var objectStore6 = trans6.objectStore("files")
+										var req6 = objectStore6.openCursor();
 
-										console.log("error: " + event);
+										req6.onerror = function(event) {
 
-									};
+											console.log("error: " + event);
 
-									req6.onsuccess = function(event) {
+										};
 
-										var fileupdate = {};
+										req6.onsuccess = function(event) {
 
-										var cursor6 = event.target.result;
+											var cursor6 = event.target.result;
 
-										if(cursor6){
+											if(cursor6){
 
-											if(cursor6.value.filefolder == originfolderid){
+												if (cursor6.value.filefolder == destfolderid) {
 
-												$.each(droppedarchive, function(t) {
+													if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
+
+														// se borra el id del archivo de destino
+														var res8 = cursor6.delete(cursor6.value.fileid);
+
+														res8.onerror = function(event) {
+
+															console.log(event);
+
+														};
+														res8.onsuccess = function(event) {
+
+															// console.log("fichero destino eliminado de la bd")
+
+														};
+
+													}
+
+												}
+
+												cursor6.continue();
+
+											}
+
+										}
+
+									});
+
+
+									// ahora modificamos los archivos de la base de datos poniendo el destfolderid como el filefolder de cada archivo que este en la bd
+									var refrescohecho2="no";
+									$.each(droppedarchive, function(t) {
+
+										var trans6 = db.transaction(["files"], "readwrite")
+										var objectStore6 = trans6.objectStore("files")
+										var req6 = objectStore6.openCursor();
+
+										req6.onerror = function(event) {
+
+											console.log("error: " + event);
+
+										};
+
+										req6.onsuccess = function(event) {
+
+											var fileupdate = {};
+
+											var cursor6 = event.target.result;
+
+											if(cursor6){
+
+												if(cursor6.value.filefolder == originfolderid){
 
 													if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
 
@@ -3311,7 +3874,7 @@ window.parent.$("#paste").on('click', function() {
 														fileupdate.fileext = cursor6.value.fileext;
 														fileupdate.filetags = cursor6.value.filetags;
 
-														// Actualizamos los archivos en la bd con el nuevo filefolder
+														// actualizamos los archivos en la bd con el nuevo filefolder
 														var res7 = cursor6.update(fileupdate);
 
 														res7.onerror = function(event){
@@ -3320,18 +3883,19 @@ window.parent.$("#paste").on('click', function() {
 
 														res7.onsuccess = function(event){
 
-															// console.log("ruta archivo cambiada");
-
 															// movemos los archivos
-															var fflagg=0;
+
+															var fflagg = 0;
+
 															$.each(droppedarchive, function(t) {
 
 																fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 																	fflagg++;
 
-																	if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
+																	if (fflagg == droppedarchive.length & refrescohecho2=="no") { //para que haga el refresco tras mover la última carpeta
 
+																		// para que refresque el filetree tambien si tuviera carpetas
 																		if(droppedfolder.length > 0) {
 
 																			timetowait = droppedfolder.length * 30;
@@ -3355,12 +3919,14 @@ window.parent.$("#paste").on('click', function() {
 																					}
 
 																				});
+																				refrescohecho2="si";
 																				previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 																				readDirectory(dirtoexec);
 
 																			}, timetowait);
 
 																		} else {
+																			refrescohecho2="si"
 																			previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 																			readDirectory(dirtoexec);
 																		}
@@ -3375,352 +3941,134 @@ window.parent.$("#paste").on('click', function() {
 
 													}
 
-												});
-
-											}
-
-											cursor6.continue();
-										}
-
-									}
-
-									trans6.oncomplete = function(event) {
-
-										// comprobamos si la carpeta origen se queda sin archivos con tags
-										var borrarcarpetaorigenbd = "yes"
-
-										var trans8 = db.transaction(["files"], "readonly")
-										var objectStore8 = trans8.objectStore("files")
-										var req8 = objectStore8.openCursor();
-
-										req8.onerror = function(event) {
-
-											console.log("error: " + event);
-
-										};
-
-										req8.onsuccess = function(event) {
-
-											var cursor8 = event.target.result;
-
-											if(cursor8){
-
-												if(cursor8.value.filefolder == originfolderid){
-
-													borrarcarpetaorigenbd = "no"
-
 												}
 
-												cursor8.continue();
+												cursor6.continue();
 											}
 
 										}
 
-										trans8.oncomplete = function() {
+										trans6.oncomplete = function(event) {
 
-											if (borrarcarpetaorigenbd == "yes") {
+											// comprobamos si la carpeta origen se queda sin archivos con tags
+											var borrarcarpetaorigenbd = "yes"
 
-												var trans9 = db.transaction(["folders"], "readwrite")
-												var request9 = trans9.objectStore("folders").delete(originfolderid);
+											var trans8 = db.transaction(["files"], "readonly")
+											var objectStore8 = trans8.objectStore("files")
+											var req8 = objectStore8.openCursor();
 
-												request9.onerror = function(event) {
+											req8.onerror = function(event) {
 
-													console.log("error - no se ha eliminado carpeta de bd:" + event);
+												console.log("error: " + event);
 
-												};
-												request9.onsuccess = function(event) {
+											};
 
-													// console.log("eliminada carpeta de la bd");
+											req8.onsuccess = function(event) {
 
+												var cursor8 = event.target.result;
+
+												if(cursor8){
+
+													if(cursor8.value.filefolder == originfolderid){
+
+														borrarcarpetaorigenbd = "no"
+
+													}
+
+													cursor8.continue();
 												}
 
 											}
 
+											trans8.oncomplete = function() {
+
+												if (borrarcarpetaorigenbd == "yes") {
+
+													var trans9 = db.transaction(["folders"], "readwrite")
+													var request9 = trans9.objectStore("folders").delete(originfolderid);
+
+													request9.onerror = function(event) {
+
+														console.log("error - no se ha eliminado carpeta de bd:" + event);
+
+													};
+
+													request9.onsuccess = function(event) {
+
+														// console.log("eliminada carpeta de la bd");
+
+													}
+
+												}
+
+											}
+
 										}
 
-									}
+									});
 
 								}
 
 							}
 
 						}
+						else { // si los archivos no tiene tag
 
-						else { // si la carpeta de destino ya estaba en la bd
+							// Se mueven los archivos y ya esta
 
-							// primero borramos de la base de datos los archivos que están asociados a la carpeta destino que vamos a sobrescribir con la operación de movimiento
+							var fflagg = 0;
+
 							$.each(droppedarchive, function(t) {
 
-								var trans6 = db.transaction(["files"], "readwrite")
-								var objectStore6 = trans6.objectStore("files")
-								var req6 = objectStore6.openCursor();
+								fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
-								req6.onerror = function(event) {
+									fflagg++;
 
-									console.log("error: " + event);
+									if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
 
-								};
+										// para que refresque el filetree también si tuviera carpetas
+										if(droppedfolder.length > 0) {
 
-								req6.onsuccess = function(event) {
+											timetowait = droppedfolder.length * 30;
+											setTimeout(function() {
+												$.each ($("#filetree span"), function(l) {
 
-									var cursor6 = event.target.result;
+													if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
 
-									if(cursor6){
+														// contraer y expandir
+														$("#filetree span:eq("+l+")").trigger( "click" );
+														$("#filetree span:eq("+l+")").trigger( "click" );
 
-										if (cursor6.value.filefolder == destfolderid) {
+													}
 
-											if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
+													if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
 
-												// se borra el id del archivo de destino
-												var res8 = cursor6.delete(cursor6.value.fileid);
+														// contraer y expandir
+														$("#filetree span:eq("+l+")").trigger( "click" );
+														$("#filetree span:eq("+l+")").trigger( "click" );
 
-												res8.onerror = function(event) {
+													}
 
-													console.log(event);
+												});
+												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+												readDirectory(dirtoexec);
 
-												};
-												res8.onsuccess = function(event) {
+											}, timetowait);
 
-													// console.log("fichero destino eliminado de la bd")
-
-												};
-
-											}
-
-										}
-
-										cursor6.continue();
-
-									}
-
-								}
-
-							});
-
-
-							// ahora modificamos los archivos de la base de datos poniendo el destfolderid como el filefolder de cada archivo que este en la bd
-							var refrescohecho2="no";
-							$.each(droppedarchive, function(t) {
-
-								var trans6 = db.transaction(["files"], "readwrite")
-								var objectStore6 = trans6.objectStore("files")
-								var req6 = objectStore6.openCursor();
-
-								req6.onerror = function(event) {
-
-									console.log("error: " + event);
-
-								};
-
-								req6.onsuccess = function(event) {
-
-									var fileupdate = {};
-
-									var cursor6 = event.target.result;
-
-									if(cursor6){
-
-										if(cursor6.value.filefolder == originfolderid){
-
-											if (cursor6.value.filename == droppedarchive[t].children[1].attributes[1].value) {
-
-												fileupdate.fileid = cursor6.value.fileid;
-												fileupdate.filefolder = destfolderid;
-												fileupdate.filename = cursor6.value.filename;
-												fileupdate.fileext = cursor6.value.fileext;
-												fileupdate.filetags = cursor6.value.filetags;
-
-												// actualizamos los archivos en la bd con el nuevo filefolder
-												var res7 = cursor6.update(fileupdate);
-
-												res7.onerror = function(event){
-													console.log("error ruta archivo no cambiada: " + event);
-												}
-
-												res7.onsuccess = function(event){
-
-													// movemos los archivos
-
-													var fflagg = 0;
-
-													$.each(droppedarchive, function(t) {
-
-														fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
-
-															fflagg++;
-
-															if (fflagg == droppedarchive.length & refrescohecho2=="no") { //para que haga el refresco tras mover la última carpeta
-
-																// para que refresque el filetree tambien si tuviera carpetas
-																if(droppedfolder.length > 0) {
-
-																	timetowait = droppedfolder.length * 30;
-																	setTimeout(function() {
-																		$.each ($("#filetree span"), function(l) {
-
-																			if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
-
-																				// contraer y expandir
-																				$("#filetree span:eq("+l+")").trigger( "click" );
-																				$("#filetree span:eq("+l+")").trigger( "click" );
-
-																			}
-
-																			if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
-
-																				// contraer y expandir
-																				$("#filetree span:eq("+l+")").trigger( "click" );
-																				$("#filetree span:eq("+l+")").trigger( "click" );
-
-																			}
-
-																		});
-																		refrescohecho2="si";
-																		previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																		readDirectory(dirtoexec);
-
-																	}, timetowait);
-
-																} else {
-																	refrescohecho2="si"
-																	previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																	readDirectory(dirtoexec);
-																}
-
-															}
-
-														});
-
-													});
-
-												}
-
-											}
-
-										}
-
-										cursor6.continue();
-									}
-
-								}
-
-								trans6.oncomplete = function(event) {
-
-									// comprobamos si la carpeta origen se queda sin archivos con tags
-									var borrarcarpetaorigenbd = "yes"
-
-									var trans8 = db.transaction(["files"], "readonly")
-									var objectStore8 = trans8.objectStore("files")
-									var req8 = objectStore8.openCursor();
-
-									req8.onerror = function(event) {
-
-										console.log("error: " + event);
-
-									};
-
-									req8.onsuccess = function(event) {
-
-										var cursor8 = event.target.result;
-
-										if(cursor8){
-
-											if(cursor8.value.filefolder == originfolderid){
-
-												borrarcarpetaorigenbd = "no"
-
-											}
-
-											cursor8.continue();
+										} else {
+											previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
+											readDirectory(dirtoexec);
 										}
 
 									}
 
-									trans8.oncomplete = function() {
-
-										if (borrarcarpetaorigenbd == "yes") {
-
-											var trans9 = db.transaction(["folders"], "readwrite")
-											var request9 = trans9.objectStore("folders").delete(originfolderid);
-
-											request9.onerror = function(event) {
-
-												console.log("error - no se ha eliminado carpeta de bd:" + event);
-
-											};
-
-											request9.onsuccess = function(event) {
-
-												// console.log("eliminada carpeta de la bd");
-
-											}
-
-										}
-
-									}
-
-								}
+								});
 
 							});
 
 						}
 
 					}
-
-				}
-				else {
-
-					// Se mueven los archivos y ya esta
-
-					var fflagg = 0;
-
-					$.each(droppedarchive, function(t) {
-
-						fs.rename(driveunit + rootdirectory + droppedarchive[t].children[1].attributes[1].value, driveunit + targetfolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
-
-							fflagg++;
-
-							if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
-
-								// para que refresque el filetree también si tuviera carpetas
-								if(droppedfolder.length > 0) {
-
-									timetowait = droppedfolder.length * 30;
-									setTimeout(function() {
-										$.each ($("#filetree span"), function(l) {
-
-											if($("#filetree span:eq("+l+")").attr("rel2") == targetfolder) {
-
-												// contraer y expandir
-												$("#filetree span:eq("+l+")").trigger( "click" );
-												$("#filetree span:eq("+l+")").trigger( "click" );
-
-											}
-
-											if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
-
-												// contraer y expandir
-												$("#filetree span:eq("+l+")").trigger( "click" );
-												$("#filetree span:eq("+l+")").trigger( "click" );
-
-											}
-
-										});
-										previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-										readDirectory(dirtoexec);
-
-									}, timetowait);
-
-								} else {
-									previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-									readDirectory(dirtoexec);
-								}
-
-							}
-
-						});
-
-					});
 
 				}
 
@@ -3774,6 +4122,7 @@ window.parent.$("#paste").on('click', function() {
 				$.each(droppedfolder, function(t) {
 
 					fs.copy(driveunit + rootdirectory + droppedfolder[t].children[1].attributes[1].value, driveunit + targetfolder + droppedfolder[t].children[1].attributes[1].value, { clobber: true }, function(err) {
+
 
 						flagg++;
 
@@ -3988,10 +4337,9 @@ window.parent.$("#paste").on('click', function() {
 
 						// antes de mover físicamente las carpetas vamos a recorrerlas recursivamente para recoger los datos de todas las subcarpetas que contenga
 
-						var arraydecarpetas = [];
-						var arraydearchivos = [];
-						var arraydecarpetasDest = [];
-						var arraydearchivosDest = [];
+						var arraydecarpetas = {};
+						var arraydecarpetasDest = {};
+						var posicion = 0;
 
 						undo.copy.folders = [];
 						undo.copy.originalfolders = [];
@@ -4048,26 +4396,17 @@ window.parent.$("#paste").on('click', function() {
 									};
 								});
 
-								var nuevoarraydecarpetas = "";
-
 								$.each(directoryfolders, function(t){
 
-									nuevoarraydecarpetas += foldertoread + directoryfolders[t].name + ",";
+									arraydecarpetas[posicion] = foldertoread + directoryfolders[t].name;
+									posicion++
 									recursivefolderdata(foldertoread + directoryfolders[t].name);
 
 								});
 
-								arraydecarpetas = arraydecarpetas + nuevoarraydecarpetas;
 							}
 
 						});
-
-						if (arraydecarpetas.length > 0) {
-
-							arraydecarpetas = arraydecarpetas.split(",");
-							arraydecarpetas.pop(); // quitamos el último elemento correspondiente a la última coma que esta vacío
-
-						}
 
 						$.each(arraydecarpetas, function(t){
 

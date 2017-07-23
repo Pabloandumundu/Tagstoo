@@ -1934,12 +1934,7 @@ $(document).ready(function () {
 							treeelementtagsinview = []
 							treeelementosdirectoriotags = []
 
-							$.each(directoryfolders, function(i) { 
-
-
-
-
-
+							$.each(directoryfolders, function(i) {
 
 								// se redibujarán los tags del treeview si están desplegadas las subcarpetas
 
@@ -3589,25 +3584,9 @@ $(document).ready(function () {
 				// ahora se va a comprobar si estás subcarpetas han quedado vacías, y si es el caso se borrarán
 				$.each(undo.copy.folders, function(n) {
 
-					var readedElements = [];
-
-					try {
-						var readedElements = fs.readdirSync(driveunit + undo.copy.folders[n]);
-					} catch(err){
-						console.log(err)
-					};
-
-					if (readedElements.length == 0) {
-
-					    try {
-					   		fs.rmdirSync(driveunit + undo.copy.folders[n]);
-					   		// console.log("folder deleted sucesfully")
-						}
-						catch(err) {
-							console.log("error folder not deleted")
-						}
-
-					}
+					// parece que ahora funciona el removeSync, si puedeo sutituirlo en las demás simplificare bastante. 
+					// Lo dejo para hacerlo en una próxima ocasión
+					fs.removeSync(driveunit + undo.copy.folders[n])
 
 				});
 
@@ -3700,6 +3679,7 @@ $(document).ready(function () {
 								}
 
 							});
+
 							previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 							readDirectory(dirtoexec);											
 				

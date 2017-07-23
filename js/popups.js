@@ -2521,7 +2521,7 @@ function optionspreload() {
 
 function loaddatabaseselect() {
 
-	console.log(listadofiltradodeDB)
+	// console.log(listadofiltradodeDB)
 
 	$("#databaseselect").find('option').remove().end(); // con esto se vacían las opciones del select para volver a llenarlo con las lineas de abajo
 

@@ -104,7 +104,9 @@
 			 */
 			labels : {
 				ok     : "OK",
-				cancel : "Cancel"
+				cancel : "Cancel",
+				no     : "No",
+				yes    : "Yes"
 			},
 
 			/**
@@ -292,6 +294,10 @@
 				case "confirm":
 					html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.ok));
 					html = html.replace("{{ok}}", this.labels.ok).replace("{{cancel}}", this.labels.cancel);
+					break;
+				case "confirmny":
+					html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.ok));
+					html = html.replace("{{ok}}", this.labels.yes).replace("{{cancel}}", this.labels.no);
 					break;
 				case "prompt":
 					html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.submit));
@@ -626,6 +632,7 @@
 		return {
 			alert   : function (message, fn, cssClass) { _alertify.dialog(message, "alert", fn, "", cssClass); return this; },
 			confirm : function (message, fn, cssClass) { _alertify.dialog(message, "confirm", fn, "", cssClass); return this; },
+			confirmny : function (message, fn, cssClass) { _alertify.dialog(message, "confirmny", fn, "", cssClass); return this; },
 			extend  : _alertify.extend,
 			init    : _alertify.init,
 			log     : function (message, type, wait) { _alertify.log(message, type, wait); return this; },

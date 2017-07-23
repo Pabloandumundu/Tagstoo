@@ -80,6 +80,27 @@ $(document).ready(function () {
         });        
 
     });
+    
 
+    // conmutador copy/paste
+    var pasteaction = "copy";
+
+    $(".onoffswitch-inner, .onoffswitch-switch").bind('click', function() {
+
+        if(pasteaction == "copy") {
+
+            window.pasteaction = "cut";
+            $(".onoffswitch-checkbox").addClass("check");
+            $(".onoffswitch-switch").css("background-color","#d5695d"); //red
+
+        } else if (pasteaction == "cut") {
+
+            window.pasteaction = "copy";
+            $(".onoffswitch-checkbox").removeClass("check");
+            $(".onoffswitch-switch").css("background-color","#439bd6"); //blue
+
+        }
+
+    });
 
 });
