@@ -34,7 +34,6 @@
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css">
 	<link href="css/estilos.css" rel="stylesheet" type="text/css">
 
-
 </head>
 <body id="initialbody">
 
@@ -45,7 +44,7 @@
       	var nwin = ngui.Window.get();
 		nwin.setPosition("center")
 		nwin.resizeTo(680, 403);
-		nwin.setResizable(false); // para que no se pueda cambiar
+		nwin.setResizable(false); // para que no se pueda cambiar		
 
  	</script>
 
@@ -94,7 +93,21 @@
 
 		<a id="deletedb" class="medium button red">Delete database</a><span><em>Delete selected database</em></span>
 
+			
+		
 		<hr>
+
+		<div id="colorswitch_initial">
+			<div class="coloronoffswitch" id="pasteaction">
+
+					<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
+					<label class="coloronoffswitch-label" for="mycoloronoffswitch" >
+							<span class="coloronoffswitch-inner"></span>
+							<span class="coloronoffswitch-switch"></span>
+					</label>
+
+				</div>
+		</div>
 
 		<a id="launch" class="large button green" onclick="starttagstoo()">Launch!</a>
 

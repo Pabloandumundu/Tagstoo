@@ -97,20 +97,33 @@ function saveoptions() {
 	if ($("#previewimgonviewmode1").is(":checked")) {
 		localStorage["previewimgonviewmode1"] = "yes";
 		window.previewimgonviewmode1 = "yes";
-
-	} else {
-		localStorage["previewimgonviewmode1"] = "no";
-		window.previewimgonviewmode1 = "no";
-	}
-
-	if ($("#previewepubonviewmode1").is(":checked")) {
 		localStorage["previewepubonviewmode1"] = "yes";
 		window.previewepubonviewmode1 = "yes";
 
 	} else {
+		localStorage["previewimgonviewmode1"] = "no";
+		window.previewimgonviewmode1 = "no";
 		localStorage["previewepubonviewmode1"] = "no";
 		window.previewepubonviewmode1 = "no";
 	}
+
+	// if ($("#previewepubonviewmode1").is(":checked")) {
+	// 	localStorage["previewepubonviewmode1"] = "yes";
+	// 	window.previewepubonviewmode1 = "yes";
+
+	// } else {
+	// 	localStorage["previewepubonviewmode1"] = "no";
+	// 	window.previewepubonviewmode1 = "no";
+	// }
+
+	if ($("#showtips").is(":checked")) {
+		localStorage["mostrartips"] = "yes";
+
+	} else {
+		localStorage["mostrartips"] = "no";
+	}
+
+
 
 	if ($("#autoslideshow").is(":checked")) {
 		selectedtime = $("#autoslideshowtime").val()
@@ -1799,11 +1812,18 @@ function optionspreload() {
 	    	$('#previewimgonviewmode1').prop('checked', false);
 	    }
 	    // el checkvox previewepubonviewmode1
-	    if(localStorage["previewepubonviewmode1"]=="yes") {
-	    	$('#previewepubonviewmode1').prop('checked', true);
+	    // if(localStorage["previewepubonviewmode1"]=="yes") {
+	    // 	$('#previewepubonviewmode1').prop('checked', true);
+	    // } else {
+	    // 	$('#previewepubonviewmode1').prop('checked', false);
+	    // }
+
+	    if(localStorage["mostrartips"]=="yes") {
+	    	$('#showtips').prop('checked', true);
 	    } else {
-	    	$('#previewepubonviewmode1').prop('checked', false);
+	    	$('#showtips').prop('checked', false);
 	    }
+
 
 
 	    if (localStorage["autoslideshow"]=="yes") {
@@ -2500,20 +2520,90 @@ function optionspreload() {
 
 		// para prevenir la introducción de letras en el autoslideshowtime
 		$("#autoslideshowtime").keydown(function (e) {
-        // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-             // Allow: Ctrl+A, Command+A
-            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
-             // Allow: home, end, left, right, down, up
-            (e.keyCode >= 35 && e.keyCode <= 40)) {
-                 // let it happen, don't do anything
-                 return;
-        }
-        // Ensure that it is a number and stop the keypress
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
-    });
+	        // Allow: backspace, delete, tab, escape, enter and .
+	        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+	             // Allow: Ctrl+A, Command+A
+	            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+	             // Allow: home, end, left, right, down, up
+	            (e.keyCode >= 35 && e.keyCode <= 40)) {
+	                 // let it happen, don't do anything
+	                 return;
+	        }
+	        // Ensure that it is a number and stop the keypress
+	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+	            e.preventDefault();
+	        }
+    	});
+
+
+    	window.colortagstoo = localStorage["colortagstoo"];
+
+		if (window.colortagstoo == "not") {
+
+		    // var ls = document.createElement('link');
+		    // ls.rel="stylesheet";
+		    // ls.href= "css/version_grey.css";
+		    // document.getElementsByTagName('head')[0].appendChild(ls);
+
+		    // para que aparezca chequeado
+		    $(".coloronoffswitch-checkbox").addClass("check");
+		    $(".coloronoffswitch-switch").css("background","#bbb");
+
+		}
+
+
+	  	$(".coloronoffswitch-inner, .coloronoffswitch-switch").bind('click', function() {
+
+		    if(window.colortagstoo == "yes") {
+
+		        window.colortagstoo = "not";
+		        $(".coloronoffswitch-checkbox").addClass("check");
+		        $(".coloronoffswitch-switch").css("background","#bbb");
+
+		        // hay que definir cada vez que se añade
+		        var ls = document.createElement('link');
+		        ls.rel="stylesheet";
+		        ls.href= "css/version_grey.css";
+		        window.top.$('head')[0].appendChild(ls);
+		        var ls = document.createElement('link');
+		        ls.rel="stylesheet";
+		        ls.href= "css/version_grey.css";
+		        window.$('head')[0].appendChild(ls);
+
+		        if($(this)["0"].parentElement.parentElement.parentElement.parentElement.parentElement.children[1].children["dirview-wrapper"]){ //si es el explore (una manera de saberlo)
+		        	var ls = document.createElement('link');
+			        ls.rel="stylesheet";
+			        ls.href= "css/version_grey.css";
+			        top.searcher.$('head')[0].appendChild(ls);
+		        } else { //si es el searcher
+		        	var ls = document.createElement('link');
+			        ls.rel="stylesheet";
+			        ls.href= "css/version_grey.css";
+			        top.explorer.$('head')[0].appendChild(ls);
+
+		        }		        
+
+		        localStorage["colortagstoo"] = window.colortagstoo;
+
+
+		    } else if (window.colortagstoo == "not") {
+
+		        window.colortagstoo = "yes";
+		        $(".coloronoffswitch-checkbox").removeClass("check");
+		        $(".coloronoffswitch-switch").css("background","linear-gradient(315deg,red,yellow,green)");
+
+		        $('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+
+		        window.top.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+		        window.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+		        top.searcher.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+		        top.explorer.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+
+		        localStorage["colortagstoo"] = window.colortagstoo;
+
+		    }
+
+		});
 
 	};
 
@@ -2854,8 +2944,7 @@ function loaddriveslist() {
 
 function restarttagstoo() {
 
-	console.log($("#selecteddrive").html())
-
+	localStorage["colortagstoo"] = window.colortagstoo;
 	localStorage["currentlydatabaseused"] = $("#selecteddb").html();
 	if (s.os.name == "windows" || s.os.name == "macos") {
 		localStorage["selecteddriveunit"] = $("#selecteddrive").html();
@@ -2909,5 +2998,37 @@ function showretroagain() {
     localStorage["showretroagain"] = "no"
   } else {
     localStorage["showretroagain"] = "yes"
+  }
+}
+
+
+
+
+function shownexttip() {
+
+	$( "#alertify-ok" )[0].click();
+	var tip=top.explorer.tip
+
+	mostrartipnumero = localStorage["mostrartipnumero"]
+
+	if (mostrartipnumero == 10) {//el tip final
+		mostrartipnumero = 0
+
+	}
+
+	// tip mensaje
+	alertify.alerttip(tip[mostrartipnumero]+tipquest)
+	mostrartipnumero++
+
+	localStorage["mostrartipnumero"]=mostrartipnumero
+
+}
+
+function mostrartips() {        
+  if ($('#mostrartips').prop('checked')){
+    localStorage["mostrartips"] = "no"
+
+  } else {
+    localStorage["mostrartips"] = "yes"
   }
 }

@@ -1,0 +1,214 @@
+/* Initial Select */
+/* -------------- */
+#initialbody {
+	filter: grayscale(85%) brightness(95%);
+	background: linear-gradient(#ddd, #ffffff);
+}
+
+
+
+/* Explore y Search */
+/* ---------------- */
+
+
+/* Parte superior */
+header {
+	background: linear-gradient(#ddd, #ffffff);
+}
+
+#topbloque1 {
+	filter: grayscale(85%) brightness(104%);
+
+}
+
+/* las imagenes de carpetas */
+#dirview-wrapper .folder img, #searchdirview-wrapper .folder img {
+	filter: grayscale(85%) brightness(104%);
+}
+
+/* el separador de las columnas */
+.exploelement .explofile.viewmode1,  .exploelement .explofolder.viewmode1, .exploelement .exploext.viewmode1, .exploelement .folderelements.viewmode1, .exploelement .explosize.viewmode1, .exploelement .tags.viewmode1, .exploelement .lastmod.viewmode1, .exploelement .duration.viewmode1{
+	border-right: 2px solid #666;
+}
+
+/* fondo nombre folders viewmodes2-9 */
+.exploelement .explofolder.viewmode2, .exploelement .explofolder.viewmode3, .exploelement .explofolder.viewmode4, .exploelement .explofolder.viewmode5, .exploelement .explofolder.viewmode6, .exploelement .explofolder.viewmode7, .exploelement .explofolder.viewmode8, .exploelement .explofolder.viewmode9 {
+	    background-color: #e1e1e1;
+}
+.ui-selected .explofolder.viewmode2, .ui-selected .explofolder.viewmode3, .ui-selected .explofolder.viewmode4, .ui-selected .explofolder.viewmode5, .ui-selected .explofolder.viewmode6, .ui-selected .explofolder.viewmode7, .ui-selected .explofolder.viewmode8, .ui-selected .explofolder.viewmode9 {
+    background-color: #444;
+}
+/* fondo nombre files viewmodes2-9 */
+.exploelement .explofile.viewmode2, .exploelement .explofile.viewmode3, .exploelement .explofile.viewmode4, .exploelement .explofile.viewmode5, .exploelement .explofile.viewmode6, .exploelement .explofile.viewmode7, .exploelement .explofile.viewmode8, .exploelement .explofile.viewmode9 {
+	background-color: #e1e1e1;
+}
+.ui-selected .explofile.viewmode2, .ui-selected .explofile.viewmode3, .ui-selected .explofile.viewmode4, .ui-selected .explofile.viewmode5, .ui-selected .explofile.viewmode6, .ui-selected .explofile.viewmode7, .ui-selected .explofile.viewmode8, .ui-selected .explofile.viewmode9 {
+    background-color: #444;
+}
+
+
+.imagename1, .imagename2 {
+    color: #222;
+}
+
+/* selecting y selected */
+#directoryview .ui-selecting, #searchdirectoryview .ui-selecting {
+
+	background: #a3a3a3 !important;
+}
+
+#directoryview .ui-selected, #searchdirectoryview .ui-selected {
+
+	background: #878787 !important;
+	color: white;
+}
+
+
+#directoryview {margin: 0; position: relative;}
+
+.ui-selectable-helper {position: absolute; z-index: 100; border:1px dotted black;}
+
+.directoryonhover { /* el hover de cuando se hace dragg and dropp*/
+
+	background-color: #ffff46 !important; /* amarillo */
+}
+
+/* barra de progreso */
+.progress-wrap {
+
+  background: #a3a3a3;
+
+}
+.progress-wrap .progress-bar {
+
+	border-left: 5px solid white;
+
+}
+.editing {
+
+	border: 1px solid #aaa;
+	outline-color: #9292e2;
+}
+
+/* el bottom */
+#botonestag {
+	filter: grayscale(85%) brightness(97%);
+}
+
+
+
+/* Explore */
+/* ------- */
+
+.treeviewinfo, #filetreerefresh {
+	filter: grayscale(85%) brightness(104%);
+}
+
+#filetree ul li span:hover {
+	background-color: #bbb;
+}
+
+#filetree ul li span.selected {
+	color: #333;
+}
+@-webkit-keyframes blink {
+    0% {
+           background-color: rgba(160,160,160,1)
+    }
+    50% {
+           background-color: rgba(160,160,160,0.7)
+    }
+    100% {
+           background-color: rgba(160,160,160,1)
+    }
+}
+
+#filetree ul li span.selected.animateonce {
+
+	-webkit-animation: onceblink 1s normal forwards;
+}
+@-webkit-keyframes onceblink {
+    0% {
+           background-color: rgba(140,140,140,1)
+    }
+    50% {
+           background-color: rgba(200, 200, 200,1)
+    }
+    100% {
+           background-color: rgba(140,140,140,1)
+    }
+}
+
+.jqueryFileTree LI.directory { background: url(../img/icons/folders_16px/Glossy_Generic_grey.png) left top no-repeat; }
+
+.jqueryFileTree LI.expanded { background: url(../img/icons/folders_16px/Glossy_Open_grey.png) left top no-repeat; }
+
+#treeview .tagticket {
+	filter: none;
+}
+
+#locationinfo {
+	filter: grayscale(85%) brightness(104%);
+}
+
+
+
+/* Search */
+/* ------ */
+
+#eraseron{
+	filter: grayscale(85%) brightness(104%);
+}
+
+
+#selectfolder {
+	filter: grayscale(85%) brightness(103%);
+}
+
+#searchin div {
+	filter: grayscale(85%) brightness(102%);
+}
+
+input[type="radio"]:checked + label span.radio::after {
+    background-color: #dadada;
+}
+
+.searchinput .button, .searchnotinput .button, .removefield {
+	filter: grayscale(85%) brightness(103%);
+}
+
+#searchaction {
+	filter: grayscale(85%) brightness(103%);
+}
+
+
+/* popups y alerts */
+/* --------------- */
+
+.alertify-dialog {
+	filter: grayscale(85%) brightness(101%);
+}
+
+#popupbg {
+	filter: grayscale(85%);
+}
+
+#popuptitle {
+	filter: grayscale(85%);
+}
+#popup .button {
+	filter: grayscale(85%);
+}
+
+#popup .coloronoffswitch {
+	filter: grayscale(85%);
+}
+
+.timepopup {
+	filter: grayscale(85%);
+}
+
+.subventana {
+	filter: grayscale(85%);
+}
+

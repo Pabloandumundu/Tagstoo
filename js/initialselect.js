@@ -35,11 +35,13 @@ $(document).ready(function() {
   //unos estilos personalizados para linux y macos
   if (s.os.name == "linux") {
     $('#initalselect').css("margin","0 auto 49px auto");
-    $('#initalhelp').css("bottom","65px")
+    $('#initalhelp').css("bottom","65px");
+    $('#colorswitch_initial').css("bottom","57px");
   }
   if (s.os.name == "macos") {
     $('#initalselect').css("margin","0 auto 32px auto");
-    $('#initalhelp').css("bottom","47px")
+    $('#initalhelp').css("bottom","47px");
+    $('#colorswitch_initial').css("bottom","38px");
   }
 
   // si no existe unidad utilizada por última vez, se selecciona la primera disponible
@@ -783,7 +785,7 @@ $(document).ready(function() {
     		opt.selectedIndex = -1; // para que ninguna este por defecto seleccionada
       })
 
-    }, 250)
+    }, 400)
 
   }
 
@@ -1086,6 +1088,56 @@ $(document).ready(function() {
     }
 
   };
+// localStorage["colortagstoo"] = "yes";
+
+  console.log(localStorage["colortagstoo"])
+
+  if (!localStorage["colortagstoo"]) {
+    localStorage["colortagstoo"] = "yes";
+  }
+
+  window.colortagstoo = localStorage["colortagstoo"];
+
+  if (window.colortagstoo == "not") {
+
+    var ls = document.createElement('link');
+    ls.rel="stylesheet";
+    ls.href= "css/version_grey.css";
+    document.getElementsByTagName('head')[0].appendChild(ls);
+
+    // para que aparezca chequeado
+    $(".coloronoffswitch-checkbox").addClass("check");
+    $(".coloronoffswitch-switch").css("background","#bbb");
+
+  }
+
+
+  $(".coloronoffswitch-inner, .coloronoffswitch-switch").bind('click', function() {
+
+    if(window.colortagstoo == "yes") {
+
+        window.colortagstoo = "not";
+        $(".coloronoffswitch-checkbox").addClass("check");
+        $(".coloronoffswitch-switch").css("background","#bbb");
+
+        var ls = document.createElement('link');
+        ls.rel="stylesheet";
+        ls.href= "css/version_grey.css";
+        document.getElementsByTagName('head')[0].appendChild(ls);
+
+    } else if (window.colortagstoo == "not") {
+
+        window.colortagstoo = "yes";
+        $(".coloronoffswitch-checkbox").removeClass("check");
+        $(".coloronoffswitch-switch").css("background","linear-gradient(315deg,red,yellow,green)");
+
+        $('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+
+    }
+
+});
+
+
 
 });
 
@@ -1094,7 +1146,9 @@ function starttagstoo() {
   if ($("#selecteddb").html() != "") {
     if($("#drivedesc").html() != "(Can't load this drive, select an available one.)") {
 
+      localStorage["colortagstoo"] = window.colortagstoo;
       localStorage["currentlydatabaseused"] = $("#selecteddb").html();
+
       if (s.os.name == "windows" || s.os.name == "macos") {
         localStorage["selecteddriveunit"] = $("#selecteddrive").html();
         localStorage["lastuseddriveunit"] = $("#selecteddrive").html();

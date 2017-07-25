@@ -541,6 +541,18 @@ $(document).ready(function () {
 
 	});
 
+	// cuando esta seleccionado no color tagstoo se pone gris
+	window.colortagstoo = localStorage["colortagstoo"];
+
+	if (window.colortagstoo == "not") {
+
+	    var ls = document.createElement('link');
+	    ls.rel="stylesheet";
+	    ls.href= "css/version_grey.css";
+	    document.getElementsByTagName('head')[0].appendChild(ls);
+
+	}
+
 
 }); // --fin on document ready
 
@@ -3193,6 +3205,10 @@ function readsearchredresults() {
 	});
 
 	$.each (resultadosarchivos, function(n) {
+
+		if (resultadosarchivos[n].ext == undefined) { //para que no salga undefined si no tiene extensión
+			resultadosarchivos[n].ext = "&nbsp;";
+		}
 
 		try {
 

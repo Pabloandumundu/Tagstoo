@@ -29,6 +29,8 @@
 </head>
 <body>
 
+	<div id="popupbg"></div>
+
 	<div id="popuptitle"><img src="../img/options.png" alt="">DATABASE MANAGER & OPTIONS</div>
 
 	<br>
@@ -78,7 +80,26 @@
 
 	<hr>
 
+
+	<span style="vertical-align: middle !important">Toggle between color and greyscale modes: </span>
+	<div class="coloronoffswitch optionsswitch" id="pasteaction">
+
+		<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
+		<label class="coloronoffswitch-label" for="mycoloronoffswitch" >
+				<span class="coloronoffswitch-inner"></span>
+				<span class="coloronoffswitch-switch"></span>
+		</label>
+
+	</div>
+
+	<br>
+
 	<span>Confirmation on close program: </span><input type="checkbox" id="closeconfirmation">
+
+	<!-- <span style="margin-left: 3px; margin-right: 5px">&vert;</span> -->
+	<br>
+
+	<span>Show tips when program launch: </span><input type="checkbox" id="showtips">
 
 	<br>
 
@@ -86,13 +107,13 @@
 
 	<br>
 
-	<span>Preview images on Viewmode 1: </span><input type="checkbox" id="previewimgonviewmode1">
+	<span>Preview <em>images</em> and <em>epubs</em> on Viewmode 1: </span><input type="checkbox" id="previewimgonviewmode1">
 
 	<br>
 	
-	<span>Preview epubs on Viewmode 1: </span><input type="checkbox" id="previewepubonviewmode1">
+	<!-- <span>Preview epubs on Viewmode 1: </span><input type="checkbox" id="previewepubonviewmode1"> -->
 
-	<br>
+	<!-- <br> -->
 
 	<span>On image-viewer change to next image each <input type="text" id="autoslideshowtime" maxlength="3"> seconds: </span><input type="checkbox" id="autoslideshow">
 	

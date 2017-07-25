@@ -58,6 +58,7 @@
 
 
 window.driveunit = localStorage["selecteddriveunit"];
+window.colortagstoo = localStorage["colortagstoo"];
 var treedirecorytolist = driveunit + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WINDOWS mirar https://github.com/resin-io-modules/drivelist
 var carpetas = treedirecorytolist;
 var newrefresh="no";
@@ -230,8 +231,12 @@ if(jQuery) (function ($){
 
 								$(this).siblings("ul").children("li").children().on('start.pressAndHold', function(event) {
 
+							 		if (window.colortagstoo=="not") {
+							 			$(this)["0"].children["0"].style.borderRight = "5px solid white";
+							 		} else {
 							 		$(this)["0"].children["0"].style.borderRight = "5px solid yellow";
-						
+							 		}
+
 
 								});
 
@@ -446,7 +451,11 @@ if(jQuery) (function ($){
 
 				$("#filetree li span").on('start.pressAndHold', function(event) {
 
-				        $(this)["0"].children["0"].style.borderRight = "5px solid yellow";
+				        if (window.colortagstoo=="not") {
+				 			$(this)["0"].children["0"].style.borderRight = "5px solid white";
+				 		} else {
+				 		$(this)["0"].children["0"].style.borderRight = "5px solid yellow";
+				 		}
 
 				});
 

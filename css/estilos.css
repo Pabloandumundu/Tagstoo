@@ -1794,11 +1794,8 @@ header h1 {
 	cursor: default;
 	padding: 13px 5px 13px 5px;
 	padding: 12px;
-	background-image: url("../img/wood_pattern.png");
 	color: #111;
 	-webkit-border-radius: 7px;
-	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
-
 	text-shadow:
 		1px 1px 2px rgba(000,000,000,0.1),
 		0 1px 0 rgba(255,255,255,0.8);
@@ -1809,6 +1806,18 @@ header h1 {
 
 	border: 1px dashed #444;
 	user-select: none;
+
+}
+
+#popupbg { /* el background interno (madera) */
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	background-image: url("../img/wood_pattern.png");
+	z-index:-1;
+	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
 
 }
 
@@ -2064,7 +2073,92 @@ header h1 {
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+
+
+.coloronoffswitch {
+
+	position: relative;
+	 width: 56px;
+	-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+	display: inline-block;
+	margin-top: 11px; /* importante para que deje una altura mínima de la sección (que incluye tabs) en pantallas estrechas */
+	margin-bottom: 11px; /* importante para que deje una altura mínima de la sección (que incluye tabs) en pantallas estrechas */
+}
+
+.coloronoffswitch-checkbox {
+
+	display: none;
+}
+
+.coloronoffswitch-label {
+
+	display: block; overflow: hidden; cursor: pointer;
+	border: 2px solid #999999; border-radius: 20px;
+}
+
+.coloronoffswitch-inner {
+
+	display: block; width: 200%; margin-left: -100%;
+	transition: margin 0.3s ease-in 0s;
+}
+
+.coloronoffswitch-inner:before, .coloronoffswitch-inner:after {
+
+	display: block; float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
+	font-size: 8px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+	box-sizing: border-box;
+}
+
+.coloronoffswitch-inner:before {
+
+	content: "GREY";
+	padding-left: 9px;
+	background-color: rgb(249,225,201); color: #999;
+}
+
+.coloronoffswitch-inner:after {
+
+	content: "COLOR";
+	padding-right: 4px;
+	background-color: rgb(249,225,201); color: #999;
+	text-align: right;
+}
+
+.coloronoffswitch-switch {
+
+	display: block; width: 8px; margin: 6px;
+	background: linear-gradient(315deg,red,yellow,green);
+	position: absolute; top: 0; bottom: 0;
+	right: 32px;
+	border: 2px solid #999999; border-radius: 20px;
+	transition: all 0.3s ease-in 0s;
+}
+
+.coloronoffswitch-checkbox.check + .coloronoffswitch-label .coloronoffswitch-inner {
+
+	margin-left: 0;
+}
+.coloronoffswitch-checkbox.check + .coloronoffswitch-label .coloronoffswitch-switch {
+
+	right: 0;
+}
+
+
+/* popup options */
+
+.coloronoffswitch.optionsswitch {
+	margin: 0;
+	vertical-align: middle !important;
+}
+
+
+
 /* popup inital select */
+
+#colorswitch_initial {
+	position:fixed;
+	bottom: 26px;
+}
 
 #initialbody {
 

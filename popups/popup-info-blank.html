@@ -25,6 +25,7 @@
 
 	<meta charset="UTF-8">
 	<title>Select info option</title>
+	<script src="../js/jquery-latest.min.js"></script>
 
 	<style>
 
@@ -98,7 +99,7 @@
 	</style>
 
 </head>
-<body>
+<body class="subventana">
 
 	<svg viewBox='-50 -50 100 100'>
 	  <g class='ring'>
@@ -141,6 +142,18 @@
 	    <circle class='b dot' r='3' style='--i: 9'></circle>
 	  </g>
 	</svg>
+
+	<script>
+		
+		// el greyscale mode
+		if (localStorage["colortagstoo"]=="not"){
+			var ls = document.createElement('link');
+	        ls.rel="stylesheet";
+	        ls.href= "../css/version_grey.css";
+	        $('head')[0].appendChild(ls);
+    	}
+
+	</script>
 	
 </body>
 </html>

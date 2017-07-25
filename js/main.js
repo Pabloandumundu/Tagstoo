@@ -39,6 +39,8 @@ var selectedtagcolor = "";
 var selectedtagtext = "";
 var selectedtagform = "";
 
+window.tip = [];
+
 var editando = "no";
 
 var order = "nameasc";
@@ -46,6 +48,11 @@ var order = "nameasc";
 pasteaction = window.top.pasteaction;
 
 var searchviewmode = top.searcher.searchviewmode; // es solo para que no de error el pressandhold
+
+
+
+
+
 
 iniciarfolderview(); // inicia cadena de acciones, carga de explorador, tags etc..
 
@@ -518,6 +525,66 @@ $(document).ready(function () {
 
 	filetreeinteractions();
 
+	// Tips
+	tip = [	
+		"<b>Tip</b>: To enter in a folder press and hold mouse button over the folder's name until it enters.", 
+		"<b>Tip</b>: Images can be launched in two ways: Pressing and holding mouse button in the name of the image will launch it in the system's default viewer, otherwise, clicking in the image will launch the internal viewer of this program.", 
+		"<b>Tip</b>: If is the first time you launch Tagstoo, will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no more load demo tags when new database created uncheck the checkbox in the options menu.",
+		"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
+		"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
+		"<b>Tip</b>: Width of the tree view (on the left) and directory view (on the right) are adjustable, columns on the right on Viewmode 1 are also adjustable (but somewhat carefully because is not very optimized yet).",
+		"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
+		"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
+		"<b>Tip</b>: Sometimes dependig the action you do (or if you move somethin using external program) the view can not be actialized, to actualize it simply press refresh icons (arrows in circle).",
+		"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and you are ready."
+
+	]
+
+	window.tipquest = "<br><br><input type='checkbox' id='mostrartips' onclick='mostrartips()'><span>Don't show more Tips at launch.</span><div id='nexttip'><a class='buttontip' onclick='shownexttip()'>Next Tip <span style='font-weight:normal'>&#x21D2</span></a></div>"; // las funciones mostrartips() y shownexttip() están definidas en popups.js (al final) la de mostrartips() además tambien esta definida abajo
+
+	//tips localstorage?
+	if (!localStorage["mostrartips"]){
+		mostrartips = "yes";
+		localStorage["mostrartips"] = "yes"
+	} else {
+		mostrartips = localStorage["mostrartips"];
+	}
+
+	if (mostrartips == "yes"){
+
+		//tip mostrarnumero?
+		if (!localStorage["mostrartipnumero"]) {
+			mostrartipnumero = 0;
+		}
+		else {
+			mostrartipnumero = localStorage["mostrartipnumero"]
+		}
+
+		if (mostrartipnumero == 10) {//el tip final (tambien definido en popups.js al final)
+			mostrartipnumero = 0
+
+		}
+
+		// tip mensaje
+		alertify.alerttip(tip[mostrartipnumero]+tipquest)
+		mostrartipnumero++
+
+		localStorage["mostrartipnumero"]=mostrartipnumero
+
+	}
+	// esta función también esta definida en popups.js al final (porque sino no funciona en todas las ocasiones)
+	function mostrartips() {        
+	 	if ($('#mostrartips').prop('checked')){
+	    	localStorage["mostrartips"] = "no"
+
+		} else {
+		    localStorage["mostrartips"] = "yes"
+		}
+
+	}
+
+
+
 }); //--fin onload
 
 
@@ -572,7 +639,6 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 
 
 
-
 		window.rootdirectory = "\/";
 		window.dirtoexec="";
 
@@ -590,6 +656,18 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 
 		// carga el visor del arbol
 		$('#filetree').fileTree();
+
+		// cuando esta seleccionado no color tagstoo se pone gris
+		window.colortagstoo = localStorage["colortagstoo"];
+
+		if (window.colortagstoo == "not") {
+
+		    var ls = document.createElement('link');
+		    ls.rel="stylesheet";
+		    ls.href= "css/version_grey.css";
+		    document.getElementsByTagName('head')[0].appendChild(ls);
+
+		}
 
 	};
 
@@ -8660,6 +8738,7 @@ function editTag() {
 
 	popup("edittag");
 }
+
 
 
 

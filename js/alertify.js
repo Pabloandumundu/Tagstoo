@@ -106,7 +106,8 @@
 				ok     : "OK",
 				cancel : "Cancel",
 				no     : "No",
-				yes    : "Yes"
+				yes    : "Yes",
+				close  : "Go Tagstoo!"
 			},
 
 			/**
@@ -306,6 +307,10 @@
 				case "alert":
 					html = html.replace("{{buttons}}", dialogs.buttons.ok);
 					html = html.replace("{{ok}}", this.labels.ok);
+					break;
+				case "alerttip":
+					html = html.replace("{{buttons}}", dialogs.buttons.ok);
+					html = html.replace("{{ok}}", this.labels.close);
 					break;
 				default:
 					break;
@@ -631,6 +636,7 @@
 
 		return {
 			alert   : function (message, fn, cssClass) { _alertify.dialog(message, "alert", fn, "", cssClass); return this; },
+			alerttip   : function (message, fn, cssClass) { _alertify.dialog(message, "alerttip", fn, "", cssClass); return this; },
 			confirm : function (message, fn, cssClass) { _alertify.dialog(message, "confirm", fn, "", cssClass); return this; },
 			confirmny : function (message, fn, cssClass) { _alertify.dialog(message, "confirmny", fn, "", cssClass); return this; },
 			extend  : _alertify.extend,

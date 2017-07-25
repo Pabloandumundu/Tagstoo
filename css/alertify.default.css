@@ -69,3 +69,48 @@
 .alertify-message a:link {
 	color: #14559f;
 }
+
+
+#nexttip {
+
+	position: absolute;
+	/*height: 50px;*/
+	right: 135px;
+	right: 20px;
+	right: 38px;
+	bottom: 32px;
+	bottom: 77px;
+}
+
+
+
+
+a.buttontip{
+		background: #ECECEC;
+		border-radius: 10px;
+		padding: 7px 15px;
+		/*display: block;*/
+		/*font-family: arial;*/
+		font-weight: bold;
+		color:#7f7f7f;
+		text-decoration: none;
+		text-shadow:0px 1px 0px #fff;
+		border:1px solid #a7a7a7;
+		width: 145px;
+		margin:0px auto;
+		margin-top:100px;
+		box-shadow: 0px 2px 1px white inset, 0px -2px 8px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+		-webkit-transition:box-shadow 0.5s;
+	}
+	a.buttontip i{
+		float: right;
+		margin-top: 2px;
+	}
+	a.buttontip:hover{
+		box-shadow: 0px 2px 1px white inset, 0px -2px 20px white, 0px 2px 5px rgba(0, 0, 0, 0.1), 0px 8px 10px rgba(0, 0, 0, 0.1);
+		cursor: pointer;
+	}
+	a.buttontip:active{
+		box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5) inset, 0px -2px 20px white, 0px 1px 5px rgba(0, 0, 0, 0.1), 0px 2px 10px rgba(0, 0, 0, 0.1);
+		background:-webkit-linear-gradient(top, #d1d1d1 0%,#ECECEC 100%);
+	}

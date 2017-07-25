@@ -107,7 +107,7 @@
 	</style>
 
 </head>
-<body>
+<body class="subventana">
 
 	<span class="page-title"><em>Help</em></span>
 
@@ -152,9 +152,10 @@
 	<a name="databases14"></a>
 	<p><b><i style="color:#333">Note</i></b> (for previous users of Tagstoo 1.4 and earlier versions)<b><i style="color:#333">:</i></b> <em>From version 1.5 of Tagstoo onwards, new database list load method is used, because of an external imperative. The previous databases will not appear in the list, but don´t worry, to access data simply execute the previous version of Tagstoo that you have (</em><a href="https://tagstoo.sourceforge.io/downloadv14compatibility.html" target="_blank">Here</a><em> you can donwload version 1.4) export the data of the database of your choice to a file and close program, launch the new Tagstoo version and import the data into a new database.</em></p>
 
-	<p>Each database is associated to a drive unit like ‘C:’, ‘D:’, ’G:’, etc.. (in Windows) or ‘/‘, ‘/media/user/externaldrive‘, etc.. (in Linux) but this associated drive can be changed at any time in the options of the program, this is so that if you have the data to be tagged on an external drive everything works correctly even though the system has been able to choose another path to the drive than you used last time.</p>
+	<p>Each database is associated to a drive unit like ‘C:’, ‘D:’, ’G:’, etc.. (in Windows) or ‘/’, ‘/media/user/externaldrive’, etc.. (in Linux), or ‘/Volumes/yourdrive’ (in macOS) but this associated drive can be changed at any time in the options of the program, this is so that if you have the data to be tagged on an external drive everything works correctly even though the system has been able to choose another path to the drive than you used last time, or you change operating system.</p>
 	<p>So select a drive unit if you need (by default is selected that from which the program is executed) and press ‘Launch!’ button to start.</p>
 	<p>Another buttons in the Initial options is ‘Import data’ that by clicking on that you can choose a file where a database has been previously exported and import that in the database you choose. And delete, to delete database that you select.</p>
+	<p>An switch to change between color and 'grayscale' modes is also available in this initial options window.</p>
 	<p>More info on import/export and databases on the help about general options.</p>
 
 	<a name="2"></a><h3>2. Program general interface</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
@@ -311,14 +312,14 @@
 
 	<a name="3_2"></a><h3>3.2. Another options</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 	<p>Few other options are also available in this window:</p>
+	<p>&#8226; Toggle betwee color and greyscale modes; an swich to change interface colors to best fit your like.</p>
 	<p>&#8226; Confirmation on close program; that by default is active.</p>
 	<p>&#8226; Demonstration 5 tags initially loaded; that by default is active, but is recommended that, when you know about the basic interface, deactivate it.</p>
-	<p>&#8226; Preview images on Viewmode 1; by default is deactivated, is because the miniatures are really very small on this viewmode, but for someone it can be anyway useful so this option is available.</p>
-	<p>&#8226; Preview epubs on Viewmode 1; same as with images, in this case it refers to the cover image of epubs.</p>
+	<p>&#8226; Preview images and epubs on Viewmode 1; by default is deactivated, is because the miniatures are really very small on this viewmode, but for someone it can be anyway useful so this option is available.</p>	
 	<p>&#8226; On image-viewer change to next image each X seconds; you can activate it to auto-change image every X seconds, to the next one, when image-viewer is launched with any image.</p>
 
 	<img src="../img/help/johnny-automatic-fern-border.svg" alt="" style="width: 90%; margin: 0 auto; display: block; max-width: 600px; margin-top: 20px; opacity: 0.5;">
-
+	
 
 	<script>
 
@@ -343,6 +344,15 @@
 		   require('nw.gui').Shell.openExternal( this.href );
 		   return false;
 		});
+
+
+		// el greyscale mode
+		if (localStorage["colortagstoo"]=="not"){
+			var ls = document.createElement('link');
+	        ls.rel="stylesheet";
+	        ls.href= "../css/version_grey.css";
+	        $('head')[0].appendChild(ls);
+    	}	
 
 	</script>
 

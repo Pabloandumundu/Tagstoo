@@ -31,19 +31,7 @@ $(document).ready(function () {
 		$(this).addClass('current');
 		$("#"+tab_id).addClass('current');
 
-	});
-
-
-    // conmutador paste-copy
-    $('#myonoffswitch').on('click', function(){
-
-        if (pasteaction == "copy") {
-            pasteaction = "cut";
-        } else {
-            pasteaction = "copy";
-        }
-
-    });
+	});    
 
 
     // Estilos un poco más ajustados para pantallas estrechas
@@ -80,10 +68,19 @@ $(document).ready(function () {
         });        
 
     });
-    
 
-    // conmutador copy/paste
+
+    // conmutador paste-copy
     var pasteaction = "copy";
+    $('#myonoffswitch').on('click', function(){
+
+        if (pasteaction == "copy") {
+            pasteaction = "cut";
+        } else {
+            pasteaction = "copy";
+        }
+
+    });
 
     $(".onoffswitch-inner, .onoffswitch-switch").bind('click', function() {
 
@@ -102,5 +99,18 @@ $(document).ready(function () {
         }
 
     });
+
+
+    // cuando esta seleccionado no color tagstoo se pone gris
+    window.colortagstoo = localStorage["colortagstoo"];
+
+    if (window.colortagstoo == "not") {
+
+        var ls = document.createElement('link');
+        ls.rel="stylesheet";
+        ls.href= "css/version_grey.css";
+        document.getElementsByTagName('head')[0].appendChild(ls);
+
+    }
 
 });
