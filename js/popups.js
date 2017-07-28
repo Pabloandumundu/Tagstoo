@@ -124,23 +124,35 @@ function saveoptions() {
 	}
 
 
-
+	// la opcion de slideshow
+		
 	if ($("#autoslideshow").is(":checked")) {
-		selectedtime = $("#autoslideshowtime").val()
-		if (+selectedtime == 0) {
-			alert("Time between images must be more than 0!. Time not saved.");
-		} else {
-			localStorage["autoslideshow"] = "yes";
-			window.autoslideshow = "yes";
-			localStorage["autoslideshowtime"] = selectedtime;
-			window.autoslideshowtime = selectedtime;
-		}
 
-	}
+		localStorage["autoslideshow"] = "yes";
+		window.autoslideshow = "yes";
+
+	}	
 	else {
 		localStorage["autoslideshow"] = "no";
 		window.autoslideshow = "no";
+
 	}
+
+	var selectedtime = $("#autoslideshowtime").val()
+	if (selectedtime == 0) {
+		alert("Time between images must be more than 0!. Time not saved.");
+
+	}
+	else {
+		localStorage["autoslideshowtime"] = selectedtime;
+		window.autoslideshowtime = selectedtime;
+
+	}
+
+
+
+
+	
 
 }
 
@@ -2533,7 +2545,9 @@ function optionspreload() {
 	        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
 	            e.preventDefault();
 	        }
+
     	});
+
 
 
     	window.colortagstoo = localStorage["colortagstoo"];
@@ -2630,7 +2644,7 @@ function loaddatabaseselect() {
 
 		})
 
-	}, 250)
+	}, 400)
 
 }
 

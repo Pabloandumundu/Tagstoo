@@ -54,7 +54,11 @@
 
 		<br>
 
-		<a id="newdatabase" class="medium button green">New database</a><input id="newdatabasename" type="text"><span><em>Select this new database</em></span>		
+		<a id="newdatabase" class="medium button green">New database</a><input id="newdatabasename" type="text"><span><em>Select this new database</em></span>
+
+		<br>
+
+		 <a class="medium button green" onclick="saveoptions(); cerrar(); restarttagstoo()">Load It</a><span><em>Load selected database</em></span>	
 
 		<br>
 
@@ -73,8 +77,6 @@
 		
 		<!-- Delete Database -->
 		<a id="deletedb" class="medium button red">Delete database</a><span><em>Delete selected database</em></span>
-
-		<br>
 
 	</div>
 
@@ -117,11 +119,9 @@
 
 	<span>On image-viewer change to next image each <input type="text" id="autoslideshowtime" maxlength="3"> seconds: </span><input type="checkbox" id="autoslideshow">
 	
-	<hr>
+	<hr>	
 
-	<a class="medium button green" onclick="saveoptions(); cerrar(); restarttagstoo()">Apply!</a>
-
-	<a class="medium button orange close" onclick="cerrar()">Close</a>
+	<a class="large button orange closeopt" onclick="saveoptions(); cerrar()">Close</a>
 
 	<script>
 		optionspreload();

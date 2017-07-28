@@ -3443,7 +3443,7 @@ function drawSearchArchives (searchviewmode, order) {
 			resultadosarchivos.sort(SortByNameAsc);
 			break;
 		case "namedesc":
-			directoryrchives.sort(SortByNameDesc);
+			resultadosarchivos.sort(SortByNameDesc);
 			break;	
 		case "extasc":
 			resultadosarchivos.sort(SortByExtAsc);
@@ -5952,44 +5952,49 @@ function interactinsforsearchdir() {
 
 // teclas accesos directos
 function KeyPress(e) {
-    var evtobj = window.event? event : e
 
-    if (evtobj.keyCode == 86 && evtobj.ctrlKey) { // Ctrl+v
+	if (!$("#popupbackground").hasClass("display")) { // para evitar teclas rapidas (especialmente supr) cuando hay un popup
 
-      window.parent.$("#paste").trigger( "click" );
-    }
+	    var evtobj = window.event? event : e
 
-    else if (evtobj.keyCode == 46) { // delete
-    	window.parent.$("#delete").trigger( "click" );
-    }
+	    if (evtobj.keyCode == 86 && evtobj.ctrlKey) { // Ctrl+v
 
-    else if (evtobj.keyCode == 88 && evtobj.ctrlKey) { // Ctrl+x
+	      window.parent.$("#paste").trigger( "click" );
+	    }
 
-      if (window.parent.pasteaction == "copy") {
+	    else if (evtobj.keyCode == 46) { // delete
+	    	window.parent.$("#delete").trigger( "click" );
+	    }
 
-        window.parent.pasteaction = "cut";
-        window.parent.$(".onoffswitch-checkbox").addClass("check");
-        window.parent.$(".onoffswitch-switch").css("background-color","#d5695d"); //red
-      }
+	    else if (evtobj.keyCode == 88 && evtobj.ctrlKey) { // Ctrl+x
 
-    }
-    else if (evtobj.keyCode == 67 && evtobj.ctrlKey) { // Ctrl+c
+	      if (window.parent.pasteaction == "copy") {
 
-      if (window.parent.pasteaction == "cut") {
+	        window.parent.pasteaction = "cut";
+	        window.parent.$(".onoffswitch-checkbox").addClass("check");
+	        window.parent.$(".onoffswitch-switch").css("background-color","#d5695d"); //red
+	      }
 
-        window.parent.pasteaction = "copy";
-        window.parent.$(".onoffswitch-checkbox").removeClass("check");
-		window.parent.$(".onoffswitch-switch").css("background-color","#439bd6"); //blue
-      }
+	    }
+	    else if (evtobj.keyCode == 67 && evtobj.ctrlKey) { // Ctrl+c
 
-    }
-    else if (evtobj.keyCode == 65 && evtobj.ctrlKey) { // Ctrl+a
-    	$(".exploelement").removeClass("ui-selected");
-    	$(".exploelement").removeClass("ui-selecting");
-    	$(".exploelement").addClass("ui-selecting");
-    	return false; //para que no seleccione otras cosas (por defecto)
+	      if (window.parent.pasteaction == "cut") {
 
-    }
+	        window.parent.pasteaction = "copy";
+	        window.parent.$(".onoffswitch-checkbox").removeClass("check");
+			window.parent.$(".onoffswitch-switch").css("background-color","#439bd6"); //blue
+	      }
+
+	    }
+	    else if (evtobj.keyCode == 65 && evtobj.ctrlKey) { // Ctrl+a
+	    	$(".exploelement").removeClass("ui-selected");
+	    	$(".exploelement").removeClass("ui-selecting");
+	    	$(".exploelement").addClass("ui-selecting");
+	    	return false; //para que no seleccione otras cosas (por defecto)
+
+	    }
+	    
+	}
 
 }
 

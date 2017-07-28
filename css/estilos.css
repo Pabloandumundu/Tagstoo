@@ -1863,6 +1863,12 @@ header h1 {
  	margin-left: 10px;
 }
 
+.closeopt {
+	margin-left: calc(50% - 31px);
+	/* margin-left: calc(90% - 31px); */
+	margin-left: 0;
+}
+
 .savetag {
 
 	margin-bottom: 10px;
@@ -2251,7 +2257,8 @@ header h1 {
 
 	display: block;
 	width: 100%;
-	height: calc(100% - 240px);
+	/*height: calc(100% - 240px);*/
+	height: calc(100% - 246px);
 	min-height: 225px;
 	border-radius: 5px;
 	margin-bottom: 7px;

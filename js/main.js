@@ -111,11 +111,11 @@ $(document).ready(function () {
 		var nd_originalwidth = $('#locationinfo, #dirview-wrapper').width();
 
 		var diference = originalwidth - event.rect.width;
-		var nd_newwithd = nd_originalwidth + diference;
+		var nd_newwidth = nd_originalwidth + diference;
 
-		if (nd_newwithd > 400 && nd_newwithd < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo
+		if (nd_newwidth > 400 && nd_newwidth < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo
 			$('#treeview').width(event.rect.width);
-			$('#locationinfo, #dirview-wrapper').width(nd_newwithd);
+			$('#locationinfo, #dirview-wrapper').width(nd_newwidth);
 		}
 
 
@@ -149,10 +149,10 @@ $(document).ready(function () {
 		var nd_originalwidth = $('#bottomright').width();
 
 		var diference = originalwidth - event.rect.width;
-		var nd_newwithd = nd_originalwidth + diference;
+		var nd_newwidth = nd_originalwidth + diference;
 		if (originalwidth > 20 && nd_originalwidth > 80) { //esto es solo para poner un tamño minimo
 			$('#bottomleft').width(event.rect.width);
-			$('#bottomright').width(nd_newwithd);
+			$('#bottomright').width(nd_newwidth);
 		}
 		else if (originalwidth <= 20) {
 			$('#bottomleft').css("width","25px");
@@ -206,12 +206,12 @@ $(document).ready(function () {
 				var nd_originalwidth = $('.explofolder, .explofile').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
 				if (sumatoriodepixels + 35 < pixelstotalesl) {
 
 					$('.explofolder, .explofile').width(event.rect.width);
-					$('.explofolder, .explofile').next("div").width(nd_newwithd);
+					$('.explofolder, .explofile').next("div").width(nd_newwidth);
 				}
 
 				else {
@@ -247,12 +247,12 @@ $(document).ready(function () {
 				var nd_originalwidth = $('.folderelements, .exploext').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
 				if (sumatoriodepixels + 35 < pixelstotalesl) {
 
 					$('.folderelements, .exploext').width(event.rect.width);
-					$('.folderelements, .exploext').next("div").width(nd_newwithd);
+					$('.folderelements, .exploext').next("div").width(nd_newwidth);
 
 				} else {
 
@@ -288,12 +288,12 @@ $(document).ready(function () {
 				var nd_originalwidth = $('.explosize').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
 				if (sumatoriodepixels + 35 < pixelstotalesl) {
 
 					$('.explosize').width(event.rect.width);
-					$('.explosize').next("div").width(nd_newwithd);
+					$('.explosize').next("div").width(nd_newwidth);
 
 				} else {
 
@@ -328,12 +328,12 @@ $(document).ready(function () {
 				var nd_originalwidth = $('.exploelement .tags').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
 				if (sumatoriodepixels + 35 < pixelstotalesl) { //para poner un limite por la derecha y que no se desborde
 
 					$('.exploelement .tags').width(event.rect.width);
-					$('.exploelement .tags').next("div").width(nd_newwithd);
+					$('.exploelement .tags').next("div").width(nd_newwidth);
 
 				} else {
 
@@ -368,13 +368,13 @@ $(document).ready(function () {
 				var nd_originalwidth = $('.lastmod').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
 
 				if (sumatoriodepixels + 35 < pixelstotalesl) {
 
 					$('.lastmod').width(event.rect.width);
-					$('.lastmod').next("div").width(nd_newwithd);
+					$('.lastmod').next("div").width(nd_newwidth);
 
 				} else {
 
@@ -409,12 +409,12 @@ $(document).ready(function () {
 				var nd_originalwidth = $('.duration').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
 				if (sumatoriodepixels + 35 < pixelstotalesl) {
 
 					$('.duration').width(event.rect.width);
-					$('.duration').next("div").width(nd_newwithd);
+					$('.duration').next("div").width(nd_newwidth);
 
 				} else {
 
@@ -733,44 +733,47 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 // teclas accesos directos
 function KeyPress(e) {
 
+	if (!$("#popupbackground").hasClass("display")) { // para evitar teclas rapidas (especialmente supr) cuando hay un popup
+		
+	    var evtobj = window.event? event : e
 
-    var evtobj = window.event? event : e
+	    if (evtobj.keyCode == 86 && evtobj.ctrlKey) { // Ctrl+v
 
-    if (evtobj.keyCode == 86 && evtobj.ctrlKey) { // Ctrl+v
+	      window.parent.$("#paste").trigger( "click" );
+	    }
 
-      window.parent.$("#paste").trigger( "click" );
-    }
+	    else if (evtobj.keyCode == 46) { // delete
+	    	window.parent.$("#delete").trigger( "click" );
+	    }
 
-    else if (evtobj.keyCode == 46) { // delete
-    	window.parent.$("#delete").trigger( "click" );
-    }
+	    else if (evtobj.keyCode == 88 && evtobj.ctrlKey) { // Ctrl+x
 
-    else if (evtobj.keyCode == 88 && evtobj.ctrlKey) { // Ctrl+x
+	      if (window.parent.pasteaction == "copy") {
 
-      if (window.parent.pasteaction == "copy") {
+	        window.parent.pasteaction = "cut";
+	        window.parent.$(".onoffswitch-checkbox").addClass("check");
+	        window.parent.$(".onoffswitch-switch").css("background-color","#d5695d"); //red
+	      }
 
-        window.parent.pasteaction = "cut";
-        window.parent.$(".onoffswitch-checkbox").addClass("check");
-        window.parent.$(".onoffswitch-switch").css("background-color","#d5695d"); //red
-      }
+	    }
+	    else if (evtobj.keyCode == 67 && evtobj.ctrlKey) { // Ctrl+c
 
-    }
-    else if (evtobj.keyCode == 67 && evtobj.ctrlKey) { // Ctrl+c
+	      if (window.parent.pasteaction == "cut") {
 
-      if (window.parent.pasteaction == "cut") {
+	        window.parent.pasteaction = "copy";
+	        window.parent.$(".onoffswitch-checkbox").removeClass("check");
+			window.parent.$(".onoffswitch-switch").css("background-color","#439bd6"); //blue
+	      }
 
-        window.parent.pasteaction = "copy";
-        window.parent.$(".onoffswitch-checkbox").removeClass("check");
-		window.parent.$(".onoffswitch-switch").css("background-color","#439bd6"); //blue
-      }
+	    }
+	    else if (evtobj.keyCode == 65 && evtobj.ctrlKey) { // Ctrl+a
+	    	$(".exploelement").removeClass("ui-selected");
+	    	$(".exploelement").removeClass("ui-selecting");
+	    	$(".exploelement").addClass("ui-selecting");
+	    	return false; //para que no seleccione otras cosas (por defecto)
+	    }
 
-    }
-    else if (evtobj.keyCode == 65 && evtobj.ctrlKey) { // Ctrl+a
-    	$(".exploelement").removeClass("ui-selected");
-    	$(".exploelement").removeClass("ui-selecting");
-    	$(".exploelement").addClass("ui-selecting");
-    	return false; //para que no seleccione otras cosas (por defecto)
-    }
+	}
 
 }
 

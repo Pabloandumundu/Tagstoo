@@ -162,28 +162,22 @@
 	</div>
 
 	<script>
+		
+		var win = nw.Window.get();
 
-		if(localStorage["closeconfirmation"]=="no") {
-			window.closeconfirmation = localStorage["closeconfirmation"];
-		} else {
-			window.closeconfirmation = "yes";
-		}
+		// para quitar un defecto de que si se había recargado la página a la hora de cerrar pedía confirmación tantas veces como recargadas
+		setTimeout(function() {
 
-		if (closeconfirmation == "yes") {
-			
-			var win = nw.Window.get();
+			$.each(win.__proto__.outerEventCBs.close, function(i) {          
+				delete win.__proto__.outerEventCBs.close[i]; 
+			});
 
-			// para quitar un defecto de que si se había recargado la página a la hora de cerrar pedía confirmación tantas veces como recargadas
-			setTimeout(function() {
+		}, 500);
 
-				$.each(win.__proto__.outerEventCBs.close, function(i) {          
-					delete win.__proto__.outerEventCBs.close[i]; 
-				});
+		// la función propia para pedir confirmación a la hora de cerrar
+		win.on('close', function() {
 
-			}, 500);
-
-			// la función propia para pedir confirmación a la hora de cerrar
-			win.on('close', function() {
+			if(localStorage["closeconfirmation"]=="yes") {
 
 				alertify.confirm( "Close application ?", function (e) {
 					if (!e) {
@@ -197,9 +191,11 @@
 
 				});
 
-			});
+			} else {
+				win.close(true);
+			}
 
-		}
+		});
 
 	</script>
 
