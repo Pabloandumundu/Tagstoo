@@ -2380,12 +2380,23 @@ function optionspreload() {
 
   													idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
 
-  													alertify.alert("Data successfully imported.");
+  													alertify.alert('Data successfully imported.', function(){
+
+  														// si es el database actualmente en uso recarga tagstoo
+														if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) {
+															setTimeout(function(){
+																saveoptions();															 
+																cerrar(); 
+																restarttagstoo();
+															}, 500);
+
+														}
+
+  													});
 
   												}
 
   											});
-
 
   											//se añade la bd al listado de bd existentes
 											var requestdbnames = window.indexedDB.open("tagstoo_databaselist_1100", 1);
@@ -2400,12 +2411,14 @@ function optionspreload() {
 																.objectStore("databases")
 																.add({ dbname: $('#selecteddb').html() });
 
-												requestdbadd.onsuccess = function(event) {
+												requestdbadd.onsuccess = function(event) {												
 
 													// se vuelve a cargar la lista
 													listadofiltradodeDB.push($('#selecteddb').html())
 													loaddatabaseselect();
+
 												};
+
 												requestdbadd.onerror = function(event) { };
 
 										    }
@@ -2427,6 +2440,7 @@ function optionspreload() {
   						});
 
   					});
+
   				});
 
   			} else {
