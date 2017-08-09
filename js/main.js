@@ -66,75 +66,87 @@ $(document).ready(function () {
 	});
 	////////////////////////\\\\\\\\
 
-	// para poder regular anchuras divs
 
+	// para poder regular anchuras divs
+	columnaswidth = [];
 	// paneles izquierdo/derecho
 	interact('#treeview')
 
 	  .resizable({
 		preserveAspectRatio: false,
-		edges: { left: false, right: true, bottom: false, top: false }
+		edges: { left: false, right: true, bottom: false, top: false },
+
+			onstart: function (event) {
+
+				if (viewmode==1) {
+					$(".imgmode1").width("16px")
+
+				}
+
+			},
+			onend: function (event) {
+
+				// se van a convertir los valores en pixeles de las columnas del panel derecho a porcentajes para que al cambiar la anchura del panel cambien las anchuras de las columnas de forma equitativa.
+				if (viewmode==1){
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
+			}
 	  })
 	  .on('resizemove', function (event) {
 
-		// se van a convertir los valores en pixeles de las columnas del panel derecho a porcentajes para que al cambiar la
-		// anchura del panel cambien las anchuras de las columnas de forma equitativa.
+			var originalwidth = $('#treeview').width();
+			var nd_originalwidth = $('#locationinfo, #dirview-wrapper').width();
 
-		var pixelstotales = $('.exploelement').width();
+			var diference = originalwidth - event.rect.width;
+			var nd_newwidth = nd_originalwidth + diference;
 
-		var pixels = $('.explofolder, .explofile').width();
-		var percentaje = (100 / pixelstotales) * pixels
-		$('.explofolder, .explofile').width(''+ percentaje + '%');
-
-		pixels = $('.folderelements, .exploext').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.folderelements, .exploext').width(''+ percentaje + '%');
-
-		pixels = $('.explosize').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.explosize').width(''+ percentaje + '%');
-
-		pixels = $('.exploelement .tags').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.exploelement .tags').width(''+ percentaje + '%');
-
-		pixels = $('.lastmod').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.lastmod').width(''+ percentaje + '%');
-
-		pixels = $('.duration').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.duration').width(''+ percentaje + '%');
+			if (nd_newwidth > 400 && nd_newwidth < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo
+				$('#treeview').width(event.rect.width);
+				$('#locationinfo, #dirview-wrapper').width(nd_newwidth);
+			}
 
 
-		var originalwidth = $('#treeview').width();
-		var nd_originalwidth = $('#locationinfo, #dirview-wrapper').width();
+			// este es un apaño necesario para que se pueda leer la dirección del location cuando hay poca anchura
+			if ($("#locationinfo").width() <= 52 + $("#location").width() + 75 + 26) {
+				$("#previousnextleft").css("display", "none")
+				$("#previousnextright").css("display", "inline-block")
+				$("#location").css("padding-left", "2px")
 
-		var diference = originalwidth - event.rect.width;
-		var nd_newwidth = nd_originalwidth + diference;
+			}
+			else {
+				$("#previousnextleft").css("display", "inline-block")
+				$("#previousnextright").css("display", "none");
+				$("#location").css("padding-left", "0")
 
-		if (nd_newwidth > 400 && nd_newwidth < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo
-			$('#treeview').width(event.rect.width);
-			$('#locationinfo, #dirview-wrapper').width(nd_newwidth);
-		}
-
-
-		// este es un apaño necesario para que se pueda leer la dirección del location cuando hay poca anchura
-		if ($("#locationinfo").width() <= 52 + $("#location").width() + 75 + 26) {
-			$("#previousnextleft").css("display", "none")
-			$("#previousnextright").css("display", "inline-block")
-			$("#location").css("padding-left", "2px")
-
-		}
-		else {
-			$("#previousnextleft").css("display", "inline-block")
-			$("#previousnextright").css("display", "none");
-			$("#location").css("padding-left", "0")
-
-		}
+			}
 
 
-	}); // --end interact #treeview
+		}); // --end interact #treeview
 
 	// bottom
 	interact('#bottomleft')
@@ -179,46 +191,61 @@ $(document).ready(function () {
 	// las diferentes "columnas" del panel derecho
 	if (viewmode==1){
 
-
 		interact('.explofolder, .explofile')
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".explofolder, .explofile").width()
+					nd_originalwidth = $(".folderelements, .exploext").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
+
 			.on('resizemove', function (event) {
-
-				var pixelstotalesl = $('.exploelement').width();
-
-				if (event.target.classList.contains("explofolder")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.folderelements', '.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				else if (event.target.classList.contains("explofile")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.explofolder, .explofile').width();
-				var nd_originalwidth = $('.explofolder, .explofile').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
 				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$('.explofolder, .explofile').width(event.rect.width);
-					$('.explofolder, .explofile').next("div").width(nd_newwidth);
-				}
-
-				else {
-
-					$('.explofolder, .explofile').width(anchuraespecifica)
+					$(".explofolder, .explofile").width(event.rect.width);
+					$(".folderelements, .exploext").width(nd_newwidth);
 
 				}
+
 
 			});
 
@@ -226,40 +253,55 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".folderelements, .exploext").width()
+					nd_originalwidth = $(".explosize").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
-
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.classList.contains("exploext")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();7
-					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				else if (event.target.classList.contains("folderelements")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.folderelements, .exploext').width();
-				var nd_originalwidth = $('.folderelements, .exploext').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
 				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$('.folderelements, .exploext').width(event.rect.width);
-					$('.folderelements, .exploext').next("div").width(nd_newwidth);
-
-				} else {
-
-					$('.folderelements, .exploext').width(anchuraespecifica);
+					$(".folderelements, .exploext").width(event.rect.width)
+					$(".explosize").width(nd_newwidth);
 
 				}
-
 
 			});
 
@@ -267,37 +309,53 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".explosize").width()
+					nd_originalwidth = $(".exploelement .tags").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
-
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.parentElement.classList.contains("archive")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				else if (event.target.parentElement.classList.contains("folder")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-				}
-
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.explosize').width();
-				var nd_originalwidth = $('.explosize').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
 				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$('.explosize').width(event.rect.width);
-					$('.explosize').next("div").width(nd_newwidth);
-
-				} else {
-
-					$('.explosize').width(anchuraespecifica);
+					$(".explosize").width(event.rect.width)
+					$(".exploelement .tags").width(nd_newwidth);
 
 				}
 
@@ -307,37 +365,53 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".exploelement .tags").width()
+					nd_originalwidth = $(".lastmod").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
-
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.parentElement.classList.contains("archive")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				else if (event.target.parentElement.classList.contains("folder")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.lastmod').width() + $('.duration').width();
-				}
-
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.exploelement .tags').width();
-				var nd_originalwidth = $('.exploelement .tags').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
 				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) { //para poner un limite por la derecha y que no se desborde
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$('.exploelement .tags').width(event.rect.width);
-					$('.exploelement .tags').next("div").width(nd_newwidth);
-
-				} else {
-
-					$('.exploelement .tags').width(anchuraespecifica)
+					$(".exploelement .tags").width(event.rect.width)
+					$(".lastmod").width(nd_newwidth);
 
 				}
 
@@ -347,38 +421,53 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".lastmod").width()
+					nd_originalwidth = $(".duration").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
-
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.parentElement.classList.contains("archive")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.duration').width();
-
-				}
-				else if (event.target.parentElement.classList.contains("folder")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.duration').width();
-				}
-
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.lastmod').width();
-				var nd_originalwidth = $('.lastmod').next("div").width();
 
 				var diference = originalwidth - event.rect.width;
 				var nd_newwidth = nd_originalwidth + diference;
 
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
-
-					$('.lastmod').width(event.rect.width);
-					$('.lastmod').next("div").width(nd_newwidth);
-
-				} else {
-
-					$('.lastmod').width(anchuraespecifica)
+					$(".lastmod").width(event.rect.width)
+					$(".duration").width(nd_newwidth);
 
 				}
 
@@ -388,37 +477,52 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".duration").width();
+					var x = $(".exploelement").offset();
+					rowleftlimit = x.left + $(".exploelement")["0"].scrollWidth - 10;
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
 
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.parentElement.classList.contains("archive")) {
-					var sumatoriodepixels = $('.exploelement .imgmode1').width() + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = $('.exploelement .imgmode1').width() + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width();
-
-				}
-				else if (event.target.parentElement.classList.contains("folder")) {
-					var sumatoriodepixels = $('.exploelement .imgmode1').width() + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = $('.exploelement .imgmode1').width() + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width();
-				}
-
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.duration').width();
-				var nd_originalwidth = $('.duration').next("div").width();
-
 				var diference = originalwidth - event.rect.width;
-				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
+				if (event.rect.width > 15 && event.clientX < rowleftlimit) {
 
-					$('.duration').width(event.rect.width);
-					$('.duration').next("div").width(nd_newwidth);
-
-				} else {
-
-					$('.duration').width(anchuraespecifica)
+					$(".duration").width(event.rect.width)
 
 				}
 
@@ -526,13 +630,13 @@ $(document).ready(function () {
 	filetreeinteractions();
 
 	// Tips
-	tip = [	
-		"<b>Tip</b>: To enter in a folder press and hold mouse button over the folder's name until it enters.", 
-		"<b>Tip</b>: Images can be launched in two ways: Pressing and holding mouse button in the name of the image will launch it in the system's default viewer, otherwise, clicking in the image will launch the internal viewer of this program.", 
+	tip = [
+		"<b>Tip</b>: To enter in a folder press and hold mouse button over the folder's name until it enters.",
+		"<b>Tip</b>: Images can be launched in two ways: Pressing and holding mouse button in the name of the image will launch it in the system's default viewer, otherwise, clicking in the image will launch the internal viewer of this program.",
 		"<b>Tip</b>: If is the first time you launch Tagstoo, will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no more load demo tags when new database created uncheck the checkbox in the options menu.",
 		"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
 		"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
-		"<b>Tip</b>: Width of the tree view (on the left) and directory view (on the right) are adjustable, columns on the right on Viewmode 1 are also adjustable (but somewhat carefully because is not very optimized yet).",
+		"<b>Tip</b>: Width of the tree view (on the left) and directory view (on the right) are adjustable, columns on the right on Viewmode 1 are also adjustable.",
 		"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
 		"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
 		"<b>Tip</b>: Sometimes dependig the action you do (or if you move somethin using external program) the view can not be actialized, to actualize it simply press refresh icons (arrows in circle).",
@@ -573,7 +677,7 @@ $(document).ready(function () {
 
 	}
 	// esta función también esta definida en popups.js al final (porque sino no funciona en todas las ocasiones)
-	function mostrartips() {        
+	function mostrartips() {
 	 	if ($('#mostrartips').prop('checked')){
 	    	localStorage["mostrartips"] = "no"
 
@@ -733,8 +837,8 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 // teclas accesos directos
 function KeyPress(e) {
 
-	if (!$("#popupbackground").hasClass("display")) { // para evitar teclas rapidas (especialmente supr) cuando hay un popup
-		
+	if (!$("#popupbackground").hasClass("display") && !$("span").hasClass("editing")) { // para evitar teclas rapidas (especialmente supr) cuando hay un popup o se está editando
+
 	    var evtobj = window.event? event : e
 
 	    if (evtobj.keyCode == 86 && evtobj.ctrlKey) { // Ctrl+v
@@ -1858,7 +1962,7 @@ function readDirectory (dirtoread) {
 					arraylocations.push(dirtoread);
 					break;
 
-			}			
+			}
 
 			var notdeletedvideoerror = "no";
 			var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
@@ -2389,7 +2493,7 @@ function drawDirectoryFolders (viewmode, order) {
 			break;
 		case "namedesc":
 			directoryfolders.sort(SortByNameDesc);
-			break;	
+			break;
 		case "extasc":
 			directoryfolders.sort(SortByNameAsc);
 			break;
@@ -2398,13 +2502,13 @@ function drawDirectoryFolders (viewmode, order) {
 			break;
 		case "sizeasc":
 			directoryfolders.sort(SortByElemAsc);
-			break;	
+			break;
 		case "sizedesc":
 			directoryfolders.sort(SortByElemDesc);
-			break;	
+			break;
 		case "lastasc":
 			directoryfolders.sort(SortByLastmodAsc);
-			break;	
+			break;
 		case "lastdesc":
 			directoryfolders.sort(SortByLastmodDesc);
 			break;
@@ -2453,7 +2557,7 @@ function drawDirectoryArchives (viewmode, order) {
 			break;
 		case "namedesc":
 			directoryarchives.sort(SortByNameDesc);
-			break;	
+			break;
 		case "extasc":
 			directoryarchives.sort(SortByExtAsc);
 			break;
@@ -2462,13 +2566,13 @@ function drawDirectoryArchives (viewmode, order) {
 			break;
 		case "sizeasc":
 			directoryarchives.sort(SortBySizeAsc);
-			break;	
+			break;
 		case "sizedesc":
 			directoryarchives.sort(SortBySizeDesc);
-			break;	
+			break;
 		case "lastasc":
 			directoryarchives.sort(SortByLastmodAsc);
-			break;	
+			break;
 		case "lastdesc":
 			directoryarchives.sort(SortByLastmodDesc);
 			break;
@@ -2573,6 +2677,15 @@ function drawDirectoryAfter() {
 		$('.tags').addClass('viewmode1');
 		$('.lastmod').addClass('viewmode1');
 		$('.duration').addClass('viewmode1');
+
+		if (columnaswidth) {
+			$('.explofolder, .explofile').width(columnaswidth[1] + "%");
+			$('.folderelements, .exploext').width(columnaswidth[2] + "%");
+			$('.explosize').width(columnaswidth[3] + "%");
+			$('.exploelement .tags').width(columnaswidth[4] + "%");
+			$('.lastmod').width(columnaswidth[5] + "%");
+			$('.duration').width(columnaswidth[6] + "%");
+		}
 
 	}
 
@@ -2731,7 +2844,7 @@ function drawDirectoryAfter() {
 		    extNames = ["ext_generic","ext_image","ext_program","ext_audio","ext_video","ext_docs","ext_www","ext_document"],
 		    maxExtName = extNames[extensions.indexOf(maxExt)];
 
-		    if (viewmode==1) {		  
+		    if (viewmode==1) {
 
 				switch (maxExtName) {
 
@@ -2739,42 +2852,42 @@ function drawDirectoryAfter() {
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Generic.png">';
 				    	break;
-				    
+
 				    case "ext_image":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Pictures.png">';
 				    	break;
-				    
+
 				    case "ext_program":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Smart.png">';
 				    	break;
-				    
+
 				    case "ext_audio":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Music.png">';
 				    	break;
-				    
+
 				    case "ext_video":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Movies.png">';
 				    	break;
-				    
+
 				    case "ext_docs":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Library.png">';
 				    	break;
-				    
+
 				    case "ext_www":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Sites.png">';
 				    	break;
-				    
+
 				    case "ext_document":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Document.png">';
 				    	break;
-				    
+
 				}
 
 			    $(this)["0"].previousElementSibling.style.marginLeft = "0px";
@@ -2790,43 +2903,43 @@ function drawDirectoryAfter() {
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Generic.png">';
 				    	break;
-				    
+
 				    case "ext_image":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Pictures.png">';
 				    	break;
-				    
+
 				    case "ext_program":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Smart.png">';
 				    	break;
-				    
+
 				    case "ext_audio":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Music.png">';
 				    	break;
-				    
+
 				    case "ext_video":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Movies.png">';
 				    	break;
-				    
+
 				    case "ext_docs":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Library.png">';
 				    	break;
-				    
+
 				    case "ext_www":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Sites.png">';
 				    	break;
-				    
+
 				    case "ext_document":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Document.png">';
 				    	break;
-				    
-				}			    
+
+				}
 
 			}
 
@@ -4431,7 +4544,7 @@ function interactions() {
 
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
             this.filename.html(filenametoshow);
-             
+
         }
 
 	});
@@ -5490,12 +5603,12 @@ function interactions() {
 
 
 						alertify.confirm("Are you sure?", function (e) {
-						
+
 						if (!e) {$("#dirviewrefresh").trigger( "click" );}
 						if (e) {
-							
-						
-			
+
+
+
 
 							$("#folderreadstatus").html("Moving ...");
 							$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
@@ -5520,7 +5633,7 @@ function interactions() {
 							req.onsuccess = function(event) {
 								var cursor = event.target.result;
 
-								// primero miramos si hay  en la bd una carpeta con el mismo nombre en destino					
+								// primero miramos si hay  en la bd una carpeta con el mismo nombre en destino
 
 								if (cursor) {
 
@@ -5565,7 +5678,7 @@ function interactions() {
 
 											if (cursor.value.folder == rootdirectory + foldername[t]) {
 
-												origenenbd = cursor.value.folderid;								
+												origenenbd = cursor.value.folderid;
 
 												// si está la carpeta de origen en la bd le adjuntamos nuevo valor al nombre si en destino no hay una ya con el mismo nombre en la bd
 												if (destinoenbd == "") {
@@ -5620,7 +5733,7 @@ function interactions() {
 
 																		// console.log("ruta carpeta cambiada")
 
-																	}	
+																	}
 
 																}
 
@@ -5652,7 +5765,7 @@ function interactions() {
 														}
 
 
-													}									
+													}
 
 
 												}
@@ -6468,7 +6581,7 @@ function interactions() {
 					if (rootdirectory != targetfolder) {
 
 						alertify.confirm("Are you sure?", function (e) {
-						
+
 							if (!e) {$("#dirviewrefresh").trigger( "click" );}
 							if (e) {
 
@@ -7357,7 +7470,7 @@ function interactions() {
 
 	}); // fin exploelement droppable
 
-	
+
 	// Lo siguiente es sustitutivo de press & hold (consume muchos menos recursos)
 
 	var timeoutId = 0;
@@ -7366,7 +7479,7 @@ function interactions() {
 	var endDate   = "";
 
 
-	$('.exploelementfolderup').on('mousedown', function() {		
+	$('.exploelementfolderup').on('mousedown', function() {
 
 		elemento = this
 		presshold()
@@ -7401,12 +7514,12 @@ function interactions() {
     		}
 
     		function moveProgressBar() {
-	      
-		        var getPercent = ($('.progress-wrap').data('progress-percent') / 100);		
+
+		        var getPercent = ($('.progress-wrap').data('progress-percent') / 100);
 		        var getProgressWrapWidth = $('.progress-wrap').width();
 		        var progressTotal = posicionx + getPercent * getProgressWrapWidth;
 		        var animationLength = 200;
-		        
+
 		        // on page load, animate percentage bar to data percentage length
 		        // .stop() used to prevent animation queueing
 		        $('.progress-bar').stop().animate({
@@ -7416,8 +7529,8 @@ function interactions() {
 		    }
 
     		moveProgressBar();
-		
-			
+
+
 			//para que no se seleccione con el press and hold
 			window.estadoprevioseleccion = "";
 			if ($(this).parent().hasClass("ui-selecting")) {
@@ -7426,11 +7539,11 @@ function interactions() {
 			else if ($(this).parent().hasClass("ui-selected")) {
 				estadoprevioseleccion = "selected"
 			}
-	    	
-		
+
+
 			$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').on('mouseup', function() {
 
-				
+
 				$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').unbind('mouseup');
 				endDate = new Date();
 				var diferencia_milisegundos = (endDate.getTime() - startDate.getTime());
@@ -7510,7 +7623,7 @@ function interactions() {
 				var exec = require('child_process');
 				if (s.os.name == "linux"){
 					exec.exec('xdg-open' + ' ' + aejecutar);
-				} 
+				}
 				else if (s.os.name == "macos") {
 					exec.exec('open' + ' ' + aejecutar);
 				}
@@ -7520,7 +7633,7 @@ function interactions() {
 				}
 				catch(exception) { }
 
-			}			
+			}
 
 			if (dirtoexec == driveunit) {
 				dirtoexec = driveunit + "\/";
@@ -7598,7 +7711,7 @@ function interactions() {
 					var exec = require('child_process');
 					if (s.os.name == "linux"){
 					exec.exec('xdg-open' + ' ' + aejecutar);
-					} 
+					}
 					else if (s.os.name == "macos") {
 						exec.exec('open' + ' ' + aejecutar);
 					}
@@ -7659,7 +7772,7 @@ function interactions() {
 
 				if ($(this).hasClass("ui-selecting")) {
 					$(this).removeClass("ui-selecting");
-					
+
 				}
 				else {
 
@@ -7668,10 +7781,10 @@ function interactions() {
 						$(this).removeClass("whitebackground");
 
 						var nombreelemento = $(this)["0"].children[1].attributes[1].nodeValue
-					
+
 					}
 
-					
+
 
 					if(e.shiftKey) { // si se pulsa shift seleccionar las que quedan entre la anterior selección y la actual
 
@@ -7689,7 +7802,7 @@ function interactions() {
 							}
 
 						});
-					 	
+
 
 						if (elementpreviousindex > 0) {
 
@@ -7733,10 +7846,10 @@ function interactions() {
 				}
 
 			}
-			else {				
+			else {
 
 			}
-			
+
 		}
 
 	});

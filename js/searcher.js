@@ -58,7 +58,7 @@ $(document).ready(function () {
 
 
 	// para poder regular anchuras divs
-
+	columnaswidth = [];
 	// paneles izquierdo/derecho
 	interact('#searchview')
 
@@ -68,35 +68,34 @@ $(document).ready(function () {
 	  })
 	  .on('resizemove', function (event) {
 
-		// se van a convertir los valores en pixeles de las columnas del panel derecho a porcentajes para que al cambiar la
-		// anchura del panel cambien las anchuras de las columnas de forma equitativa.
+		// se van a convertir los valores en pixeles de las columnas del panel derecho a porcentajes para que al cambiar la anchura del panel cambien las anchuras de las columnas de forma equitativa.
+		if (searchviewmode==1){
+			var pixelstotales = $('.exploelement').width();
 
-		var pixelstotales = $('.exploelement').width();
+			var pixels = $('.explofolder, .explofile').width();
+			columnaswidth[1] = (100 / pixelstotales) * pixels
+			$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
 
-		var pixels = $('.explofolder, .explofile').width();
-		var percentaje = (100 / pixelstotales) * pixels
-		$('.explofolder, .explofile').width(''+ percentaje + '%');
+			pixels = $('.folderelements, .exploext').width();
+			columnaswidth[2] = (100 / pixelstotales) * pixels
+			$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
 
-		pixels = $('.folderelements, .exploext').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.folderelements, .exploext').width(''+ percentaje + '%');
+			pixels = $('.explosize').width();
+			columnaswidth[3] = (100 / pixelstotales) * pixels
+			$('.explosize').width(''+ columnaswidth[3] + '%');
 
-		pixels = $('.explosize').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.explosize').width(''+ percentaje + '%');
+			pixels = $('.exploelement .tags').width();
+			columnaswidth[4] = (100 / pixelstotales) * pixels
+			$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
 
-		pixels = $('.exploelement .tags').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.exploelement .tags').width(''+ percentaje + '%');
+			pixels = $('.lastmod').width();
+			columnaswidth[5] = (100 / pixelstotales) * pixels
+			$('.lastmod').width(''+ columnaswidth[5] + '%');
 
-		pixels = $('.lastmod').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.lastmod').width(''+ percentaje + '%');
-
-		pixels = $('.duration').width();
-		percentaje = (100 / pixelstotales) * pixels
-		$('.duration').width(''+ percentaje + '%');
-
+			pixels = $('.duration').width();
+			columnaswidth[6] = (100 / pixelstotales) * pixels
+			$('.duration').width(''+ columnaswidth[6] + '%');
+		}
 
 		var originalwidth = $('#searchview').width();
 		var nd_originalwidth = $('#locationinfo, #searchdirview-wrapper').width();
@@ -158,41 +157,57 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".explofolder, .explofile").width()
+					nd_originalwidth = $(".folderelements, .exploext").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
+
 			.on('resizemove', function (event) {
 
-				var pixelstotalesl = $('.exploelement').width();
-
-				if (event.target.classList.contains("explofolder")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.folderelements', '.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				else if (event.target.classList.contains("explofile")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.explofolder, .explofile').width();
-				var nd_originalwidth = $('.explofolder, .explofile').next("div").width();
-
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$('.explofolder, .explofile').width(event.rect.width);
-					$('.explofolder, .explofile').next("div").width(nd_newwithd);
-				}
-
-				else {
-
-					$('.explofolder, .explofile').width(anchuraespecifica)
+					$(".explofolder, .explofile").width(event.rect.width);
+					$(".folderelements, .exploext").width(nd_newwidth);
 
 				}
+
 
 			});
 
@@ -200,40 +215,55 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".folderelements, .exploext").width()
+					nd_originalwidth = $(".explosize").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
 
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.classList.contains("exploext")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();7
-					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				else if (event.target.classList.contains("folderelements")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.folderelements, .exploext').width();
-				var nd_originalwidth = $('.folderelements, .exploext').next("div").width();
-
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$('.folderelements, .exploext').width(event.rect.width);
-					$('.folderelements, .exploext').next("div").width(nd_newwithd);
-
-				} else {
-
-					$('.folderelements, .exploext').width(anchuraespecifica);
+					$(".folderelements, .exploext").width(event.rect.width)
+					$(".explosize").width(nd_newwidth);
 
 				}
-
 
 			});
 
@@ -241,37 +271,53 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".explosize").width()
+					nd_originalwidth = $(".exploelement .tags").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
 
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.parentElement.classList.contains("archive")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				else if (event.target.parentElement.classList.contains("folder")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-				}
-
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.explosize').width();
-				var nd_originalwidth = $('.explosize').next("div").width();
-
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$('.explosize').width(event.rect.width);
-					$('.explosize').next("div").width(nd_newwithd);
-
-				} else {
-
-					$('.explosize').width(anchuraespecifica);
+					$(".explosize").width(event.rect.width)
+					$(".exploelement .tags").width(nd_newwidth);
 
 				}
 
@@ -281,37 +327,53 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".exploelement .tags").width()
+					nd_originalwidth = $(".lastmod").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
 
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.parentElement.classList.contains("archive")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.lastmod').width() + $('.duration').width();
-
-				}
-				else if (event.target.parentElement.classList.contains("folder")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.lastmod').width() + $('.duration').width();
-				}
-
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.exploelement .tags').width();
-				var nd_originalwidth = $('.exploelement .tags').next("div").width();
-
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) { //para poner un limite por la derecha y que no se desborde
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$('.exploelement .tags').width(event.rect.width);
-					$('.exploelement .tags').next("div").width(nd_newwithd);
-
-				} else {
-
-					$('.exploelement .tags').width(anchuraespecifica)
+					$(".exploelement .tags").width(event.rect.width)
+					$(".lastmod").width(nd_newwidth);
 
 				}
 
@@ -321,38 +383,53 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".lastmod").width()
+					nd_originalwidth = $(".duration").width()
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
 
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.parentElement.classList.contains("archive")) {
-					var sumatoriodepixels = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.duration').width();
-
-				}
-				else if (event.target.parentElement.classList.contains("folder")) {
-					var sumatoriodepixels = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = 16 + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.duration').width();
-				}
-
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.lastmod').width();
-				var nd_originalwidth = $('.lastmod').next("div").width();
-
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
+				var nd_newwidth = nd_originalwidth + diference;
 
+				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
-
-					$('.lastmod').width(event.rect.width);
-					$('.lastmod').next("div").width(nd_newwithd);
-
-				} else {
-
-					$('.lastmod').width(anchuraespecifica)
+					$(".lastmod").width(event.rect.width)
+					$(".duration").width(nd_newwidth);
 
 				}
 
@@ -362,37 +439,52 @@ $(document).ready(function () {
 
 			.resizable({
 				preserveAspectRatio: false,
-				edges: { left: false, right: true, bottom: false, top: false }
+				edges: { left: false, right: true, bottom: false, top: false },
+
+				onstart: function (event) {
+					originalwidth = $(".duration").width();
+					var x = $(".exploelement").offset();
+					rowleftlimit = x.left + $(".exploelement")["0"].scrollWidth - 10;
+					$(".imgmode1").width("16px");
+				},
+				onend: function (event) {
+
+					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+					var pixelstotales = $('.exploelement').width();
+
+					var pixels = $('.explofolder, .explofile').width();
+					columnaswidth[1] = (100 / pixelstotales) * pixels
+					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+
+					pixels = $('.folderelements, .exploext').width();
+					columnaswidth[2] = (100 / pixelstotales) * pixels
+					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+
+					pixels = $('.explosize').width();
+					columnaswidth[3] = (100 / pixelstotales) * pixels
+					$('.explosize').width(''+ columnaswidth[3] + '%');
+
+					pixels = $('.exploelement .tags').width();
+					columnaswidth[4] = (100 / pixelstotales) * pixels
+					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+
+					pixels = $('.lastmod').width();
+					columnaswidth[5] = (100 / pixelstotales) * pixels
+					$('.lastmod').width(''+ columnaswidth[5] + '%');
+
+					pixels = $('.duration').width();
+					columnaswidth[6] = (100 / pixelstotales) * pixels
+					$('.duration').width(''+ columnaswidth[6] + '%');
+				}
+
 			})
 			.on('resizemove', function (event) {
 
-				var pixelstotalesl = $('.exploelement').width();
-				if (event.target.parentElement.classList.contains("archive")) {
-					var sumatoriodepixels = $('.exploelement .imgmode1').width() + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = $('.exploelement .imgmode1').width() + $('.explofile').width() + $('.exploext').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width();
-
-				}
-				else if (event.target.parentElement.classList.contains("folder")) {
-					var sumatoriodepixels = $('.exploelement .imgmode1').width() + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width() + $('.duration').width();
-					var sumatoriodepixelsotros = $('.exploelement .imgmode1').width() + $('.explofolder').width() + $('.folderelements').width() + $('.explosize').width() + $('.exploelement .tags').width() + $('.lastmod').width();
-				}
-
-				var anchuraespecifica = pixelstotalesl - sumatoriodepixelsotros -36;
-
-				var originalwidth = $('.duration').width();
-				var nd_originalwidth = $('.duration').next("div").width();
-
 				var diference = originalwidth - event.rect.width;
-				var nd_newwithd = nd_originalwidth + diference;
 
-				if (sumatoriodepixels + 35 < pixelstotalesl) {
+				if (event.rect.width > 15 && event.clientX < rowleftlimit) {
 
-					$('.duration').width(event.rect.width);
-					$('.duration').next("div").width(nd_newwithd);
-
-				} else {
-
-					$('.duration').width(anchuraespecifica)
+					$(".duration").width(event.rect.width)
 
 				}
 
@@ -929,7 +1021,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 		window.searchfor = $("input:radio[name ='searchfor']:checked").val(); // folder and files, folders or files
 
-		if (numerodecamposrellenados > 0) {			
+		if (numerodecamposrellenados > 0) {
 
 			$('#searchdirectoryview').html("");
 
@@ -957,7 +1049,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 			}
 
-		} 
+		}
 		// cuando son busquedas donde solo hay definidos tags que no deven incluir los resultados
 		else if (numerodecamposrellenados == 0 && numerodecamposrellenadosno > 0) {
 
@@ -993,7 +1085,7 @@ function addtagfield(thisbutton){
 	$(thisbutton).remove(); //se quita boton previamente existente
 
 	var lastcleartagbutton = $( ".cleartagfield" ).last();
-	
+
 	var htmltoadd = '<div class="searchinput"><span>..or tag(s): (max 5 tags)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Add tags input field</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	$(htmltoadd).insertAfter(lastcleartagbutton);
@@ -1132,7 +1224,7 @@ function addtagfield(thisbutton){
 
 		if (taginput.hasChildNodes()){
 			taginput.removeChild(taginput.lastChild);
-		}		
+		}
 
 	});
 
@@ -1145,7 +1237,7 @@ function addnottagfield(thisbutton){
 	$(thisbutton).remove(); //se quita boton previamente existente
 
 	var lastclearnottagbutton = $( ".clearnottagfield" ).last();
-	
+
 	var htmltoadd = '<div class="searchnotinput"><span>..and do not have the tag:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Add input field</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	$(htmltoadd).insertAfter(lastclearnottagbutton);
@@ -1223,7 +1315,7 @@ function addnottagfield(thisbutton){
 						req2.onsuccess = function(event) {
 							var cursor2 = event.target.result;
 							if (cursor2) {
-								
+
 								$.each(nottaginputtags, function(n) {
 
 									if (cursor2.value.tagid == nottaginputtags[n].attributes[1].value) {
@@ -2195,7 +2287,7 @@ function searchnoinfolders() {
 				foldertoad.name = cursor.value.folder
 				foldertoad.tagsid = cursor.value.foldertags
 
-				resultsfolderstemp.push(foldertoad);				
+				resultsfolderstemp.push(foldertoad);
 
 			}
 
@@ -2869,7 +2961,7 @@ function searchinfiles() {
 														}
 
 													}
-												
+
 												});
 
 											}
@@ -2997,7 +3089,7 @@ function searchnoinfiles() {
 
 
 			}
-			
+
 
 		});
 
@@ -3059,7 +3151,7 @@ function concetradoresultadoscarpetas(entradas) {
 							if (typeof(concentradorresultadoscarpetas[u][n]["tagsid"]) == "string") {
 								var tagsacomparar = concentradorresultadoscarpetas[u][n]["tagsid"].split(",")
 							} else {
-								var tagsacomparar = concentradorresultadoscarpetas[u][n]["tagsid"]	
+								var tagsacomparar = concentradorresultadoscarpetas[u][n]["tagsid"]
 							}
 
 							$.each (tagsacomparar, function(t) {
@@ -3068,7 +3160,7 @@ function concetradoresultadoscarpetas(entradas) {
 								}
 							})
 						}
-						
+
 					})
 					if (testnotag) {
 						resultadoscarpetas.push(concentradorresultadoscarpetas[u][n])
@@ -3132,7 +3224,7 @@ function concetradoresultadosarchivos(entradas) {
 							if (typeof(concentradorresultadosarchivos[u][n]["tagsid"]) == "string") {
 								var tagsacomparar = concentradorresultadosarchivos[u][n]["tagsid"].split(",")
 							} else {
-								var tagsacomparar = concentradorresultadosarchivos[u][n]["tagsid"]	
+								var tagsacomparar = concentradorresultadosarchivos[u][n]["tagsid"]
 							}
 
 							$.each (tagsacomparar, function(t) {
@@ -3141,7 +3233,7 @@ function concetradoresultadosarchivos(entradas) {
 								}
 							})
 						}
-						
+
 					})
 					if (testnotag) {
 						resultadosarchivos.push(concentradorresultadosarchivos[u][n])
@@ -3371,14 +3463,14 @@ function SortByLastmodDesc(a,b) {
 
 function drawSearchFolders (searchviewmode, order) {
 
-	
+
 	switch(searchorder){
 		case "nameasc":
 			resultadoscarpetas.sort(SortByNameAsc);
 			break;
 		case "namedesc":
 			resultadoscarpetas.sort(SortByNameDesc);
-			break;	
+			break;
 		case "extasc":
 			resultadoscarpetas.sort(SortByNameAsc);
 			break;
@@ -3387,13 +3479,13 @@ function drawSearchFolders (searchviewmode, order) {
 			break;
 		case "sizeasc":
 			resultadoscarpetas.sort(SortByElemAsc);
-			break;	
+			break;
 		case "sizedesc":
 			resultadoscarpetas.sort(SortByElemDesc);
-			break;	
+			break;
 		case "lastasc":
 			resultadoscarpetas.sort(SortByLastmodAsc);
-			break;	
+			break;
 		case "lastdesc":
 			resultadoscarpetas.sort(SortByLastmodDesc);
 			break;
@@ -3444,7 +3536,7 @@ function drawSearchArchives (searchviewmode, order) {
 			break;
 		case "namedesc":
 			resultadosarchivos.sort(SortByNameDesc);
-			break;	
+			break;
 		case "extasc":
 			resultadosarchivos.sort(SortByExtAsc);
 			break;
@@ -3453,13 +3545,13 @@ function drawSearchArchives (searchviewmode, order) {
 			break;
 		case "sizeasc":
 			resultadosarchivos.sort(SortBySizeAsc);
-			break;	
+			break;
 		case "sizedesc":
 			resultadosarchivos.sort(SortBySizeDesc);
-			break;	
+			break;
 		case "lastasc":
 			resultadosarchivos.sort(SortByLastmodAsc);
-			break;	
+			break;
 		case "lastdesc":
 			resultadosarchivos.sort(SortByLastmodDesc);
 			break;
@@ -3565,6 +3657,15 @@ function drawSearchAfter() {
 		$('.tags').addClass('viewmode1');
 		$('.lastmod').addClass('viewmode1');
 		$('.duration').addClass('viewmode1');
+
+		if (columnaswidth) {
+			$('.explofolder, .explofile').width(columnaswidth[1] + "%");
+			$('.folderelements, .exploext').width(columnaswidth[2] + "%");
+			$('.explosize').width(columnaswidth[3] + "%");
+			$('.exploelement .tags').width(columnaswidth[4] + "%");
+			$('.lastmod').width(columnaswidth[5] + "%");
+			$('.duration').width(columnaswidth[6] + "%");
+		}
 
 	}
 
@@ -3994,43 +4095,43 @@ function drawSearchAfter() {
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Generic.png">';
 				    	break;
-				    
+
 				    case "ext_image":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Pictures.png">';
 				    	break;
-				    
+
 				    case "ext_program":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Smart.png">';
 				    	break;
-				    
+
 				    case "ext_audio":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Music.png">';
 				    	break;
-				    
+
 				    case "ext_video":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Movies.png">';
 				    	break;
-				    
+
 				    case "ext_docs":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Library.png">';
 				    	break;
-				    
+
 				    case "ext_www":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Sites.png">';
 				    	break;
-				    
+
 				    case "ext_document":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Document.png">';
 				    	break;
-				    
-				}			    
+
+				}
 
 			    $(this)["0"].previousElementSibling.style.display = "inline-block";
 			    $(this)["0"].previousElementSibling.style.background = "none";
@@ -4046,43 +4147,43 @@ function drawSearchAfter() {
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Generic.png">';
 				    	break;
-				    
+
 				    case "ext_image":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Pictures.png">';
 				    	break;
-				    
+
 				    case "ext_program":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Smart.png">';
 				    	break;
-				    
+
 				    case "ext_audio":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Music.png">';
 				    	break;
-				    
+
 				    case "ext_video":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Movies.png">';
 				    	break;
-				    
+
 				    case "ext_docs":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Library.png">';
 				    	break;
-				    
+
 				    case "ext_www":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Sites.png">';
 				    	break;
-				    
+
 				    case "ext_document":
 
 				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Document.png">';
 				    	break;
-				    
-				}			    
+
+				}
 
 			}
 
@@ -4292,7 +4393,7 @@ function drawSearchAfter() {
 					var audiowidth = 420;
 					break;
 			}
-			
+
 			// para el preview de los audios
 			$.each ($(".explofile"), function(u) {
 
@@ -4478,7 +4579,7 @@ function drawSearchAfter() {
 					var videowidth = 420;
 					break;
 			}
-		
+
 			//para el preview de los videos
 			$.each ($(".explofile"), function(u) {
 
@@ -4601,6 +4702,14 @@ function drawSearchAfter() {
 			}
 
 		});
+
+		// pequeño ajuste para que la vista de los resultados siempre ocupe toda la altura del wraper y así se puedan seleccionar los elementos con la cajetilla del ratón
+		if ($("#searchdirview-wrapper").height() > $("#searchdirectoryview").height()) {
+			$("#searchdirview").css("height", "97%")
+		} else {
+			$("#searchdirectoryview").css("padding-bottom", "10px")
+
+		}
 
 		drawdirectoryviewtags();
 		interactinsforsearchdir();
@@ -4855,7 +4964,7 @@ function interactinsforsearchdir() {
 												undo.taggaarch.tagid = taganadir;
 
 												// Actualizar visual
-												var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");								
+												var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");
 												var arraydetags = taganadir // solo hay un tag a añadir
 												elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -5017,7 +5126,7 @@ function interactinsforsearchdir() {
 										console.log(filefoldername)
 										var prueba = $(".placehold2").filter("[value='" + filefoldername + "']")
 										console.log(prueba)
-										var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");										
+										var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");
 										arraydetags = arraydetags.toString() // de array a string
 										elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -5098,7 +5207,7 @@ function interactinsforsearchdir() {
 										undo.taggaarch.tagid = taganadir;
 
 										// Actualizar visual
-										var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");										
+										var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");
 										var arraydetags = taganadir // solo hay un tag a añadir
 										elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -5580,15 +5689,15 @@ function interactinsforsearchdir() {
 
     		if (viewmode != 1){
     			$(this).parent()[0].lastChild.style.width = $(this).parent().width() + "px";
-    		} 
+    		}
 
     		function moveProgressBar() {
-	      
-		        var getPercent = ($('.progress-wrap').data('progress-percent') / 100);		
+
+		        var getPercent = ($('.progress-wrap').data('progress-percent') / 100);
 		        var getProgressWrapWidth = $('.progress-wrap').width();
 		        var progressTotal = posicionx + getPercent * getProgressWrapWidth;
 		        var animationLength = 200;
-		        
+
 		        // on page load, animate percentage bar to data percentage length
 		        // .stop() used to prevent animation queueing
 		        $('.progress-bar').stop().animate({
@@ -5598,8 +5707,8 @@ function interactinsforsearchdir() {
 		    }
 
     		moveProgressBar();
-		
-			
+
+
 			//para que no se seleccione con el press and hold
 			window.estadoprevioseleccion = "";
 			if ($(this).parent().hasClass("ui-selecting")) {
@@ -5608,11 +5717,11 @@ function interactinsforsearchdir() {
 			else if ($(this).parent().hasClass("ui-selected")) {
 				estadoprevioseleccion = "selected"
 			}
-	    	
-		
+
+
 			$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').on('mouseup', function() {
 
-				
+
 				$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').unbind('mouseup');
 				endDate   = new Date();
 				var diferencia_milisegundos = (endDate.getTime() - startDate.getTime());
@@ -5652,7 +5761,7 @@ function interactinsforsearchdir() {
 			}
 		}, 275);
 
-		
+
 
 
 		if ($(elemento).hasClass("explofile")) {
@@ -5691,7 +5800,7 @@ function interactinsforsearchdir() {
 				var exec = require('child_process');
 				if (s.os.name == "linux"){
 					exec.exec('xdg-open' + ' ' + aejecutar);
-				} 
+				}
 				else if (s.os.name == "macos") {
 					exec.exec('open' + ' ' + aejecutar);
 				}
@@ -5768,7 +5877,7 @@ function interactinsforsearchdir() {
 					var exec = require('child_process');
 					if (s.os.name == "linux"){
 					exec.exec('xdg-open' + ' ' + aejecutar);
-					} 
+					}
 					else if (s.os.name == "macos") {
 						exec.exec('open' + ' ' + aejecutar);
 					}
@@ -5836,7 +5945,7 @@ function interactinsforsearchdir() {
 
 				if ($(this).hasClass("ui-selecting")) {
 					$(this).removeClass("ui-selecting");
-					
+
 				}
 				else {
 
@@ -5847,10 +5956,10 @@ function interactinsforsearchdir() {
 						$(this).removeClass("whitebackground");
 
 						var nombreelemento = $(this)["0"].children[1].attributes[1].nodeValue
-					
+
 					}
 
-					
+
 
 					if(e.shiftKey) { // si se pulsa shift seleccionar las que quedan entre la anterior selección y la actual
 
@@ -5868,7 +5977,7 @@ function interactinsforsearchdir() {
 							}
 
 						});
-					 	
+
 
 						if (elementpreviousindex > 0) {
 
@@ -5912,23 +6021,51 @@ function interactinsforsearchdir() {
 				}
 
 			}
-			else {				
+			else {
 
 			}
-			
+
 		}
 
 	});
 
 
-	// $( "#searchdirview" ).selectable({
+	$( "#searchdirview" ).selectable({
 
-	// 	filter: '.exploelement',
-	// 	cancel: '.tagticket, .mmcontrols',
-	// 	selecting: function(e, ui) { // on select
-	// 		elementpreviousindex = 0; // restear la selección múltiple con shift
-	// 	}
-	// }); // esto también aplica al DRAGGABLE
+		filter: '.exploelement',
+		cancel: '.tagticket, .mmcontrols',
+		selecting: function(e, ui) { // on select
+			elementpreviousindex = 0; // restear la selección múltiple con shift
+		}
+	}); // esto también aplica al DRAGGABLE
+
+	// necesario para que funcione bien el selectable
+	$( "#searchdirectoryview > div" ).draggable({
+
+		// appendTo: 'parent',
+		// containment: 'window',
+		// scroll: false,
+		helper: 'clone',
+		delay: 10000,
+		cancel: '.exploelementfolderup',
+
+		start: function(ev, ui) {
+
+			posiciony = $(this)["0"].offsetTop + "px"
+			posicionx = $(this)["0"].offsetLeft + "px"
+
+		},
+		drag: function(ev, ui) {
+
+
+			ui.position.left = posicionx;
+			ui.position.top = posiciony;
+
+
+		},
+		stop: function( event, ui ) {	}
+
+	}); // --fin Draggable #searchdirectoryview td/div
 
 
 	// -- fin Selector
@@ -5953,7 +6090,7 @@ function interactinsforsearchdir() {
 // teclas accesos directos
 function KeyPress(e) {
 
-	if (!$("#popupbackground").hasClass("display")) { // para evitar teclas rapidas (especialmente supr) cuando hay un popup
+	if (!$("#popupbackground").hasClass("display") && !$("span").hasClass("editing")) { // para evitar teclas rapidas (especialmente supr) cuando hay un popup o se esta editando
 
 	    var evtobj = window.event? event : e
 
@@ -5993,7 +6130,7 @@ function KeyPress(e) {
 	    	return false; //para que no seleccione otras cosas (por defecto)
 
 	    }
-	    
+
 	}
 
 }
@@ -7839,9 +7976,9 @@ window.parent.$("#paste").on('click', function() {
 
 	alldroppedelement = $(".exploelement.ui-selecting");
 
-	// if (alldroppedelement.length == 0) {
-	// 	alldroppedelement = $(".exploelement.ui-selected"); // para que lo haga con los selected si no hay selecting
-	// }
+	if (alldroppedelement.length == 0) {
+		alldroppedelement = $(".exploelement.ui-selected"); // para que lo haga con los selected si no hay selecting
+	}
 
 	if (alldroppedelement.length == 0) {
 
@@ -7864,18 +8001,18 @@ window.parent.$("#paste").on('click', function() {
 	    			alertify.confirm(  "OK, you selected <em>to copy</em> associated tags too. A folder selection window will now open, because tags will be copied also you must select a destination that is inside the drive associated to database to work correctly. Take in consideration that Undo is unavailable in this operation. Continue? ", function (e) {
 			    		if (e) {
 			    			document.getElementById('selectedactionFolder').click()
-			    			
+
 			    		} else {
 			    			// break;
 			    		}
 	    			});
 
-	    		} else {	    			
+	    		} else {
 	    			alsotags = "no";
 	    			alertify.confirm(  "OK, you selected <em>not to copy</em> associated tags. A folder selection window will now open, because tags will not be copied you can select any available drive. Take in consideration that Undo is unavailable in this operation. Continue? ", function (e) {
 			    		if (e) {
 			    			document.getElementById('selectedactionFolder').click()
-			    			
+
 			    		} else {
 			    			// break;
 			    		}
@@ -7886,7 +8023,7 @@ window.parent.$("#paste").on('click', function() {
 
 	    	});
 
-    	} 
+    	}
 
     	else if (pasteaction == "cut") {
 
@@ -7896,18 +8033,18 @@ window.parent.$("#paste").on('click', function() {
 	    			alertify.confirm(  "OK, you selected <em>to move</em> associated tags too. A folder selection window will now open, because tags will be moved also you must select a destination that is inside the drive associated to database to work correctly. Take in consideration that Undo is unavailable in this operation. Continue? ", function (e) {
 			    		if (e) {
 			    			document.getElementById('selectedactionFolder').click()
-			    			
+
 			    		} else {
 			    			// break;
 			    		}
 	    			});
 
-	    		} else {	    			
+	    		} else {
 	    			alsotags = "no";
 	    			alertify.confirm(  "OK, you selected <em>not to move</em> associated tags. A folder selection window will now open, because tags will not be moved you can select any available drive. Take in consideration that Undo is unavailable in this operation. Continue? ", function (e) {
 			    		if (e) {
 			    			document.getElementById('selectedactionFolder').click()
-			    			
+
 			    		} else {
 			    			// break;
 			    		}
@@ -7916,9 +8053,9 @@ window.parent.$("#paste").on('click', function() {
 
 	    		}
 
-	    	});	    	
+	    	});
 
-    	}    	
+    	}
 
     }
 
@@ -7926,7 +8063,7 @@ window.parent.$("#paste").on('click', function() {
 
 function selectedactionfolder() {
 
-	
+
 	var pasteaction = window.parent.pasteaction;
 	var selectedactionFold=document.getElementById("selectedactionFolder");
 
@@ -7950,7 +8087,7 @@ function selectedactionfolder() {
 
 				if (selectedactionDriveUnit == driveunit) {
 
-					if (pasteaction == "copy") {				
+					if (pasteaction == "copy") {
 
 						searchercopyaction();
 
@@ -7964,7 +8101,7 @@ function selectedactionfolder() {
 
 			}
 
-		} 
+		}
 		else if (alsotags == "no") {
 
 			if (pasteaction == "copy") {
@@ -8064,7 +8201,8 @@ function searchercopyaction() {
 
 						$("#status").html("");
 						$('.exploelement').css("filter","none");
-						$('.exploelement').removeClass('ui-selecting')					
+						$('.exploelement').removeClass('ui-selecting');
+						$('.exploelement').removeClass('ui-selected');
 
 					}
 
@@ -8118,7 +8256,7 @@ function searchercopyaction() {
 
 					var parts = droppedfolder[t].children[1].attributes[1].value.split('/');
 					var folderlastsub = "/" + parts.pop();
-					foldername[t] = folderlastsub;		
+					foldername[t] = folderlastsub;
 
 				});
 
@@ -8212,7 +8350,7 @@ function searchercopyaction() {
 										cursor12.continue()
 									}
 
-								}								
+								}
 
 							}
 
@@ -8289,7 +8427,7 @@ function searchercopyaction() {
 							};
 						});
 
-						$.each(directoryfolders, function(n){	
+						$.each(directoryfolders, function(n){
 
 							foldertoread = foldertoread.replace(driveunit,"");
 							arraydecarpetas[posicion] = foldertoread + directoryfolders[n].name;
@@ -8299,7 +8437,7 @@ function searchercopyaction() {
 							arraydemadres[posicion] = parts.join('/');
 
 							posicion++
-							
+
 							recursivefolderdata(foldertoread + directoryfolders[n].name);
 
 						});
@@ -8444,7 +8582,7 @@ function searchercopyaction() {
 			// trabajamos con los archivos
 
 			// primero comprobamos si algún archivo estaba en la base de datos (si tiene tags)
-			
+
 			var anyarchiveondb = "no";
 			$.each(droppedarchive, function(t) {
 
@@ -8476,7 +8614,8 @@ function searchercopyaction() {
 						}
 						// tambien aprovechamos para sacar el id de la carpeta origen (para luego buscar los archivos en la bd)
 						$.each(droppedarchive, function(t) {
-							if(cursor3.value.folder == droppedarchive[t].children[1].children[1].attributes[1].value){
+							console.log($(droppedarchive[t]))
+							if(cursor3.value.folder == droppedarchive[t].children[1].attributes[2].value){
 
 								originfolderid[t] = cursor3.value.folderid;
 
@@ -8489,7 +8628,7 @@ function searchercopyaction() {
 					}
 
 				}
-			
+
 				trans3.oncomplete = function(event) {
 
 					var fileupdate = {};
@@ -8510,7 +8649,7 @@ function searchercopyaction() {
 							var req5 = objectStore5.openCursor();
 
 							req5.onerror = function(event) {console.log(event)};
-		
+
 							req5.onsuccess = function(event) {
 
 								var cursor5 = event.target.result;
@@ -8559,7 +8698,7 @@ function searchercopyaction() {
 													// Actualizamos los archivos en la bd con el nuevo filefolder
 													var res7 = objectStore6.put(fileupdate);
 
-													res7.onerror = function(event) {console.log(event)}; // error ruta archivo no cambiada			
+													res7.onerror = function(event) {console.log(event)}; // error ruta archivo no cambiada
 
 												}
 
@@ -8578,9 +8717,9 @@ function searchercopyaction() {
 
 									$.each(droppedarchive, function(t) {
 
-										if (driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+										if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-											fs.copy(driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+											fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 												flagg++;
 
@@ -8588,7 +8727,8 @@ function searchercopyaction() {
 
 													$("#status").html("");
 													$('.exploelement').css("filter","none");
-													$('.exploelement').removeClass('ui-selecting');													
+													$('.exploelement').removeClass('ui-selecting');
+													$('.exploelement').removeClass('ui-selected');
 
 												}
 
@@ -8598,7 +8738,17 @@ function searchercopyaction() {
 
 										else {
 
-											alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+											alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+
+											if (t == droppedarchive.length-1) { //para que lo lance al final
+
+												$("#status").html("");
+												$('.exploelement').css("filter","none");
+												$('.exploelement').removeClass('ui-selecting');
+												$('.exploelement').removeClass('ui-selected');
+
+											}
+
 										}
 
 									});
@@ -8624,7 +8774,7 @@ function searchercopyaction() {
 							var req6 = objectStore6.openCursor();
 
 							req6.onerror = function(event) {console.log(event)};
-		
+
 							req6.onsuccess = function(event) {
 
 								var cursor6 = event.target.result;
@@ -8711,9 +8861,9 @@ function searchercopyaction() {
 
 						$.each(droppedarchive, function(t) {
 
-							if (driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+							if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-								fs.copy(driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {								
+								fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 									flagg++;
 
@@ -8721,9 +8871,10 @@ function searchercopyaction() {
 
 										$("#status").html("");
 										$('.exploelement').css("filter","none");
-										$('.exploelement').removeClass('ui-selecting');								
+										$('.exploelement').removeClass('ui-selecting');
+										$('.exploelement').removeClass('ui-selected');
 
-									} 
+									}
 
 								});
 
@@ -8731,7 +8882,16 @@ function searchercopyaction() {
 
 							else {
 
-								alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+								alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+
+								if (t == droppedarchive.length-1) { //para que lo lance al final
+
+									$("#status").html("");
+									$('.exploelement').css("filter","none");
+									$('.exploelement').removeClass('ui-selecting');
+									$('.exploelement').removeClass('ui-selected');
+
+								}
 							}
 
 						});
@@ -8750,9 +8910,9 @@ function searchercopyaction() {
 
 				$.each(droppedarchive, function(t) {
 
-					if (driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+					if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-						fs.copy(driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {			
+						fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 							flagg++;
 
@@ -8760,9 +8920,10 @@ function searchercopyaction() {
 
 								$("#status").html("");
 								$('.exploelement').css("filter","none");
-								$('.exploelement').removeClass('ui-selecting');			
+								$('.exploelement').removeClass('ui-selecting');
+								$('.exploelement').removeClass('ui-selected');
 
-							} 
+							}
 
 						});
 
@@ -8770,7 +8931,17 @@ function searchercopyaction() {
 
 					else {
 
-						alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+						alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+
+						if (t == droppedarchive.length-1) { //para que lo lance al final
+
+							$("#status").html("");
+							$('.exploelement').css("filter","none");
+							$('.exploelement').removeClass('ui-selecting');
+							$('.exploelement').removeClass('ui-selected');
+
+						}
+
 					}
 
 				});
@@ -8807,7 +8978,7 @@ function searchercopyaction() {
 
 						$("#status").html("");
 						$('.exploelement').css("filter","none");
-						$('.exploelement').removeClass('ui-selecting')					
+						$('.exploelement').removeClass('ui-selecting')
 
 					}
 
@@ -8827,9 +8998,9 @@ function searchercopyaction() {
 		// copiamos cada uno de los archivos
 		$.each(droppedarchive, function(t) {
 
-			if (driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+			if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-				fs.copy(driveunit + droppedarchive[t].children[1].children[1].attributes[1].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {			
+				fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 					flagg++;
 
@@ -8837,9 +9008,10 @@ function searchercopyaction() {
 
 						$("#status").html("");
 						$('.exploelement').css("filter","none");
-						$('.exploelement').removeClass('ui-selecting');			
+						$('.exploelement').removeClass('ui-selecting');
+						$('.exploelement').removeClass('ui-selected');
 
-					} 
+					}
 
 				});
 
@@ -8848,12 +9020,22 @@ function searchercopyaction() {
 			else {
 
 				alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+
+				if (t == droppedarchive.length-1) { //para que lo lance al final
+
+					$("#status").html("");
+					$('.exploelement').css("filter","none");
+					$('.exploelement').removeClass('ui-selecting');
+					$('.exploelement').removeClass('ui-selected');
+
+				}
+
 			}
 
 		});
 
 	} // --fin if alsotags=no
-	
+
 } // --fin searchercopyaction
 
 
@@ -8906,7 +9088,7 @@ function searchermoveaction() {
 		req.onsuccess = function(event) {
 			var cursor = event.target.result;
 
-			// primero miramos si hay  en la bd una carpeta con el mismo nombre en destino					
+			// primero miramos si hay  en la bd una carpeta con el mismo nombre en destino
 
 			if (cursor) {
 
@@ -8931,7 +9113,7 @@ function searchermoveaction() {
 
 		trans.oncomplete = function(event){
 
-			
+
 			var trans = db.transaction(["folders"], "readwrite")
 			var objectStore = trans.objectStore("folders")
 			var req = objectStore.openCursor();
@@ -8975,7 +9157,7 @@ function searchermoveaction() {
 
 									// console.log("ruta carpeta cambiada")
 
-								}							
+								}
 
 							} else { //si en destino ya hay una carpeta con el nombre en la bd le adjuntamos los nuevos tags
 
@@ -9013,7 +9195,7 @@ function searchermoveaction() {
 
 													// console.log("ruta carpeta cambiada")
 
-												}	
+												}
 
 											}
 
@@ -9164,7 +9346,7 @@ function searchermoveaction() {
 								};
 							});
 
-							$.each(directoryfolders, function(n){	
+							$.each(directoryfolders, function(n){
 
 								foldertoread = foldertoread.replace(driveunit,"");
 								arraydecarpetas[posicion] = foldertoread + directoryfolders[n].name;
@@ -9174,7 +9356,7 @@ function searchermoveaction() {
 								arraydemadres[posicion] = parts.join('/');
 
 								posicion++
-								
+
 								recursivefolderdata(foldertoread + directoryfolders[n].name);
 
 							});
@@ -9193,7 +9375,7 @@ function searchermoveaction() {
 					// console.log(arraydecarpetas);
 					// console.log("destination folders:");
 					// console.log(arraydecarpetasDest);
-					
+
 					// se va a mirar si en destino hay una carpeta con el mismo nombre en la base de datos y si está se borra de ella
 
 					$.each(arraydecarpetasDest, function(t) {
@@ -9207,7 +9389,7 @@ function searchermoveaction() {
 						req11.onerror = function(event) {
 							console.log("error: " + event);
 						};
-						req11.onsuccess = function(event) {									
+						req11.onsuccess = function(event) {
 							var cursor11 = event.target.result;
 							if (cursor11) {
 
@@ -9247,7 +9429,7 @@ function searchermoveaction() {
 						req10.onerror = function(event) {
 							console.log(event);
 						};
-						req10.onsuccess = function(event) {									
+						req10.onsuccess = function(event) {
 							var cursor10 = event.target.result;
 							if (cursor10) {
 
@@ -9298,9 +9480,10 @@ function searchermoveaction() {
 
 								$("#status").html("");
 								$('.exploelement').css("filter","none");
-								$('.exploelement').removeClass('ui-selecting')					
+								$('.exploelement').removeClass('ui-selecting');
+								$('.exploelement').removeClass('ui-selected');
 
-							}						
+							}
 
 						});
 
@@ -9312,7 +9495,7 @@ function searchermoveaction() {
 				// trabajamos con los archivos
 
 				// primero comprobamos si algún archivo estaba en la base de datos (si tiene tags)
-			
+
 				var anyarchiveondb = "no";
 				$.each(droppedarchive, function(t) {
 
@@ -9360,7 +9543,7 @@ function searchermoveaction() {
 					}
 
 
-				
+
 					trans3.oncomplete = function(event) {
 
 						var fileupdate = {};
@@ -9381,7 +9564,7 @@ function searchermoveaction() {
 								var req5 = objectStore5.openCursor();
 
 								req5.onerror = function(event) {console.log(event)};
-			
+
 								req5.onsuccess = function(event) {
 
 									var cursor5 = event.target.result;
@@ -9446,7 +9629,7 @@ function searchermoveaction() {
 
 															// movemos los archivos
 															var flagg=0;
-															
+
 															$.each(droppedarchive, function(t) {
 
 																if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
@@ -9459,7 +9642,8 @@ function searchermoveaction() {
 																			if (flagg == droppedarchive.length) { //para que lo lance al final
 																			$("#status").html("");
 																			$('.exploelement').css("filter","none");
-																			$('.exploelement').removeClass('ui-selecting');													
+																			$('.exploelement').removeClass('ui-selecting');
+																			$('.exploelement').removeClass('ui-selected');
 
 																			}
 																		}
@@ -9470,7 +9654,8 @@ function searchermoveaction() {
 
 																			$("#status").html("");
 																			$('.exploelement').css("filter","none");
-																			$('.exploelement').removeClass('ui-selecting');													
+																			$('.exploelement').removeClass('ui-selecting');
+																			$('.exploelement').removeClass('ui-selected');
 
 																		}
 
@@ -9481,6 +9666,16 @@ function searchermoveaction() {
 																else {
 
 																	alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not moved.");
+
+																	if (t == droppedarchive.length-1) { //para que lo lance al final
+
+																		$("#status").html("");
+																		$('.exploelement').css("filter","none");
+																		$('.exploelement').removeClass('ui-selecting');
+																		$('.exploelement').removeClass('ui-selected');
+
+																	}
+
 																}
 
 															});
@@ -9532,7 +9727,7 @@ function searchermoveaction() {
 
 
 												});
-												
+
 
 												cursor8.continue();
 											}
@@ -9564,7 +9759,7 @@ function searchermoveaction() {
 											});
 
 										}
-										
+
 									}
 
 								}
@@ -9683,10 +9878,11 @@ function searchermoveaction() {
 
 																$("#status").html("");
 																$('.exploelement').css("filter","none");
-																$('.exploelement').removeClass('ui-selecting')					
+																$('.exploelement').removeClass('ui-selecting');
+																$('.exploelement').removeClass('ui-selected');
 
 															}
-															
+
 
 														});
 
@@ -9776,7 +9972,7 @@ function searchermoveaction() {
 
 						}
 
-					}				
+					}
 
 				}
 
@@ -9797,10 +9993,11 @@ function searchermoveaction() {
 
 								$("#status").html("");
 								$('.exploelement').css("filter","none");
-								$('.exploelement').removeClass('ui-selecting')					
+								$('.exploelement').removeClass('ui-selecting');
+								$('.exploelement').removeClass('ui-selected');
 
 							}
-							
+
 
 						});
 
@@ -9815,7 +10012,7 @@ function searchermoveaction() {
 	}
 
 	// Mover sin pasarle tags
- 
+
 	else if (alsotags = "no") {
 
 		var arraydecarpetas = {};
@@ -9883,13 +10080,13 @@ function searchermoveaction() {
 						};
 					});
 
-					$.each(directoryfolders, function(n){	
+					$.each(directoryfolders, function(n){
 
 						foldertoread = foldertoread.replace(driveunit,"");
 						arraydecarpetas[posicion] = foldertoread + directoryfolders[n].name;
 
 						posicion++;
-						
+
 						recursivefolderdata(foldertoread + directoryfolders[n].name);
 
 					});
@@ -9899,7 +10096,7 @@ function searchermoveaction() {
 			});
 
 			// console.log(arraydecarpetas)
-		}	
+		}
 
 
 		// se borran los archivos de primer nivel de la base de datos (si están)
@@ -9913,8 +10110,8 @@ function searchermoveaction() {
 		req3.onsuccess = function(event) {
 			var cursor3 = event.target.result;
 			if (cursor3) {
-				
-				
+
+
 				$.each(droppedarchive, function(t) {
 					if(cursor3.value.folder == droppedarchive[t].children[1].attributes[2].value){
 
@@ -10300,8 +10497,8 @@ function searchermoveaction() {
 
 		});
 
-		$('#numeroderesultadosarchivos').html("Found " + (resultadosarchivos.length-contadorarchivosseleccionados) + " files. ");
-		resultadosarchivos.length = resultadosarchivos.length-contadorarchivosseleccionados;
+		$('#numeroderesultadosarchivos').html("Found " + ($(".exploelement").length - contadorarchivosseleccionados) + " files. ");
+		resultadosarchivos.length = $(".exploelement").length - contadorarchivosseleccionados;
 
 
 
@@ -10321,10 +10518,11 @@ function searchermoveaction() {
 
 					$("#status").html("");
 					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting')					
+					$('.exploelement').removeClass('ui-selecting');
+					$('.exploelement').removeClass('ui-selected');
 
 				}
-				
+
 
 			});
 
@@ -10347,12 +10545,13 @@ function searchermoveaction() {
 
 					$("#status").html("");
 					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting')
+					$('.exploelement').removeClass('ui-selecting');
+					$('.exploelement').removeClass('ui-selected');
 
 					//si se han "borrado" carpetas de la bd  por si acaso se vuelve a lanzar el search para que no se muestren archivos inexistentes
-					$( "#searchaction" ).trigger( "click" );					
+					$( "#searchaction" ).trigger( "click" );
 
-				}						
+				}
 
 			});
 
@@ -10446,7 +10645,7 @@ window.parent.$("#delete").on('click', function() {
 		// para que no haya ningun tipo de conflicto se limpia el undo
 		$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
 		undo.class == "";
-		
+
 
 		var arraydecarpetas = {};
 		var posicion = 0;
@@ -10512,13 +10711,13 @@ window.parent.$("#delete").on('click', function() {
 						};
 					});
 
-					$.each(directoryfolders, function(n){	
+					$.each(directoryfolders, function(n){
 
 						foldertoread = foldertoread.replace(driveunit,"");
 						arraydecarpetas[posicion] = foldertoread + directoryfolders[n].name;
 
 						posicion++;
-						
+
 						recursivefolderdata(foldertoread + directoryfolders[n].name);
 
 					});
@@ -10528,7 +10727,7 @@ window.parent.$("#delete").on('click', function() {
 			});
 
 			// console.log(arraydecarpetas)
-		}	
+		}
 
 
 		// se borran los archivos de primer nivel de la base de datos (si están)
@@ -10542,8 +10741,8 @@ window.parent.$("#delete").on('click', function() {
 		req3.onsuccess = function(event) {
 			var cursor3 = event.target.result;
 			if (cursor3) {
-				
-				
+
+
 				$.each(droppedarchive, function(t) {
 					if(cursor3.value.folder == droppedarchive[t].children[1].attributes[2].value){
 
@@ -10929,10 +11128,8 @@ window.parent.$("#delete").on('click', function() {
 			contadorarchivosseleccionados++
 
 		});
-
-		$('#numeroderesultadosarchivos').html("Found " + (resultadosarchivos.length-contadorarchivosseleccionados) + " files. ");
-		resultadosarchivos.length = resultadosarchivos.length-contadorarchivosseleccionados;
-
+		$('#numeroderesultadosarchivos').html("Found " + ($(".exploelement").length - contadorarchivosseleccionados) + " files. ");
+		resultadosarchivos.length = $(".exploelement").length - contadorarchivosseleccionados;
 
 
 		// se borran los archivos y las carpetas
@@ -10951,10 +11148,11 @@ window.parent.$("#delete").on('click', function() {
 
 					$("#status").html("");
 					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting')					
+					$('.exploelement').removeClass('ui-selecting');
+					$('.exploelement').removeClass('ui-selected');
 
 				}
-				
+
 
 			});
 
@@ -10977,17 +11175,18 @@ window.parent.$("#delete").on('click', function() {
 
 					$("#status").html("");
 					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting')
+					$('.exploelement').removeClass('ui-selecting');
+					$('.exploelement').removeClass('ui-selected');
 
 					//si se han borrado carpetas por si acaso se vuelve a lanzar el search para que no se muestren archivos inexistentes
-					$( "#searchaction" ).trigger( "click" );			
+					$( "#searchaction" ).trigger( "click" );
 
-				}						
+				}
 
 			});
 
 		});
-	
+
 
 	}
 
