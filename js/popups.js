@@ -74,6 +74,7 @@ function popup (popupclass, data) {
 
 function saveoptions() {
 
+
 	// aquí se irán guardando las diferentes opciones del popup de opciones antes de cerrar al darle a Apply (aparte de las bases de datos que se manejan aparte)
 
 	if ($("#closeconfirmation").is(":checked")) {
@@ -150,9 +151,16 @@ function saveoptions() {
 	}
 
 
+	// si ha cambiado el driveunit de la base de datos actual recargará la aplicación
+	if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) { 
+		if ($("#unitselect").val() != driveunit && $("#unitselect").val() != null) {
 
+			cerrar();
+			restarttagstoo();
 
-	
+		}
+
+	}
 
 }
 
