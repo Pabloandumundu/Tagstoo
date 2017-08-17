@@ -583,10 +583,12 @@ $(document).ready(function () {
 
 	});
 
-	$("#searchorder").on('change', function() {
+	$("#selectFolder").on('click', function() {
 
-		searchorder = $(this)["0"].value;
-		readsearchredresults();
+		// searchorder = $(this)["0"].value;
+		// readsearchredresults();
+
+		 popup('selectfoldersearch');
 
 	});
 
@@ -595,7 +597,7 @@ $(document).ready(function () {
 	$( window ).resize(function() {
 
 		// ponemos las anchuras del panel izquierdo y derecho en porcentajes para que se ajusten al tamaño de la pantalla
-		$('#treeview').width(''+ 24.8 + '%');
+		$('#content #treeview').width(''+ 24.8 + '%');
 		$('#locationinfo, #dirview-wrapper').width(''+ 74 + '%');
 		$('#searchview').width(''+ 24.8 + '%');
 		$('#searchdirview-wrapper').width(''+ 74 + '%');
@@ -683,14 +685,15 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 	window.db = top.explorer.db; // acceso a la base de datos
 	window.availabletagforms = top.explorer.availabletagforms;
-	window.driveunit = top.explorer.driveunit;
+	window.driveunit = top.explorer.driveunit.trim();
+
 	window.selectedFolder = "\/" ; // valor por defecto
 	window.selectedDriveUnit = driveunit; // valor por defecto
 
 	if (driveunit != "") {
 		$("#searchin")["0"].children["0"].innerHTML = driveunit;
 	} else {
-		$("#searchin")["0"].children["0"].innerHTML = "&nbsp;/";
+		$("#searchin")["0"].children["0"].innerHTML = "\/";
 	}
 
 	drawfootertags();
@@ -833,7 +836,6 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 		}
 
 	});
-
 
 
 
@@ -1642,49 +1644,6 @@ function footertagsinteractions(){
 }
 
 
-/* El panel del search */
-
-function selectedafolder() {
-
-	var selectedFold=document.getElementById("selectedFold");
-
-	selectedFolder = selectedFold.value.replace(/\\/g, "\/"); // se cambia las \ por /
-	selectedDriveUnit= selectedFolder.substr(0, selectedFolder.indexOf('\/')); // se selecciona hasta la primera /
-	selectedFolder = selectedFolder.replace(selectedDriveUnit, ""); // se quita el driveunit de la ruta seleccionada
-
-	console.log(selectedFolder)
-	if (s.os.name == "windows") {
-
-		if (selectedDriveUnit != "") {
-
-			if (selectedDriveUnit != driveunit) {
-
-				alertify.alert("The destination you selected is in drive <em>'" + selectedDriveUnit + "'</em> while the current database is associated with drive <em>'" + driveunit + "'</em> , please select a destination that is in the drive associated to database.", function () {
-
-					$( "#selectFolder" ).trigger( "click" );
-				});
-			}
-
-			if (selectedDriveUnit == driveunit) {
-
-				$("#searchin")["0"].children["0"].innerHTML = selectedDriveUnit + selectedFolder;
-
-			}
-
-		}
-
-	}
-	if (s.os.name == "linux" || s.os.name == "macos") {
-
-		if (selectedFolder) {
-
-			$("#searchin")["0"].children["0"].innerHTML = selectedFolder;
-
-		}
-
-	}
-
-}
 
 
 function searchinfolders() {
@@ -2381,10 +2340,6 @@ function searchinfiles() {
 
 				arraydetagsabuscar[t] = taggroup[t].split(",");
 
-				// $.each (arraydetagsabuscar[t], function(u) {
-				// 	console.log("tagabuscar " + t + ":" + arraydetagsabuscar[t][u])
-				// });
-
 				var trans = db.transaction(["files"], "readonly")
 				var objectStore = trans.objectStore("files")
 
@@ -2841,7 +2796,7 @@ function searchinfiles() {
 
 														// a por el 5º tag
 
-														else if (arraydetagsabuscar[t].length == 5) { // si hay 4 tags para buscar
+														else if (arraydetagsabuscar[t].length == 5) { // si hay 5 tags para buscar
 
 															resultadopreviovalido[t] = [];
 
@@ -4087,8 +4042,6 @@ function drawSearchAfter() {
 
 		    if (searchviewmode==1) {
 
-
-
 		    	switch (maxExtName) {
 
 			    	case "ext_generic":
@@ -4245,7 +4198,6 @@ function drawSearchAfter() {
 
 		if (searchviewmode!=1 || previewepubonviewmode1!="no") {
 
-
 			$.each ($(".explofile"), function(u) {
 
 				var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
@@ -4278,9 +4230,6 @@ function drawSearchAfter() {
 							}
 
 						}
-
-
-
 
 				      	var imagesource = filepath + '/temp-epubcover'+u+ filenamesinbarra+'/cover.jpg'
 
@@ -4412,8 +4361,7 @@ function drawSearchAfter() {
 					}
 
 					// para que muestre el div de duration
-					$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
-					console.log($(this))
+					$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";					
 					var audiotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
 					$(this)["0"].previousSibling.children[0].outerHTML = '<audio width="'+audiowidth+'" class="audio" src="file:///'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'" controls></audio><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 					$(this)["0"].previousSibling.style.backgroundImage = "none";
@@ -4592,7 +4540,6 @@ function drawSearchAfter() {
 
 					// para que muestre el div de duration
 					$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
-
 					var videotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
 					$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video" src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 					$(this)["0"].previousSibling.style.backgroundImage = "none";
@@ -4688,20 +4635,20 @@ function drawSearchAfter() {
 		}
 
 		// simplemente para que se pueda seleccionar en nombre de cualquier elemento del resultado
-		$(".explofolder").on('dblclick', function(evt) {
+		// $(".explofolder").on('dblclick', function(evt) {
 
-			alertify.alert("\/" + $(this)[0].childNodes[1].innerHTML);
+		// 	alertify.alert("\/" + $(this)[0].childNodes[1].innerHTML);
 
-		});
-		$(".explofile").on('dblclick', function(evt) {
+		// });
+		// $(".explofile").on('dblclick', function(evt) {
 
-			if (searchviewmode==1){
-			alertify.alert($(this)[0].childNodes[3].innerHTML + "\/" + $(this)[0].childNodes[1].innerHTML);
-			} else {
-				alertify.alert("\/" + $(this)[0].childNodes[1].innerHTML);
-			}
+		// 	if (searchviewmode==1){
+		// 		alertify.alert($(this)[0].childNodes[3].innerHTML + "\/" + $(this)[0].childNodes[1].innerHTML);
+		// 	} else {
+		// 		alertify.alert("\/" + $(this)[0].childNodes[1].innerHTML);
+		// 	}
 
-		});
+		// });
 
 		// pequeño ajuste para que la vista de los resultados siempre ocupe toda la altura del wraper y así se puedan seleccionar los elementos con la cajetilla del ratón
 		if ($("#searchdirview-wrapper").height() > $("#searchdirectoryview").height()) {
@@ -5547,7 +5494,7 @@ function interactinsforsearchdir() {
 									// se redibujarán los tags del treeview si están desplegadas las subcarpetas
 									$.each ($("#filetree span"), function(t) {
 										if($("#filetree span:eq("+t+")").attr("rel2") == undo.taggfold.folder) {
-											console.log($("#filetree span:eq("+t+")")[0]);
+											// console.log($("#filetree span:eq("+t+")")[0]);
 											treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
 										}
 
@@ -5762,14 +5709,11 @@ function interactinsforsearchdir() {
 		}, 275);
 
 
-
-
 		if ($(elemento).hasClass("explofile")) {
 
 			// var s = top.explorer.s
 			s = new Sniffr();
 			s.sniff(agent);
-
 
 			var toexec = $(elemento)["0"].attributes[1].nodeValue;
 			var filepath = driveunit + $(elemento)["0"].attributes[2].nodeValue
@@ -6648,8 +6592,6 @@ function activateeditname(item) {
 					var archivoenbd="no";
 					var paraextensionarchivo = $(this).parent();
 
-					console.log($(this))
-
 					var rootdirectory = $(this)["0"].parentNode.children[1].innerText
 
 					$(this).parent().attr("value", '\/' + nombrenuevo); // cambiamos el atributo value
@@ -6876,9 +6818,6 @@ function activateeditname(item) {
 
 	// -- fin Editar nombre
 }
-
-
-
 
 
 
@@ -7966,7 +7905,6 @@ window.parent.$("#paste").on('click', function() {
 
 	if (window.parent.$("li.current").attr('data-tab') == "tab-1") { // salir de la función si esta seleccionado el explore
 		return;
-
 	}
 
 	var pasteaction = window.parent.pasteaction;
@@ -7998,26 +7936,13 @@ window.parent.$("#paste").on('click', function() {
 	    	alertify.confirmny(  "When the <em>Copy</em> is made, do you want the associated tags to be copied too?", function (e) {
 	    		if (e) {
 	    			alsotags = "yes";
-	    			alertify.confirm(  "OK, you selected <em>to copy</em> associated tags too. A folder selection window will now open, because tags will be copied also you must select a destination that is inside the drive associated to database to work correctly. Take in consideration that Undo is unavailable in this operation. Continue? ", function (e) {
-			    		if (e) {
-			    			document.getElementById('selectedactionFolder').click()
-
-			    		} else {
-			    			// break;
-			    		}
-	    			});
+	    			
+	    			popup('selectfolderactiontag');
 
 	    		} else {
-	    			alsotags = "no";
-	    			alertify.confirm(  "OK, you selected <em>not to copy</em> associated tags. A folder selection window will now open, because tags will not be copied you can select any available drive. Take in consideration that Undo is unavailable in this operation. Continue? ", function (e) {
-			    		if (e) {
-			    			document.getElementById('selectedactionFolder').click()
+	    			alsotags = "no";	    			
 
-			    		} else {
-			    			// break;
-			    		}
-
-	    			});
+	    			popup('selectfolderactionnotag');
 
 	    		}
 
@@ -8030,26 +7955,13 @@ window.parent.$("#paste").on('click', function() {
 	    	alertify.confirmny(  "When the <em>Move</em> is made, do you want the associated tags to be moved too? (if you choose 'No' those tags will be lost when selected elements moved)", function (e) {
 	    		if (e) {
 	    			alsotags = "yes";
-	    			alertify.confirm(  "OK, you selected <em>to move</em> associated tags too. A folder selection window will now open, because tags will be moved also you must select a destination that is inside the drive associated to database to work correctly. Take in consideration that Undo is unavailable in this operation. Continue? ", function (e) {
-			    		if (e) {
-			    			document.getElementById('selectedactionFolder').click()
-
-			    		} else {
-			    			// break;
-			    		}
-	    			});
+	    			
+	    			popup('selectfolderactiontag');
 
 	    		} else {
 	    			alsotags = "no";
-	    			alertify.confirm(  "OK, you selected <em>not to move</em> associated tags. A folder selection window will now open, because tags will not be moved you can select any available drive. Take in consideration that Undo is unavailable in this operation. Continue? ", function (e) {
-			    		if (e) {
-			    			document.getElementById('selectedactionFolder').click()
-
-			    		} else {
-			    			// break;
-			    		}
-
-	    			});
+	    			
+	    			popup('selectfolderactionnotag');
 
 	    		}
 
@@ -8061,92 +7973,42 @@ window.parent.$("#paste").on('click', function() {
 
 });
 
-function selectedactionfolder() {
+function selectedactionfolder(selectedfolder, selecteddrive) {
 
 
 	var pasteaction = window.parent.pasteaction;
-	var selectedactionFold=document.getElementById("selectedactionFolder");
 
-	selectedactionFolder = selectedactionFold.value.replace(/\\/g, "\/"); // se cambia las \ por /
-	selectedactionDriveUnit= selectedactionFolder.substr(0, selectedactionFolder.indexOf('\/')); // se selecciona hasta la primera /
-	selectedactionFolder = selectedactionFolder.replace(selectedactionDriveUnit, ""); // se quita el driveunit de la ruta seleccionada
+	var selectedactionFold=selectedfolder;
 
+	selectedactionFolder = selectedactionFold.replace(/\\/g, "\/"); // se cambia las \ por /
 	if (s.os.name == "windows") {
-
-		if (alsotags=="yes") {
-
-			if (selectedactionDriveUnit != "") {
-
-				if (selectedactionDriveUnit != driveunit) {
-
-					alertify.alert("The destination you selected is in drive <em>'" + selectedactionDriveUnit + "'</em> while the current database is associated with drive <em>'" + driveunit + "'</em> , please select a destination that is in the drive associated to database.", function () {
-
-						$( "#selectedactionFolder" ).trigger( "click" );
-					});
-				}
-
-				if (selectedactionDriveUnit == driveunit) {
-
-					if (pasteaction == "copy") {
-
-						searchercopyaction();
-
-					} else if (pasteaction == "cut") {
-
-						searchermoveaction();
-
-					}
-
-				}
-
-			}
-
-		}
-		else if (alsotags == "no") {
-
-			if (pasteaction == "copy") {
-
-				searchercopyaction();
-
-			} else if (pasteaction == "cut") {
-
-				searchermoveaction();
-
-			}
-
-		}
-
+		selectedactionDriveUnit = selectedactionFolder.substr(0, selectedactionFolder.indexOf('\/')); // se selecciona hasta la primera / (en windows pillara C: d: etc en linux y mac no tendrá nada)
+	} else {
+		selectedactionDriveUnit = selecteddrive;
 	}
-	if (s.os.name == "linux" || s.os.name == "macos") {
+	selectedactionFolder = selectedactionFolder.replace(selectedactionDriveUnit, ""); // se quita el driveunit de la ruta seleccionada
+	selectedactionFolder = selectedactionFolder.trim()
 
-		if (selectedactionFolder) {
+	if (pasteaction == "copy") {
 
-			// $("#searchin")["0"].children["0"].innerHTML = selectedactionFolder;
-			if (pasteaction == "copy") {
+		searchercopyaction(selectedactionFolder, selecteddrive);
 
-				searchercopyaction();
+	} else if (pasteaction == "cut") {
 
-			} else if (pasteaction == "cut") {
+		searchermoveaction(selectedactionFolder, selecteddrive);
 
-				searchermoveaction();
-
-			}
-
-		}
-
-	}
+	}	
 
 }
 
-function searchercopyaction() {
+
+function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 	droppedarchive = [];
     droppedfolder = [];
     foldername = [];
 	var y = 0;
     var x = 0;
-
-
 
 	$.each (alldroppedelement, function(t) {
 
@@ -8184,14 +8046,15 @@ function searchercopyaction() {
 
 		var flagg = 0;
 		// copiamos cada una de las carpetas
+
 		$.each(droppedfolder, function(t) {
 
 			var parts = droppedfolder[t].children[1].attributes[1].value.split('/');
 			var folderlastsub = "/" + parts.pop(); // coge la ultima parte de la dirección despues del último "/"
 
-			if (driveunit + droppedfolder[t].children[1].attributes[1].value != driveunit + selectedactionFolder + folderlastsub) { // si origen y destino son distintos
+			if (driveunit + droppedfolder[t].children[1].attributes[1].value != selecteddrive + selectedactionFolder + folderlastsub) { // si origen y destino son distintos
 
-				fs.copy(driveunit + droppedfolder[t].children[1].attributes[1].value, driveunit + selectedactionFolder + folderlastsub, { clobber: true }, function(err) {
+				fs.copy(driveunit + droppedfolder[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + folderlastsub, { clobber: true }, function(err) {
 
 					if (err) return console.error(err)
 
@@ -8614,7 +8477,7 @@ function searchercopyaction() {
 						}
 						// tambien aprovechamos para sacar el id de la carpeta origen (para luego buscar los archivos en la bd)
 						$.each(droppedarchive, function(t) {
-							console.log($(droppedarchive[t]))
+
 							if(cursor3.value.folder == droppedarchive[t].children[1].attributes[2].value){
 
 								originfolderid[t] = cursor3.value.folderid;
@@ -8717,9 +8580,9 @@ function searchercopyaction() {
 
 									$.each(droppedarchive, function(t) {
 
-										if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+										if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-											fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+											fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 												flagg++;
 
@@ -8861,9 +8724,9 @@ function searchercopyaction() {
 
 						$.each(droppedarchive, function(t) {
 
-							if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+							if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-								fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+								fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 									flagg++;
 
@@ -8910,9 +8773,9 @@ function searchercopyaction() {
 
 				$.each(droppedarchive, function(t) {
 
-					if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+					if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-						fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+						fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 							flagg++;
 
@@ -8966,9 +8829,9 @@ function searchercopyaction() {
 			var parts = droppedfolder[t].children[1].attributes[1].value.split('/');
 			var folderlastsub = "/" + parts.pop(); // coge la ultima parte de la dirección despues del último "/"
 
-			if (driveunit + droppedfolder[t].children[1].attributes[1].value != driveunit + selectedactionFolder + folderlastsub) { // si origen y destino son distintos
+			if (driveunit + droppedfolder[t].children[1].attributes[1].value != selectedactionDriveUnit + selectedactionFolder + folderlastsub) { // si origen y destino son distintos
 
-				fs.copy(driveunit + droppedfolder[t].children[1].attributes[1].value, driveunit + selectedactionFolder + folderlastsub, { clobber: true }, function(err) {
+				fs.copy(driveunit + droppedfolder[t].children[1].attributes[1].value, selectedactionDriveUnit + selectedactionFolder + folderlastsub, { clobber: true }, function(err) {
 
 					if (err) return console.error(err)
 
@@ -8998,10 +8861,11 @@ function searchercopyaction() {
 		// copiamos cada uno de los archivos
 		$.each(droppedarchive, function(t) {
 
-			if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+			if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != selectedactionDriveUnit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-				fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+				fs.copy(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, selectedactionDriveUnit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
+					if (err) {console.log(err)}
 					flagg++;
 
 					if (flagg == droppedarchive.length) { //para que lo lance al final
@@ -9039,7 +8903,7 @@ function searchercopyaction() {
 } // --fin searchercopyaction
 
 
-function searchermoveaction() {
+function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 	droppedarchive = [];
     droppedfolder = [];
@@ -9469,7 +9333,7 @@ function searchermoveaction() {
 						var parts = droppedfolder[t].children[1].attributes[1].value.split('/');
 						var folderlastsub = "/" + parts.pop();
 
-						fs.move(driveunit + droppedfolder[t].children[1].attributes[1].value, driveunit + selectedactionFolder + folderlastsub, { clobber: true }, function(err) {
+						fs.move(driveunit + droppedfolder[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + folderlastsub, { clobber: true }, function(err) {
 
 
 							if (err) return console.error(err)
@@ -9632,9 +9496,9 @@ function searchermoveaction() {
 
 															$.each(droppedarchive, function(t) {
 
-																if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
+																if (driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value != selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value) { // si origen y destino son distintos
 
-																	fs.rename(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+																	fs.rename(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 																		if (err) {
 
@@ -9766,7 +9630,6 @@ function searchermoveaction() {
 
 							}
 
-
 						}
 
 						else { // si la carpeta de destino ya estaba en la bd
@@ -9867,7 +9730,7 @@ function searchermoveaction() {
 
 													$.each(droppedarchive, function(t) {
 
-														fs.rename(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+														fs.rename(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 
 															if (err) return console.error(err)
@@ -9983,7 +9846,7 @@ function searchermoveaction() {
 
 					$.each(droppedarchive, function(t) {
 
-						fs.rename(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+						fs.rename(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 							if (err) return console.error(err)
 
@@ -10013,7 +9876,7 @@ function searchermoveaction() {
 
 	// Mover sin pasarle tags
 
-	else if (alsotags = "no") {
+	else if (alsotags=="no") {
 
 		var arraydecarpetas = {};
 		var posicion = 0;
@@ -10508,7 +10371,7 @@ function searchermoveaction() {
 
 		$.each(droppedarchive, function(t) {
 
-			fs.rename(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, driveunit + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
+			fs.move(driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + droppedarchive[t].children[1].attributes[1].value, function(err) {
 
 				if (err) return console.error(err)
 
@@ -10535,7 +10398,7 @@ function searchermoveaction() {
 			var parts = droppedfolder[t].children[1].attributes[1].value.split('/');
 			var folderlastsub = "/" + parts.pop();
 
-			fs.move(driveunit + droppedfolder[t].children[1].attributes[1].value, driveunit + selectedactionFolder + folderlastsub, { clobber: true }, function(err) {
+			fs.move(driveunit + droppedfolder[t].children[1].attributes[1].value, selecteddrive + selectedactionFolder + folderlastsub, { clobber: true }, function(err) {
 
 				if (err) return console.error(err)
 
@@ -10572,7 +10435,15 @@ window.parent.$("#delete").on('click', function() {
 
 	}
 
-	alldroppedelement = $(".exploelement.ui-selecting");
+	if ($(".exploelement.ui-selecting").length > 0) {
+
+		alldroppedelement = $(".exploelement.ui-selecting");
+
+	}
+	else if ($(".exploelement.ui-selected").length > 0) {
+
+		alldroppedelement = $(".exploelement.ui-selected");
+	}
 
 	if (alldroppedelement.length == 0) {
 
@@ -10641,11 +10512,9 @@ window.parent.$("#delete").on('click', function() {
 
 	function deleteitsearch(){
 
-
 		// para que no haya ningun tipo de conflicto se limpia el undo
 		$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
 		undo.class == "";
-
 
 		var arraydecarpetas = {};
 		var posicion = 0;
@@ -11079,8 +10948,6 @@ window.parent.$("#delete").on('click', function() {
 
 		};
 
-
-
 		$.each($('.ui-selecting'), function(u) {
 
 			// para poder mover/eliminar los videos hay que quitarlos del DOM (es decir de la memoria)
@@ -11128,6 +10995,56 @@ window.parent.$("#delete").on('click', function() {
 			contadorarchivosseleccionados++
 
 		});
+		$.each($('.ui-selected'), function(u) {
+
+			// para poder mover/eliminar los videos hay que quitarlos del DOM (es decir de la memoria)
+			try {
+				if (viewmode == 1) {
+
+					// console.log($('.ui-selected:eq('+u+')'))
+					if ($('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[0]){
+						if ($('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[0].nodeName == "VIDEO") {//para viewmode = 1
+
+							var videoElement = $('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[0];
+							videoElement.pause();
+							videoElement.currentSrc =""; // empty source
+							videoElement.src="";
+							videoElement.load();
+							var parenteee = videoElement.parentNode
+							parenteee.removeChild(parenteee.childNodes[0])
+							// parenteee.removeChild(parenteee.childNodes[0])
+
+						}
+					}
+				}
+				else {
+
+					if ($('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[1]){
+						if ($('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[1].nodeName == "VIDEO") {//para viewmodes !=1
+
+							var videoElement = $('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[1];
+							$('.ui-selected:eq('+u+')').children().children('video').attr('src','')
+							videoElement.pause();
+							videoElement.currentSrc =""; // empty source
+							videoElement.src="";
+							videoElement.load();
+							var parenteee = videoElement.parentNode
+							parenteee.removeChild(parenteee.childNodes[0])
+							// parenteee.removeChild(parenteee.childNodes[0])
+						}
+					}
+				}
+			} catch (err) {console.log(err)}
+
+
+			// se aprobecha a quitar de la pantalla lo seleccionado (porque es necesario para que borre/mueva los videos y porque quizas queda mejor)
+			$('.ui-selected:eq('+u+')')[0].style.display = "none";
+			contadorarchivosseleccionados++
+
+		});
+
+
+
 		$('#numeroderesultadosarchivos').html("Found " + ($(".exploelement").length - contadorarchivosseleccionados) + " files. ");
 		resultadosarchivos.length = $(".exploelement").length - contadorarchivosseleccionados;
 
@@ -11186,7 +11103,6 @@ window.parent.$("#delete").on('click', function() {
 			});
 
 		});
-
 
 	}
 

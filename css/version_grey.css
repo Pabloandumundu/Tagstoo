@@ -165,7 +165,7 @@ header {
 	filter: grayscale(85%) brightness(103%);
 }
 
-#searchin div {
+#searchin div, #selectedfolder div {
 	filter: grayscale(85%) brightness(102%);
 }
 

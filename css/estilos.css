@@ -1937,6 +1937,21 @@ header h1 {
 	min-width: 600px;
 }
 
+#popup.selectfoldersearch, #popup.selectfolderactionnotag, #popup.selectfolderactiontag {
+
+	display: initial;
+	top: 60px;
+	height: calc(100% - 130px);
+	max-height: calc(100% - 130px);
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 1100px;
+	width: 400px;
+}
+
+
 
 /* popup newtag, edittag styles */
 
@@ -2277,6 +2292,28 @@ header h1 {
 #showlicenses {
 	margin: 6px 0;
 }
+
+
+/* popup selectfolder */
+
+#selectedfolder {
+
+	margin-bottom: 2px;
+}
+
+#selectedfolder > div {
+
+	background-color: #99ddee;
+	margin-right: 10px;
+	border-radius: 8px;
+	padding-left: 1px;
+	margin-left: 1px;
+	word-wrap: break-word;
+	border-top: 1px solid #A8AAC1;
+}
+
+
+
 
 
 

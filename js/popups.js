@@ -57,7 +57,7 @@ function popup (popupclass, data) {
 			$("#popup").addClass("options");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
-			break;	
+			break;
 
 		case "info":
 
@@ -65,9 +65,29 @@ function popup (popupclass, data) {
 			$("#popup").addClass("info");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
-			break;	
+			break;
 
-	}	
+		case "selectfoldersearch":
+			$( "#popup" ).load( "../popups/popup-selectfoldersearch.html" );
+			$("#popup").addClass("selectfoldersearch");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;
+
+		case "selectfolderactionnotag":
+			$( "#popup" ).load( "../popups/popup-selectfolderactionnotag.html" );
+			$("#popup").addClass("selectfolderactionnotag");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;
+
+		case "selectfolderactiontag":
+			$( "#popup" ).load( "../popups/popup-selectfolderactiontag.html" );
+			$("#popup").addClass("selectfolderactiontag");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;
+	}
 
 }
 
@@ -108,15 +128,6 @@ function saveoptions() {
 		window.previewepubonviewmode1 = "no";
 	}
 
-	// if ($("#previewepubonviewmode1").is(":checked")) {
-	// 	localStorage["previewepubonviewmode1"] = "yes";
-	// 	window.previewepubonviewmode1 = "yes";
-
-	// } else {
-	// 	localStorage["previewepubonviewmode1"] = "no";
-	// 	window.previewepubonviewmode1 = "no";
-	// }
-
 	if ($("#showtips").is(":checked")) {
 		localStorage["mostrartips"] = "yes";
 
@@ -126,13 +137,13 @@ function saveoptions() {
 
 
 	// la opcion de slideshow
-		
+
 	if ($("#autoslideshow").is(":checked")) {
 
 		localStorage["autoslideshow"] = "yes";
 		window.autoslideshow = "yes";
 
-	}	
+	}
 	else {
 		localStorage["autoslideshow"] = "no";
 		window.autoslideshow = "no";
@@ -152,7 +163,7 @@ function saveoptions() {
 
 
 	// si ha cambiado el driveunit de la base de datos actual recargará la aplicación
-	if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) { 
+	if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) {
 		if ($("#unitselect").val() != driveunit && $("#unitselect").val() != null) {
 
 			cerrar();
@@ -175,6 +186,9 @@ function cerrar() {
 	$("#popup").removeClass("tagfolder");
 	$("#popup").removeClass("newtag");
 	$("#popup").removeClass("edittag");
+	$("#popup").removeClass("selectfoldersearch");
+	$("#popup").removeClass("selectfolderactionnotag");
+	$("#popup").removeClass("selectfolderactiontag");
 
 	$("#explorer", window.parent.document).contents().find('#popup').removeClass("options");
 	$("#searcher", window.parent.document).contents().find('#popup').removeClass("options");
@@ -1775,7 +1789,7 @@ function optionspreload() {
 	          listadofiltradodeDB.push(cursor.value.dbname)
 	          cursor.continue();
 
-	        } 
+	        }
 
       	};
 
@@ -1788,24 +1802,26 @@ function optionspreload() {
       	}
 
 
-		if (driveunit == "") { //esto es un apaño necesário en linux
-			driveunit = " ";
-		}
-
-		if (driveunit) {
+		// if (driveunit == "") { //esto es un apaño necesário en linux
+		// 	driveunit = " ";
+		// }
+		// if (driveunit.length) {
+			// console.log(driveunit.length)
 
 			if (s.os.name == "windows" || s.os.name == "macos") {
 					 $('#selecteddrive').html(driveunit)
 			}
 			if (s.os.name == "linux") {
-					 if(driveunit == " "){
+
+					 if(driveunit.length==0){
 							$('#selecteddrive').html("/" + driveunit)
+
 					 } else {
 							$('#selecteddrive').html(driveunit)
 					 }
 			}
 
-		}
+		// }
 
 
 		loaddatabaseselect();
@@ -2393,8 +2409,8 @@ function optionspreload() {
   														// si es el database actualmente en uso recarga tagstoo
 														if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) {
 															setTimeout(function(){
-																saveoptions();															 
-																cerrar(); 
+																saveoptions();
+																cerrar();
 																restarttagstoo();
 															}, 500);
 
@@ -2419,7 +2435,7 @@ function optionspreload() {
 																.objectStore("databases")
 																.add({ dbname: $('#selecteddb').html() });
 
-												requestdbadd.onsuccess = function(event) {												
+												requestdbadd.onsuccess = function(event) {
 
 													// se vuelve a cargar la lista
 													listadofiltradodeDB.push($('#selecteddb').html())
@@ -2497,9 +2513,9 @@ function optionspreload() {
 
 
 							// se ha de borrar tambien del listado de bases de datos
-			                var requestdblist = window.indexedDB.open("tagstoo_databaselist_1100", 1);   
+			                var requestdblist = window.indexedDB.open("tagstoo_databaselist_1100", 1);
 
-			                requestdblist.onsuccess = function(event) {      
+			                requestdblist.onsuccess = function(event) {
 
 			                  var databaselistdb = request.result;
 
@@ -2617,7 +2633,7 @@ function optionspreload() {
 			        ls.href= "css/version_grey.css";
 			        top.explorer.$('head')[0].appendChild(ls);
 
-		        }		        
+		        }
 
 		        localStorage["colortagstoo"] = window.colortagstoo;
 
@@ -2670,7 +2686,7 @@ function loaddatabaseselect() {
 
 }
 
-function loaddriveslist() {
+function loaddriveslist() { //se utiliza tanto por el popup de folder a buscar como los de folder destino selectfolderactionnotagpreload() y selectfolderactiontagpreload()
 
 	if (s.os.name == "windows") {
 
@@ -2763,14 +2779,6 @@ function loaddriveslist() {
 
 	if (s.os.name == "linux") {
 
-		console.log($("#unitselect").val())
-
-		// if ($("#unitselect").val() != "") {
-		// 	$('#selecteddrive').html( "/" + $("#unitselect").val() );
-		// } else {
-		// 	$('#selecteddrive').html("/")
-		// }
-
 		drives = [""];
 
 		// Detectar y añadir unidades externas a la lista
@@ -2838,8 +2846,8 @@ function loaddriveslist() {
 			var tdesc="";
 
 			$.each (drives, function(i){
-
-				if (drives[i] == ""){
+				console.log(drives[i].length)
+				if (drives[i].length == 0){
 					t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
 					tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
 				} else {
@@ -2864,6 +2872,9 @@ function loaddriveslist() {
 					$(this).remove()
 
 				}
+				if ($("#selecteddrive")[0].innerText == "/") { //para que ponga local disk cuando lanza el popup si esta en /
+					$("#drivedesc").html("&nbsp;(local disk)");
+				}
 
 			});
 
@@ -2874,16 +2885,10 @@ function loaddriveslist() {
 	}
 	if (s.os.name == "macos") {
 
-      // if ($("#unitselect").val() != "") {
-      //   $('#selecteddrive').html( "/" + $("#unitselect").val() );
-      // } else {
-      //   $('#selecteddrive').html("/")
-      // }
-
       drives = [""];
 
       // Detectar y añadir unidades
-      
+
       var dirtoread = "/Volumes" ;
       var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
 
@@ -2972,9 +2977,6 @@ function loaddriveslist() {
 
     }
 
-
-
-
 }
 
 
@@ -3029,14 +3031,13 @@ function infopreload() {
 
 };
 
-function showretroagain() {        
+function showretroagain() {
   if ($('#showretroagain').prop('checked')){
     localStorage["showretroagain"] = "no"
   } else {
     localStorage["showretroagain"] = "yes"
   }
 }
-
 
 
 
@@ -3047,9 +3048,8 @@ function shownexttip() {
 
 	mostrartipnumero = localStorage["mostrartipnumero"]
 
-	if (mostrartipnumero == 10) {//el tip final
-		mostrartipnumero = 0
-
+	if (mostrartipnumero == 10) { // el tip final
+		mostrartipnumero = 0;
 	}
 
 	// tip mensaje
@@ -3060,7 +3060,7 @@ function shownexttip() {
 
 }
 
-function mostrartips() {        
+function mostrartips() {
   if ($('#mostrartips').prop('checked')){
     localStorage["mostrartips"] = "no"
 
@@ -3068,3 +3068,943 @@ function mostrartips() {
     localStorage["mostrartips"] = "yes"
   }
 }
+
+
+
+/* seleccionar folder para busqueda en el Search */
+
+window.newselectedFolder = "";
+
+function selectfoldersearchpreload(){
+
+	window.colortagstoo = localStorage["colortagstoo"];
+	// if (colortagstoo == "not") {
+	// 	var ls = document.createElement('link');
+ //        ls.rel="stylesheet";
+ //        ls.href= "../css/version_grey.css";
+ //        $('head')[0].appendChild(ls);
+	// } else {
+	// 	$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+	// 	// window.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+	// }
+
+
+	window.driveunit = localStorage["selecteddriveunit"];
+	var treedirecorytolist = driveunit + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WINDOWS mirar https://github.com/resin-io-modules/drivelist
+	var carpetas = treedirecorytolist;
+	var newrefresh="no";
+
+	var Sniffr = require("sniffr");
+	var agent = navigator.userAgent;
+	window.s = "";
+	s = new Sniffr();
+	s.sniff(agent);
+
+	$("#searchin")["0"].children["0"].innerHTML = $("#searchin")["0"].parentNode.parentNode.childNodes[11].childNodes[1].childNodes[5].childNodes[1].textContent
+
+	window.newselectedFolder = window.selectedFolder
+
+
+	if(jQuery) (function ($){
+
+	    // el conector transformado en una función, solo se utilizan los folders pero es la misma función de lectura de elementos que la utilizada en el directoryview
+		function getdirlist (tdirtoread) {
+
+		 	var tdirectorycontent = []; // en esta variable se meten archivos y directorios
+		    var tdirectoryarchives = []; // en esta variable se meten los archivos
+		    var tdirectoryfolders = []; // en esta variable se meten los directorios
+
+			var tdirtoreadcheck = ""
+		    var tdirectoryelement = {};
+		    var tdirectorycontent = [];
+
+		    if (newrefresh=="yes") {
+		    	tdirtoread = driveunit + "\/";
+		    }
+
+		    var treadedElements = fs.readdirSync(tdirtoread);
+
+		    var tre = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+		    for (i = 0; i < treadedElements.length; i++) {
+
+		        var text = tre.exec(treadedElements[i])[1];
+
+		        // comprobar si es carpeta o archivo
+		        tdirtoreadcheck = tdirtoread + treadedElements[i] + "\/";
+		        try {
+		            var tarorfo = "i_am_an_archive";
+		            var tarorfo = fs.readdirSync(tdirtoreadcheck);
+		        }
+		        catch(exception) {};
+
+		        tdirectoryelement.name = treadedElements[i]
+		        tdirectoryelement.ext = text;
+		        tdirectoryelement.arorfo = tarorfo;
+
+		        copied_tdirectoryelement = jQuery.extend({}, tdirectoryelement); // necesario trabajar con una copia para actualizar el objeto tdirectorycontent
+		        tdirectorycontent[i] = copied_tdirectoryelement;
+	    	};
+
+	    	// separa carpetas y archivos en dos objetos (aquí solo son necesarias las carpetas)
+		    ii = 0;
+		    iii = 0;
+		    for (i in tdirectorycontent) {
+		        if (tdirectorycontent[i].arorfo != "i_am_an_archive" || tdirectorycontent[i].arorfo == undefined || tdirectorycontent[i].name == "Documents and Settings") {
+		            tdirectoryfolders[ii] = tdirectorycontent[i];
+		            ii++;
+		        } else {
+		            tdirectoryarchives[iii] = tdirectorycontent[i];
+		            iii++;
+		        }
+		    }
+
+			r = '<ul class="jqueryFileTree" style="display: none;">';
+		   	try {
+		       	r = '<ul class="jqueryFileTree" style="display: none;">';
+				tdirectoryfolders.forEach(function(f){
+		            r += '<li class="directory collapsed"><span rel="\/' + f.name + '" rel2="\/' + f.name + '">' + f.name + '<div class="id"></div><div class="fttags"></div></span></li>';
+				});
+				r += '</ul>';
+			} catch(e) { };
+
+			return r;
+		};
+
+
+		$.extend($.fn, {
+			fileTree: function(o, h) {
+
+				// Defaults
+				if( !o ) var o = {};
+				if( o.root == undefined ) o.root = '/';
+				// if( o.script == undefined ) o.script = 'jqueryFileTreeConnector.js';
+				if( o.folderEvent == undefined ) o.folderEvent = 'click';
+				if( o.folderEvent2 == undefined ) o.folderEvent2 = 'dblclick';
+				if( o.folderEvent3 == undefined ) o.folderEvent3 = 'mousedown';
+				// if( o.expandSpeed == undefined ) o.expandSpeed= 500;
+				if( o.expandSpeed == undefined ) o.expandSpeed= 0;
+				// if( o.collapseSpeed == undefined ) o.collapseSpeed= 500;
+				if( o.collapseSpeed == undefined ) o.collapseSpeed= 0;
+				if( o.expandEasing == undefined ) o.expandEasing = null;
+				if( o.collapseEasing == undefined ) o.collapseEasing = null;
+				if( o.multiFolder == undefined ) o.multiFolder = true;
+				if( o.loadMessage == undefined ) o.loadMessage = 'Loading...';
+
+				$(this).each( function() {
+					function showTree(c, carpeta) {
+
+						$(c).addClass('wait');
+						$(".jqueryFileTree.start").remove();
+						datadir = getdirlist(carpetas);
+
+						function display (datadir) {
+
+							$(c).find('.start').html('');
+							$(c).removeClass('wait').append(datadir);
+							if( o.root == "t" ) $(c).find('UL:hidden').show(); else $(c).find('UL:hidden').slideDown({ duration: o.expandSpeed, easing: o.expandEasing });
+							bindTree(c);
+						};
+
+						display(datadir);
+
+					}
+
+					function bindTree(t) {
+
+						// folderEvent -> clic (Expandir y contraer arbol)
+						$(t).find('LI span').bind(o.folderEvent, function() {
+							if( $(this).parent().hasClass('directory') ) {
+								if( $(this).parent().hasClass('collapsed') ) {
+
+									// Expand
+									if( !o.multiFolder ) {
+										$(this).parent().parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
+										$(this).parent().parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
+									}
+									$(this).parent().find('UL').remove(); //cleanup
+
+									var expandedspans = $(this).parents('.directory').children('span'); // los span de la/las carpetas expandidas (la carpeta expandida, no los hijos)
+
+									carpetas = ""; // variable global usada para abrir subcarpetas en el árbol
+									carpetas2 = ""; // variable global para usarla con la base de datos y meter datos del atributo rel2
+
+										for (i=0; i<expandedspans.length; i++) {
+											var item = expandedspans[i].attributes["0"].value; // se toma el valor del atributo rel
+											carpetas2 = item + carpetas2; // se usa para la base de datos con los tags y meter datos del atributo rel2
+
+											// para abrir subcarpetas en el árbol:
+											item = item.substring(1); // le quitamos la / del principio
+											item = item + "\/" // se lo metemos al principio
+											carpetas = item + carpetas;
+											newrefresh = "no";
+										}
+
+									carpetas = treedirecorytolist + carpetas;
+
+									showTree( $(this).parent(), carpetas); // muestra carpetas descendientes
+
+									$(this).parent().removeClass('collapsed').addClass('expanded');
+
+									var subcarpetas = $(this).siblings("ul").children("li").children(); // subcarpetas
+
+									for (i=0; i<subcarpetas.length; i++) {
+
+										var relativosubcarpeta = subcarpetas[i].attributes["0"].value; // se toma el valor del rel (direc. relativa)
+										subcarpetas[i].setAttribute("rel2", carpetas2 + relativosubcarpeta); // se utiliza para crear el rel2 (direc. completa) en cada una de las subcarpetas
+
+									}
+
+								// -- fin expandir (si estába colapsado)
+								} else { // colapsar si estába extendido
+									// Collapse
+									$(this).parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
+									$(this).parent().removeClass('expanded').addClass('collapsed');
+								}
+
+
+							} else { //fin si es directorio, en la versión original del filetree se podían ver ficheros
+							}
+
+							return false;
+
+						}); // --fin folderevent click
+
+						// folderEvent2 -> dblclick
+						$(t).find('LI span').bind(o.folderEvent2, function() {
+
+							if ($(this).hasClass("selected")){
+							 	// $(this).removeClass("selected")
+							} else {
+								$("#filetree ul li span").removeClass("selected")
+							 	$(this).addClass("selected")
+
+							 	$("#searchin")["0"].children["0"].innerHTML = selectedDriveUnit + $(this)["0"].attributes[1].value;
+								window.newselectedFolder = $(this)["0"].attributes[1].value;					 	
+
+							}
+
+						});
+
+					}
+
+					// Loading message
+					$(this).html('<ul class="jqueryFileTree start"><li class="wait">' + o.loadMessage + '<li></ul>');
+					// Get the initial file list
+					showTree( $(this), escape(o.root) );
+
+				}); // --fin each
+
+
+				// para quitar la carpeta "Document and Setings" si la creara pues no es capaz de abrir desde aquí
+				var recorrercarpetas = $("#filetree li span")
+				$.each(recorrercarpetas, function(i) {
+
+					if (recorrercarpetas[i].attributes["1"].value == "\/Documents and Settings" ) {
+						recorrercarpetas[i].parentElement.style.display = "none";
+					}
+
+				});
+
+			}
+
+		});
+
+
+		$('#filetree').fileTree();
+		if (colortagstoo == "not") {
+			$('#filetree').css("filter","grayscale(85%) brightness(109%)")
+		} else {
+			$('#filetree').css("filter", "none")
+		}
+
+	})(jQuery);
+}
+
+function acceptsearchfolder(e) {
+
+	window.selectedFolder = window.newselectedFolder;
+
+	$(e)["0"].parentNode.parentNode.childNodes[11].childNodes[1].childNodes[5].childNodes[1].innerHTML = $("#searchin")["0"].children["0"].innerHTML;
+}
+
+function choseroot() { // para el popup de seleccionar carpeta busqueda del Search
+
+	var Sniffr = require("sniffr");
+	var agent = navigator.userAgent;
+	var s = new Sniffr();
+	s.sniff(agent);
+
+	if (s.os.name == "windows") {
+
+		$("#searchin")["0"].children["0"].innerHTML = driveunit
+		window.newselectedFolder = "/";
+	} else {
+
+		if (driveunit != "") {
+			$("#searchin")["0"].children["0"].innerHTML = driveunit
+		}
+		else {
+			$("#searchin")["0"].children["0"].innerHTML = "/"
+		}
+		window.newselectedFolder = "/";
+	}
+
+	$("#filetree span").removeClass("selected")
+}
+
+/* -- fin seleccionar folder para busqueda en el Search */
+
+/* popup seleccionar carpeta destino tag y no tag */
+
+	/* destino no tag */
+
+window.carpetas = ""
+window.treedirecorytolist = "";
+window.destinationdrive = "";
+window.rootdeselected = false;
+
+function selectfolderactionnotagpreload(){
+
+	rootdeselected = false;
+	loaddriveslist(); /* definida arriba */
+
+	driveunit = localStorage["selecteddriveunit"];
+	window.colortagstoo = localStorage["colortagstoo"];
+	window.treedirecorytolist = driveunit + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WINDOWS mirar https://github.com/	resin-io-modules/drivelist
+	window.carpetas = treedirecorytolist;
+
+	if (driveunit) {
+
+		if (s.os.name == "windows" || s.os.name == "macos") {
+			$('#selecteddrive').html(driveunit)
+		}
+		if (s.os.name == "linux") {
+			if(driveunit == ""){
+				$('#selecteddrive').html("/" + driveunit)
+			} else {
+				$('#selecteddrive').html(driveunit)
+			}
+		}
+
+	}
+
+	var Sniffr = require("sniffr");
+	var agent = navigator.userAgent;
+	window.s = "";
+	s = new Sniffr();
+	s.sniff(agent);
+
+	if (window.parent.pasteaction == "copy") {
+		$("#acceptdestination").html("COPY")
+	} else {
+		$("#acceptdestination").html("MOVE")
+	}
+
+	$("#selectedfolder")["0"].children["0"].innerHTML = treedirecorytolist;
+
+	destinationdrive = driveunit;
+
+	showdrivefolders() /* definido abajo */
+
+	$("#unitselect").change(function() {
+
+		rootdeselected = false;
+
+		if (s.os.name == "windows") {
+
+		 var availabledrives=[];
+
+		 $('#selecteddrive').html($("#unitselect").val());
+
+			var drivelist = require('drivelist');
+			var driveLetters = require('windows-drive-letters');
+
+			var t="";
+			var tdesc="";
+
+			availabledrives = drivelist.list((error, drives) => {
+				if (error) {
+					throw error;
+				}
+
+				drives.forEach((drive, i) => {
+
+					i= i+1;
+
+					t += "<option value='" + drive.mountpoints["0"].path + "'>" + drive.mountpoints["0"].path + "</option>"
+					tdesc += "<div value='" + drive.mountpoints["0"].path + "' class='drivedesc'>" + drive.description + "</div>"
+
+				});
+
+				// para detectar unidades virtuales en windows y añadirlas a la lista
+				try {
+					letters = driveLetters.usedLettersSync();
+					// console.log(letters); // => ['C', 'D', ...]
+				} catch (err) {};
+
+				$.each (letters, function(i){
+
+					unidadvirtual = "si";
+					drives.forEach((drive, u) => {
+
+						if (letters[i]+":" == drive.mountpoints["0"].path ) {
+							unidadvirtual = "no";
+						}
+
+					});
+
+					if (unidadvirtual == "si") {
+						t += "<option value='" + letters[i] + ":'>" + letters[i] + ":</option>"
+						tdesc += "<div value='" + letters[i] + ":' class='drivedesc'>Virtual Drive</div>"
+					}
+
+
+				});
+
+				$("#unitselect").html(t);
+				$("#unitselect").val($('#selecteddrive').html());
+
+				$("#drivedesc").css("display","none")
+				$("#drivedesc").html("("+tdesc+")");
+
+				// se pintará solo la info del drive seleccionado
+				$.each($("#drivedesc div"), function(n) {
+
+					if($(this).attr("value") != $("#selecteddrive").html()) {
+
+						$(this).remove()
+
+					}
+
+				});
+
+				$("#drivedesc").css("display","inline-block");
+
+			});
+
+		}
+
+		if (s.os.name == "linux") {
+
+			if ($("#unitselect").val() != "") {
+				$('#selecteddrive').html( "/" + $("#unitselect").val() );
+			} else {
+				$('#selecteddrive').html("/")
+			}
+
+			drives = [""];
+
+			// Detectar y añadir unidades externas a la lista
+
+			const username = require('username');
+
+			username().then(username => {
+
+				var dirtoread = "/media/" + username // la carpeta donde se montan las unidades externas
+				var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+
+				var directoryelement = [];
+				var directorycontent = [];
+				window.directoryarchives = [];
+				window.directoryfolders = [];
+
+				var readedElements = fs.readdirSync(dirtoread)
+				var iteratentimes = readedElements.length;
+
+				for (i = 0; i < iteratentimes; i++) {
+
+					var ext = re.exec(readedElements[i])[1];
+					if (!ext) {
+						ext="&nbsp;";
+					}
+
+					// comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+					var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+
+					try {
+						var arorfo = "i_am_an_archive";
+						var arorfo = fs.readdirSync(dirtoreadcheck);
+					}
+					catch(exception) {};
+
+					directoryelement.name = readedElements[i]
+
+					var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+					directorycontent[i] = copied_directoryelement;
+				};
+
+				// separa carpetas y archivos en dos objetos
+				var i = 0;
+				var ii = 0;
+				var iii = 0;
+
+				$.each(directorycontent, function(i) {
+
+					if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+						directoryfolders[ii] = directorycontent[i];
+
+						ii++;
+					} else {
+						directoryarchives[iii] = directorycontent[i];
+						iii++;
+					};
+				});
+
+				// se añaden las carpetas detectadas como unidades externas disponibles
+				$.each(directoryfolders, function(i) {
+					drives.push("media/" + username + "/" + directoryfolders[i].name);
+				});
+
+				var t="";
+				var tdesc="";
+
+				$.each (drives, function(i){
+
+					if (drives[i] == ""){
+						t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
+						tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+					} else {
+						t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
+						tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+					}
+
+				});
+
+				$("#unitselect").html(t);
+				$("#unitselect").val("");
+
+				$("#drivedesc").css("display","none")
+				$("#drivedesc").html("("+tdesc+")");
+
+				// se pintará solo la info del drive seleccionado
+				$.each($("#drivedesc div"), function(n) {
+
+					if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+
+						$(this).remove()
+
+					}
+
+				});
+
+				$("#drivedesc").css("display","inline-block");
+
+			});
+
+		}
+
+		if (s.os.name == "macos") {
+
+	     	if ($("#unitselect").val() != "") {
+	        	$('#selecteddrive').html( "/" + $("#unitselect").val() );
+	      	} else {
+	        	$('#selecteddrive').html("/")
+	      	}
+
+		    drives = [""];
+
+		    // Detectar y añadir unidades
+
+		    var dirtoread = "/Volumes" ;
+		    var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+
+		    var directoryelement = [];
+		    var directorycontent = [];
+		    window.directoryarchives = [];
+		    window.directoryfolders = [];
+
+		    var readedElements = fs.readdirSync(dirtoread)
+		    var iteratentimes = readedElements.length;
+
+	    	for (i = 0; i < iteratentimes; i++) {
+
+		        var ext = re.exec(readedElements[i])[1];
+		        if (!ext) {
+		          ext="&nbsp;";
+		        }
+
+		        // comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+		        var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+
+		        try {
+		          var arorfo = "i_am_an_archive";
+		          var arorfo = fs.readdirSync(dirtoreadcheck);
+		        }
+		        catch(exception) {};
+
+		        directoryelement.name = readedElements[i]
+
+		        var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+		        directorycontent[i] = copied_directoryelement;
+      		};
+
+		    // separa carpetas y archivos en dos objetos
+		    var i = 0;
+		    var ii = 0;
+		    var iii = 0;
+
+			$.each(directorycontent, function(i) {
+
+				if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+				  	directoryfolders[ii] = directorycontent[i];
+
+				  	ii++;
+				} else {
+				  	directoryarchives[iii] = directorycontent[i];
+				  	iii++;
+				};
+			});
+
+	      	// se añaden las carpetas detectadas como unidades externas disponibles
+	      	$.each(directoryfolders, function(i) {
+	        	drives.push("Volumes/" + directoryfolders[i].name);
+	      	});
+
+      		var t="";
+      		var tdesc="";
+
+      		$.each (drives, function(i){
+
+      			if (drives[i] != ""){
+          			t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
+          			tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
+        		}
+
+      		});
+
+      		$("#unitselect").html(t);
+      		$("#unitselect").val("");
+
+      		$("#drivedesc").css("display","none")
+      		$("#drivedesc").html("("+tdesc+")");
+
+      		// se pintará solo la info del drive seleccionado
+      		$.each($("#drivedesc div"), function(n) {
+
+        		if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+
+          			$(this).remove()
+
+        		}
+
+      		});
+
+      		$("#drivedesc").css("display","inline-block");
+
+    	}
+
+    	destinationdrive = $("#selecteddrive").html().trim();
+
+		if (destinationdrive != "/") {
+      		window.treedirecorytolist = destinationdrive + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WINDOWS mirar https://github.com/resin-io-modules/drivelist
+		} else {
+			window.treedirecorytolist = destinationdrive;
+		}
+
+		window.carpetas = treedirecorytolist;
+		$("#selectedfolder")["0"].children["0"].innerHTML = treedirecorytolist
+
+        showdrivefolders(); /* definido abajo */
+
+	});
+
+	$("#acceptdestination").on("click", function(){
+		if (rootdeselected) {
+			selectedactionfolder($("#selectedfolder")["0"].children["0"].innerHTML, destinationdrive.trim());
+			cerrar();
+		} else {
+			if (window.parent.pasteaction == "copy"){
+				alertify.alert("Not possible to copy to root directory... Select a destination folder.")
+			} else {
+				alertify.alert("Not possible to move to root directory... Select a destination folder.")
+
+			}
+		}
+	});
+
+}
+/* --fin selectfolderactionnotagpreload() */
+
+function showdrivefolders(){ /* usado tanto por selectfolderactionnotagpreload() (arriba) como por selectfolderactiontagpreload() (abajo) */
+
+	var newrefresh="no";
+
+	if(jQuery) (function ($){
+
+	    // el conector transformado en una función, solo se utilizan los folders pero es la misma función de lectura de elementos que la utilizada en el  directoryview
+		function getdirlist (tdirtoread) {
+
+		 	var tdirectorycontent = []; // en esta variable se meten archivos y directorios
+		    var tdirectoryarchives = []; // en esta variable se meten los archivos
+		    var tdirectoryfolders = []; // en esta variable se meten los directorios
+
+			var tdirtoreadcheck = ""
+		    var tdirectoryelement = {};
+		    var tdirectorycontent = [];
+
+		    if (newrefresh=="yes") {
+		    	tdirtoread = driveunit + "\/";
+		    }
+
+		    var treadedElements = fs.readdirSync(tdirtoread);
+
+		    var tre = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+		    for (i = 0; i < treadedElements.length; i++) {
+
+		        var text = tre.exec(treadedElements[i])[1];
+
+		        // comprobar si es carpeta o archivo
+		        tdirtoreadcheck = tdirtoread + treadedElements[i] + "\/";
+		        try {
+		            var tarorfo = "i_am_an_archive";
+		            var tarorfo = fs.readdirSync(tdirtoreadcheck);
+		        }
+		        catch(exception) {};
+
+		        tdirectoryelement.name = treadedElements[i]
+		        tdirectoryelement.ext = text;
+		        tdirectoryelement.arorfo = tarorfo;
+
+		        copied_tdirectoryelement = jQuery.extend({}, tdirectoryelement); // necesario trabajar con una copia para actualizar el objeto tdirectorycontent
+		        tdirectorycontent[i] = copied_tdirectoryelement;
+	    	};
+
+	    	// separa carpetas y archivos en dos objetos (aquí solo son necesarias las carpetas)
+		    ii = 0;
+		    iii = 0;
+		    for (i in tdirectorycontent) {
+		        if (tdirectorycontent[i].arorfo != "i_am_an_archive" || tdirectorycontent[i].arorfo == undefined || tdirectorycontent[i].name == "Documents and Settings") {
+		            tdirectoryfolders[ii] = tdirectorycontent[i];
+		            ii++;
+		        } else {
+		            tdirectoryarchives[iii] = tdirectorycontent[i];
+		            iii++;
+		        }
+		    }
+
+			r = '<ul class="jqueryFileTree" style="display: none;">';
+		   	try {
+		       	r = '<ul class="jqueryFileTree" style="display: none;">';
+				tdirectoryfolders.forEach(function(f){
+		            r += '<li class="directory collapsed"><span rel="\/' + f.name + '" rel2="\/' + f.name + '">' + f.name + '<div class="id"></div><div class="fttags"></div></span></li>';
+				});
+				r += '</ul>';
+			} catch(e) { };
+
+			return r;
+		};
+
+
+		$.extend($.fn, {
+			fileTree: function(o, h) {
+
+				// Defaults
+				if( !o ) var o = {};
+				if( o.root == undefined ) o.root = '/';
+				// if( o.script == undefined ) o.script = 'jqueryFileTreeConnector.js';
+				if( o.folderEvent == undefined ) o.folderEvent = 'click';
+				if( o.folderEvent2 == undefined ) o.folderEvent2 = 'dblclick';
+				if( o.folderEvent3 == undefined ) o.folderEvent3 = 'mousedown';
+				// if( o.expandSpeed == undefined ) o.expandSpeed= 500;
+				if( o.expandSpeed == undefined ) o.expandSpeed= 0;
+				// if( o.collapseSpeed == undefined ) o.collapseSpeed= 500;
+				if( o.collapseSpeed == undefined ) o.collapseSpeed= 0;
+				if( o.expandEasing == undefined ) o.expandEasing = null;
+				if( o.collapseEasing == undefined ) o.collapseEasing = null;
+				if( o.multiFolder == undefined ) o.multiFolder = true;
+				if( o.loadMessage == undefined ) o.loadMessage = 'Loading...';
+
+				$(this).each( function() {
+					function showTree(c, carpeta) {
+
+						$(c).addClass('wait');
+						$(".jqueryFileTree.start").remove();
+						datadir = getdirlist(carpetas);
+
+						function display (datadir) {
+
+							$(c).find('.start').html('');
+							$(c).removeClass('wait').append(datadir);
+							if( o.root == "t" ) $(c).find('UL:hidden').show(); else $(c).find('UL:hidden').slideDown({ duration: o.expandSpeed, easing: o.expandEasing });
+							bindTree(c);
+						};
+
+						display(datadir);
+
+					}
+
+					function bindTree(t) {
+
+						// folderEvent -> clic (Expandir y contraer arbol)
+						$(t).find('LI span').bind(o.folderEvent, function() {
+							if( $(this).parent().hasClass('directory') ) {
+								if( $(this).parent().hasClass('collapsed') ) {
+
+									// Expand
+									if( !o.multiFolder ) {
+										$(this).parent().parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
+										$(this).parent().parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
+									}
+									$(this).parent().find('UL').remove(); //cleanup
+
+									var expandedspans = $(this).parents('.directory').children('span'); // los span de la/las carpetas expandidas (la carpeta expandida, no los hijos)
+
+									carpetas = ""; // variable global usada para abrir subcarpetas en el árbol
+									carpetas2 = ""; // variable global para usarla con la base de datos y meter datos del atributo rel2
+
+										for (i=0; i<expandedspans.length; i++) {
+											var item = expandedspans[i].attributes["0"].value; // se toma el valor del atributo rel
+											carpetas2 = item + carpetas2; // se usa para la base de datos con los tags y meter datos del atributo rel2
+
+											// para abrir subcarpetas en el árbol:
+											item = item.substring(1); // le quitamos la / del principio
+											item = item + "\/" // se lo metemos al principio
+											carpetas = item + carpetas;
+											newrefresh = "no";
+										}
+
+									carpetas = treedirecorytolist + carpetas;
+
+									showTree( $(this).parent(), carpetas); // muestra carpetas descendientes
+
+									$(this).parent().removeClass('collapsed').addClass('expanded');
+
+									var subcarpetas = $(this).siblings("ul").children("li").children(); // subcarpetas
+
+									for (i=0; i<subcarpetas.length; i++) {
+
+										var relativosubcarpeta = subcarpetas[i].attributes["0"].value; // se toma el valor del rel (direc. relativa)
+										subcarpetas[i].setAttribute("rel2", carpetas2 + relativosubcarpeta); // se utiliza para crear el rel2 (direc. completa) en cada una de las subcarpetas
+
+									}
+
+
+									// filetreeinteractions(); // activar interacciones para cada uno de los spans añadidos
+
+								// -- fin expandir (si estába colapsado)
+								} else { // colapsar si estába extendido
+									// Collapse
+									$(this).parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
+									$(this).parent().removeClass('expanded').addClass('collapsed');
+								}
+
+
+							} else { //fin si es directorio, en la versión original del filetree se podían ver ficheros
+							}
+
+							return false;
+
+						}); // --fin folderevent click
+
+						// folderEvent2 -> dblclick
+						$(t).find('LI span').bind(o.folderEvent2, function() {
+
+							if ($(this).hasClass("selected")){
+							 	// $(this).removeClass("selected")
+							} else {
+								$("#filetree ul li span").removeClass("selected")
+							 	$(this).addClass("selected")
+							 	rootdeselected = true;
+
+							 	$("#selectedfolder")["0"].children["0"].innerHTML = destinationdrive + $(this)["0"].attributes[1].value;
+							}
+
+						});
+
+					}
+
+					// Loading message
+					$(this).html('<ul class="jqueryFileTree start"><li class="wait">' + o.loadMessage + '<li></ul>');
+					// Get the initial file list
+					showTree( $(this), escape(o.root) );
+
+				}); // --fin each
+
+
+				// para quitar la carpeta "Document and Setings" si la creara pues no es capaz de abrir desde aquí
+				var recorrercarpetas = $("#filetree li span")
+				$.each(recorrercarpetas, function(i) {
+
+					if (recorrercarpetas[i].attributes["1"].value == "\/Documents and Settings" ) {
+						recorrercarpetas[i].parentElement.style.display = "none";
+					}
+
+				});
+
+			}
+
+		});
+
+
+	})(jQuery);
+
+	$('#filetree').html("");
+	$('#filetree').fileTree();
+	if (colortagstoo == "not") {
+		$('#filetree').css("filter","grayscale(85%) brightness(109%)")
+	} else {
+		$('#filetree').css("filter", "none")
+	}
+
+} /* --fin showdrivefolders() */
+
+
+/* para el popup folder destino con tags */
+function selectfolderactiontagpreload(){
+
+	rootdeselected = false;
+
+	window.driveunit = localStorage["selecteddriveunit"];
+	window.colortagstoo = localStorage["colortagstoo"];
+	window.treedirecorytolist = driveunit + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WINDOWS mirar https://github.com/	resin-io-modules/drivelist
+	window.carpetas = treedirecorytolist;
+
+	if (driveunit) {
+
+		if (s.os.name == "windows" || s.os.name == "macos") {
+			$('#selecteddrive').html(driveunit)
+		}
+		if (s.os.name == "linux") {
+			if(driveunit == ""){
+				$('#selecteddrive').html("/" + driveunit)
+			} else {
+				$('#selecteddrive').html(driveunit)
+			}
+
+		}
+
+	}
+
+	var Sniffr = require("sniffr");
+	var agent = navigator.userAgent;
+	window.s = "";
+	s = new Sniffr();
+	s.sniff(agent);
+
+	if (window.parent.pasteaction == "copy") {
+		$("#acceptdestination").html("COPY")
+	} else {
+		$("#acceptdestination").html("MOVE")
+	}
+
+	$("#selectedfolder")["0"].children["0"].innerHTML = treedirecorytolist;
+
+	destinationdrive = driveunit;
+
+	showdrivefolders();
+
+	$("#acceptdestination").on("click", function(){
+		if (rootdeselected) {
+			selectedactionfolder($("#selectedfolder")["0"].children["0"].innerHTML, destinationdrive.trim());
+			cerrar();
+		} else {
+			if (window.parent.pasteaction == "copy"){
+				alertify.alert("Not possible to copy to root directory... Select a destination folder.")
+			} else {
+				alertify.alert("Not possible to move to root directory... Select a destination folder.")
+
+			}
+		}
+	})
+
+} /* --fin selectfolderactiontagpreload() */

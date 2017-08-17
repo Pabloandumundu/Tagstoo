@@ -50,10 +50,6 @@ pasteaction = window.top.pasteaction;
 var searchviewmode = top.searcher.searchviewmode; // es solo para que no de error el pressandhold
 
 
-
-
-
-
 iniciarfolderview(); // inicia cadena de acciones, carga de explorador, tags etc..
 
 
@@ -716,7 +712,7 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 		db = request.result;
 
 		window.driveunit = localStorage["selecteddriveunit"];
-		// window.driveunit = ""
+		window.driveunit = window.driveunit.trim();
 
 		if (!localStorage["previewimgonviewmode1"]) {
 			window.previewimgonviewmode1 = "no";

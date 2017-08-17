@@ -265,6 +265,7 @@
 #searchin {
 
 	margin-bottom: 2px;
+	width:100%;
 }
 
 #searchin > div {
@@ -272,7 +273,7 @@
 	background-color: #99ddee;
 	margin-right: 10px;
 	border-radius: 8px;
-	padding-left: 1px;
+	padding-left: 4px;
 	margin-left: 1px;
 	word-wrap: break-word;
 	border-top: 1px solid #A8AAC1;
@@ -364,7 +365,7 @@ input[type="radio"]:checked + label span.radio::after {
 
 }
 .nottaginput {
-	
+
 	/*width: calc(90% - 90px);*/
 	width: 60%;
 	min-height: 20px;

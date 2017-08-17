@@ -51,11 +51,11 @@
 		  fill: currentColor;
 		  stroke: none;
 		  
-		  motion-path: path(
+		  offset-path: path(
 		    "M-45,0 A45,45 0 0 0 45,0 A45,45 0 0 0 -45,0");
 		  offset-path: circle(45px);
 		  
-		  motion-offset: calc(10% * var(--i));
+		  
 		  offset-distance: calc(10% * var(--i));
 		}
 		.loop {
@@ -66,11 +66,11 @@
 		  fill: none;
 		}
 		.ring {  
-		  motion-path: path(
+		  offset-path: path(
 		    "M-8,0 A8,8 0 0 0 8,0 A8,8 0 0 0 -8,0");
 		  offset-path: circle(8px);
-		  motion-rotation: 0deg;
-		  offset-rotation: 0deg;
+
+		  offset-rotate: 0deg;
 		  
 		  animation: fade calc(var(--spin-dur) * 1.8) infinite alternate cubic-bezier(1, 0, 0.5, 0.5) both,
 		    spin var(--spin-dur) infinite linear;
@@ -81,7 +81,7 @@
 		}
 		@keyframes spin {
 		  to {
-		    motion-offset: 100%;
+		    
 		    offset-distance: 100%;
 		  }
 		}

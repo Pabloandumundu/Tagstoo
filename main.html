@@ -49,14 +49,14 @@
 	</script>
 
 	<header>
-		
+
 		<div id="toppopupbackground"></div>
 
 		<div id="topbloque1">
 
 			<div id="logotipo"><img src="img/tagstoo30b.png" alt=""></div>
-		
-			<div class="animatedtabs"> 
+
+			<div class="animatedtabs">
 
 				<ul class="tabs">
 
@@ -113,7 +113,7 @@
 			<div id="viewmode-wrap">
 
 				<span class="toptext">Viewmode: <span id="viewmodenumber">1 ...</span></span><br>
-				<input id="viewmode" type="range" min="1" max="9" step="1" value="1"> 
+				<input id="viewmode" type="range" min="1" max="9" step="1" value="1">
 
 			</div>
 
@@ -137,7 +137,7 @@
 
 				<div>
 
-					<a href="#" class="action-button shadow animate yellow tooltip-right" id="undo" data-tooltip="UNDO (not undo action)">UNDO</a>        
+					<a href="#" class="action-button shadow animate yellow tooltip-right" id="undo" data-tooltip="UNDO (not undo action)">UNDO</a>
 				</div>
 
 				<img id="options" src="img/options.png" alt="">
@@ -146,7 +146,7 @@
 			</div>
 
 		</div>
-		
+
 	</header>
 
 	<div id="tab-1" class="tab-content current">
@@ -162,14 +162,14 @@
 	</div>
 
 	<script>
-		
+
 		var win = nw.Window.get();
 
 		// para quitar un defecto de que si se había recargado la página a la hora de cerrar pedía confirmación tantas veces como recargadas
 		setTimeout(function() {
 
-			$.each(win.__proto__.outerEventCBs.close, function(i) {          
-				delete win.__proto__.outerEventCBs.close[i]; 
+			$.each(win.__proto__.outerEventCBs.close, function(i) {
+				delete win.__proto__.outerEventCBs.close[i];
 			});
 
 		}, 500);
@@ -182,8 +182,8 @@
 				alertify.confirm( "Close application ?", function (e) {
 					if (!e) {
 						x = "You pressed Cancel!";
-						console.log(x);                 
-					} else {                  
+						console.log(x);
+					} else {
 						x = "You pressed OK!";
 						console.log(x)
 						win.close(true);

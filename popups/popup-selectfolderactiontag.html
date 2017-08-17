@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Select Destination Folder (tag)</title>
+
+	<link href="../css/jqueryFileTree.css" rel="stylesheet" type="text/css">
+
+	<style>
+		#treeview {
+			top:0;
+			background-color: white;
+			border-radius: 5px;
+			height:calc(100% - 50px);
+			margin-right: 5px;
+			width: 50%;
+
+		}
+		#treeview li {
+			padding-top: 4px;
+		}
+		.searchin {
+			max-width: 45%;
+		}
+		.searchin div {
+			padding: 0 3px;
+		}
+		.selectfoldbutt {
+			margin-bottom: 5px;
+			margin-right: 3px;
+		}
+	</style>
+		
+</head>
+<body>
+
+	<div id="popupbg"></div>
+
+	<div id="popuptitle">SELECT DESTINATION FOLDER (Tags? Yes)</div>
+
+	<br>
+	<hr>
+	 <div id="treeview">
+
+      <div id="filetree"></div>
+
+    </div>
+
+	<p>&larr; Click to expand, double-click to select.</p>
+	<div id="selectedfolder" class="searchin">Destination Folder: <div></div></div>
+
+	<br>
+	<br>
+
+	<a class="medium button orange selectfoldbutt" onclick="cerrar()">Cancel</a>
+	<a class="medium button green selectfoldbutt" id="acceptdestination">ff</a>
+
+	<script>
+		selectfolderactiontagpreload();
+	</script>
+
+</body>
+</html>
