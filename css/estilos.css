@@ -1941,8 +1941,8 @@ header h1 {
 
 	display: initial;
 	top: 60px;
-	height: calc(100% - 130px);
-	max-height: calc(100% - 130px);
+	height: calc(100% - 200px);
+	max-height: calc(100% - 200px);
 	left: 0;
 	right: 0;
 	margin-left: auto;

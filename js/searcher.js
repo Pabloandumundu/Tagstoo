@@ -583,10 +583,16 @@ $(document).ready(function () {
 
 	});
 
-	$("#selectFolder").on('click', function() {
+	$("#searchorder").on('change', function() {
 
-		// searchorder = $(this)["0"].value;
-		// readsearchredresults();
+		searchorder = $(this)["0"].value;
+		readsearchredresults();
+
+	});
+
+
+
+	$("#selectFolder").on('click', function() {
 
 		 popup('selectfoldersearch');
 
