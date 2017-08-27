@@ -80,6 +80,7 @@ div#filetree {
 #filetree span div {
 
 	display: inline-block;
+    /*min-width: 1px;*/
 }
 
 /* clase que se aplicará en los span del tree cuando se haga hover con un contenido */

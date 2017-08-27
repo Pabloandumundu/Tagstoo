@@ -5311,8 +5311,9 @@ function interactinsforsearchdir() {
 											undo.taggfold.tagid = taganadir;
 											undo.taggfold.folder = folderupdate.folder;
 
-											popup("addtagtosubelements"); // aunque no se añade a la carpeta madre se preguntará como siempre que sea una carpeta si se quiere añadir a subelementos
-
+											if(localStorage["asktagsubeleents"]=="yes"){
+												popup("addtagtosubelements"); // aunque no se añade a la carpeta madre se preguntará como siempre que sea una carpeta si se quiere añadir a subelementos
+											}
 											return;
 
 										}
@@ -5452,8 +5453,9 @@ function interactinsforsearchdir() {
 
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
-
-											popup("addtagtosubelements");
+											if(localStorage["asktagsubeleents"]=="yes"){
+												popup("addtagtosubelements");
+											}
 
 										}
 
@@ -5592,7 +5594,9 @@ function interactinsforsearchdir() {
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 										elemetstagdelete(); // activa sistema borrado tags
 
-										popup("addtagtosubelements");
+										if(localStorage["asktagsubeleents"]=="yes"){
+											popup("addtagtosubelements");
+										}
 
 									}
 

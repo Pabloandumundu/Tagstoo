@@ -711,8 +711,9 @@ function filetreeinteractions() {
 										undo.taggfold.tagid = taganadir;
 										undo.taggfold.folder = folderupdate.folder;
 
-										popup("addtagtosubelements"); // aunque no se añade a la carpeta madre se preguntará, como siempre que sea una carpeta, si se quiere añadir a subelementos
-
+										if(localStorage["asktagsubeleents"]=="yes"){
+											popup("addtagtosubelements"); // aunque no se añade a la carpeta madre se preguntará, como siempre que sea una carpeta, si se quiere añadir a subelementos
+										}
 										return;
 
 									}
@@ -854,7 +855,9 @@ function filetreeinteractions() {
 									trans2.oncomplete = function(event) {
 
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
-										popup("addtagtosubelements");
+										if(localStorage["asktagsubeleents"]=="yes"){
+											popup("addtagtosubelements");
+										}
 
 									}
 
@@ -993,7 +996,9 @@ function filetreeinteractions() {
 
 									elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 
-									popup("addtagtosubelements");
+									if(localStorage["asktagsubeleents"]=="yes"){
+										popup("addtagtosubelements");
+									}
 
 								}
 
@@ -1011,6 +1016,8 @@ function filetreeinteractions() {
 		    // Mover y Copiar
 
 		    if (ui.draggable["0"].classList.contains("exploelement")) {
+
+		    	var pasteaction = window.parent.pasteaction;
 
 		    	var droppedarchive = [];
 		    	var droppedfolder = [];
@@ -1281,7 +1288,7 @@ function filetreeinteractions() {
 
 									$.each(droppedfolder, function(t) {
 
-										foldertoread = rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
+										foldertoread = driveunit + rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
 
 										recursivefolderdata(foldertoread);
 
@@ -2345,7 +2352,7 @@ function filetreeinteractions() {
 
 								$.each(droppedfolder, function(t) {
 
-									foldertoread = rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
+									foldertoread = driveunit + rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
 
 									recursivefolderdata(foldertoread);
 
@@ -3327,7 +3334,7 @@ window.parent.$("#paste").on('click', function() {
 
 							$.each(droppedfolder, function(t) {
 
-								foldertoread = rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
+								foldertoread = driveunit + rootdirectory + droppedfolder[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
 
 								recursivefolderdata(foldertoread);
 
@@ -4355,7 +4362,7 @@ window.parent.$("#paste").on('click', function() {
 
 						$.each(droppedfolder, function(t) {
 
-							foldertoread = rootdirectory + droppedfolder[t].children[1].attributes[1].value; //recogemos el value de cada carpeta
+							foldertoread = driveunit + rootdirectory + droppedfolder[t].children[1].attributes[1].value; //recogemos el value de cada carpeta
 							recursivefolderdata(foldertoread);
 
 

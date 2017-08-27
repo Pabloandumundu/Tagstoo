@@ -27,6 +27,10 @@ s.sniff(agent);
 
 window.currentlydatabaseused = localStorage["currentlydatabaseused"];
 
+if (!localStorage["asktagsubeleents"]){
+	localStorage["asktagsubeleents"] = "yes";
+}
+
 var directoryelement = [];
 var alldroppedelement = [];
 var viewmode="1"
@@ -682,8 +686,7 @@ $(document).ready(function () {
 		}
 
 	}
-
-
+	//tips localstorage?
 
 }); //--fin onload
 
@@ -1323,7 +1326,7 @@ window.parent.$("#delete").on('click', function() {
 
 				$.each(todeletefolders, function(t) {
 
-					foldertoread = rootdirectory + todeletefolders[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
+					foldertoread = driveunit + rootdirectory + todeletefolders[t].children[1].attributes[1].value; // recogemos el value de cada carpeta
 
 					recursivefolderdata(foldertoread);
 
@@ -5259,7 +5262,9 @@ function interactions() {
 										undo.taggfold.tagid = taganadir;
 										undo.taggfold.folder = folderupdate.folder;
 
-										popup("addtagtosubelements"); // aunque no se añade a la carpeta madre se preguntará como siempre que sea una carpeta si se quiere añadir a subelementos
+										if(localStorage["asktagsubeleents"]=="yes"){
+											popup("addtagtosubelements"); // aunque no se añade a la carpeta madre se preguntará como siempre que sea una carpeta si se quiere añadir a subelementos
+										};
 
 										return;
 
@@ -5400,7 +5405,9 @@ function interactions() {
 
 										elemetstagdelete(); // activa sistema borrado tags
 
-										popup("addtagtosubelements");
+										if(localStorage["asktagsubeleents"]=="yes"){
+											popup("addtagtosubelements");
+										}
 
 									}
 
@@ -5540,7 +5547,9 @@ function interactions() {
 									elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 									elemetstagdelete(); // activa sistema borrado tags
 
-									popup("addtagtosubelements");
+									if(localStorage["asktagsubeleents"]=="yes"){
+										popup("addtagtosubelements");
+									};
 
 								}
 
@@ -8745,7 +8754,6 @@ function footertagsinteractions(){
 		zIndex: 9999,
 		start: startedDrag,
 		stop: stoppedDrag
-
 	});
 
 	$('.footertagticket').droppable({

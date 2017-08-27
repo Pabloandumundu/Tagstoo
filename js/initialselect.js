@@ -1143,36 +1143,41 @@ $(document).ready(function() {
 
 function starttagstoo() {
 
-  if ($("#selecteddb").html() != "") {
-    if($("#drivedesc").html() != "(Can't load this drive, select an available one.)") {
+  if ($("#selecteddrive").html() != "") {
+    if ($("#selecteddb").html() != "") {    
+      if($("#drivedesc").html() != "(Can't load this drive, select available one.)") {
 
-      localStorage["colortagstoo"] = window.colortagstoo;
-      localStorage["currentlydatabaseused"] = $("#selecteddb").html();
+        localStorage["colortagstoo"] = window.colortagstoo;
+        localStorage["currentlydatabaseused"] = $("#selecteddb").html();
 
-      if (s.os.name == "windows" || s.os.name == "macos") {
-        localStorage["selecteddriveunit"] = $("#selecteddrive").html();
-        localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
-      }
-      if (s.os.name == "linux") {
-        if ($("#selecteddrive").html() == "/ "){
-          localStorage["selecteddriveunit"] = $("#selecteddrive").html().slice(2);
-          localStorage["lastuseddriveunit"] = $("#selecteddrive").html().slice(2);
-        } else {
+        if (s.os.name == "windows" || s.os.name == "macos") {
           localStorage["selecteddriveunit"] = $("#selecteddrive").html();
           localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
         }
+        if (s.os.name == "linux") {
+          if ($("#selecteddrive").html() == "/ "){
+            localStorage["selecteddriveunit"] = $("#selecteddrive").html().slice(2);
+            localStorage["lastuseddriveunit"] = $("#selecteddrive").html().slice(2);
+          } else {
+            localStorage["selecteddriveunit"] = $("#selecteddrive").html();
+            localStorage["lastuseddriveunit"] = $("#selecteddrive").html();
+          }
+
+        }
+
+        window.parent.location.assign("main.html")
 
       }
+      else {
+        alertify.alert("Please select an available drive.")
+      }
 
-      window.parent.location.assign("main.html")
-
-    }
-    else {
-      alertify.alert("Please select an available drive unit.")
+    } else {
+      alertify.alert("You must select an existing database or enter a new name for a new database to launch the program.")
     }
 
   } else {
-    alertify.alert("You must select an existing database or enter a new name for a new database to launch the program.")
+    alertify.alert("Please select an available drive.")
   }
 
 };

@@ -135,6 +135,12 @@ function saveoptions() {
 		localStorage["mostrartips"] = "no";
 	}
 
+	if($("#asktagsubelements").is(":checked")) {
+		localStorage["asktagsubeleents"] = "no"
+	} else {
+		localStorage["asktagsubeleents"] = "yes"
+	}
+
 
 	// la opcion de slideshow
 
@@ -1860,6 +1866,11 @@ function optionspreload() {
 	    	$('#showtips').prop('checked', false);
 	    }
 
+	    if(localStorage["asktagsubeleents"]=="yes"){
+	    	$('#asktagsubelements').prop('checked', false);
+	    } else {
+	    	$('#asktagsubelements').prop('checked', true);
+	    }
 
 
 	    if (localStorage["autoslideshow"]=="yes") {
