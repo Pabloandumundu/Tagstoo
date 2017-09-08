@@ -75,8 +75,8 @@ header h1 {
 #logotipo {
 
   position: absolute;
-  left: 33px;
-  top: 0px;
+  left: 27px;
+  top: 3px;
 }
 
 
@@ -2191,7 +2191,7 @@ header h1 {
 #logo-wrapper img{
 
    	display:block;
-	margin:7px auto 11px auto;
+	margin:11px auto 15px auto;
 }
 
 #initalselect {

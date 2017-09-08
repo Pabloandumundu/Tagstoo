@@ -1,0 +1,137 @@
+<!doctype html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Help - Retrocompatibility</title>
+	<script src="../js/jquery-latest.min.js"></script>
+	<link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
+	<style>
+
+		body {
+
+			background-color: white;
+			font-size: 84%;
+			max-width: 1020px;
+		}
+
+		.page-title {
+
+			font-size: 164%;
+			font-weight: bold;
+			color: #4994e9;
+			text-decoration: underline;
+			display: block;
+			margin-bottom: 19px;
+		}
+
+		#index {
+
+			padding-left: 100px;
+			margin-bottom: 40px;
+		}
+
+		h2, h3 {
+
+			display: inline-block;
+			color: #333;
+			margin-bottom: 2px;
+			margin-top: 7px;
+		}
+
+		p {
+
+			font-size: 14px;
+		}
+
+		
+
+		.licence span {
+
+			text-align: center;
+			display: block;
+		}
+
+		a {
+
+			color: #2981e4;
+			margin-bottom: 4px;
+			text-decoration: none;
+			font-weight: bold;
+			letter-spacing: 1px;
+			line-height: 1.4em;
+		}
+
+		a:visited {
+
+			color: #2981e4;
+		}
+
+		img {
+
+			display: inline-block;
+			vertical-align: middle;
+			margin-bottom: 6px;
+			margin-left: 5px;
+
+		}
+
+		img.capture {
+
+			display: block;
+			margin: 0 auto;
+		}
+
+	</style>
+
+</head>
+<body class="subventana">
+
+	<!-- <span class="page-title"><em>Help - Retrocompatibility</em></span> -->
+	<h3>Help - Retrocompatibility</h3>
+	
+	<p><i style="color:#333"><b>Note</b> (for previous users of Tagstoo 1.4 and earlier versions)<b>:</b> <em>From version 1.5 of Tagstoo onwards, new database list load method is used, because of an external imperative. The previous databases will not appear in the list, but don´t worry, to access data simply execute the previous version of Tagstoo that you have (</em><a href="https://tagstoo.sourceforge.io/downloadv14compatibility.html" target="_blank"><u>Here</u></a><em> you can donwload version 1.4) export the data of the database of your choice to a file and close program, launch the new Tagstoo version and import the data into a new database.</em></i></p>
+
+	
+
+	<script>
+
+		// para que habra el enlace del help a la v1.4 en el navegador normal
+		$('a[target=_blank]').on('click', function(){
+		   require('nw.gui').Shell.openExternal( this.href );
+		   return false;
+		});
+
+
+		// el greyscale mode
+		if (localStorage["colortagstoo"]=="not"){
+			var ls = document.createElement('link');
+	        ls.rel="stylesheet";
+	        ls.href= "../css/version_grey.css";
+	        $('head')[0].appendChild(ls);
+    	}	
+
+	</script>
+
+</body>
+</html>

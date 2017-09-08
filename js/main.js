@@ -1217,6 +1217,9 @@ window.parent.$("#delete").on('click', function() {
 
 	}
 
+	var numerooriginalelementos = $("#folderreadstatus").html();
+	numerooriginalelementos = numerooriginalelementos.substr(0,numerooriginalelementos.indexOf(' '));
+
 	if ($(".ui-selecting").length > 0) {
 
 		var todeleteelements = $(".ui-selecting");
@@ -1847,8 +1850,11 @@ window.parent.$("#delete").on('click', function() {
 
 					var timetowaitf = 300 + todeletearchives.length + todeletefolders.length * 30
 					setTimeout(function() {
-						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-						readDirectory(dirtoexec);
+
+						$(".ui-selecting, ui-selected").next().remove(); // para los <br>
+						$(".ui-selecting, ui-selected").remove();
+						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length - todeletefolders.length + " elements in folder.");
+						$('.exploelement, .exploelementfolderup').css("filter","none");						
 
 					}, timetowaitf);
 
@@ -1857,8 +1863,11 @@ window.parent.$("#delete").on('click', function() {
 
 					var timetowaitf = 300 + todeletearchives.length * 30
 					setTimeout(function() {
-						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-						readDirectory(dirtoexec);
+
+						$(".ui-selecting, ui-selected").next().remove(); // para los <br>						
+						$(".ui-selecting, ui-selected").remove();						
+						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length + " elements in folder.");
+						$('.exploelement, .exploelementfolderup').css("filter","none");
 
 					}, timetowaitf);
 
@@ -4609,6 +4618,46 @@ function interactions() {
 			  	return true;
 
 			} // --fin si objetivo dragging no válido
+
+
+			if(is_valid_drop){  // si el objetivo del dragging es válido
+
+				if (posicionsup!=1) { // posiciones originales tomadas en "start:"
+				   	for (i in posicionsup) {
+				   		if (window.top.pasteaction == "copy") {
+
+					  //  		$(".ui-selected.exploelement:eq( "+ i +" )").css({left: "" + posicionsleft[i] + "px", top: "" + posicionsup[i] + "px"});
+
+							// $( ".ui-selecting.exploelement:eq( "+ i +" )" ).css({ left: "" + posicionsleft[i] + "px", top: "" + posicionsup[i] + "px"});
+
+							$(this).css({"visibility": "visible"});								
+							$(this)["0"].children[1].children["0"].style.display = "initial"; // los holdButtonProgress para que sean visibles de nuevo
+					
+						}
+
+					}
+
+				}
+
+				if (window.top.pasteaction == "cut") {
+					// se le quita la clase especifica de los elementos que se están
+					if (viewmode == 1) {
+						$(".dragging").next().remove(); // los <br>
+					}
+					$(".dragging").remove()
+					
+				} else if (window.top.pasteaction == "copy"){
+					$(".dragging").removeClass("dragging");
+					$(".ui-selected").removeClass("ui-selected");
+					$(".ui-selecting").removeClass("ui-selecting");
+				}
+
+			  	return true;
+
+			} // --fin si objetivo dragging es válido
+
+
+
 		},
 		start: function(ev, ui) {
 
@@ -5568,6 +5617,9 @@ function interactions() {
 
 			if (ui.draggable["0"].classList.contains("exploelement")) {
 
+				var numerooriginalelementos = $("#folderreadstatus").html();
+	    		numerooriginalelementos = numerooriginalelementos.substr(0,numerooriginalelementos.indexOf(' '));
+
 		    	var droppedarchive = [];
 		    	window.droppedfolder = [];
 		    	var foldername = [];
@@ -5600,20 +5652,35 @@ function interactions() {
 
 				});
 
+				function updatedestitems() { //pequeña función para actualizar si estuviera en la vista del directorio en n in folder
+					$.each ($(".explofolder"), function(ex) {
+
+						if (rootdirectory + $(".explofolder")[ex].attributes[1].value == targetfolder) {
+
+							var arorfo = fs.readdirSync(driveunit + targetfolder);
+							var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
+							$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + " in folder";
+
+						}
+					})
+				}
+
 
 				// Mover
 
 				if (pasteaction == "cut") {
+
+					var origenenbd = "";
+					var destinoenbd = "";
+
 					if (rootdirectory != targetfolder) {
 
+						$(ui.helper).remove();  //destroy clone
 
 						alertify.confirm("Are you sure?", function (e) {
 
 						if (!e) {$("#dirviewrefresh").trigger( "click" );}
 						if (e) {
-
-
-
 
 							$("#folderreadstatus").html("Moving ...");
 							$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
@@ -6001,15 +6068,19 @@ function interactions() {
 
 															});
 
-															previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-															readDirectory(dirtoexec);
+															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+															$('.exploelement, .exploelementfolderup').css("filter","none");
+															updatedestitems();
+															$('.directoryonhover').removeClass('directoryonhover');
 
 														}, timetowait);
 
 													} else {
 
-														previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-														readDirectory(dirtoexec);
+														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+														$('.exploelement, .exploelementfolderup').css("filter","none");
+														updatedestitems();
+														$('.directoryonhover').removeClass('directoryonhover');	
 													}
 
 												}
@@ -6218,14 +6289,20 @@ function interactions() {
 																	}
 
 																});
-																previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																readDirectory(dirtoexec);
+
+																$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																$('.exploelement, .exploelementfolderup').css("filter","none");
+																updatedestitems();
+																$('.directoryonhover').removeClass('directoryonhover');
 
 															}, timetowait);
 
 														} else {
-															previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-															readDirectory(dirtoexec);
+
+															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");								
+															$('.exploelement, .exploelementfolderup').css("filter","none");
+															updatedestitems();
+															$('.directoryonhover').removeClass('directoryonhover');
 														}
 
 													}
@@ -6488,14 +6565,19 @@ function interactions() {
 
 															});
 
-															previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-															readDirectory(dirtoexec);
+															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+															$('.exploelement, .exploelementfolderup').css("filter","none");
+															updatedestitems();
+															$('.directoryonhover').removeClass('directoryonhover');
 
 														}, timetowait);
 
 													} else {
-														previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-														readDirectory(dirtoexec);
+
+														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+														$('.exploelement, .exploelementfolderup').css("filter","none");
+														updatedestitems();
+														$('.directoryonhover').removeClass('directoryonhover');
 
 													}
 
@@ -6546,14 +6628,18 @@ function interactions() {
 														}
 
 													});
-													previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-													readDirectory(dirtoexec);
+													$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+													$('.exploelement, .exploelementfolderup').css("filter","none");
+													updatedestitems();
+													$('.directoryonhover').removeClass('directoryonhover');
 
 												}, timetowait);
 
 											} else {
-												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-												readDirectory(dirtoexec);
+												$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+												$('.exploelement, .exploelementfolderup').css("filter","none");
+												updatedestitems();
+												$('.directoryonhover').removeClass('directoryonhover');
 											}
 
 										}
@@ -6584,6 +6670,8 @@ function interactions() {
 
 				if (pasteaction == "copy") {
 					if (rootdirectory != targetfolder) {
+
+						$(ui.helper).remove();  //destroy clone
 
 						alertify.confirm("Are you sure?", function (e) {
 
@@ -6634,15 +6722,19 @@ function interactions() {
 
 													});
 
-													previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-													readDirectory(dirtoexec);
+													$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+													$('.exploelement, .exploelementfolderup').css("filter","none");
+													updatedestitems();
+													$('.directoryonhover').removeClass('directoryonhover');
 
 												}, timetowait);
 
 											} else {
 
-												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-												readDirectory(dirtoexec);
+												$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+												$('.exploelement, .exploelementfolderup').css("filter","none");
+												updatedestitems();
+												$('.directoryonhover').removeClass('directoryonhover');
 											}
 
 										}
@@ -7217,8 +7309,10 @@ function interactions() {
 																if (flagg == droppedarchive.length && refrescohecho1=="no") { // para que haga el refresco tras mover la última carpeta
 
 																	refrescohecho1 = "si";
-																	previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																	readDirectory(dirtoexec);
+																	$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																	$('.exploelement, .exploelementfolderup').css("filter","none");
+																	updatedestitems();
+																	$('.directoryonhover').removeClass('directoryonhover');
 																}
 
 															});
@@ -7367,15 +7461,19 @@ function interactions() {
 
 																	});
 
-																	previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																	readDirectory(dirtoexec);
+																	$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																	$('.exploelement, .exploelementfolderup').css("filter","none");
+																	updatedestitems();
+																	$('.directoryonhover').removeClass('directoryonhover');
 
 																}, timetowait);
 
 															} else {
 
-																previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																readDirectory(dirtoexec);
+																$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																$('.exploelement, .exploelementfolderup').css("filter","none");
+																updatedestitems();
+																$('.directoryonhover').removeClass('directoryonhover');
 															}
 
 														}
@@ -7411,8 +7509,10 @@ function interactions() {
 													}
 													setTimeout(function() {
 
-														previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-														readDirectory(dirtoexec);
+														$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+														$('.exploelement, .exploelementfolderup').css("filter","none");
+														updatedestitems();
+														$('.directoryonhover').removeClass('directoryonhover');
 
 													}, timetowait);
 
@@ -7482,6 +7582,7 @@ function interactions() {
 	var elemento = ""
 	var startDate = "";
 	var endDate   = "";
+	var numeroejecuciones = 0; // para prevenir que abra carpeta varias veces
 
 
 	$('.exploelementfolderup').on('mousedown', function() {
@@ -7493,6 +7594,7 @@ function interactions() {
 
 	$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').on('mousedown', function() {
 
+		numeroejecuciones = 0;
 		elemento = this
 		startDate = new Date();
 
@@ -7548,13 +7650,16 @@ function interactions() {
 
 			$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').on('mouseup', function() {
 
-
 				$('.explofile, .explofolder, .exploelement>div:first-child, .progress-bar').unbind('mouseup');
 				endDate = new Date();
 				var diferencia_milisegundos = (endDate.getTime() - startDate.getTime());
 
 				if (diferencia_milisegundos > 200) {
-					presshold()
+
+					if (numeroejecuciones == 0) { //para prevenir que abra carpeta varias veces
+						numeroejecuciones++;						
+						presshold();
+					}
 				}
 
 				// se quita barra de progrso
@@ -7653,9 +7758,12 @@ function interactions() {
 			}
 
 			// acceder a la carpeta
+
+			
 			var carpeta = $(elemento)["0"].attributes[1].nodeValue;
 			previousornext = "normal"
 			readDirectory(dirtoexec + carpeta);
+			
 
 		}
 

@@ -156,7 +156,7 @@ $(document).ready(function() {
             }
 
             if (localStorage["showretroagain"] == "yes") {
-              alertify.alert(`If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help.html#databases14' target="_blank">read this</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Do not show this message again</span>`)
+              alertify.alert(`If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">read this</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Do not show this message again</span>`)
             }
 
           }
@@ -785,7 +785,7 @@ $(document).ready(function() {
     		opt.selectedIndex = -1; // para que ninguna este por defecto seleccionada
       })
 
-    }, 400)
+    }, 450)
 
   }
 

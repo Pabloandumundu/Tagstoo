@@ -644,7 +644,7 @@ function filetreeinteractions() {
 		tolerance: 'pointer',
 	    drop: handle_drop_patient,
 
-	    drop: function( event, ui ) {
+	    drop: function( event, ui ) {	    	
 
 	    	// Añadir tag
 
@@ -1017,6 +1017,9 @@ function filetreeinteractions() {
 
 		    if (ui.draggable["0"].classList.contains("exploelement")) {
 
+		    	var numerooriginalelementos = $("#folderreadstatus").html();
+	    		numerooriginalelementos = numerooriginalelementos.substr(0,numerooriginalelementos.indexOf(' '));
+
 		    	var pasteaction = window.parent.pasteaction;
 
 		    	var droppedarchive = [];
@@ -1048,6 +1051,21 @@ function filetreeinteractions() {
 					}
 
 				});
+
+
+				function updatedestitems() { //pequeña función para actualizar si estuviera en la vista del directorio en n in folder
+					$.each ($(".explofolder"), function(ex) {
+
+						if (rootdirectory + $(".explofolder")[ex].attributes[1].value == targetfolder) {
+
+							var arorfo = fs.readdirSync(driveunit + targetfolder);
+							var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
+							$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + " in folder";
+
+						}
+					})
+				}
+
 
 
 				// Mover
@@ -1669,14 +1687,20 @@ function filetreeinteractions() {
 																									}
 
 																								});
-																								previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																								readDirectory(dirtoexec);
+																								$(ui.helper).remove(); //destroy clone
+																								$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																								$('.exploelement, .exploelementfolderup').css("filter","none");
+
+																								updatedestitems();
 
 																							}, timetowait);
 
 																						} else {
-																							previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																							readDirectory(dirtoexec);
+																						
+																							$(ui.helper).remove(); //destroy clone
+																							$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																							$('.exploelement, .exploelementfolderup').css("filter","none");
+																							updatedestitems();
 																						}
 
 																					}
@@ -1889,16 +1913,20 @@ function filetreeinteractions() {
 																							}
 
 																						});
-																						refrescohecho2="si";
-																						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																						readDirectory(dirtoexec);
+																						refrescohecho2="si";					
+																						$(ui.helper).remove(); //destroy clone
+																						$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																						$('.exploelement, .exploelementfolderup').css("filter","none");
+																						updatedestitems();
 
 																					}, timetowait);
 
 																				} else {
-																					refrescohecho2="si"
-																					previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																					readDirectory(dirtoexec);
+																					refrescohecho2="si";
+																					$(ui.helper).remove(); //destroy clone
+																					$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																					$('.exploelement, .exploelementfolderup').css("filter","none");
+																					updatedestitems();
 																				}
 
 																			}
@@ -2020,14 +2048,20 @@ function filetreeinteractions() {
 															}
 
 														});
-														previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-														readDirectory(dirtoexec);
+														
+														$(ui.helper).remove(); //destroy clone
+														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+														$('.exploelement, .exploelementfolderup').css("filter","none");
+														updatedestitems();
 
 													}, timetowait);
 
 												} else {
-													previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-													readDirectory(dirtoexec);
+													
+													$(ui.helper).remove(); //destroy clone
+													$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+													$('.exploelement, .exploelementfolderup').css("filter","none");
+													updatedestitems();
 												}
 
 											}
@@ -2117,15 +2151,19 @@ function filetreeinteractions() {
 
 											});
 
-											previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-											readDirectory(dirtoexec);
+											$(ui.helper).remove(); //destroy clone
+											$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+											$('.exploelement, .exploelementfolderup').css("filter","none");
+											updatedestitems();
 
 										}, timetowait);
 
 									} else {
 
-										previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-										readDirectory(dirtoexec);
+										$(ui.helper).remove(); //destroy clone
+										$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+										$('.exploelement, .exploelementfolderup').css("filter","none");
+										updatedestitems();
 									}
 
 								}
@@ -2310,15 +2348,19 @@ function filetreeinteractions() {
 
 																});
 
-																previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																readDirectory(dirtoexec);
+																$(ui.helper).remove(); //destroy clone
+																$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																$('.exploelement, .exploelementfolderup').css("filter","none");
+																updatedestitems();
 
 															}, timetowait);
 
 														} else {
 
-															previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-															readDirectory(dirtoexec);
+															$(ui.helper).remove(); //destroy clone
+															$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+															$('.exploelement, .exploelementfolderup').css("filter","none");
+															updatedestitems();
 														}
 
 													}
@@ -2755,16 +2797,20 @@ function filetreeinteractions() {
 
 																		});
 
-																		previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																		readDirectory(dirtoexec);
+																		$(ui.helper).remove(); //destroy clone
+																		$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																		$('.exploelement, .exploelementfolderup').css("filter","none");
+																		updatedestitems();
 
 																	}, timetowait);
 
 																} else {
 
 																	refrescohecho1="si";
-																	previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																	readDirectory(dirtoexec);
+																	$(ui.helper).remove(); //destroy clone
+																	$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																	$('.exploelement, .exploelementfolderup').css("filter","none");
+																	updatedestitems();
 																}
 
 															}
@@ -2917,15 +2963,19 @@ function filetreeinteractions() {
 
 															});
 
-															previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-															readDirectory(dirtoexec);
+															$(ui.helper).remove(); //destroy clone
+															$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+															$('.exploelement, .exploelementfolderup').css("filter","none");
+															updatedestitems();
 
 														}, timetowait);
 
 													} else {
 
-														previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-														readDirectory(dirtoexec);
+														$(ui.helper).remove(); //destroy clone
+														$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+														$('.exploelement, .exploelementfolderup').css("filter","none");
+														updatedestitems();
 													}
 
 												}
@@ -2969,15 +3019,19 @@ function filetreeinteractions() {
 
 													});
 
-													previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-													readDirectory(dirtoexec);
+													$(ui.helper).remove(); //destroy clone
+													$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+													$('.exploelement, .exploelementfolderup').css("filter","none");
+													updatedestitems();
 
 												}, timetowait);
 
 											} else {
 
-												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-												readDirectory(dirtoexec);
+												$(ui.helper).remove(); //destroy clone
+												$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+												$('.exploelement, .exploelementfolderup').css("filter","none");
+												updatedestitems();
 											}
 
 										}
@@ -3034,12 +3088,15 @@ function filetreerefresh() {
 
 // Copiar y Mover   (usando la Botonera de arriba)
 
-window.parent.$("#paste").on('click', function() {
+window.parent.$("#paste").on('click', function() {	
 
 	if (window.parent.$("li.current").attr('data-tab') == "tab-2") { // salir de la función si esta seleccionado el search
 		return;
 
 	}
+
+	var numerooriginalelementos = $("#folderreadstatus").html();
+	numerooriginalelementos = numerooriginalelementos.substr(0,numerooriginalelementos.indexOf(' '));
 
 	var pasteaction = window.parent.pasteaction;
 	if ($("#filetree ul li span.selected")["0"]) {
@@ -3092,6 +3149,20 @@ window.parent.$("#paste").on('click', function() {
 
 		});
 
+		function updatedestitems() { //pequeña función para actualizar si estuviera en la vista del directorio en n in folder
+
+			$.each ($(".explofolder"), function(ex) {
+
+				if (rootdirectory + $(".explofolder")[ex].attributes[1].value == targetfolder) {
+
+					var arorfo = fs.readdirSync(driveunit + targetfolder);
+					var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
+					$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + " in folder";
+
+				}
+			})
+		}
+
 
 		// Mover
 
@@ -3100,6 +3171,8 @@ window.parent.$("#paste").on('click', function() {
 
 				$("#folderreadstatus").html("Moving ...");
 				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+				$(".ui-selected, .ui-selecting").next().remove(); // los <br>
+				$(".ui-selected, .ui-selecting").remove();
 
 				$("#filetree ul li span.selected").addClass("animateonce");
 
@@ -3509,8 +3582,9 @@ window.parent.$("#paste").on('click', function() {
 
 									if (flagg == droppedfolder.length && refescohechoporcarpeta == "no" && droppedarchive.length == 0) { // para que haga el refresco tras mover la última carpeta y solo lo haga una vez..
 
-										previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-										readDirectory(dirtoexec);
+										$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+										$('.exploelement, .exploelementfolderup').css("filter","none");
+										updatedestitems();
 										refescohechoporcarpeta = "si";
 
 										// para actualizar visual del filetree
@@ -3715,14 +3789,16 @@ window.parent.$("#paste").on('click', function() {
 																							}
 
 																						});
-																						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																						readDirectory(dirtoexec);
+																						$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																						$('.exploelement, .exploelementfolderup').css("filter","none");
+																						updatedestitems();
 
 																					}, timetowait);
 
 																				} else {
-																					previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																					readDirectory(dirtoexec);
+																					$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																					$('.exploelement, .exploelementfolderup').css("filter","none");
+																					updatedestitems();
 																				}
 
 																			}
@@ -3936,15 +4012,17 @@ window.parent.$("#paste").on('click', function() {
 
 																				});
 																				refrescohecho2="si";
-																				previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																				readDirectory(dirtoexec);
+																				$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																				$('.exploelement, .exploelementfolderup').css("filter","none");
+																				updatedestitems();
 
 																			}, timetowait);
 
 																		} else {
 																			refrescohecho2="si"
-																			previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																			readDirectory(dirtoexec);
+																			$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																			$('.exploelement, .exploelementfolderup').css("filter","none");
+																			updatedestitems();
 																		}
 
 																	}
@@ -4066,14 +4144,16 @@ window.parent.$("#paste").on('click', function() {
 													}
 
 												});
-												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-												readDirectory(dirtoexec);
+												$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+												$('.exploelement, .exploelementfolderup').css("filter","none");
+												updatedestitems();
 
 											}, timetowait);
 
 										} else {
-											previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-											readDirectory(dirtoexec);
+											$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+											$('.exploelement, .exploelementfolderup').css("filter","none");
+											updatedestitems();
 										}
 
 									}
@@ -4161,15 +4241,22 @@ window.parent.$("#paste").on('click', function() {
 
 									});
 
-									previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-									readDirectory(dirtoexec);
+									$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+									$('.exploelement, .exploelementfolderup').css("filter","none");
+									updatedestitems();
+									$(".ui-selected").removeClass("ui-selected");
+									$(".ui-selecting").removeClass("ui-selecting");
 
 								}, timetowait);
 
 							} else {
 
-								previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-								readDirectory(dirtoexec);
+								$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+								$('.exploelement, .exploelementfolderup').css("filter","none");
+								updatedestitems();
+								$(".ui-selected").removeClass("ui-selected");
+								$(".ui-selecting").removeClass("ui-selecting");
+
 							}
 
 						}
@@ -4764,16 +4851,22 @@ window.parent.$("#paste").on('click', function() {
 
 																});
 
-																previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-																readDirectory(dirtoexec);
+																$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																$('.exploelement, .exploelementfolderup').css("filter","none");
+																updatedestitems();
+																$(".ui-selected").removeClass("ui-selected");
+																$(".ui-selecting").removeClass("ui-selecting");
 
 															}, timetowait);
 
 														} else {
 
 															refrescohecho1="si";
-															previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-															readDirectory(dirtoexec);
+															$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+															$('.exploelement, .exploelementfolderup').css("filter","none");
+															updatedestitems();
+															$(".ui-selected").removeClass("ui-selected");
+															$(".ui-selecting").removeClass("ui-selecting");
 														}
 
 													}
@@ -4927,15 +5020,21 @@ window.parent.$("#paste").on('click', function() {
 
 													});
 
-													previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-													readDirectory(dirtoexec);
+													$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+													$('.exploelement, .exploelementfolderup').css("filter","none");
+													updatedestitems();
+													$(".ui-selected").removeClass("ui-selected");
+													$(".ui-selecting").removeClass("ui-selecting");
 
 												}, timetowait);
 
 											} else {
 
-												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-												readDirectory(dirtoexec);
+												$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+												$('.exploelement, .exploelementfolderup').css("filter","none");
+												updatedestitems();
+												$(".ui-selected").removeClass("ui-selected");
+												$(".ui-selecting").removeClass("ui-selecting");
 											}
 
 										}
@@ -4988,14 +5087,20 @@ window.parent.$("#paste").on('click', function() {
 												}
 
 											});
-											previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-											readDirectory(dirtoexec);
+											$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+											$('.exploelement, .exploelementfolderup').css("filter","none");
+											updatedestitems();
+											$(".ui-selected").removeClass("ui-selected");
+											$(".ui-selecting").removeClass("ui-selecting");
 
 										}, timetowait);
 
 									} else {
-										previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
-										readDirectory(dirtoexec);
+										$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+										$('.exploelement, .exploelementfolderup').css("filter","none");
+										updatedestitems();
+										$(".ui-selected").removeClass("ui-selected");
+										$(".ui-selecting").removeClass("ui-selecting");
 									}
 
 								}
