@@ -2,7 +2,7 @@ DESCRIPTION
 
 With this application you can tag folders and files; create tags with various shapes and colours for easier classification and by drag and dropping them, tag a file, a folder or all the content of a folder.
 
-![](https://tagstoo.sourceforge.io/demoimage1lq.png)
+![](https://tagstoo.sourceforge.io/img_ext/demoimage1lq.png)
 
 Precise search possibilities, with various input fields, allowing to add all the necessary tags that you want. For example, in one field you can add tags ‘cat’ and ‘white’ and in another field you can add tags ‘dog’ and ‘brown’, so the search result will return all white cats and brown dogs.
 
