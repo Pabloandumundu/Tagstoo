@@ -3171,7 +3171,9 @@ window.parent.$("#paste").on('click', function() {
 
 				$("#folderreadstatus").html("Moving ...");
 				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
-				$(".ui-selected, .ui-selecting").next().remove(); // los <br>
+				if (viewmode==1){
+					$(".ui-selected, .ui-selecting").next().remove(); // los <br>
+				}
 				$(".ui-selected, .ui-selecting").remove();
 
 				$("#filetree ul li span.selected").addClass("animateonce");

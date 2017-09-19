@@ -636,7 +636,7 @@ $(document).ready(function () {
 		"<b>Tip</b>: If is the first time you launch Tagstoo, will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no more load demo tags when new database created uncheck the checkbox in the options menu.",
 		"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
 		"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
-		"<b>Tip</b>: Width of the tree view (on the left) and directory view (on the right) are adjustable, columns on the right on Viewmode 1 are also adjustable.",
+		"<b>Tip</b>: At the current application development stage, depending on computer, manage folders with more than few hundred of elements can be heavy and slow when load.",
 		"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
 		"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
 		"<b>Tip</b>: Sometimes dependig the action you do (or if you move somethin using external program) the view can not be actialized, to actualize it simply press refresh icons (arrows in circle).",
@@ -1851,7 +1851,9 @@ window.parent.$("#delete").on('click', function() {
 					var timetowaitf = 300 + todeletearchives.length + todeletefolders.length * 30
 					setTimeout(function() {
 
-						$(".ui-selecting, ui-selected").next().remove(); // para los <br>
+						if (viewmode==1){
+							$(".ui-selecting, ui-selected").next().remove(); // para los <br>
+						}
 						$(".ui-selecting, ui-selected").remove();
 						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length - todeletefolders.length + " elements in folder.");
 						$('.exploelement, .exploelementfolderup').css("filter","none");						
@@ -1864,7 +1866,9 @@ window.parent.$("#delete").on('click', function() {
 					var timetowaitf = 300 + todeletearchives.length * 30
 					setTimeout(function() {
 
-						$(".ui-selecting, ui-selected").next().remove(); // para los <br>						
+						if (viewmode==1){
+							$(".ui-selecting, ui-selected").next().remove(); // para los <br>
+						}						
 						$(".ui-selecting, ui-selected").remove();						
 						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length + " elements in folder.");
 						$('.exploelement, .exploelementfolderup').css("filter","none");

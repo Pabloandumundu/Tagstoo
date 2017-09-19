@@ -4801,8 +4801,9 @@ function interactinsforsearchdir() {
 
 					var filename = $(this).children('.explofile');
 					filename = filename.attr("value");
-					var filefoldername = $(this).children().children('.placehold2');
-					filefoldername = filefoldername.attr("value");
+
+					var filefoldername = $(this).children(".explofile");
+					filefoldername = filefoldername.attr("filepath");
 
 					var extension = $(this).children('.exploext');
 					extension = extension[0].textContent;
@@ -4917,7 +4918,7 @@ function interactinsforsearchdir() {
 												undo.taggaarch.tagid = taganadir;
 
 												// Actualizar visual
-												var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");
+												var elementtagsinview = $(".explofile").filter("[filepath='" + filefoldername + "']").filter("[value='" + filename + "']").siblings(".tags");
 												var arraydetags = taganadir // solo hay un tag a añadir
 												elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -5076,10 +5077,10 @@ function interactinsforsearchdir() {
 										undo.taggaarch.tagid = taganadir;
 
 										// Actualizar visual
-										console.log(filefoldername)
-										var prueba = $(".placehold2").filter("[value='" + filefoldername + "']")
-										console.log(prueba)
-										var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");
+										// console.log(filefoldername)
+
+										var elementtagsinview = $(".explofile").filter("[filepath='" + filefoldername + "']").filter("[value='" + filename + "']").siblings(".tags");
+										// console.log($(".placehold2").filter("[value='" + filefoldername + "']"))
 										arraydetags = arraydetags.toString() // de array a string
 										elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -5160,7 +5161,7 @@ function interactinsforsearchdir() {
 										undo.taggaarch.tagid = taganadir;
 
 										// Actualizar visual
-										var elementtagsinview = $(".placehold2").filter("[value='" + filefoldername + "']").parent().filter("[value='" + filename + "']").siblings(".tags");
+										var elementtagsinview = $(".explofile").filter("[filepath='" + filefoldername + "']").filter("[value='" + filename + "']").siblings(".tags");
 										var arraydetags = taganadir // solo hay un tag a añadir
 										elementtagsinview[0].setAttribute("value", arraydetags);
 
@@ -10597,7 +10598,7 @@ window.parent.$("#delete").on('click', function() {
 
 						posicion++;
 
-						recursivefolderdata(foldertoread + directoryfolders[n].name);
+						recursivefolderdata(driveunit + foldertoread + directoryfolders[n].name);
 
 					});
 

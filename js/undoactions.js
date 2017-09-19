@@ -1288,7 +1288,9 @@ $(document).ready(function () {
 						} 
 						else if ($(document).has( "#treeview" ).length == 0){
 
-							var elementtagsinview = $(".placehold2").filter("[value='" + folderofarchive + "']").parent().filter("[value='" + undo.taggaarch.archive + "']").siblings(".tags");
+							var elementtagsinview = $(".explofile").filter("[filepath='" + folderofarchive + "']").filter("[value='" + undo.taggaarch.archive + "']").siblings(".tags");
+
+							
 
 						}
 
