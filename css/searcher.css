@@ -30,6 +30,7 @@
 #searchlocationinfonotfixed {
 
 	width: calc(100% - 65px);
+	padding-top: 2px;
 }
 
 #searchlocationinfonotfixed > div {
@@ -117,6 +118,21 @@
 	z-index: 1;
 	padding-bottom: 5px;
 }
+
+
+#searchviewmode {
+	vertical-align: sub;
+}
+
+#tolist img {
+	vertical-align: sub;
+	cursor: pointer;
+}
+
+
+
+
+
 
 .holdButtonProgress {
 

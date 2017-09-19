@@ -156,7 +156,11 @@ $(document).ready(function() {
             }
 
             if (localStorage["showretroagain"] == "yes") {
-              alertify.alert(`If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">read this</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Do not show this message again</span>`)
+              alertify.alert(`Although the program was used previously databases list is empty, this can be because one of these two cases:<br>
+
+                - You updated the program and laterly you back to use previous version, in this case the only solution is to create new database and import your latest backup to it. As is mentioned in the <a href='popups/popup-info-help.html#importantnote' target="_blank">help</a>, that is why is important to maintain backup files updated. <br>
+
+                - If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">read this</a></em>`)
             }
 
           }

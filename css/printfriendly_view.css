@@ -1,0 +1,57 @@
+body {
+	overflow: auto;
+	-webkit-print-color-adjust: exact; /* Muy importante para que imprima los background (archivos imagenes, etiquetas) */
+}
+
+.iframestyle {
+
+	display: block;
+	border: none;
+	height: 100vh; /* Viewport-relative units */
+	width: 100vw; /* Viewport-relative units */
+}
+
+.iframesup {
+
+	display: block;
+	border: none;
+	height: 49px;
+	width: 100%; /* Viewport-relative units */
+}
+
+.iframesub {
+
+	display: block;
+	border: none;
+	height: calc(100vh - 70px); /* Viewport-relative units */
+	width: 100%; /* Viewport-relative units */
+}
+
+#listtxt {
+	
+	display: none;
+}
+
+#printfriendlymenu a{
+
+    height: 34px;
+    width: 34px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+#printfriendlymenu img {
+	
+    height: 26px;
+    margin-right: 11px;
+    margin: 0 auto;
+    display: block;
+    margin-top: 2px;
+}
+
+#printfriendlymenu a:hover {
+	filter: brightness(105%);
+	background-color: #ffffa9;
+}

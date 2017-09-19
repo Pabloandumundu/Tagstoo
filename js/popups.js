@@ -87,6 +87,14 @@ function popup (popupclass, data) {
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
 			break;
+
+		case "listchoose":
+
+			$( "#popup" ).load( "../popups/popup-listchoose.html" );
+			$("#popup").addClass("listchoose");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;
 	}
 
 }
@@ -195,6 +203,8 @@ function cerrar() {
 	$("#popup").removeClass("selectfoldersearch");
 	$("#popup").removeClass("selectfolderactionnotag");
 	$("#popup").removeClass("selectfolderactiontag");
+	$("#popup").removeClass("listchoose");
+
 
 	$("#explorer", window.parent.document).contents().find('#popup').removeClass("options");
 	$("#searcher", window.parent.document).contents().find('#popup').removeClass("options");
@@ -4019,3 +4029,17 @@ function selectfolderactiontagpreload(){
 	})
 
 } /* --fin selectfolderactiontagpreload() */
+
+
+/* storetoprinview */
+
+function storetoprintview() {
+
+	var listdata = toJSON($("#searchdirectoryview")[0]); //funcion definida en dom-to-json.js
+	listdata = JSON.stringify(listdata);
+	localStorage["toprintfriendlist"] = listdata;
+
+	localStorage["searchviewmode"] = searchviewmode;
+
+	
+}

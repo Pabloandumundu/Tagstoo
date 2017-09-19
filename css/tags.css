@@ -55,8 +55,9 @@
 .exploelement.viewmode1 .tagticket {
 
     /* centrado vertical */   
-    top:50%;
+  /*  top:50%;
     transform: translateY(-50%);
+*/    margin-top: 1px;
 }
 
 .exploelement.viewmode2 .tagticket {

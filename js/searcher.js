@@ -612,6 +612,27 @@ $(document).ready(function () {
 
 	});
 
+	// generar lista
+
+	$('#tolist').on('click', function() {
+
+		var searchedelements = $(".exploelement");
+
+		if (searchedelements.length > 0) {
+			popup('listchoose');
+		}
+
+		else {
+			alertify.alert("You choosed to create a printable friendly list of searched results, but there are not searched results at the moment.");
+		}
+
+		
+    	
+
+	})
+
+
+
 
 	// goma de borrar
 	window.eraseron = "off";

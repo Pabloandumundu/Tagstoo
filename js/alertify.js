@@ -107,7 +107,7 @@
 				cancel : "Cancel",
 				no     : "No",
 				yes    : "Yes",
-				close  : "Go Tagstoo!"
+				close  : "Go!"
 			},
 
 			/**

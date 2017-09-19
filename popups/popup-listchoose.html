@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Choose List Type</title>
+
+	<script src="../js/dom-to-json.js"></script>
+
+</head>
+<body>
+
+	<div id="popupbg"></div>
+
+	<div id="popuptitle"><img src="../img/listaicon14.png" alt="" style="margin-top: 1px">DISPLAY PRINTABLE FRIENDLY LIST</div>
+
+	<br>
+	<hr>
+
+
+
+	<label><em>..with the list of the names of searched directories/files (text only):</em></label>
+
+	<a href="popups/printfriendly_txt.html" target="_blank" class="medium button green" onclick="storetoprintview();cerrar()">Names (TXT)</a>
+
+
+
+	<label><em>..of the current search view as is (tags included):</em></label>
+
+	<a href="popups/printfriendly_view.html" target="_blank" class="medium button green" onclick="storetoprintview();cerrar()">Current Search View</a>
+
+	<br>
+	<hr>
+	<a class="large button orange close" onclick="cerrar()">Close</a>
+	
+</body>
+</html>

@@ -1,0 +1,52 @@
+.iframestyle {
+
+	display: block;
+	border: none;
+	height: 100vh; /* Viewport-relative units */
+	width: 100vw; /* Viewport-relative units */
+}
+
+.iframesup {
+
+	display: block;
+	border: none;
+	height: 49px;
+	width: 100%; /* Viewport-relative units */
+}
+
+.iframesub {
+
+	display: block;
+	border: none;
+	height: calc(100vh - 70px); /* Viewport-relative units */
+	width: 100%; /* Viewport-relative units */
+}
+
+#listvisual {
+	
+	display: none;
+}
+
+#printfriendlymenu a{
+
+    height: 34px;
+    width: 34px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 4px;    
+}
+
+#printfriendlymenu img {
+	
+    height: 26px;
+    margin: 0 auto;
+    display: block;
+    margin-top: 4px;
+}
+
+#printfriendlymenu a:hover {
+	filter: brightness(105%);
+	background-color: #ffffa9;
+}

@@ -22,7 +22,7 @@ header {
 }
 
 /* las imagenes de carpetas */
-#dirview-wrapper .folder img, #searchdirview-wrapper .folder img {
+#directoryview .folder img, #searchdirectoryview .folder img {
 	filter: grayscale(85%) brightness(104%);
 }
 

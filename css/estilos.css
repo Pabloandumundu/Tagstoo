@@ -1951,7 +1951,32 @@ header h1 {
 	width: 400px;
 }
 
+#popup.listchoose {
 
+	display: initial;
+	left: calc(50% - 178px);
+	top: 20%;
+	width: 356px;
+	-webkit-box-shadow: inset 0px 0px 8px 0px #331a00;
+}
+
+#popup.listchoose label{
+
+	padding: 9px 0 5px 0;
+	display: block;
+}
+#popup.listchoose label:nth-of-type(1){
+
+	padding-top: 0;
+}
+
+#popup.listchoose .close{
+
+	/*float:right;*/
+	margin: 6px 45px 2px 0;
+	margin: 6px 0 2px 0;
+	margin-left: calc(50% - 32px);
+}
 
 /* popup newtag, edittag styles */
 
