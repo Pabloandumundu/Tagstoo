@@ -4035,6 +4035,53 @@ function selectfolderactiontagpreload(){
 
 function storetoprintview() {
 
+	// se cargan todas las imagenes (incluidas las que todavia estavan ocultas)
+	if ((searchviewmode != 1) || (searchviewmode == 1 && localStorage["previewimgonviewmode1"]=="yes")){
+		$.each($("#searchdirectoryview .archive img"), function(n){
+
+			var element = $( "#searchdirectoryview .archive img:eq( "+ n +" )" );
+
+			if (element["0"].attributes[1]){ // si contiene data-src (es decir si el archivo es una imagen)
+				var img_data_src = element["0"].attributes[1].value;
+				element["0"].setAttribute("src", img_data_src);
+
+				// varios estilos: quitar fondo, etc.. en tras cada imagen cargada
+			    element.parent().parent().css("background","none"); // quita el icono de imagen
+			 	element.parent().parent().css("display","inline-block");
+				element.parent().parent().css("padding-right","0px");
+
+				element.css("padding-right", "1px");
+
+				// esto es para centrar verticalmente la imagen
+				var toaddpaddingtop = (16 - element.height()) / 2;
+				if (toaddpaddingtop > 0) {
+					element.css("padding-top", toaddpaddingtop+"px")
+				}
+				if (toaddpaddingtop == 7.5 || toaddpaddingtop <= 0) {
+					element.css("vertical-align", "middle");
+					element.css("margin-top", "-3px");
+				}
+			}
+		})
+	}
+
+	// se cargan todos los videos (incluidos los que estaban ocultos)
+	if (searchviewmode != 1) {
+
+		$.each($("#searchdirectoryview .archive video"), function(n){
+
+			var element = $( "#searchdirectoryview .archive video:eq( "+ n +" )" );
+			var img_data_src = element["0"].attributes[2].value;
+			
+			if (element["0"].attributes[3].value == "") {
+				element["0"].setAttribute("src", img_data_src);
+			}
+
+		});
+
+	}
+
+
 	var listdata = toJSON($("#searchdirectoryview")[0]); //funcion definida en dom-to-json.js
 	listdata = JSON.stringify(listdata);
 	localStorage["toprintfriendlist"] = listdata;

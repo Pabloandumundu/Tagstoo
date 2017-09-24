@@ -59,6 +59,8 @@ iniciarfolderview(); // inicia cadena de acciones, carga de explorador, tags etc
 
 $(document).ready(function () {
 
+	var bLazy = new Blazy();
+
 
 	// panel de desarrollo ////\\\\
 	$( "#paneloff" ).click(function() {
@@ -2561,7 +2563,7 @@ function drawDirectoryFolders (viewmode, order) {
 } //-- fin drawDirectoryFolders
 
 
-function drawDirectoryArchives (viewmode, order) {
+function drawDirectoryArchives (viewmode, order) {	
 
 	switch(order){
 		case "nameasc":
@@ -2598,18 +2600,18 @@ function drawDirectoryArchives (viewmode, order) {
 			var nameSinBarra = v.name.substring(1);
 
 			if (v.ext) {
-			var exten = v.ext.toLowerCase();
+				var exten = v.ext.toLowerCase();
 			}
-			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "jpeg" || exten == "xbm" || exten == "ico") {
+			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "xbm" || exten == "ico") {				
 
 				if (previewimgonviewmode1=="yes") {
 
-					var imagen = '<a href="file:///'+ dirtoexec + v.name +'"><img data-src="file:///' + dirtoexec + v.name + '" src="../img/ffffff-0.0.png"></a>';
+					var imagen = '<a href="file:///'+ dirtoexec + v.name +'"><img class="b-lazy" src="img/ffffff-16.16.png" data-src="file:///' + dirtoexec + v.name + '"></a>';
 
 					}
 				else {
 
-					var imagen = '<a href="file:///'+ dirtoexec + v.name +'"><img data-src="../img/ffffff-16.16.png" src="../img/ffffff-0.0.png"></a>'
+					var imagen = '<a href="file:///'+ dirtoexec + v.name +'"><img src="img/ffffff-16.16.png"></a>'
 
 				}
 
@@ -2631,7 +2633,7 @@ function drawDirectoryArchives (viewmode, order) {
 	} // --fin viewmodes1
 
 
-	if (viewmode!=1) {
+	if (viewmode!=1) {		
 
 		$.each(directoryarchives, function(i, v) {
 
@@ -2640,9 +2642,27 @@ function drawDirectoryArchives (viewmode, order) {
 			if (v.ext) {
 			var exten = v.ext.toLowerCase();
 			}
-			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "jpeg" || exten == "xbm" || exten == "ico") {
+			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "xbm" || exten == "ico") {
 
-				var imagen = '<a href="file:///'+ dirtoexec + v.name +'"><img src="file:///' + dirtoexec + v.name + '"></a>';
+				var imagentemporal = "";
+				switch(exten){
+					case "jpg":
+						imagentemporal = "img/icons/420px/jpg.png"
+						break;
+					case "png":
+						imagentemporal = "img/icons/420px/png.png"
+						break;
+					case "gif":
+						imagentemporal = "img/icons/420px/gif.png"
+						break;
+					case "bmp":
+						imagentemporal = "img/icons/420px/bmp.png"
+						break;
+					default: 
+						imagentemporal = "img/icons/420px/_blank.png"
+				}
+
+				var imagen = '<a href="file:///'+ dirtoexec + v.name +'"><img class="b-lazy" src="' + imagentemporal + '" data-src="file:///' + dirtoexec + v.name + '" ></a>';
 
 				var exploname = "<span class='exploname imagename2'>"+nameSinBarra+"</span>";
 				var imgsrc = encodeURI(dirtoexec + v.name);
@@ -2659,6 +2679,8 @@ function drawDirectoryArchives (viewmode, order) {
 			t += '<div class="exploelement archive"><div class="imgmode'+viewmode+' ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">&nbsp' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">(Tags Here)</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div>';
 
 		});
+
+		
 
 	} // --fin viewmodes2
 
@@ -2714,82 +2736,12 @@ function drawDirectoryAfter() {
 		$('.tags').addClass('viewmode' + viewmode);
 		$('.lastmod').addClass('viewmode' + viewmode).css("display","none");
 		$('.duration').addClass('viewmode' + viewmode).css("display","none"); // será visible específicamente si es media
-
 	}
+
 
 	drawdirectoryviewtags(); // para añadir los divs de los tags
 	interactions(); // activa los eventos de arrastre, click, hold para los elementos añadidos.
-
-
-	// para cargar las imágenes secuencialmente (solo viewmode1)
-	if (viewmode==1) {
-
-		var numberofimages = $(".imgmode1 img").length;
-		if (numberofimages > 0) {
-			loadMyImage(0);
-		}
-		else {
-			loadfolderimages();
-		}
-
-		function loadMyImage(u){
-
-			var image = $(".imgmode1 img:eq("+u+")");
-			var image_src = image.attr('data-src');
-
-			image.removeAttr('data-src');
-
-			image.attr('src','../img/ffffff-16.16.png'); // otro "apaño" para que las imágenes aparezcan luego centradas
-			image.attr('src',image_src);
-
-			if (previewimgonviewmode1=="yes") {
-
-				image.parent().parent().css("background","none"); // quita el icono de imagen
-				image.parent().parent().css("display","inline-block");
-				image.parent().parent().css("padding-right","0px");
-
-				$(".imgmode1 img:eq("+u+")").on('load', function() {
-
-					$(".imgmode1 img:eq("+u+")").css("padding-right", "1px");
-
-					// esto es para centrar verticalmente la imagen
-					var toaddpaddingtop = (16 - $(".imgmode1 img:eq("+u+")").height()) / 2;
-					if (toaddpaddingtop > 0) {
-						$(".imgmode1 img:eq("+u+")").css("padding-top", toaddpaddingtop+"px")
-					}
-					if (toaddpaddingtop == 7.5 || toaddpaddingtop <= 0) {
-						$(".imgmode1 img:eq("+u+")").css("vertical-align", "middle");
-						$(".imgmode1 img:eq("+u+")").css("margin-top", "-3px");
-					}
-
-					if (numberofimages == u+1) { // al terminar se lanza la carga de las imágenes de carpetas
-
-						loadfolderimages();
-
-					} else {
-
-						loadMyImage(u+1);
-					}
-				});
-
-			} else {
-
-				if(numberofimages == u+1) {
-					loadfolderimages();
-				} else {
-					$(".imgmode1 img:eq("+u+")").on('load', function() {
-						loadMyImage(u+1); // solo esta cargando la imagen transparente
-					});
-				}
-
-			}
-
-		}
-
-	} else {
-		loadfolderimages();
-	}
-
+	loadfolderimages(); // carga de imagenes especificas para carpetas segun mayoria de archivos que contengan
 
 	// para evitar selección del elemento cuando se le da a una imagen
 	$(".archive a img").on('click', function(){
@@ -3293,7 +3245,7 @@ function drawDirectoryAfter() {
 				$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
 
 				var videotopreview = encodeURI(dirtoexec + "\/" + $(this)["0"].innerText);
-				$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video" preload="metadata" src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
+				$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video b-lazy" preload="metadata" data-src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 				$(this)["0"].previousSibling.style.backgroundImage = "none";
 		      	$(this)["0"].previousSibling.classList.add("filepreview"); // para quitarle paddings y centrarlo
 
@@ -3383,6 +3335,40 @@ function drawDirectoryAfter() {
 		});
 
 	}
+
+
+	// para cargar, segun se hace scroll, las imágenes (y videos)
+	setTimeout(function(){ //se le pone un pequeño delay sino a veces no hace todas a la primera
+		var bLazy = new Blazy({
+		    container: '#dirview-wrapper',
+		    success: function(element){
+
+		    	// varios estilos (viewmode1): quitar fondo, etc.. en tras cada imagen cargada 
+		    	if (viewmode==1){
+				    $(element).parent().parent().css("background","none"); // quita el icono de imagen
+				 	$(element).parent().parent().css("display","inline-block");
+					$(element).parent().parent().css("padding-right","0px");
+
+					$(element).css("padding-right", "1px");
+
+					// esto es para centrar verticalmente la imagen
+					var toaddpaddingtop = (16 - $(element).height()) / 2;
+					if (toaddpaddingtop > 0) {
+						$(element).css("padding-top", toaddpaddingtop+"px")
+					}
+					if (toaddpaddingtop == 7.5 || toaddpaddingtop <= 0) {
+						$(element).css("vertical-align", "middle");
+						$(element).css("margin-top", "-3px");
+					}
+				}
+
+		    }
+
+		});
+
+	}, 50);
+
+
 
 
 	// pequeño ajuste para que la vista de directorio siempre ocupe toda la altura del wraper y así se puedan seleccionar los elementos con la cajetilla del ratón

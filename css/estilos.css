@@ -1807,17 +1807,21 @@ header h1 {
 	border: 1px dashed #444;
 	user-select: none;
 
+	background-image: url("../img/wood_pattern.png");
+	/*z-index:-1;*/
+	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
+
 }
 
-#popupbg { /* el background interno (madera) */
-	position:absolute;
+#popupbg { /* el background interno (madera) NO SIRVE*/
 	top:0;
 	left:0;
 	right:0;
 	bottom:0;
-	background-image: url("../img/wood_pattern.png");
 	z-index:-1;
-	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
+	/*position:absolute;*/
+	/*background-image: url("../img/wood_pattern.png");*/
+	/*-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;*/
 
 }
 
@@ -2298,7 +2302,7 @@ header h1 {
 	display: block;
 	width: 100%;
 	/*height: calc(100% - 240px);*/
-	height: calc(100% - 246px);
+	height: calc(100% - 252px);
 	min-height: 225px;
 	border-radius: 5px;
 	margin-bottom: 7px;

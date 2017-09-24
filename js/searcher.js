@@ -3511,7 +3511,6 @@ function drawSearchFolders (searchviewmode, order) {
 
 function drawSearchArchives (searchviewmode, order) {
 
-
 	switch(searchorder){
 		case "nameasc":
 			resultadosarchivos.sort(SortByNameAsc);
@@ -3548,13 +3547,14 @@ function drawSearchArchives (searchviewmode, order) {
 			if (v.ext) {
 				var exten = v.ext.toLowerCase();
 			}
-			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "jpeg" || exten == "xbm" || exten == "ico") {
+			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "xbm" || exten == "ico") {
 				if (previewimgonviewmode1=="yes") {
-					// var imagen = "<a href='file:///"+ driveunit + v.filepath + v.name +"'><img data-src='" + driveunit + v.filepath + v.name + "' src='../img/ffffff-0.0.png'></a>";
-					var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img data-src="file:///' + driveunit + v.filepath + v.name + '" src="../img/ffffff-0.0.png"></a>';
+
+					var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img class="b-lazy" data-src="file:///' + driveunit + v.filepath + v.name + '" src="img/ffffff-16.16.png"></a>';
+				
 				} else {
-					// var imagen = "<a href='file:///"+ driveunit + v.filepath + v.name +"'><img data-src='../img/ffffff-16.16.png' src='../img/ffffff-0.0.png'></a>";
-					var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img data-src="../img/ffffff-16.16.png" src="../img/ffffff-0.0.png"></a>';
+
+					var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img data-src="img/ffffff-16.16.png" src="img/ffffff-16.16.png"></a>';
 				}
 				var exploname = "<span class='exploname imagename1'>"+nameSinBarra+"</span>";
 				$(".imgmode1").addClass("conimagen1");
@@ -3581,12 +3581,30 @@ function drawSearchArchives (searchviewmode, order) {
 			if (v.ext) {
 			var exten = v.ext.toLowerCase();
 			}
-			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "jpeg" || exten == "xbm" || exten == "ico") {
+			if (exten == "jpg" || exten == "jpeg" || exten == "png" || exten == "gif" || exten == "bmp" || exten == "svg" || exten == "xbm" || exten == "ico") {
+
+				var imagentemporal = "";
+				switch(exten){
+					case "jpg":
+						imagentemporal = "img/icons/420px/jpg.png"
+						break;
+					case "png":
+						imagentemporal = "img/icons/420px/png.png"
+						break;
+					case "gif":
+						imagentemporal = "img/icons/420px/gif.png"
+						break;
+					case "bmp":
+						imagentemporal = "img/icons/420px/bmp.png"
+						break;
+					default: 
+						imagentemporal = "img/icons/420px/_blank.png"
+				}
 
 				var exploname = "<span class='exploname imagename2'>"+nameSinBarra+"</span>";
 				var imgsrc = encodeURI(driveunit + v.filepath + v.name)
-				// var imagen = "<a href='file:///"+ driveunit + v.filepath + v.name +"'><img src=" + imgsrc + "></a>";
-				var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img src="file:///' + imgsrc + '"></a>';
+
+				var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img class="b-lazy" data-src="file:///' + imgsrc + '" src="' + imagentemporal + '"></a>';
 
 
 				$(".imgmode"+searchviewmode+"").addClass("conimagen"+searchviewmode+"");
@@ -4172,53 +4190,7 @@ function drawSearchAfter() {
 	} // --fin pintar carpetas según contenido
 
 
-	if (stopbecausebadfolder=="no") {  // si es superado el test de carpetas inexistentes (si hay archivos inexistentes simplemente no hará nada pues el DOM estará vacío)
-
-
-		// para cargar las imágenes secuencialmente (solo viewmode1)
-
-		if (searchviewmode==1) {
-
-			var numberofimages = $(".imgmode1 img").length;
-			if (numberofimages > 0) {
-				loadMyImage(0)
-			}
-			function loadMyImage(u){
-
-				var image = $(".imgmode1 img:eq("+u+")");
-				var image_src = image.attr('data-src');
-				image.removeAttr('data-src');
-				image.attr('src',image_src);
-
-				if (previewimgonviewmode1=="yes") {
-
-					image.parent().parent().css("background","none"); // quita el icono de imagen
-					image.parent().parent().css("display","inline-block"); // aquí es necesario para que se vean bien los iconos o imágenes
-
-					$(".imgmode1 img:eq("+u+")").on('load', function() {
-
-						// esto es para centrar verticalmente la imagen
-						var toaddspaddingtop = (16 - $(".imgmode1 img:eq("+u+")").height()) / 2;
-						if (toaddspaddingtop > 0) {
-							$(".imgmode1 img:eq("+u+")").css("padding-top", toaddspaddingtop+"px")
-						} if (toaddspaddingtop == 7.5 || toaddspaddingtop < 0) {
-							$(".imgmode1 img:eq("+u+")").css("padding-top","2px");
-						}
-
-						loadMyImage(u+1);
-
-					});
-
-				} else {
-					$(".imgmode1 img:eq("+u+")").on('load', function() {
-						loadMyImage(u+1); // solo esta cargando la imagen transparente
-					});
-
-				}
-
-			}
-
-		}
+	if (stopbecausebadfolder=="no") {  // si es superado el test de carpetas inexistentes (si hay archivos inexistentes simplemente no hará nada pues el DOM estará vacío)	}
 
 
 		// para el preview de los epubs
@@ -4568,7 +4540,7 @@ function drawSearchAfter() {
 					// para que muestre el div de duration
 					$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
 					var videotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
-					$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video" src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
+					$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video b-lazy" data-src="file:///'+videotopreview+'" src="" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 					$(this)["0"].previousSibling.style.backgroundImage = "none";
 			      	$(this)["0"].previousSibling.classList.add("filepreview"); // para quitarle paddings y centrarlo
 
@@ -4687,6 +4659,39 @@ function drawSearchAfter() {
 
 		drawdirectoryviewtags();
 		interactinsforsearchdir();
+
+		// para cargar, segun se hace scroll, las imágenes (y videos)
+		setTimeout(function(){ //se le pone un pequeño delay sino a veces no hace todas a la primera
+			var bLazy = new Blazy({
+			    container: '#searchdirview-wrapper',
+			    success: function(element){
+
+			    	// varios estilos (searchviewmode1): quitar fondo, etc.. en tras cada imagen cargada 
+			    	if (searchviewmode==1){
+					    $(element).parent().parent().css("background","none"); // quita el icono de imagen
+					 	$(element).parent().parent().css("display","inline-block");
+						$(element).parent().parent().css("padding-right","0px");
+
+						$(element).css("padding-right", "1px");
+
+						// esto es para centrar verticalmente la imagen
+						var toaddpaddingtop = (16 - $(element).height()) / 2;
+						if (toaddpaddingtop > 0) {
+							$(element).css("padding-top", toaddpaddingtop+"px")
+						}
+						if (toaddpaddingtop == 7.5 || toaddpaddingtop <= 0) {
+							$(element).css("vertical-align", "middle");
+							$(element).css("margin-top", "-3px");
+						}
+					}
+
+			    }
+
+			});
+			
+		}, 50);
+
+
 
 	}
 
