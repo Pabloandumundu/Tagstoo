@@ -26,64 +26,147 @@
 	<meta charset="UTF-8">
 	<title>Options</title>
 
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+	        language = localStorage["language"];
+
+			if (language == 'EN') {
+				$(".lang_en").css("display", "inline-block");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "none");
+				// margin-bottom:1px (para algunos span)
+				$(".lang_en_m").css("display", "inline-block");
+				$(".lang_es_m").css("display", "none");
+				$(".lang_fr_m").css("display", "none");
+			} else if (language =='ES') {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "inline-block");
+				$(".lang_fr").css("display", "none");
+				// margin-bottom:1px (para algunos span)
+				$(".lang_en_m").css("display", "none");
+				$(".lang_es_m").css("display", "inline-block");
+				$(".lang_fr_m").css("display", "none");
+			} else if (language == "FR") {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "inline-block");
+				// margin-bottom:1px (para algunos span)
+				$(".lang_en_m").css("display", "none");
+				$(".lang_es_m").css("display", "none");
+				$(".lang_fr_m").css("display", "inline-block");
+			}
+
+		});
+	</script>
+
 </head>
 <body>
 
-	<div id="popupbg"></div>
-
-	<div id="popuptitle"><img src="../img/options.png" alt="">DATABASE MANAGER & OPTIONS</div>
+	<div id="popuptitle" class="lang_en"><img src="../img/options.png" alt="">DATABASE MANAGEMENT & OPTIONS</div>
+	<div id="popuptitle" class="lang_es"><img src="../img/options.png" alt="">GESTIÓN DE BASE DE DATOS Y OPCIONES</div>
+	<div id="popuptitle" class="lang_fr"><img src="../img/options.png" alt="">GESTION DE BASE DE DONNÉES ET OPTIONS</div>
 
 	<br>
 	<hr>
 
-	<span>Currently selected database: </span><span id="selecteddb"></span>
+	<span class="lang_en">Currently selected database: </span>
+	<span class="lang_es">Base de datos actualmente seleccionada: </span>
+	<span class="lang_fr">Base de données (BD) actuellement sélectionnée: </span>
+	<span id="selecteddb"></span>
 
 	<br>
 
-	<span>That's asociated to drive: </span><span id="selecteddrive"></span><div id="drivedesc"></div>
+	<span class="lang_en">That's asociated to drive: </span>
+	<span class="lang_es">Que está asociada a la unidad: </span>
+	<span class="lang_fr">Cela est associé à l'unité: </span>
+	<span id="selecteddrive"></span><div id="drivedesc"></div>
 
 	<br>
 
 	<div id="databaseoptionsform">
 
-		<span>Change database:</span>
+		<span class="lang_en">Change database:</span>
+		<span class="lang_es">Cambiar base de datos:</span>
+		<span class="lang_fr">Changer de base de données:</span>
 		<select name="" id="databaseselect"></select>
 
-		<span>Change asociated drive:</span>
+		<span class="lang_en">&nbsp;Change asociated drive:</span>
+		<span class="lang_es">&nbsp;Cambiar unidad asociada:</span>
+		<span class="lang_fr">&nbsp;Changer lecteur associé:</span>
 		<select name="unitselect" id="unitselect" form="initialoptions"></select>
 
 		<br>
 
-		<a id="newdatabase" class="medium button green">New database</a><input id="newdatabasename" type="text"><span><em>Select this new database</em></span>
+		<a id="newdatabase" class="medium button green">
+			<span class="lang_en">New database</span>
+			<span class="lang_es">Nueva base de datos</span>
+			<span class="lang_fr">Nouvelle base données</span>
+		</a>
+
+		<input id="newdatabasename" type="text">
+		<span class="lang_en labele"><em>Select this new database</em></span>	
+		<span class="lang_es labele"><em>Seleccionar esta nueva base datos</em></span>
+		<span class="lang_fr labele"><em>Sélectionnez cette nouvelle BD</em></span>
 
 		<br>
 
-		 <a class="medium button green" onclick="saveoptions(); cerrar(); restarttagstoo()">Load It</a><span><em>Load selected database</em></span>	
+		 <a class="medium button green" onclick="saveoptions(); cerrar(); restarttagstoo()">
+		 	<span class="lang_en">Load It</span>
+		 	<span class="lang_es">Cárgarla</span>
+		 	<span class="lang_fr">Chargez-le</span>
+		 </a>
+		 <span class="lang_en labele"><em>Load selected database</em></span>	
+		 <span class="lang_es labele"><em>Cargar la base de datos seleccionada</em></span>	
+		 <span class="lang_fr labele"><em>Charger la base de données sélectionnée</em></span>	
 
 		<br>
 
 		<!-- Export data -->
 		 <input type="file" id="toexportfile" name="toexportfile" style="display: none;" />
-	     <a id="exportdata" class="medium button yellow">Export data</a><span><em>Export data from selected database to file</em> </span>
+	     <a id="exportdata" class="medium button yellow">
+	     	<span class="lang_en">Export data</span>
+	     	<span class="lang_es">Exportar datos</span>
+	     	<span class="lang_fr">Exporter données</span>
+	     </a>
+	     <span class="lang_en labele"><em>Export data from selected database to a file</em> </span>
+	     <span class="lang_es labele"><em>Exportar datos de la base de datos seleccionada a un archivo</em> </span>
+	     <span class="lang_fr labele"><em>Exporter données de la BD sélectionnée vers un fichier</em> </span>
 
 		
 		<br>
 
 		<!-- Import Data -->
 		<input type="file" id="toinportfile" name="toinportfile" style="display: none;" />
-	     <a id="inportdata" class="medium button orange">Import data</a><span><em>Import data from file to selected database</em> </span>
+	     <a id="inportdata" class="medium button orange">
+	     	<span class="lang_en">Import data</span>
+	     	<span class="lang_es">Importar datos</span>
+	     	<span class="lang_fr">Importer données</span>
+	     </a>
+	     <span class="lang_en labele"><em>Import data from file to selected database</em> </span>
+	     <span class="lang_es labele"><em>Importar datos desde archivo a la base de datos seleccionada</em> </span>
+	     <span class="lang_fr labele"><em>Importer données du fichier vers la BD sélectionnée</em> </span>
 
 		<br>
 		
 		<!-- Delete Database -->
-		<a id="deletedb" class="medium button red">Delete database</a><span><em>Delete selected database</em></span>
+		<a id="deletedb" class="medium button red">
+			<span class="lang_en">Delete database</span>
+			<span class="lang_es">Borrar base de datos</span>
+			<span class="lang_fr">Effacer base de données</span>
+		</a>
+		<span class="lang_en labele"><em>Delete selected database</em></span>
+		<span class="lang_es labele"><em>Borrar la base de datos seleccionada</em></span>
+		<span class="lang_fr labele"><em>Effacer la base de données sélectionnée</em></span>
 
 	</div>
 
 	<hr>
 
 
-	<span style="vertical-align: middle !important">Toggle between color and greyscale modes: </span>
+	<span style="vertical-align: middle !important" class="lang_en">Toggle between color and greyscale modes: </span>
+	<span style="vertical-align: middle !important" class="lang_es">Cambia entre los modos color y escala de grises: </span>
+	<span style="vertical-align: middle !important" class="lang_fr">Bascule entre les modes couleur et nuances de gris: </span>
 	<div class="coloronoffswitch optionsswitch" id="pasteaction">
 
 		<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
@@ -96,31 +179,57 @@
 
 	<br>
 
-	<span>Confirmation on close program: </span><input type="checkbox" id="closeconfirmation">
+	<span class="lang_en_m">Confirmation at the close of the program: </span>
+	<span class="lang_es_m">Confirmación al cerrar el programa: </span>
+	<span class="lang_fr_m">Confirmation pour fermer le programme: </span>
+	<input type="checkbox" id="closeconfirmation" class="optionscheckbox">
 
 	<br>
 
-	<span>Show tips when program launch: </span><input type="checkbox" id="showtips">
+	<span class="lang_en_m">Show tips when program launch: </span>
+	<span class="lang_es_m">Mostrar sugerencias al iniciar el programa: </span>
+	<span class="lang_fr_m">Afficher astuces lorsque le programme lancé: </span>
+	<input type="checkbox" id="showtips" class="optionscheckbox">
 
 	<br>
 
-	<span>Load demo tags when a new database initialize: </span><input type="checkbox" id="demotags">
+	<span class="lang_en_m">Load demo tags when a new database initialize: </span>
+	<span class="lang_es_m">Cargar etiquetas de demostración cuando se inicia una nueva base de datos: </span>
+	<span class="lang_fr_m">Chargez balises de démonstration lorsqu'une nouvelle BD est initialisée: </span>
+	<input type="checkbox" id="demotags" class="optionscheckbox">
 
 	<br>
 
-	<span>Automatically not add tag to folders subelements: </span><input type="checkbox" id="asktagsubelements">
+	<span class="lang_en_m">Automatically not add tag to folders subelements: </span>
+	<span class="lang_es_m">Automáticamente no añadir etiquetas a subelementos de carpetas: </span>
+	<span class="lang_fr_m">Automatiquement ne pas ajouter d'étiquettes aux sous-éléments de dossier: </span>
+	<input type="checkbox" id="asktagsubelements" class="optionscheckbox">
 
 	<br>
 
-	<span>Preview <em>images</em> and <em>epubs</em> on Viewmode 1: </span><input type="checkbox" id="previewimgonviewmode1">
+	<span class="lang_en_m">Preview <em>images</em> and <em>epubs</em> on Viewmode 1: </span>
+	<span class="lang_es_m">Vista previa de <em>imágenes</em> y <em>epubs</em> en Vista modo 1:</span>
+	<span class="lang_fr_m">Aperçu des <em>images</em> et des <em>epubs</em> en Vue mode 1: </span>
+	<input type="checkbox" id="previewimgonviewmode1" class="optionscheckbox">
 
 	<br>
 
-	<span>On image-viewer change to next image each <input type="text" id="autoslideshowtime" maxlength="3"> seconds: </span><input type="checkbox" id="autoslideshow">
+	<span class="lang_en_m">On image-viewer change to next image each </span>
+	<span class="lang_es_m">En el visor de imágenes cambia a la siguiente imagen cada </span>
+	<span class="lang_fr_m">Sur le visualiseur d'image passez à l'image suivante toutes les</span>
+	<input type="text" id="autoslideshowtime" maxlength="3">
+	<span class="lang_en_m"> seconds: </span>
+	<span class="lang_es_m"> segundos: </span>
+	<span class="lang_fr_m"> secondes: </span>
+	<input type="checkbox" id="autoslideshow" class="optionscheckbox">
 	
 	<hr>	
 
-	<a class="large button orange closeopt" onclick="saveoptions(); cerrar()">Close</a>
+	<a class="large button orange closeopt" onclick="saveoptions(); cerrar()">
+		<span class="lang_en">Close</span>
+		<span class="lang_es">Cerrar</span>
+		<span class="lang_fr">Fermer</span>
+	</a>
 
 	<script>
 		optionspreload();

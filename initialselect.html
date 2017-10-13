@@ -56,42 +56,101 @@
 
 	<div id="initalselect">
 
-		<div id="popuptitle">INITIAL DATABASE OPTIONS</div>
+		<div id="popuptitle" class="lang_en">INITIAL DATABASE OPTIONS</div>
+		<div id="popuptitle" class="lang_es">OPCIONES INICIALES DE LA BASE DE DATOS</div>
+		<div id="popuptitle" class="lang_fr">OPTIONS DE BASE DE DONNÉES INITIALES</div>
 		<div id="initalhelp">
-			<a href="popups/popup-info-help.html#1" target="_blank">
-				<img src="img/info.png" alt="">
-			</a>
+			<span class="lang_en">
+				<a href="popups/popup-info-help_en.html#1" target="_blank">
+					<img src="img/info.png" alt="">
+				</a>
+			</span>
+			<span class="lang_es">
+				<a href="popups/popup-info-help_es.html#1" target="_blank">
+					<img src="img/info.png" alt="">
+				</a>
+			</span>
+			<span class="lang_fr">
+				<a href="popups/popup-info-help_fr.html#1" target="_blank">
+					<img src="img/info.png" alt="">
+				</a>
+			</span>
 		</div>
+
+		<div id="languageselect_wrapper">
+			<span class="lang_en">Language: </span>
+			<span class="lang_es">Lenguaje: </span>
+			<span class="lang_fr">Langue: </span>
+			<select name="languageselect" id="languageselect">
+				<option value="EN">EN</option>
+				<option value="ES">ES</option>
+				<option value="FR">FR</option>
+			</select>
+		</div>
+
 
 		<hr>
 
-		<span>Currently selected database: </span><span id="selecteddb"></span>
+		<span class="lang_en">Currently selected database: </span>
+		<span class="lang_es">Base de datos actualmente seleccionada: </span>
+		<span class="lang_fr">Base de données (BD) actuellement sélectionnée: </span>
+		<span id="selecteddb"></span>
 
 		<br>
 
-		<span>That's asociated to drive: </span><span id="selecteddrive"></span><div id="drivedesc" style="display: inline-block;"></div>
+		<span class="lang_en">That's asociated to drive: </span>
+		<span class="lang_es">Que está asociada a la unidad: </span>
+		<span class="lang_fr">Cela est associé à l'unité: </span>
+		<span id="selecteddrive"></span><div id="drivedesc" style="display: inline-block;"></div>
 
 		<br>
 
-		<span>Change database:</span>
+		<span class="lang_en">Change database:</span>
+		<span class="lang_es">Cambiar base de datos:</span>
+		<span class="lang_fr">Changer de base de données:</span>
 		<select name="" id="databaseselect"></select>
 
-		<span>Change asociated drive:</span>
+		<span class="lang_en">&nbsp;Change asociated drive:</span>
+		<span class="lang_es">&nbsp;Cambiar unidad asociada:</span>
+		<span class="lang_fr">&nbsp;Changer lecteur associé:</span>
 		<select name="unitselect" id="unitselect" form="initialoptions"></select>
 
 		<br>
 
-		<a id="newdatabase" class="medium button green">New database</a><input id="newdatabasename" type="text"><span><em>Select this new database</em></span>	
+		<a id="newdatabase" class="medium button green">
+			<span class="lang_en">New database</span>
+			<span class="lang_es">Nueva base de datos</span>
+			<span class="lang_fr">Nouvelle base données</span>
+		</a>
+
+		<input id="newdatabasename" type="text">
+		<span class="lang_en labele"><em>Select this new database</em></span>	
+		<span class="lang_es labele"><em>Selecciona esta nueva base datos</em></span>
+		<span class="lang_fr labele"><em>Sélectionnez cette nouvelle BD</em></span>
 
 		<br>
 
 		<!-- Import Data -->
 		<input type="file" id="toinportfile" name="toinportfile" style="display: none;" />
-	     <a id="inportdata" class="medium button orange">Import data</a><span><em>Import data from file to selected database</em> </span>
+	     <a id="inportdata" class="medium button orange">
+	     	<span class="lang_en">Import data</span>
+	     	<span class="lang_es">Importar datos</span>
+	     	<span class="lang_fr">Importer données</span>
+	     </a>
+	     <span class="lang_en labele"><em>Import data from file to selected database</em> </span>
+	     <span class="lang_es labele"><em>Importar datos desde archivo a la base de datos seleccionada</em> </span>
+	     <span class="lang_fr labele"><em>Importer données du fichier vers la BD sélectionnée</em> </span>
 
 		<br>		
 
-		<a id="deletedb" class="medium button red">Delete database</a><span><em>Delete selected database</em></span>
+		<a id="deletedb" class="medium button red">
+			<span class="lang_en">Delete database</span>
+			<span class="lang_es">Borrar base de datos</span>
+			<span class="lang_fr">Effacer base de données</span>
+		</a>
+		<span class="lang_en labele"><em>Delete selected database</em></span>
+		<span class="lang_es labele"><em>Borrar la base de datos seleccionada</em></span>
+		<span class="lang_fr labele"><em>Effacer la base de données sélectionnée</em></span>
 
 			
 		
@@ -100,16 +159,20 @@
 		<div id="colorswitch_initial">
 			<div class="coloronoffswitch" id="pasteaction">
 
-					<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
-					<label class="coloronoffswitch-label" for="mycoloronoffswitch" >
-							<span class="coloronoffswitch-inner"></span>
-							<span class="coloronoffswitch-switch"></span>
-					</label>
+				<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
+				<label class="coloronoffswitch-label" for="mycoloronoffswitch" >
+						<span class="coloronoffswitch-inner"></span>
+						<span class="coloronoffswitch-switch"></span>
+				</label>
 
-				</div>
+			</div>
 		</div>
-
-		<a id="launch" class="large button green" onclick="starttagstoo()">Launch!</a>
+		
+		<a id="launch" class="large button green" onclick="starttagstoo()">
+			<span class="lang_en">Launch!</span>
+			<span class="lang_es">¡Iniciar!</span>
+			<span class="lang_fr">Lancer!</span>
+		</a>
 
 	</div>
 

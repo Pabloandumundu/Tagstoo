@@ -285,12 +285,33 @@ header h1 {
 	background-color: rgb(249,225,201); color: #999;
 }
 
+.onoffswitch-inner.l_es:before { 
+	content: "CORTA";
+	padding-left: 8px;
+}
+
+.onoffswitch-inner.l_fr:before { 
+	content: "COUPE";
+	padding-left: 8px;
+}
+
 .onoffswitch-inner:after {
 
 	content: "COPY";
 	padding-right: 10px;
 	background-color: rgb(249,225,201); color: #999;
 	text-align: right;
+}
+
+.onoffswitch-inner.l_es:after {
+	content: "COPIA";
+	padding-left: 11px;
+
+}
+.onoffswitch-inner.l_fr:after {
+	content: "COPIE";
+	padding-left: 11px;
+
 }
 
 .onoffswitch-switch {
@@ -342,10 +363,20 @@ header h1 {
 
 #favfolders {
 
-	width: 200px;
-	margin-top: 7px;
+	/*width: 200px;
+	margin-top: 6px;
 	margin-right: 4px;
-	vertical-align: bottom;
+	vertical-align: bottom;*/
+
+	/*width: 200px;
+    margin-top: 3px;
+    margin-right: 4px;
+    vertical-align: super;*/
+
+    width: 200px;
+    margin-top: 3px;
+    margin-right: 4px;
+    vertical-align: unset;
 }
 
 #favfolders.animateonce { /* cuando se agrega una carpeta al favfolders */
@@ -511,9 +542,10 @@ header h1 {
 	margin-right: 8px;
 }
 
-#order {
+.order {
 
-	margin-top: 7px;
+	margin-top: 1px;
+    vertical-align: super;
 }
 
 #undo-wrap {
@@ -1663,6 +1695,13 @@ header h1 {
 	height: 50px;
 	float: left;
 }
+#bottomleft.l_es {
+	width: 298px; /* valor inicial */
+}
+#bottomleft.l_fr {
+	width: 346px; /* valor inicial */
+	width: 332px; /* valor inicial */
+}
 
 #botonestag {
 
@@ -1680,6 +1719,14 @@ header h1 {
 	position: relative; /* es importante para que pueda "tapar" los botones */
 	margin-top: 4px;
 	min-height: 40px;
+}
+
+#bottomright.l_es {
+	width: calc(100% - 316px);
+}
+#bottomright.l_fr {
+	width: calc(100% - 364px);
+	width: calc(100% - 350px);
 }
 
 #bottomright > div {
@@ -1982,6 +2029,22 @@ header h1 {
 	margin-left: calc(50% - 32px);
 }
 
+span.labele {
+
+	vertical-align: middle;
+	margin-left: 3px;
+}
+
+.lang_en_m, .lang_es_m, .lang_fr_m {
+	margin-bottom: 1px;
+}
+
+.optionscheckbox {
+	vertical-align: middle;
+    margin-top: 1px;
+}
+
+
 /* popup newtag, edittag styles */
 
 #selectcolor {
@@ -2060,7 +2123,7 @@ header h1 {
   	margin-top: 7px;
 }
 
-#databaseoptionsform > span , #databaseoptionsform > select{
+#databaseoptionsform > select{
 
   	display: inline-block !important;
 }
@@ -2107,8 +2170,17 @@ header h1 {
 
 #unitselect{
   	/*max-width: 150px;*/
-  	max-width: 17%;
+  	max-width: 15%;
 	padding: 1px !important;
+}
+
+#popup #unitselect{
+  	max-width: 12%;	
+}
+
+#popup #newdatabasename {
+  	max-width: 27%;	
+
 }
 
 #autoslideshowtime {
@@ -2163,14 +2235,20 @@ header h1 {
 
 	content: "GREY";
 	padding-left: 9px;
-	background-color: rgb(249,225,201); color: #999;
+	/*background-color: rgb(249,225,201);*/
+	background-color: #ff9;
+	/*background-color: #ffe799;*/
+	color: #999;
 }
 
 .coloronoffswitch-inner:after {
 
 	content: "COLOR";
 	padding-right: 4px;
-	background-color: rgb(249,225,201); color: #999;
+	/*background-color: rgb(249,225,201); */
+	background-color: #ff9; 
+	/*background-color: #ffe799; */
+	color: #999;
 	text-align: right;
 }
 
@@ -2205,10 +2283,7 @@ header h1 {
 
 /* popup inital select */
 
-#colorswitch_initial {
-	position:fixed;
-	bottom: 26px;
-}
+
 
 #initialbody {
 
@@ -2277,14 +2352,28 @@ header h1 {
 	margin-top: 6px;
 }
 
-#initalselect a + span{
 
-	margin-left: 6px;
+#languageselect {
+	border:  2px solid #999999;
+	border-radius: 20px;
+	color: #111;
+	text-shadow: 1px 1px 2px rgba(000,000,000,0.1), 0 1px 0 rgba(255,255,255,0.8);
+	background-color: #ffff99;
+	outline: none;
 }
 
-#initalselect input + span{
 
-	margin-left: 6px;
+#colorswitch_initial {
+	position:fixed;
+	bottom: 26px;
+}
+
+#languageselect_wrapper {
+	position:fixed;
+	/*bottom: 38px;
+	left: 142px;*/
+	top: 80px;
+    right: 78px;
 }
 
 #launch {
@@ -2292,6 +2381,7 @@ header h1 {
 	width: 50px;
 	display: block;
 	margin: 0 auto 5px auto;
+	text-align: center;
 }
 
 
@@ -2312,7 +2402,7 @@ header h1 {
 	width: 100%;
 }
 #infopanel > span, #infopanel > a {
-	display: inline-block !important;
+	display: inline-block;
 }
 #infopanel > span {
 	margin-left: 6px;
@@ -2328,6 +2418,7 @@ header h1 {
 #selectedfolder {
 
 	margin-bottom: 2px;
+	width: 100%;
 }
 
 #selectedfolder > div {

@@ -69,6 +69,10 @@
 .alertify-message a:link {
 	color: #14559f;
 }
+/* retoque para que quede más centrado (checkbox novolver a mostrar...) */
+.alertify input[type="checkbox"] {
+	vertical-align: bottom;
+}
 
 
 #nexttip {

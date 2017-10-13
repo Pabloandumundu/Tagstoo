@@ -500,19 +500,113 @@ if(jQuery) (function ($){
 // Tags e interacciones que se activan en la primera carga del filetree
 function filetrerefreshtags() {
 
+
+
 	var currentlydatabaseused_toshow = currentlydatabaseused.replace("tagstoo_", "");
 	if (driveunit != "") {
 		if (s.os.name != "macos") { //esto es porque en macos añadiremos un espacio por tema visual
-			$('#filetree ul li:eq(0)').before("<li class='treeviewinfo'>drive: "+driveunit+" &#9881; database: "+currentlydatabaseused_toshow+"</li>");
+			$('#filetree ul li:eq(0)').before(`
+				<li class='treeviewinfo'>
+					<div class="lang_en">drive: </div>
+					<div class="lang_es">unidad: </div>
+					<div class="lang_fr">lecteur: </div>
+					`+driveunit+`
+					<div class="lang_en"> &#9881; database: </div>
+					<div class="lang_es"> &#9881; base de datos: </div>
+					<div class="lang_fr"> &#9881; base de données: </div>
+					`+currentlydatabaseused_toshow+`
+				</li>`
+			);
 		} else {
-			$('#filetree ul li:eq(0)').before("<li class='treeviewinfo'>drive: "+driveunit+" &#9881;&nbsp; database: "+currentlydatabaseused_toshow+"</li>");
+			$('#filetree ul li:eq(0)').before(`
+				<li class='treeviewinfo'>
+					<div class="lang_en">drive: </div>
+					<div class="lang_es">unidad: </div>
+					<div class="lang_fr">lecteur: </div>
+					`+driveunit+`
+					<div class="lang_en"> &#9881;&nbsp; database: </div>
+					<div class="lang_es"> &#9881;&nbsp; base de datos: </div>
+					<div class="lang_fr"> &#9881;&nbsp; base de données: </div>
+					`+currentlydatabaseused_toshow+`
+				</li>`
+			);
 		}
 	} else {
-		$('#filetree ul li:eq(0)').before("<li class='treeviewinfo'>drive: /"+driveunit+" &#9881; database: "+currentlydatabaseused_toshow+"</li>");
+		$('#filetree ul li:eq(0)').before(`
+			<li class='treeviewinfo'>
+				<div class="lang_en">drive: /</div>
+				<div class="lang_es">unidad: /</div>
+				<div class="lang_fr">lecteur: /</div>
+				`+driveunit+`
+				<div class="lang_en"> &#9881; database: </div>
+				<div class="lang_es"> &#9881; base de datos: </div>
+				<div class="lang_fr"> &#9881; base de données: </div>
+				`+currentlydatabaseused_toshow+`
+			</li>`
+		);
 	}
 	$('.treeviewinfo').on('click', function() {
 		readDirectory(driveunit + "\/")
 	});
+
+	language = localStorage["language"];
+
+  	if (language == 'EN') {
+		$(".lang_en").css("display", "inline-block");
+		$(".lang_es").css("display", "none");
+		$(".lang_fr").css("display", "none");
+	} else if (language =='ES') {
+		$(".lang_en").css("display", "none");
+		$(".lang_es").css("display", "inline-block");
+		$(".lang_fr").css("display", "none");
+	} else if (language == "FR") {
+		$(".lang_en").css("display", "none");
+		$(".lang_es").css("display", "none");
+		$(".lang_fr").css("display", "inline-block");
+	}
+
+	// Frases segun idioma
+
+	if (language == 'EN') {
+
+		ph_moving = "Moving ...";
+		ph_copying = "Copying ...";
+		ph_elementsinfolder = " elements in folder.";
+		ph_alr_05 = "Same origin and destination folder.";
+		ph_alr_06 = "No elements selected to copy.";
+		ph_alr_07 = "No elements selected to move.";
+		ph_alr_08 = "No destination folder selected, please double-click in desired folder on left window. Alternatively you can drag and drop elements from right window to folders in left.";
+		ph_dato_tagfold = "UNDO (tag folder)";
+		ph_dato_move = "UNDO (move)";
+		ph_dato_copy = "UNDO (copy)";
+
+	} else if (language =='ES') {
+
+		ph_moving = "Moviendo ...";
+		ph_copying = "Copiando ...";
+		ph_elementsinfolder = " elementos en carpeta.";
+		ph_alr_05 = "Carpeta de destino y origen son la misma.";
+		ph_alr_06 = "No hay elementos seleccionados para copiar.";
+		ph_alr_07 = "No hay elementos seleccionados para mover.";
+		ph_alr_08 = "Ninguna carpeta de destino seleccionada, por favor haga doble clic en la carpeta deseada en la ventana izquierda. Alternativamente, puede arrastrar y soltar elementos de la ventana derecha a las carpetas de la izquierda.";
+		ph_dato_tagfold = "DESHACER (etiquetar carpeta)";
+		ph_dato_move = "DESHACER (mover)";
+		ph_dato_copy = "DESHACER (copiar)";
+
+	} else if (language =='FR') {
+
+		ph_moving = "En déplaçant ...";
+		ph_copying = "En copiant ...";
+		ph_elementsinfolder = " éléments dans dossier.";
+		ph_alr_05 = "Le dossier de destination et la source sont les mêmes.";
+		ph_alr_06 = "Aucun élément sélectionné pour copier.";
+		ph_alr_07 = "Aucun élément sélectionné pour se déplacer";
+		ph_alr_08 = "Aucun dossier de destination sélectionné, s'il vous plaît double-cliquez dans le dossier souhaité sur la fenêtre de gauche. Sinon, vous pouvez faire glisser et déposer des éléments de fenêtre de droite aux dossiers à gauche.";
+		ph_dato_tagfold = "DÉFAIRE (étiqueter dossier)";
+		ph_dato_move = "DÉFAIRE (déplacer)";
+		ph_dato_copy = "DÉFAIRE (copier)";
+	}
+
 
 	var subcarpetas = $('.directory span');
 
@@ -705,7 +799,7 @@ function filetreeinteractions() {
 
 										isnewtag = "no"; // no se añadirá
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagfold);
 										undo.class = "tag folder";
 										undo.taggfold.foldid = folderupdate.folderid;
 										undo.taggfold.tagid = taganadir;
@@ -744,7 +838,7 @@ function filetreeinteractions() {
 
 									// console.log("tag añadida!");
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagfold);
 									undo.class = "tag folder";
 									undo.taggfold.foldid = folderupdate.folderid;
 									undo.taggfold.tagid = taganadir;
@@ -1073,12 +1167,12 @@ function filetreeinteractions() {
 				if (pasteaction == "cut") {
 					if (rootdirectory != targetfolder) {
 
-						$("#folderreadstatus").html("Moving ...");
+						$("#folderreadstatus").html(ph_moving);
 						$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 
 						$("#filetree ul li span.selected").addClass("animateonce");
 
-						$("#undo", window.parent.document).attr("data-tooltip", "UNDO (move)");
+						$(".undo", window.parent.document).attr("data-tooltip", ph_dato_move);
 						undo.class = "move";
 						undo.move.rootfiles = droppedarchive;
 						undo.move.rootfolders = droppedfolder;
@@ -1688,7 +1782,7 @@ function filetreeinteractions() {
 
 																								});
 																								$(ui.helper).remove(); //destroy clone
-																								$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																								$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 																								$('.exploelement, .exploelementfolderup').css("filter","none");
 
 																								updatedestitems();
@@ -1698,7 +1792,7 @@ function filetreeinteractions() {
 																						} else {
 																						
 																							$(ui.helper).remove(); //destroy clone
-																							$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																							$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 																							$('.exploelement, .exploelementfolderup').css("filter","none");
 																							updatedestitems();
 																						}
@@ -1915,7 +2009,7 @@ function filetreeinteractions() {
 																						});
 																						refrescohecho2="si";					
 																						$(ui.helper).remove(); //destroy clone
-																						$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																						$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 																						$('.exploelement, .exploelementfolderup').css("filter","none");
 																						updatedestitems();
 
@@ -1924,7 +2018,7 @@ function filetreeinteractions() {
 																				} else {
 																					refrescohecho2="si";
 																					$(ui.helper).remove(); //destroy clone
-																					$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																					$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 																					$('.exploelement, .exploelementfolderup').css("filter","none");
 																					updatedestitems();
 																				}
@@ -2050,7 +2144,7 @@ function filetreeinteractions() {
 														});
 														
 														$(ui.helper).remove(); //destroy clone
-														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 														$('.exploelement, .exploelementfolderup').css("filter","none");
 														updatedestitems();
 
@@ -2059,7 +2153,7 @@ function filetreeinteractions() {
 												} else {
 													
 													$(ui.helper).remove(); //destroy clone
-													$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+													$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 													$('.exploelement, .exploelementfolderup').css("filter","none");
 													updatedestitems();
 												}
@@ -2079,9 +2173,8 @@ function filetreeinteractions() {
 					} // --fin si la carpeta origen y destino son las mismas
 
 					else {
-
-						alertify.alert("Same origin and destination folder.");
-
+						
+						alertify.alert(ph_alr_05);
 						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 						readDirectory(dirtoexec);
 
@@ -2101,10 +2194,10 @@ function filetreeinteractions() {
 				if (pasteaction == "copy") {
 					if (rootdirectory != targetfolder) {
 
-						$("#folderreadstatus").html("Copying ...");
+						$("#folderreadstatus").html(ph_copying);
 						$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 
-						$("#undo", window.parent.document).attr("data-tooltip", "UNDO (copy)");
+						$(".undo", window.parent.document).attr("data-tooltip", ph_dato_copy);
 						undo.class = "copy";
 						undo.copy.rootfiles = droppedarchive;
 						undo.copy.rootfolders = droppedfolder;
@@ -2152,7 +2245,7 @@ function filetreeinteractions() {
 											});
 
 											$(ui.helper).remove(); //destroy clone
-											$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+											$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 											$('.exploelement, .exploelementfolderup').css("filter","none");
 											updatedestitems();
 
@@ -2161,7 +2254,7 @@ function filetreeinteractions() {
 									} else {
 
 										$(ui.helper).remove(); //destroy clone
-										$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+										$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 										$('.exploelement, .exploelementfolderup').css("filter","none");
 										updatedestitems();
 									}
@@ -2349,7 +2442,7 @@ function filetreeinteractions() {
 																});
 
 																$(ui.helper).remove(); //destroy clone
-																$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 																$('.exploelement, .exploelementfolderup').css("filter","none");
 																updatedestitems();
 
@@ -2358,7 +2451,7 @@ function filetreeinteractions() {
 														} else {
 
 															$(ui.helper).remove(); //destroy clone
-															$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+															$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 															$('.exploelement, .exploelementfolderup').css("filter","none");
 															updatedestitems();
 														}
@@ -2798,7 +2891,7 @@ function filetreeinteractions() {
 																		});
 
 																		$(ui.helper).remove(); //destroy clone
-																		$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																		$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 																		$('.exploelement, .exploelementfolderup').css("filter","none");
 																		updatedestitems();
 
@@ -2808,7 +2901,7 @@ function filetreeinteractions() {
 
 																	refrescohecho1="si";
 																	$(ui.helper).remove(); //destroy clone
-																	$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																	$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 																	$('.exploelement, .exploelementfolderup').css("filter","none");
 																	updatedestitems();
 																}
@@ -2964,7 +3057,7 @@ function filetreeinteractions() {
 															});
 
 															$(ui.helper).remove(); //destroy clone
-															$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+															$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 															$('.exploelement, .exploelementfolderup').css("filter","none");
 															updatedestitems();
 
@@ -2973,7 +3066,7 @@ function filetreeinteractions() {
 													} else {
 
 														$(ui.helper).remove(); //destroy clone
-														$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+														$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 														$('.exploelement, .exploelementfolderup').css("filter","none");
 														updatedestitems();
 													}
@@ -3020,7 +3113,7 @@ function filetreeinteractions() {
 													});
 
 													$(ui.helper).remove(); //destroy clone
-													$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+													$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 													$('.exploelement, .exploelementfolderup').css("filter","none");
 													updatedestitems();
 
@@ -3029,7 +3122,7 @@ function filetreeinteractions() {
 											} else {
 
 												$(ui.helper).remove(); //destroy clone
-												$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+												$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 												$('.exploelement, .exploelementfolderup').css("filter","none");
 												updatedestitems();
 											}
@@ -3047,9 +3140,8 @@ function filetreeinteractions() {
 					} // --fin si la carpeta origen y destino son las mismas
 
 					else {
-
-						alertify.alert("Same origin and destination folder.");
-
+						
+						alertify.alert(ph_alr_05);
 						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 						readDirectory(dirtoexec);
 
@@ -3109,18 +3201,23 @@ window.parent.$("#paste").on('click', function() {
 		alldroppedelement = $(".exploelement.ui-selected"); // para que lo haga con los selected si no hay selecting
 	}
 
-	if (alldroppedelement.length == 0) {
+	if (alldroppedelement.length == 0) { // si no hay elementos seleccionados
 
 		if (pasteaction == "copy") {
-			alertify.alert("No elements selected to copy.");
+			
+			alertify.alert(ph_alr_06);
+			
 		}
-		if (pasteaction == "cut") {
-			alertify.alert("No elements selected to move.");
+		else if (pasteaction == "cut") {
+			
+			alertify.alert(ph_alr_07);
+			
 		}
 	}
 
 	if (alldroppedelement.length > 0 && targetfolder == undefined) {
-		alertify.alert("No destination folder selected, please doble-click in desired folder on left window. Alternatively you can drag and drop elements from right window to folders in left.")
+		
+		alertify.alert(ph_alr_08);		
 	}
 
 	if (alldroppedelement.length > 0 && targetfolder != undefined) {
@@ -3169,7 +3266,7 @@ window.parent.$("#paste").on('click', function() {
 		if (pasteaction == "cut") {
 			if (rootdirectory != targetfolder) {
 
-				$("#folderreadstatus").html("Moving ...");
+				$("#folderreadstatus").html(ph_moving);
 				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 				if (viewmode==1){
 					$(".ui-selected, .ui-selecting").next().remove(); // los <br>
@@ -3178,7 +3275,7 @@ window.parent.$("#paste").on('click', function() {
 
 				$("#filetree ul li span.selected").addClass("animateonce");
 
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (move)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_move);
 				undo.class = "move";
 				undo.move.rootfiles = droppedarchive;
 				undo.move.rootfolders = droppedfolder;
@@ -3584,7 +3681,7 @@ window.parent.$("#paste").on('click', function() {
 
 									if (flagg == droppedfolder.length && refescohechoporcarpeta == "no" && droppedarchive.length == 0) { // para que haga el refresco tras mover la última carpeta y solo lo haga una vez..
 
-										$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+										$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 										$('.exploelement, .exploelementfolderup').css("filter","none");
 										updatedestitems();
 										refescohechoporcarpeta = "si";
@@ -3791,14 +3888,14 @@ window.parent.$("#paste").on('click', function() {
 																							}
 
 																						});
-																						$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																						$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 																						$('.exploelement, .exploelementfolderup').css("filter","none");
 																						updatedestitems();
 
 																					}, timetowait);
 
 																				} else {
-																					$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																					$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 																					$('.exploelement, .exploelementfolderup').css("filter","none");
 																					updatedestitems();
 																				}
@@ -4014,7 +4111,7 @@ window.parent.$("#paste").on('click', function() {
 
 																				});
 																				refrescohecho2="si";
-																				$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																				$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 																				$('.exploelement, .exploelementfolderup').css("filter","none");
 																				updatedestitems();
 
@@ -4022,7 +4119,7 @@ window.parent.$("#paste").on('click', function() {
 
 																		} else {
 																			refrescohecho2="si"
-																			$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																			$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 																			$('.exploelement, .exploelementfolderup').css("filter","none");
 																			updatedestitems();
 																		}
@@ -4146,14 +4243,14 @@ window.parent.$("#paste").on('click', function() {
 													}
 
 												});
-												$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+												$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 												$('.exploelement, .exploelementfolderup').css("filter","none");
 												updatedestitems();
 
 											}, timetowait);
 
 										} else {
-											$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+											$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 											$('.exploelement, .exploelementfolderup').css("filter","none");
 											updatedestitems();
 										}
@@ -4173,9 +4270,8 @@ window.parent.$("#paste").on('click', function() {
 			} // --fin si la carpeta origen y destino son las mismas
 
 			else {
-
-				alertify.alert("Same origin and destination folder.");
-
+				
+				alertify.alert(ph_alr_05);
 				previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 				readDirectory(dirtoexec);
 
@@ -4195,12 +4291,12 @@ window.parent.$("#paste").on('click', function() {
 		if (pasteaction == "copy") {
 			if (rootdirectory != targetfolder) {
 
-				$("#folderreadstatus").html("Copying ...");
+				$("#folderreadstatus").html(ph_copying);
 				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 
 				$("#filetree ul li span.selected").addClass("animateonce");
 
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (copy)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_copy);
 				undo.class = "copy";
 				undo.copy.rootfiles = droppedarchive;
 				undo.copy.rootfolders = droppedfolder;
@@ -4243,7 +4339,7 @@ window.parent.$("#paste").on('click', function() {
 
 									});
 
-									$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+									$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 									$('.exploelement, .exploelementfolderup').css("filter","none");
 									updatedestitems();
 									$(".ui-selected").removeClass("ui-selected");
@@ -4253,7 +4349,7 @@ window.parent.$("#paste").on('click', function() {
 
 							} else {
 
-								$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+								$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 								$('.exploelement, .exploelementfolderup').css("filter","none");
 								updatedestitems();
 								$(".ui-selected").removeClass("ui-selected");
@@ -4853,7 +4949,7 @@ window.parent.$("#paste").on('click', function() {
 
 																});
 
-																$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 																$('.exploelement, .exploelementfolderup').css("filter","none");
 																updatedestitems();
 																$(".ui-selected").removeClass("ui-selected");
@@ -4864,7 +4960,7 @@ window.parent.$("#paste").on('click', function() {
 														} else {
 
 															refrescohecho1="si";
-															$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+															$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 															$('.exploelement, .exploelementfolderup').css("filter","none");
 															updatedestitems();
 															$(".ui-selected").removeClass("ui-selected");
@@ -5022,7 +5118,7 @@ window.parent.$("#paste").on('click', function() {
 
 													});
 
-													$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+													$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 													$('.exploelement, .exploelementfolderup').css("filter","none");
 													updatedestitems();
 													$(".ui-selected").removeClass("ui-selected");
@@ -5032,7 +5128,7 @@ window.parent.$("#paste").on('click', function() {
 
 											} else {
 
-												$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+												$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 												$('.exploelement, .exploelementfolderup').css("filter","none");
 												updatedestitems();
 												$(".ui-selected").removeClass("ui-selected");
@@ -5089,7 +5185,7 @@ window.parent.$("#paste").on('click', function() {
 												}
 
 											});
-											$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+											$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 											$('.exploelement, .exploelementfolderup').css("filter","none");
 											updatedestitems();
 											$(".ui-selected").removeClass("ui-selected");
@@ -5098,7 +5194,7 @@ window.parent.$("#paste").on('click', function() {
 										}, timetowait);
 
 									} else {
-										$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+										$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 										$('.exploelement, .exploelementfolderup').css("filter","none");
 										updatedestitems();
 										$(".ui-selected").removeClass("ui-selected");
@@ -5118,9 +5214,8 @@ window.parent.$("#paste").on('click', function() {
 			} // --fin si la carpeta origen y destino son distintas
 
 			else {
-
-				alertify.alert("Same origin and destination folder.");
-
+				
+				alertify.alert(ph_alr_05);
 				previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 				readDirectory(dirtoexec);
 

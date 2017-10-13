@@ -23,7 +23,7 @@ var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que s
 var agent = navigator.userAgent;
 window.s = "";
 s = new Sniffr();
-s.sniff(agent);
+s.sniff(agent); // detectar S.O.
 
 window.currentlydatabaseused = localStorage["currentlydatabaseused"];
 
@@ -59,15 +59,38 @@ iniciarfolderview(); // inicia cadena de acciones, carga de explorador, tags etc
 
 $(document).ready(function () {
 
-	var bLazy = new Blazy();
-
-
 	// panel de desarrollo ////\\\\
 	$( "#paneloff" ).click(function() {
 		$("#panel").removeClass("show");
 	});
 	////////////////////////\\\\\\\\
 
+	var bLazy = new Blazy(); // para carga de imágenes según se hace scroll
+
+	language = localStorage["language"];
+
+  	if (language == 'EN') {
+		$(".lang_en").css("display", "inline-block");
+		$(".lang_es").css("display", "none");
+		$(".lang_fr").css("display", "none");
+		// para el bottom
+		$("#bottomleft, #bottomright").removeClass("l_es");
+		$("#bottomleft, #bottomright").removeClass("l_fr");
+	} else if (language =='ES') {
+		$(".lang_en").css("display", "none");
+		$(".lang_es").css("display", "inline-block");
+		$(".lang_fr").css("display", "none");
+		// para el bottom
+		$("#bottomleft, #bottomright").addClass("l_es");
+		$("#bottomleft, #bottomright").removeClass("l_fr");
+	} else if (language == "FR") {
+		$(".lang_en").css("display", "none");
+		$(".lang_es").css("display", "none");
+		$(".lang_fr").css("display", "inline-block");
+		// para el bottom
+		$("#bottomleft, #bottomright").removeClass("l_es");
+		$("#bottomleft, #bottomright").addClass("l_fr");
+	}
 
 	// para poder regular anchuras divs
 	columnaswidth = [];
@@ -583,8 +606,17 @@ $(document).ready(function () {
 		$('#locationinfo, #dirview-wrapper').width(''+ 74 + '%');
 		$('#searchview').width(''+ 24.8 + '%');
 		$('#searchdirview-wrapper').width(''+ 74 + '%');
-		$('#bottomleft').width('205px');
-		$('#bottomright').width('calc(100% - 223px)');
+
+		if (language == "EN") {
+			$('#bottomleft').width('205px');
+			$('#bottomright').width('calc(100% - 223px)');
+		} else if (language == "ES") {
+			$('#bottomleft').width('298px');
+			$('#bottomright').width('calc(100% - 316px)');
+		} else if (language == "FR") {
+			$('#bottomleft').width('332px');
+			$('#bottomright').width('calc(100% - 350px)');
+		}
 
 	});
 
@@ -631,22 +663,166 @@ $(document).ready(function () {
 
 	filetreeinteractions();
 
+
+	// frases segun idioma
+
+	if (language == "EN") {
+
+		ph_readingfolder = "Reading folder ...";
+		ph_elementsinfolder = " elements in folder.";
+		ph_moving = "Moving ...";
+		ph_deleting = "Deleting ...";
+		ph_copying = "Copying ...";
+		ph_infolder = " in folder";
+		ph_filesize = "File Size";
+		ph_tagshere = "(Tags Here)";
+		ph_medialenght = "Media Length";
+		ph_alr_00 = "Select a folder from Fast access list first";
+		ph_alr_01 = "Select a folder from Fast access list to remove.";
+		ph_alr_02 = "No elements selected to delete.";
+		ph_alr_03a = "Folder <em>'";
+		ph_alr_03b = "'</em> not possible to delete because probably some file is in use.";
+		ph_alr_04 = "Some video in this folder cannot definitively deleted because they are in use, it will be deleted when application close.";
+		ph_alr_05 = "Same origin and destination folder.";
+		ph_alr_tqa = "Don't show more Tips at launch.";
+		ph_alr_tqb = "Next Tip ";
+		ph_alc_01a = " files and ";
+		ph_alc_01b = " folders (and all it´s contents) have been selected to delete. There is no undo for delete. Are you sure?";
+		ph_alc_02 = " files are selected to delete. There is no undo for delete. Are you sure?";
+		ph_alc_03 = "Are you sure?";
+		ph_dato_no = "UNDO (not action to undo)";
+		ph_dato_erasefoldtag = "UNDO (erase folder tag)";
+		ph_dato_erasearchtag = "UNDO (erase archive tag)";
+		ph_dato_tagarch = "UNDO (tag archive)";
+		ph_dato_tagfold = "UNDO (tag folder)";
+		ph_dato_move = "UNDO (move)";
+		ph_dato_copy = "UNDO (copy)";
+		ph_dato_renfold = "UNDO (rename folder)";
+		ph_dato_renarch = "UNDO (rename archive)";		
+
+	} else if (language == "ES"){
+
+		ph_readingfolder = "Leyendo carpeta ...";
+		ph_elementsinfolder = " elementos en carpeta.";
+		ph_moving = "Moviendo ...";
+		ph_deleting = "Eliminando ...";
+		ph_copying = "Copiando ...";
+		ph_infolder = " en carpeta";
+		ph_filesize = "Tamaño Archivo";
+		ph_tagshere = "(Etiquetas Aquí)";
+		ph_medialenght = "Duración de Media";
+		ph_alr_00 = "Primero seleccione una carpeta de la lista de Acceso rápido.";
+		ph_alr_01 = "Seleccione una carpeta de la lista de Acceso rápido para eliminar.";
+		ph_alr_02 = "No hay elementos seleccionados para eliminar.";
+		ph_alr_03a = "La carpeta <em>'";
+		ph_alr_03b = "'</em> no se puede eliminar porque probablemente algún archivo está en uso.";
+		ph_alr_04 = "Algunos videos de esta carpeta no se pueden borrar definitivamente porque están en uso, se eliminarán al cerrar la aplicación.";
+		ph_alr_05 = "Carpeta de destino y origen son la misma.";
+		ph_alr_tqa = "No mostrar más consejos al inicio.";
+		ph_alr_tqb = "Sig. Consejo ";
+		ph_alc_01a = " archivos y ";
+		ph_alc_01b = " carpetas (y todo su contenido) han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?"
+		ph_alc_02 = " archivos han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?";
+		ph_alc_03 = "¿Estás seguro?";
+		ph_dato_no = "DESHACER (no hay acción para deshacer)";
+		ph_dato_erasefoldtag = "DESHACER (borrar etiqueta de carpeta)";
+		ph_dato_erasearchtag = "DESHACER (eliminar etiqueta de archivo)";
+		ph_dato_tagarch = "DESHACER (etiquetar archivo)";
+		ph_dato_tagfold = "DESHACER (etiquetar carpeta)";
+		ph_dato_move = "DESHACER (mover)";	
+		ph_dato_copy = "DESHACER (copiar)";		
+		ph_dato_renfold = "DESHACER (renombrar carpeta)";		
+		ph_dato_renarch = "DESHACER (renombrar archivo)";
+
+	} else if (language == "FR") {
+
+		ph_readingfolder = "En lisant le dossier ...";
+		ph_elementsinfolder = " éléments dans dossier.";
+		ph_moving = "En déplaçant ...";
+		ph_deleting = "En supprimant ...";
+		ph_copying = "En copiant ...";
+		ph_infolder = " dans dossier";
+		ph_filesize = "Taille Fichier";
+		ph_tagshere = "(Étiquettes Ici)";
+		ph_medialenght = "Longueur du Média";
+		ph_alr_00 = "Sélectionnez d'abord un dossier dans la liste d'Accès rapide.";
+		ph_alr_01 = "Sélectionnez un dossier de la liste d'Accès rapide pour supprimer.";
+		ph_alr_02 = "Aucun élément sélectionné pour supprimer.";
+		ph_alr_03a = "Le dossier <em>'";
+		ph_alr_03b = "'</em> ne peut pas être supprimé car certains fichiers sont probablement utilisés.";
+		ph_alr_04 = "Certaines vidéos de ce dossier ne peuvent pas être définitivement supprimées car elles sont utilisées, elles seront supprimées lors de la fermeture de l'application.";
+		ph_alr_05 = "Le dossier de destination et la source sont les mêmes.";
+		ph_alr_tqa = "Pas plus conseils au lancement.";
+		ph_alr_tqb = "+ Conseil ";
+		ph_alc_01a = " archives et ";
+		ph_alc_01b = " dossiers (et tout son contenu) ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
+		ph_alc_02 = " archives ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
+		ph_alc_03 = "Tu es sûr?";
+		ph_dato_no = "DÉFAIRE (aucune action à défaire)";
+		ph_dato_erasefoldtag = "DÉFAIRE (supprimer étiquette du dossier)";
+		ph_dato_erasearchtag = "DÉFAIRE (supprimer étiquette du archive)";
+		ph_dato_tagarch = "DÉFAIRE (étiqueter archive)";
+		ph_dato_tagfold = "DÉFAIRE (étiqueter dossier)";
+		ph_dato_move = "DÉFAIRE (déplacer)";	
+		ph_dato_copy = "DÉFAIRE (copier)";		
+		ph_dato_renfold = "DÉFAIRE (renommer dossier)";		
+		ph_dato_renarch = "DÉFAIRE (renommer archive)";		
+
+	}
+
+
 	// Tips
-	tip = [
-		"<b>Tip</b>: To enter in a folder press and hold mouse button over the folder's name until it enters.",
-		"<b>Tip</b>: Images can be launched in two ways: Pressing and holding mouse button in the name of the image will launch it in the system's default viewer, otherwise, clicking in the image will launch the internal viewer of this program.",
-		"<b>Tip</b>: If is the first time you launch Tagstoo, will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no more load demo tags when new database created uncheck the checkbox in the options menu.",
-		"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
-		"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
-		"<b>Tip</b>: At the current application development stage, depending on computer, manage folders with more than few hundred of elements can be heavy and slow when load.",
-		"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
-		"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
-		"<b>Tip</b>: Sometimes dependig the action you do (or if you move somethin using external program) the view can not be actialized, to actualize it simply press refresh icons (arrows in circle).",
-		"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and you are ready."
 
-	]
+	if (language == "EN") {
+		tip = [
+			"<b>Tip</b>: To enter in a folder press and hold mouse button over the folder's name until it enters.",
+			"<b>Tip</b>: Images can be launched in two ways: holding down the mouse button in the name of the image will start in the default system viewer, otherwise clicking on the image will start the internal viewer of the program.",
+			"<b>Tip</b>: If is the first time you launch Tagstoo, it will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no longer load demo tags when a new database is created uncheck the checkbox in the options menu.",
+			"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
+			"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
+			"<b>Tip</b>: At the current application's development stage, depending on computer, manage folders with more than few hundred of elements can be heavy and slow when load.",
+			"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
+			"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
+			"<b>Tip</b>: Sometimes depending the action you do (or if you move somethin using external program) the view cannot be actualized, to actualize it simply press refresh icons (arrows in circle).",
+			"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and will be ready."
 
-	window.tipquest = "<br><br><input type='checkbox' id='mostrartips' onclick='mostrartips()'><span>Don't show more Tips at launch.</span><div id='nexttip'><a class='buttontip' onclick='shownexttip()'>Next Tip <span style='font-weight:normal'>&#x21D2</span></a></div>"; // las funciones mostrartips() y shownexttip() están definidas en popups.js (al final) la de mostrartips() además tambien esta definida abajo
+		]
+	} else if (language == "ES"){
+
+		tip = [
+			"<b>Tip</b>: Para entrar en una carpeta, mantenga presionado el botón del ratón sobre el nombre de la carpeta hasta que entre.",
+			"<b>Tip</b>: Las imágenes se pueden lanzar de dos maneras: manteniendo presionado el botón del ratón en el nombre de la imagen se iniciará en el visor por defecto del sistema, de lo contrario, haciendo clic en la imagen se iniciará el visor interno del programa.",
+			"<b>Tip</b>: Si es la primera vez que inicia Tagstoo, se habrán cargado las etiquetas de demostración en la parte inferior, puede modificarlas o eliminarlas o agregar nuevas a su conveniencia, para no cargar etiquetas de demostración cuando se crea una nueva base de datos desmarque la casilla de verificación en el menú de opciones.",
+			"<b>Tip</b>: Haga doble clic en una carpeta de la izquierda para seleccionar, luego al pulsar el botón de pegar, las carpetas y archivos que seleccionó a la derecha se copiarán o moverán a esta carpeta dependiendo de lo que haya seleccionado en el interruptor de copia/corta.",
+			"<b>Tip</b>: Puede seleccionar varios elementos al mismo tiempo presionando shift mientras selecciona.",
+			"<b>Tip</b>: En la fase actual de desarrollo de la aplicacion, dependiendo de la computadora, administrar carpetas con más de unos pocos cientos de elementos puede ser pesado y lento cuando se carga.",
+			"<b>Tip</b>: En la búsqueda puedes agregar todos los campos de entrada que necesites para que puedas construir fácilmente búsquedas como “<em>Buscar archivos que tengan (tag1 + tag2 + tag7 + tag8) o (tag1 + tag2 + tag6 + tag9) o (tag4 + tag6) + tag9) pero no tienen (tag10) y (tag11).</em>”",
+			"<b>Tip</b>: Si el nombre de la etiqueta es largo, elija una forma de etiqueta que tenga esquinas afiladas para que se ajuste mejor.",
+			"<b>Tip</b>: A veces dependiendo de la acción que hagas (o si mueves algo usando un programa externo) la vista no se puede actualizar, actualizarla simplemente pulsa los iconos de actualización (flechas en círculo).",
+			"<b>Tip</b>: Debido a que hay versiones de Tagstoo para varios sistemas (Windows, Linux y macOS), puede administrar los mismos datos, en una unidad externa, por ejemplo, desde diferentes sistemas alternativamente: Exporte los datos a un archivo e importerlo donde lo necesite y estarán listos."
+
+		]
+
+	} else if (language == "FR") {
+
+		tip = [
+			"<b>Tip</b>: Pour entrer dans un dossier, maintenez le bouton de la souris sur le nom du dossier jusqu'à ce qu'il entre.",
+			"<b>Tip</b>: Les images peuvent être lancées de deux façons: en maintenant enfoncé le bouton de la souris au nom de l'image, on commencera dans la visionneuse système par défaut, sinon le fait de cliquer sur l'image va démarrer la visionneuse interne du programme.",
+			"<b>Tip</b>: Si c'est la première fois que vous démarrez Tagstoo, les étiquettes de démonstration ont été chargées en bas, vous pouvez les modifier ou les supprimer ou en ajouter de nouvelles à votre convenance, pour ne pas charger les balises de démonstration lorsqu'une nouvelle base de données est créée, décochez la case cochez en le menu d'option.",
+			"<b>Tip</b>: Double-cliquez sur un dossier à gauche pour être sélectionné, puis, lorsque vous appuyez sur le bouton de collage, les dossiers et les fichiers que vous avez sélectionnés dans la droite seront copiés ou déplacés dans ce dossier en fonction de ce que vous avez sélectionné dans le commutateur copie/coupe.",
+			"<b>Tip</b>: Vous pouvez sélectionner plusieurs éléments en même temps en appuyant sur shift tout en sélectionnant.",
+			"<b>Tip</b>: À la phase de développement de l'application actuelle, selon l'ordinateur, gérer les dossiers avec plus de quelques centaines d'éléments peut être lourd et lent lors de la charge.",
+			"<b>Tip</b>: Dans la recherche, vous pouvez ajouter tous les champs de saisie dont vous avez besoin afin que vous puissiez construire facilement des recherches comme “<em>Rechercher des fichiers qui ont (tag1 + tag2 + tag7 + tag8) ou (tag1 + tag2 + tag6 + tag9) ou (tag4 + tag6 + tag9) mais n'ont pas (tag10) et (tag11).</em>”",
+			"<b>Tip</b>: Si votre nom de balise est long, choisissez une forme d'étiquette qui a des angles vifs pour mieux l'adapter.",
+			"<b>Tip</b>: Parfois, selon l'action que vous faites (ou si vous déplacez quelque chose en utilisant un programme externe), la vue ne peut pas être actualisée, pour l'actualiser appuyez simplement sur les icônes de rafraîchissement (flèches en cercle).",
+			"<b>Tip</b>: Étant donné qu'il existe des versions de Tagstoo pour plusieurs systèmes (Windows, Linux et MacOS), vous pouvez gérer les mêmes données, par exemple sur un lecteur externe, par exemple à partir de différents systèmes: Exportez les données vers un fichier et importez-les là où vous en avez besoin et elles seront prêt."
+
+		]
+
+	}
+
+
+	window.tipquest = "<br><br><input type='checkbox' id='mostrartips' onclick='mostrartips()'><span>" + ph_alr_tqa + "</span><div id='nexttip'><a class='buttontip' onclick='shownexttip()'>" + ph_alr_tqb + "<span style='font-weight:normal'>&#x21D2</span></a></div>"; // las funciones mostrartips() y shownexttip() están definidas en popups.js (al final) la de mostrartips() además tambien esta definida abajo
 
 	//tips localstorage?
 	if (!localStorage["mostrartips"]){
@@ -1035,7 +1211,7 @@ window.parent.$("#gotofolderselect").on('click', function() {
 		readDirectory(foldertogo);
 	}
 	else {
-		alertify.alert("Select a folder from Fast access list to go.")
+		alertify.alert(ph_alr_00)
 	}
 
 });
@@ -1101,7 +1277,7 @@ window.parent.$("#removefolderselect").on('click', function() {
 
 	}
 	else {
-		alertify.alert("Select a folder from Fast access list to remove.")
+		alertify.alert(ph_alr_01)
 	}
 
 });
@@ -1202,7 +1378,7 @@ window.parent.$("#viewmode").on('change', function() {
 
 
 // Select Order
-window.parent.$("#order").on('change', function() {
+window.parent.$(".order").on('change', function() {
 
 	order = $(this)["0"].value;
 	previousornext = "refresh";
@@ -1234,7 +1410,7 @@ window.parent.$("#delete").on('click', function() {
 
 	if (!todeleteelements) {
 
-		alertify.alert("No elements selected to delete.")
+		alertify.alert(ph_alr_02)
 	}
 	else {
 
@@ -1266,9 +1442,9 @@ window.parent.$("#delete").on('click', function() {
 
 		if (todeletearchives.length > 0 && todeletefolders.length > 0) {
 
-			alertify.confirm(todeletearchives.length + " files and " + todeletefolders.length + " folders (and all it´s contents) are selected to delete. There is no undo for delete. Are you sure?", function (e) {
+			alertify.confirm(todeletearchives.length + ph_alc_01a + todeletefolders.length + ph_alc_01b, function (e) {
 				if (e) {
-					$("#folderreadstatus").html("Deleting ...");
+					$("#folderreadstatus").html(ph_deleting);
 					$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 					setTimeout(function() { //porque sino no escribe el "Deleting ..."
 						deleteit()
@@ -1277,9 +1453,9 @@ window.parent.$("#delete").on('click', function() {
 		}
 		else if (todeletearchives.length > 0 && todeletefolders.length == 0) {
 
-			alertify.confirm( todeletearchives.length + " files are selected to delete. There is no undo for delete. Are you sure?", function (e) {
+			alertify.confirm( todeletearchives.length + ph_alc_02, function (e) {
 				if (e) {
-					$("#folderreadstatus").html("Deleting ...");
+					$("#folderreadstatus").html(ph_deleting);
 					$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 					setTimeout(function() { //porque sino no escribe el "Deleting ..."
 						deleteit()
@@ -1289,9 +1465,9 @@ window.parent.$("#delete").on('click', function() {
 		}
 		else if (todeletearchives.length == 0 && todeletefolders.length > 0) {
 
-			alertify.confirm(todeletefolders.length + " folders (and all it´s contents) are selected to delete. There is no undo for delete. Are you sure?", function (e) {
+			alertify.confirm(todeletefolders.length + ph_alc_01b, function (e) {
 				if (e) {
-					$("#folderreadstatus").html("Deleting ...");
+					$("#folderreadstatus").html(ph_deleting);
 					$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 					setTimeout(function() { //porque sino no escribe el "Deleting ..."
 						deleteit()
@@ -1322,7 +1498,7 @@ window.parent.$("#delete").on('click', function() {
 			numberofelements = previousnumberofelements - numberofelementtodelete;
 
 
-  			$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+  			$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 				undo.class = "";
 
     		// antes de empezar a borrar nada hay que recorrer las subcarpetas recursivamente para tener un listado de ellas y poder borrarlas de la bd
@@ -1495,7 +1671,7 @@ window.parent.$("#delete").on('click', function() {
 				try {
 				fs.removeSync(driveunit + rootdirectory + todeletefolders[d].children[1].attributes[1].value);
 				} catch (err) {
-					alertify.alert("Folder <em>'" + driveunit + rootdirectory + todeletefolders[d].children[1].attributes[1].value +  "'</em> not possible to delete because probably some file is in use.")
+					alertify.alert(ph_alr_03a + driveunit + rootdirectory + todeletefolders[d].children[1].attributes[1].value +  ph_alr_03b)
 				}
 
 			});
@@ -1856,8 +2032,8 @@ window.parent.$("#delete").on('click', function() {
 						if (viewmode==1){
 							$(".ui-selecting, ui-selected").next().remove(); // para los <br>
 						}
-						$(".ui-selecting, ui-selected").remove();
-						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length - todeletefolders.length + " elements in folder.");
+						$(".ui-selecting, ui-selected").remove();						
+						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length - todeletefolders.length + ph_elementsinfolder);						
 						$('.exploelement, .exploelementfolderup').css("filter","none");						
 
 					}, timetowaitf);
@@ -1872,7 +2048,7 @@ window.parent.$("#delete").on('click', function() {
 							$(".ui-selecting, ui-selected").next().remove(); // para los <br>
 						}						
 						$(".ui-selecting, ui-selected").remove();						
-						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length + " elements in folder.");
+						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length + ph_elementsinfolder);			
 						$('.exploelement, .exploelementfolderup').css("filter","none");
 
 					}, timetowaitf);
@@ -1907,7 +2083,7 @@ window.parent.$('#info').on('click', function() {
 
 function readDirectory (dirtoread) {
 
-	$("#folderreadstatus").html("Reading folder ...");
+	$("#folderreadstatus").html(ph_readingfolder);
 	$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 	$("#location").html(dirtoread);
 	$("#location").css("word-break","break-word")
@@ -2079,7 +2255,7 @@ function readDirectory (dirtoread) {
 			};
 
 			if (notdeletedvideoerror=="yes"){
-				alertify.alert("Some video in this folder not definitively deleted because they are in use, it will be deleted when application close.")
+				alertify.alert(ph_alr_04)
 			}
 
 			if (directorycontent.length == 1) {
@@ -2537,7 +2713,7 @@ function drawDirectoryFolders (viewmode, order) {
 
 			var folderelements = Object.size(this.arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
 
-			t += '<div class="exploelement folder"><div class="imgmode1 folder"></div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ' in folder</div><div class="explosize"><span class="placehold">File Size</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">(Tags Here)</span>&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span>&nbsp;</div></div><br>';
+			t += '<div class="exploelement folder"><div class="imgmode1 folder"></div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">' + ph_tagshere + '</span>&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span>&nbsp;</div></div><br>';
 			// los tag se separan y presentan en divs aparte en la función drawdirectoryviewtags()
 
 		});
@@ -2553,7 +2729,7 @@ function drawDirectoryFolders (viewmode, order) {
 
 			var folderelements = Object.size(this.arorfo); //el tamaño del objeto arorfo que contiene el numero de subelementos en una carpeta
 
-			t += '<div class="exploelement folder"><div class="imgmode'+viewmode+' folder">&nbsp;</div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ' in folder</div><div class="explosize"><span class="placehold">File Size</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">(Tags Here)</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div>';
+			t += '<div class="exploelement folder"><div class="imgmode'+viewmode+' folder">&nbsp;</div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">' + ph_tagshere + '</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
 			// los tag se separan y presentan en divs aparte en la función drawdirectoryviewtags()
 
 		});
@@ -2626,7 +2802,7 @@ function drawDirectoryArchives (viewmode, order) {
 
 			}
 
-			t += '<div class="exploelement archive"><div class="imgmode1 ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">(Tags Here)</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div><br>';
+			t += '<div class="exploelement archive"><div class="imgmode1 ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">' + ph_tagshere + '</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div><br>';
 
 		});
 
@@ -2676,7 +2852,7 @@ function drawDirectoryArchives (viewmode, order) {
 
 			}
 
-			t += '<div class="exploelement archive"><div class="imgmode'+viewmode+' ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">&nbsp' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">(Tags Here)</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div>';
+			t += '<div class="exploelement archive"><div class="imgmode'+viewmode+' ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">&nbsp' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">' + ph_tagshere + '</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
 
 		});
 
@@ -2693,8 +2869,8 @@ function drawDirectoryAfter() {
 	$('#directoryview').append(t);
 
 	window.parent.$("#viewmodenumber").html(viewmode + ".");
-
-	$("#folderreadstatus").html($('.exploelement').length + " elements in folder.");
+	
+	$("#folderreadstatus").html($('.exploelement').length + ph_elementsinfolder);	
 
 	// Estilos para las diferentes vistas
 
@@ -3880,7 +4056,7 @@ function elemetstagdelete() {
 
 									var treeelementtagsinview = "";
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (erase folder tag)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
 									undo.class = "delete folder tag";
 									undo.deltaggfold.foldid = updatefolder.folderid;
 									undo.deltaggfold.tags = idtagsoriginales;
@@ -4040,7 +4216,7 @@ function elemetstagdelete() {
 
 									var treeelementtagsinview = "";
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (erase folder tag)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
 									undo.class = "delete folder tag";
 									undo.deltaggfold.foldid = "";
 									undo.deltaggfold.tags = idtagsoriginales;
@@ -4145,7 +4321,7 @@ function elemetstagdelete() {
 
 												var treeelementtagsinview = "";
 
-												$("#undo", window.parent.document).attr("data-tooltip", "UNDO (erase folder tag)");
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
 												undo.class = "delete folder tag";
 												undo.deltaggfold.foldid = updatefolder.folderid;
 												undo.deltaggfold.tags = idtagsoriginales;
@@ -4234,7 +4410,7 @@ function elemetstagdelete() {
 
 			if (isfolderorarchive == "archive") {
 
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (erase archive tag)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasearchtag);
 				undo.class = "delete archive tag";
 				undo.deltaggfile = []; // para dejar todos los valores a 0 y no se crucen algunos datos
 				undo.deltaggfile.tags = idtagsoriginales;
@@ -4898,7 +5074,7 @@ function interactions() {
 
 												// console.log("datos nuevo fichero añadidos");
 
-												$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag archive)");
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagarch);
 												undo.class = "tag archive";
 												undo.taggaarch.archid = event.target.result;
 												undo.taggaarch.archive = fileupdate.filename;
@@ -5055,7 +5231,7 @@ function interactions() {
 
 										// console.log("datos nuevo fichero añadidos");
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag archive)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagarch);
 										undo.class = "tag archive";
 										undo.taggaarch.archid = event.target.result;
 										undo.taggaarch.archive = fileupdate.filename;
@@ -5136,7 +5312,7 @@ function interactions() {
 
 										// console.log("datos nuevo fichero añadidos");
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag archive)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagarch);
 										undo.class = "tag archive";
 										undo.taggaarch.archid = event.target.result;
 										undo.taggaarch.archive = fileupdate.filename;
@@ -5295,7 +5471,7 @@ function interactions() {
 
 										isnewtag = "no"; // no se añadirá
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagfold);
 										undo.class = "tag folder";
 										undo.taggfold.foldid = folderupdate.folderid;
 										undo.taggfold.tagid = taganadir;
@@ -5336,7 +5512,7 @@ function interactions() {
 									// console.log("tag añadida!");
 									var treviewvisible = "no";
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagfold);
 									undo.class = "tag folder";
 									undo.taggfold.foldid = folderupdate.folderid;
 									undo.taggfold.tagid = taganadir;
@@ -5479,7 +5655,7 @@ function interactions() {
 
 								// console.log("tag añadida!");
 
-								$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder)");
+								$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagfold);
 								undo.class = "tag folder";
 								undo.taggfold.foldid = event.target.result; //el nuevo id de la carpeta
 								undo.taggfold.tagid = taganadir;
@@ -5649,7 +5825,7 @@ function interactions() {
 
 							var arorfo = fs.readdirSync(driveunit + targetfolder);
 							var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
-							$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + " in folder";
+							$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + ph_infolder;
 
 						}
 					})
@@ -5667,15 +5843,15 @@ function interactions() {
 
 						$(ui.helper).remove();  //destroy clone
 
-						alertify.confirm("Are you sure?", function (e) {
+						alertify.confirm(ph_alc_03, function (e) {
 
 						if (!e) {$("#dirviewrefresh").trigger( "click" );}
 						if (e) {
 
-							$("#folderreadstatus").html("Moving ...");
+							$("#folderreadstatus").html(ph_moving);
 							$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 
-							$("#undo", window.parent.document).attr("data-tooltip", "UNDO (move)");
+							$(".undo", window.parent.document).attr("data-tooltip", ph_dato_move);
 							undo.class = "move";
 							undo.move.rootfiles = droppedarchive;
 							undo.move.rootfolders = droppedfolder;
@@ -6057,8 +6233,8 @@ function interactions() {
 																}
 
 															});
-
-															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+															
+															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);										
 															$('.exploelement, .exploelementfolderup').css("filter","none");
 															updatedestitems();
 															$('.directoryonhover').removeClass('directoryonhover');
@@ -6066,8 +6242,8 @@ function interactions() {
 														}, timetowait);
 
 													} else {
-
-														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+														
+														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);														
 														$('.exploelement, .exploelementfolderup').css("filter","none");
 														updatedestitems();
 														$('.directoryonhover').removeClass('directoryonhover');	
@@ -6279,8 +6455,8 @@ function interactions() {
 																	}
 
 																});
-
-																$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+																
+																$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);									
 																$('.exploelement, .exploelementfolderup').css("filter","none");
 																updatedestitems();
 																$('.directoryonhover').removeClass('directoryonhover');
@@ -6288,8 +6464,8 @@ function interactions() {
 															}, timetowait);
 
 														} else {
-
-															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");								
+															
+															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);										
 															$('.exploelement, .exploelementfolderup').css("filter","none");
 															updatedestitems();
 															$('.directoryonhover').removeClass('directoryonhover');
@@ -6554,8 +6730,8 @@ function interactions() {
 																}
 
 															});
-
-															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+															
+															$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);										
 															$('.exploelement, .exploelementfolderup').css("filter","none");
 															updatedestitems();
 															$('.directoryonhover').removeClass('directoryonhover');
@@ -6563,8 +6739,8 @@ function interactions() {
 														}, timetowait);
 
 													} else {
-
-														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+														
+														$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);														
 														$('.exploelement, .exploelementfolderup').css("filter","none");
 														updatedestitems();
 														$('.directoryonhover').removeClass('directoryonhover');
@@ -6618,7 +6794,8 @@ function interactions() {
 														}
 
 													});
-													$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+
+													$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);													
 													$('.exploelement, .exploelementfolderup').css("filter","none");
 													updatedestitems();
 													$('.directoryonhover').removeClass('directoryonhover');
@@ -6626,7 +6803,8 @@ function interactions() {
 												}, timetowait);
 
 											} else {
-												$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + " elements in folder.");
+												
+												$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);												
 												$('.exploelement, .exploelementfolderup').css("filter","none");
 												updatedestitems();
 												$('.directoryonhover').removeClass('directoryonhover');
@@ -6646,7 +6824,7 @@ function interactions() {
 
 					else {
 
-						alertify.alert("Same origin and destination folder.");
+						alertify.alert(ph_alr_05);
 
 						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 						readDirectory(dirtoexec);
@@ -6663,15 +6841,15 @@ function interactions() {
 
 						$(ui.helper).remove();  //destroy clone
 
-						alertify.confirm("Are you sure?", function (e) {
+						alertify.confirm(ph_alc_03, function (e) {
 
 							if (!e) {$("#dirviewrefresh").trigger( "click" );}
 							if (e) {
 
-								$("#folderreadstatus").html("Copying ...");
+								$("#folderreadstatus").html(ph_copying);
 								$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 
-								$("#undo", window.parent.document).attr("data-tooltip", "UNDO (copy)");
+								$(".undo", window.parent.document).attr("data-tooltip", ph_dato_copy);
 								undo.class = "copy";
 								undo.copy.rootfiles = droppedarchive;
 								undo.copy.rootfolders = droppedfolder;
@@ -6711,8 +6889,8 @@ function interactions() {
 														}
 
 													});
-
-													$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+													
+													$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);		
 													$('.exploelement, .exploelementfolderup').css("filter","none");
 													updatedestitems();
 													$('.directoryonhover').removeClass('directoryonhover');
@@ -6720,8 +6898,8 @@ function interactions() {
 												}, timetowait);
 
 											} else {
-
-												$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+												
+												$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);			
 												$('.exploelement, .exploelementfolderup').css("filter","none");
 												updatedestitems();
 												$('.directoryonhover').removeClass('directoryonhover');
@@ -7298,8 +7476,8 @@ function interactions() {
 																flagg++;
 																if (flagg == droppedarchive.length && refrescohecho1=="no") { // para que haga el refresco tras mover la última carpeta
 
-																	refrescohecho1 = "si";
-																	$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																	refrescohecho1 = "si";														
+																	$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);										
 																	$('.exploelement, .exploelementfolderup').css("filter","none");
 																	updatedestitems();
 																	$('.directoryonhover').removeClass('directoryonhover');
@@ -7450,8 +7628,8 @@ function interactions() {
 																		}
 
 																	});
-
-																	$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																	
+																	$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);
 																	$('.exploelement, .exploelementfolderup').css("filter","none");
 																	updatedestitems();
 																	$('.directoryonhover').removeClass('directoryonhover');
@@ -7459,8 +7637,8 @@ function interactions() {
 																}, timetowait);
 
 															} else {
-
-																$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+																
+																$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);											
 																$('.exploelement, .exploelementfolderup').css("filter","none");
 																updatedestitems();
 																$('.directoryonhover').removeClass('directoryonhover');
@@ -7498,8 +7676,8 @@ function interactions() {
 														timetowait = 0;
 													}
 													setTimeout(function() {
-
-														$("#folderreadstatus").html(numerooriginalelementos + " elements in folder.");
+														
+														$("#folderreadstatus").html(numerooriginalelementos + ph_elementsinfolder);	
 														$('.exploelement, .exploelementfolderup').css("filter","none");
 														updatedestitems();
 														$('.directoryonhover').removeClass('directoryonhover');
@@ -7530,7 +7708,7 @@ function interactions() {
 
 					else {
 
-						alertify.alert("Same origin and destination folder.");
+						alertify.alert(ph_alr_05);
 
 						previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 						readDirectory(dirtoexec);
@@ -8280,7 +8458,7 @@ function activateeditname(item) {
 									if ( err ) console.log('ERROR: ' + err);
 									});
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename folder)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_renfold);
 									undo.class = "rename folder";
 									undo.rename.folder= dirtoexec;
 									undo.rename.original = nombreoriginal;
@@ -8410,7 +8588,7 @@ function activateeditname(item) {
 
 							}
 
-							$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename folder)");
+							$(".undo", window.parent.document).attr("data-tooltip", ph_dato_renfold);
 							undo.class = "rename folder";
 							undo.rename.folder= dirtoexec;
 							undo.rename.original = nombreoriginal;
@@ -8620,7 +8798,7 @@ function activateeditname(item) {
 											}
 										});
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename archive)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_renarch);
 										undo.class = "rename archive";
 										undo.rename.folder= dirtoexec;
 										undo.rename.original = nombreoriginal;
@@ -8657,7 +8835,7 @@ function activateeditname(item) {
 									});
 
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename archive)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_renarch);
 									undo.class = "rename archive";
 									undo.rename.folder= dirtoexec;
 									undo.rename.original = nombreoriginal;
@@ -8695,7 +8873,7 @@ function activateeditname(item) {
 								}
 							});
 
-							$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename archive)");
+							$(".undo", window.parent.document).attr("data-tooltip", ph_dato_renarch);
 							undo.class = "rename archive";
 							undo.rename.folder= dirtoexec;
 							undo.rename.original = nombreoriginal;

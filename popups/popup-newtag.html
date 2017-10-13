@@ -28,11 +28,48 @@
 	<title>New tag</title>
 		
 	<script type="text/javascript">
-		$(document).ready(function()
-	    {
+		$(document).ready(function() {
+
+	        language = localStorage["language"];
+
+			if (language == 'EN') {
+				$(".lang_en").css("display", "inline-block");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "none");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "block");
+				$(".lang_es_b").css("display", "none");
+				$(".lang_fr_b").css("display", "none");
+				// para el colorPicker
+				$("#colorPicker").removeClass("l_es");
+				$("#colorPicker").removeClass("l_fr");
+			} else if (language =='ES') {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "inline-block");
+				$(".lang_fr").css("display", "none");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "none");
+				$(".lang_es_b").css("display", "block");
+				$(".lang_fr_b").css("display", "none");
+				// para el colorPicker
+				$("#colorPicker").addClass("l_es");
+				$("#colorPicker").removeClass("l_fr");
+			} else if (language == "FR") {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "inline-block");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "none");
+				$(".lang_es_b").css("display", "none");
+				$(".lang_fr_b").css("display", "block");
+				// para el colorPicker
+				$("#colorPicker").removeClass("l_es");
+				$("#colorPicker").addClass("l_fr");				
+			}
+
+			// para el colorPicker
 			var $box = $('#colorPicker');
 	        $box.tinycolorpicker();
-
 	        box = $box.data("plugin_tinycolorpicker");
 
 		});
@@ -41,19 +78,29 @@
 </head>
 <body>
 
-	<div id="popupbg"></div>
-
 	<!-- <div id="popuptitle"><img src="../img/tagadd.png" alt="" style="margin-top: 1px">ADD NEW TAG</div> -->
-	<div id="popuptitle">ADD NEW TAG</div>
+	<div id="popuptitle">
+		<span class="lang_en">ADD NEW TAG</span>
+		<span class="lang_es">AÑADIR NUEVA ETIQUETA</span>
+		<span class="lang_fr">AJOUTER NOVEAU ÉTIQUETTE</span>
+	</div>
 
 	<br>
 	<hr>
 
-	<div>Select Shape:</div>
+	<div>
+		<span class="lang_en">Select Shape:</span>
+		<span class="lang_es">Seleccionar Forma:</span>
+		<span class="lang_fr">Sélectionnez Forme:</span>
+	</div>
 	<div id="tagforms-wrap"><div id="tagforms"></div></div>
 
 	<div id="selectcolor">
-		<span>Select Color:</span>
+
+		<span class="lang_en">Select Color:</span>
+		<span class="lang_es">Seleccionar Color:</span>
+		<span class="lang_fr">Sélectionnez Couleur:</span>
+
 	    <div id="colorPicker">
 	        <a class="color"><div class="colorInner"></div></a>
 	        <div class="track"></div>
@@ -63,12 +110,16 @@
     </div>
 
 	<div id="selecttext">
-	    <span>Text of the tag:</span>
+	    <span class="lang_en_b">Text of the tag:</span>
+	    <span class="lang_es_b">Texto de la etiqueta:</span>
+	    <span class="lang_fr_b">Texte de étiquette:</span>
 	    <input type="text" id="tagtext">
     </div>
 
     <div id="preview">
-	    <span>Preview:</span>
+	    <span class="lang_en_b">Preview:</span>
+	    <span class="lang_es_b">Vista anticipada:</span>
+	    <span class="lang_fr_b">Prévisualisation:</span>
 		<div id="tagpreview">
 			<div class="tagticket small">&nbsp;</div>
 		</div>
@@ -77,9 +128,17 @@
 	<br />
 	<hr />
 
-	<a class="medium button green" onclick="createnewtag()">Create tag!</a>
+	<a class="medium button green" onclick="createnewtag()">
+		<span class="lang_en">Create tag!</span>
+		<span class="lang_es">¡Crear etiqueta!</span>
+		<span class="lang_fr">Créez étiquette!</span>
+	</a>
 
-	<a class="medium button orange close" onclick="cerrar()">Close</a>
+	<a class="medium button orange close" onclick="cerrar()">
+		<span class="lang_en">Close</span>
+		<span class="lang_es">Cerrar</span>
+		<span class="lang_fr">Fermer</span>
+	</a>
 
 	<script>
 		newtagpreload();

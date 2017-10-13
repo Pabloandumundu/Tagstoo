@@ -5,6 +5,10 @@
 	background: linear-gradient(#ddd, #ffffff);
 }
 
+#languageselect {
+	background-color: #ececde;
+}
+
 
 
 /* Explore y Search */
@@ -189,8 +193,8 @@ input[type="radio"]:checked + label span.radio::after {
 	filter: grayscale(85%) brightness(101%);
 }
 
-#popupbg {
-	filter: grayscale(85%);
+#popup {
+	background-image: url(../img/wood_pattern_grey.png);
 }
 
 #popuptitle {

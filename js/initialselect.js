@@ -44,6 +44,147 @@ $(document).ready(function() {
     $('#colorswitch_initial').css("bottom","38px");
   }
 
+
+  if (!localStorage["language"]) { 
+
+    language = "EN";
+    localStorage["language"] = "EN";
+
+  } else {
+
+    language = localStorage["language"];
+    $("#languageselect").val(language);
+  }
+
+
+  $("#languageselect").on('change', function() {
+
+    localStorage["language"] = this.value;
+    language = this.value
+
+    if (language == 'EN') {
+      $(".lang_en").css("display", "inline-block");
+      $(".lang_es").css("display", "none");
+      $(".lang_fr").css("display", "none");
+    } else if (language =='ES') {
+      $(".lang_en").css("display", "none");
+      $(".lang_es").css("display", "inline-block");
+      $(".lang_fr").css("display", "none");
+    } else if (language == "FR") {
+      $(".lang_en").css("display", "none");
+      $(".lang_es").css("display", "none");
+      $(".lang_fr").css("display", "inline-block");
+    }
+
+  });
+
+
+  if (language == 'EN') {
+    $(".lang_en").css("display", "inline-block");
+    $(".lang_es").css("display", "none");
+    $(".lang_fr").css("display", "none");
+  } else if (language =='ES') {
+    $(".lang_en").css("display", "none");
+    $(".lang_es").css("display", "inline-block");
+    $(".lang_fr").css("display", "none");
+  } else if (language == "FR") {
+    $(".lang_en").css("display", "none");
+    $(".lang_es").css("display", "none");
+    $(".lang_fr").css("display", "inline-block");
+  }
+  
+  // frases segun idioma
+
+  if (language == 'EN') {
+
+    ph_cantloaddrive = "(Can't load this drive, select another)";
+    ph_localdisk = "local disk";
+    ph_exterdisk = "external disk";
+    ph_alr_01or02a = "There is no database previously used. You must enter a new name for a new database";
+    ph_alr_02b = ", or select one from the available (previously created) database list.";
+    ph_alr_03 = `Although the program was used previously databases list is empty, this can be due to one of these two cases:<br>
+
+                - The program was updated and the old version was later reused, in this case the only solution is to create a new database and import your last backup into it. As is mentioned in the <a href='popups/popup-info-help_en.html#importantnote' target="_blank">help</a> that is why is important to maintain backup files updated. <br>
+
+                - If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">read this</a></em>`;
+    ph_alr_04 = "The name you chosen already exists, first delete the database that uses this name if you want to use it.";
+    ph_alr_05 = "You must enter a name for the database first.";
+    ph_alr_06 = "An open file dialogue will open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.";
+    ph_alr_07 = "Data successfully imported.";
+    ph_alr_08a = "It appears that <em>'";
+    ph_alr_08b = "'</em> do not have a valid data format, please select a valid data file.";
+    ph_alr_09 = "First you must select a database to which import.";
+    ph_alr_10 = "Database deleted successfully.";
+    ph_alr_11 = "First you must select the database to delete.";
+    ph_alr_12 = "Please select an available drive.";
+    ph_alr_13 = "You must select an existing database or enter a new name for a new database to launch the program.";
+    ph_alc_01a = "Attention, the data in selected database, <em>'";
+    ph_alc_01b = "'</em>, will be overwritten by the content of file <em>'";
+    ph_alc_01c = "'</em>, are you sure?";
+    ph_alc_02a = "Attention, you have selected to delete <em>'";
+    ph_alc_02b = "'</em>, are you sure?";
+
+  } else if (language =='ES') {
+
+    ph_cantloaddrive = "(No se puede cargar esta unidad, seleccione otra)";
+    ph_localdisk = "disco local"
+    ph_exterdisk = "disco externo";
+    ph_alr_01or02a = "Ninguna base de datos utilizada anteriormente. Debe introducir un nuevo nombre para una nueva base de datos";
+    ph_alr_02b = ", o seleccionar uno de la lista de bases de datos disponibles (previamente creadas).";
+    ph_alr_03 = `Aunque el programa se utilizó anteriormente, la lista de bases de datos está vacía, esto puede deberse a uno de estos dos casos:<br>
+
+                - Se actualizó el programa y posteriormente se volvió a utilizar la versión anterior, en este caso la única solución es crear una nueva base de datos e importar su última copia de seguridad en ella. Como se menciona en la <a href='popups/popup-info-help_es.html#importantnote' target="_blank">ayuda</a> por eso es importante mantener actualizados los archivos de copia de seguridad. <br>
+
+                - Si antes de esta versión se ha utilizado la versión 1.4 o anterior de Tagstoo <br>y las bases de datos no aparecen en la lista, no se preocupe, por favor <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">lea esto</a></em>`;
+    ph_alr_04 = "El nombre que ha elegido ya existe, elimine primero la base de datos que utiliza este nombre si desea utilizarlo.";
+    ph_alr_05 = "Debe introducir primero un nombre para la base de datos.";
+    ph_alr_06 = "Se abrirá un cuadro de diálogo de abrir archivo, seleccione el archivo donde se guardó la base de datos, tenga cuidado, los datos de la base de datos seleccionada serán sobrescritos por el contenido del archivo.";
+    ph_alr_07 = "Datos importados correctamente.";
+    ph_alr_08a = "Parece que <em>'";
+    ph_alr_08b = "'</em> no tiene un formato de datos válido, seleccione un archivo de datos válido.";
+    ph_alr_09 = "Primero debe seleccionar una base de datos a la que importar.";
+    ph_alr_10 = "Base de datos eliminada correctamente.";
+    ph_alr_11 = "Primero debe seleccionar la base de datos a eliminar.";
+    ph_alr_12 = "Por favor seleccione una unidad disponible.";
+    ph_alr_13 = "Debe seleccionar una base de datos existente o introducir un nombre nuevo para una nueva base de datos para iniciar el programa.";
+    ph_alc_01a = "Atención, los datos en la base de datos seleccionada, <em>'";
+    ph_alc_01b = "'</em>,  serán sobrescritos por el contenido del archivo <em>'";
+    ph_alc_01c = "'</em>, ¿está seguro?";
+    ph_alc_02a = "Atención, ha seleccionado eliminar <em>'";
+    ph_alc_02b = "'</em>, ¿está seguro?";
+
+  } else if (language =='FR') {
+
+    ph_cantloaddrive = "(Cet appareil ne peut pas être chargé, sélectionnez un autre)";
+    ph_localdisk = "disque local";
+    ph_exterdisk = "disque externe";
+    ph_alr_01or02a = "Aucune base de données utilisée précédemment. Vous devez entrer un nouveau nom pour une nouvelle base de données";
+    ph_alr_02b = ", ou choisissez-en un parmi la liste des bases de données disponibles (précédemment créées).";
+    ph_alr_03 = `Bien que le programme ait été utilisé précédemment, la liste des bases de données est vide, cela peut être dû à l'un de ces deux cas:<br>
+
+                - Le programme a été mis à jour et l'ancienne version a été réutilisée plus tard, dans ce cas, la seule solution est de créer une nouvelle base de données et d'importer votre dernière sauvegarde dans celle-ci. Comme mentionné dans <a href='popups/popup-info-help_fr.html#importantnote' target="_blank">l'aide</a> c'est pourquoi il est important de garder vos fichiers de sauvegarde à jour. <br>
+
+                - Si avant cette version a été utilisée la version 1.4 ou antérieure de Tagstoo <br>et les bases de données n'apparaissent pas dans la liste, ne vous inquiétez pas, <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">lisez ceci</a></em>`;
+    ph_alr_04 = "Le nom que vous avez choisi existe déjà, commencez par supprimer la base de données qui utilise ce nom si vous souhaitez l'utiliser."
+    ph_alr_05 = "Vous devez d'abord entrer un nom pour la base de données.";
+    ph_alr_06 = "Une boîte de dialogue de ouvrir fichier sera ouverte, sélectionnez le fichier où la base de données est enregistrée, faites attention, les données dans la base de données sélectionnée seront écrasées par le contenu du fichier.";
+    ph_alr_07 = "Données importées avec succès.";
+    ph_alr_08a = "Il semble que <em>'";
+    ph_alr_08b = "'</em> n'ont pas de format de données valide, sélectionnez un fichier de données valide.";
+    ph_alr_09 = "D'abord vous devez sélectionner une base de données à laquelle importer.";
+    ph_alr_10 = "Base de données supprimée avec succès.";
+    ph_alr_11 = "Vous devez d'abord sélectionner la base de données à supprimer.";
+    ph_alr_12 = "S'il vous plaît sélectionner un lecteur disponible.";
+    ph_alr_13 = "Vous devez sélectionner une base de données existante ou entrer un nouveau nom pour une nouvelle base de données pour lancer le programme.";
+    ph_alc_01a = "Attention, les données dans la base de données sélectionnée, <em>'";
+    ph_alc_01b = "'</em>, seront écrasé par le contenu du fichier <em>'";
+    ph_alc_01c = "'</em>, êtes-vous sûr?";
+    ph_alc_02a = "Attention, vous avez choisi de supprimer <em>'";
+    ph_alc_02b = "'</em>, êtes-vous sûr?";
+
+  }
+
+
   // si no existe unidad utilizada por última vez, se selecciona la primera disponible
   if (!localStorage["lastuseddriveunit"]) {
 
@@ -139,9 +280,9 @@ $(document).ready(function() {
         if (!currentlydatabaseused) {
 
           if(!listadofiltradodeDB[0]) {
-            alertify.alert("There is not previously used database. You must enter a new name for a new database.")
+            alertify.alert(ph_alr_01or02a + ".");
           } else {
-            alertify.alert("There is not previously used database. You must enter a new name for a new database, or select one from the available (previously created) database list.")
+            alertify.alert(ph_alr_01or02a + ph_alr_02b);
           }
         }
 
@@ -156,11 +297,7 @@ $(document).ready(function() {
             }
 
             if (localStorage["showretroagain"] == "yes") {
-              alertify.alert(`Although the program was used previously databases list is empty, this can be because one of these two cases:<br>
-
-                - You updated the program and laterly you back to use previous version, in this case the only solution is to create new database and import your latest backup to it. As is mentioned in the <a href='popups/popup-info-help.html#importantnote' target="_blank">help</a>, that is why is important to maintain backup files updated. <br>
-
-                - If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">read this</a></em>`)
+              alertify.alert(ph_alr_03);
             }
 
           }
@@ -351,10 +488,10 @@ $(document).ready(function() {
 
               if (drives[i] == ""){
                 t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
-                tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+                tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + ph_localdisk + "</div>";
               } else {
                 t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
-                tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+                tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + ph_exterdisk + "</div>";
               }
 
             });
@@ -506,12 +643,12 @@ $(document).ready(function() {
   					$('#selecteddb').html($("#newdatabasename").val())
   				}
   				else {
-  					alertify.alert("The name you chosen already exists, first delete the database that use this name if you want to use it.")
+  					alertify.alert(ph_alr_04)
   				}
 
   			}
   			else {
-  				alertify.alert("You must enter a name for the database first.")
+  				alertify.alert(ph_alr_05)
   			}
 
   		});
@@ -535,12 +672,12 @@ $(document).ready(function() {
   						$('#selecteddb').html($("#newdatabasename").val())
   					}
   					else {
-  						alertify.alert("The name you chosen already exists, first delete the database that use this name if you want to use it.")
+  						alertify.alert(ph_alr_04)
   					}
 
   				}
   				else {
-  					alertify.alert("You must enter a name for the database first.")
+  					alertify.alert(ph_alr_05)
   				}
 
        		};
@@ -551,7 +688,7 @@ $(document).ready(function() {
 
   			if ($('#selecteddb').html() != "") {
 
-  				alertify.alert("A file open dialog will be open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.", function () {
+  				alertify.alert(ph_alr_06, function () {
 
   					document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
 
@@ -574,7 +711,7 @@ $(document).ready(function() {
   								// console.log("is JSON");
 
   								// y continua
-  								alertify.confirm("Attention, data in selected database, <em>'" + $('#selecteddb').html() + "'</em>,  will be overwritten by the content of file <em>'" + file + "'</em>, are you sure?", function (e) {
+  								alertify.confirm(ph_alc_01a + $('#selecteddb').html() + ph_alc_01b + file + ph_alc_01c, function (e) {
   									if (!e) {
   										x = "You pressed Cancel!";
   										console.log(x);
@@ -652,7 +789,7 @@ $(document).ready(function() {
 
   													idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
 
-  													alertify.alert("Data successfully imported.");
+  													alertify.alert(ph_alr_07);
 
   												}
 
@@ -666,7 +803,7 @@ $(document).ready(function() {
 
   							} catch (e) {
   								console.log("not JSON");
-  								alertify.alert("It appears that <em>'" +file+ "'</em> do not have a valid data format, please select a valid data file.", function () {
+  								alertify.alert(ph_alr_08a + file + ph_alr_08b, function () {
   									document.getElementById('toinportfile').click();
   								});
 
@@ -678,7 +815,7 @@ $(document).ready(function() {
   				});
 
   			} else {
-  				alertify.alert("You must select a database from where to import first.");
+  				alertify.alert(ph_alr_09);
   			}
 
   		}); // --fin importdata onclick
@@ -687,7 +824,7 @@ $(document).ready(function() {
 
   			if ($('#selecteddb').html() != "") {
 
-  				alertify.confirm("Attention, you select to delete <em>'"+$('#selecteddb').html()+"'</em>, are you sure?", function (e) {
+  				alertify.confirm(ph_alc_02a + $('#selecteddb').html() + ph_alc_02b, function (e) {
   					if (!e) {
   						x = "You pressed Cancel!";
   						console.log(x);
@@ -747,7 +884,7 @@ $(document).ready(function() {
   						  	 localStorage.removeItem("currentlydatabaseused");
   						  }
 
-  						  alertify.alert("Database deleted successfully.", function () {
+  						  alertify.alert(ph_alr_10, function () {
   						  	location.reload();
   						  });
 
@@ -757,17 +894,12 @@ $(document).ready(function() {
 
   				});
   			} else {
-  				alertify.alert("You must select a database to delete first.");
+  				alertify.alert(ph_alr_11);
   			}
 
   		});
 
   	};
-
-    request.oncomplete = function(event) {
-
-      console.log("pepinillos")
-    }
 
   }
 
@@ -875,7 +1007,7 @@ $(document).ready(function() {
     		}
 
     		if($("#drivedesc").html() == "()") {
-    			$("#drivedesc").html("(Can't load this drive, select available one.)")
+    			$("#drivedesc").html(ph_cantloaddrive)
     		}
 
     		$("#drivedesc").css("display","inline-block");
@@ -965,10 +1097,10 @@ $(document).ready(function() {
 
           if (drives[i] == ""){
             t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
-            tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+            tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + ph_localdisk + "</div>";
           } else {
             t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
-            tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+            tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + ph_exterdisk + "</div>";
 
           }
 
@@ -1149,7 +1281,7 @@ function starttagstoo() {
 
   if ($("#selecteddrive").html() != "") {
     if ($("#selecteddb").html() != "") {    
-      if($("#drivedesc").html() != "(Can't load this drive, select available one.)") {
+      if($("#drivedesc").html() != ph_cantloaddrive) {
 
         localStorage["colortagstoo"] = window.colortagstoo;
         localStorage["currentlydatabaseused"] = $("#selecteddb").html();
@@ -1173,15 +1305,15 @@ function starttagstoo() {
 
       }
       else {
-        alertify.alert("Please select an available drive.")
+        alertify.alert(ph_alr_12)
       }
 
     } else {
-      alertify.alert("You must select an existing database or enter a new name for a new database to launch the program.")
+      alertify.alert(ph_alr_13)
     }
 
   } else {
-    alertify.alert("Please select an available drive.")
+    alertify.alert(ph_alr_12)
   }
 
 };

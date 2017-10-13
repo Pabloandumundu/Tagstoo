@@ -52,13 +52,48 @@
 			margin-right: 3px;
 		}
 	</style>
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+	        language = localStorage["language"];
+
+			if (language == 'EN') {
+				$(".lang_en").css("display", "inline-block");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "none");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "block");
+				$(".lang_es_b").css("display", "none");
+				$(".lang_fr_b").css("display", "none");
+				} else if (language =='ES') {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "inline-block");
+				$(".lang_fr").css("display", "none");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "none");
+				$(".lang_es_b").css("display", "block");
+				$(".lang_fr_b").css("display", "none");		
+			} else if (language == "FR") {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "inline-block");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "none");
+				$(".lang_es_b").css("display", "none");
+				$(".lang_fr_b").css("display", "block");						
+			}			
+
+		});
+	</script>
 		
 </head>
 <body>
 
-	<div id="popupbg"></div>
-
-	<div id="popuptitle">SELECT DESTINATION FOLDER (Tags? No)</div>
+	<div id="popuptitle">
+		<span class="lang_en">SELECT THE DESTINATION FOLDER (Tags? No)</span>
+		<span class="lang_es">SELECCIONAR LA CARPETA DE DESTINO (Etiquetas? No)</span>
+		<span class="lang_fr">SÉLECT. DOSSIER DE DESTINATION (Étiquettes? Non)</span>
+	</div>
 
 	<br>
 	<hr>
@@ -69,19 +104,38 @@
     </div>
 
 	
-	<p>&larr; Click to expand, double-click to select.</p>
-	<span>Selected drive: </span><span id="selecteddrive"></span><!-- <div id="drivedesc"></div> -->
+	<p>
+		<span class="lang_en_b">&larr; Click to expand, double-click to select.</span>
+		<span class="lang_es_b">&larr; Clic para expandir, doble clic para seleccionar.</span>
+		<span class="lang_fr_b">&larr; Cliquez pour étendre, double-cliquez pour sélectionner.</span>
+	</p>
+	<span class="lang_en">Selected drive: </span>
+	<span class="lang_es">Unidad seleccionada: </span>
+	<span class="lang_fr">Unité sélectionnée: </span>
+	<span id="selecteddrive"></span><!-- <div id="drivedesc"></div> -->
 	<br>
-	<span>Change drive:</span>
-		<select name="unitselect" id="unitselect" form="initialoptions"></select>
-	<div id="selectedfolder" class="searchin">Destination Folder: <div></div></div>
+	<span class="lang_en">Change drive:</span>
+	<span class="lang_es">Cambiar unidad:</span>
+	<span class="lang_fr">Changer l'unité:</span>
+	<select name="unitselect" id="unitselect" form="initialoptions"></select>
+	<span>
+	    <span class="lang_en_b">Destination folder: </span>
+	    <span class="lang_es_b">Carpeta de destino: </span>
+	    <span class="lang_fr_b">Dossier de destination: </span>
+  	</span>
+	<div id="selectedfolder" class="searchin"><div></div></div>
 
 	<br>
 	<br>
 
-	<a class="medium button orange selectfoldbutt" onclick="cerrar()">Close</a>
-	<a class="medium button green selectfoldbutt" id="acceptdestination">Accept</a>
-
+	<a class="medium button orange selectfoldbutt" onclick="cerrar()">
+		<span class="lang_en">Close</span>
+		<span class="lang_es">Cerrar</span>
+		<span class="lang_fr">Fermer</span>
+	</a>
+	<a class="medium button green selectfoldbutt" id="acceptdestination">
+		<!-- se carga el innerhtml del botón dinámicamente (porque es para copiar o para mover) -->
+	</a> 
 	<script>
 		selectfolderactionnotagpreload();
 	</script>

@@ -67,7 +67,24 @@ $(document).ready(function () {
 	undo.copy.addedfolderids = [];
 
 
-	window.parent.$("#undo").on('click', function() {
+	language = localStorage["language"];
+"UNDO (not undo action)"
+	if (language == 'EN') {
+
+		ph_dato_no = "UNDO (not action to undo)";
+
+	} else if (language =='ES') {
+
+		ph_dato_no = "DESHACER (no hay acción para deshacer)";
+
+	} else if (language =='FR') {
+
+		ph_dato_no = "DÉFAIRE (aucune action à défaire)";
+
+	}
+
+
+	window.parent.$(".undo").on('click', function() {
 
 		if (undo.class != "") {
 
@@ -204,7 +221,7 @@ $(document).ready(function () {
 
 								trans2.oncomplete = function(event) {
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 									undo.class == "";
 									elementstagsorder(); // activa posibilidad de cambiar orden en tags
 									elemetstagdelete(); // activa posibilidad de borrar tags
@@ -213,7 +230,7 @@ $(document).ready(function () {
 								
 							} else { // si no hay que actualizar visual
 
-								$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+								$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 								undo.class == "";
 
 							}
@@ -350,7 +367,7 @@ $(document).ready(function () {
 
 										trans2.oncomplete = function(event) {
 
-											$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");	
+											$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);	
 											undo.class == "";
 											elementstagsorder(); // activa posibilidad de cambiar orden en tags
 											elemetstagdelete(); // activa posibilidad de borrar tags
@@ -358,7 +375,7 @@ $(document).ready(function () {
 										}								
 
 									} else { // si no hay que actualizar visual
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 										undo.class == "";
 
 									}
@@ -468,7 +485,7 @@ $(document).ready(function () {
 
 									trans2.oncomplete = function(event) {
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 									
 
 										undo.class == "";
@@ -481,7 +498,7 @@ $(document).ready(function () {
 
 								 else { //si no hay que actualizar visual
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 									
 
 									undo.class == "";
@@ -648,7 +665,7 @@ $(document).ready(function () {
 
 						});
 
-						$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+						$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 						undo.class == "";
 
 					}
@@ -803,7 +820,7 @@ $(document).ready(function () {
 
 						});
 
-						$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+						$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 						undo.class = "";
 
 					}
@@ -849,7 +866,7 @@ $(document).ready(function () {
 
 								activateeditname($(".explofile:eq("+i+") span"));
 
-								$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");							
+								$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);							
 								undo.class = "";
 
 							}
@@ -941,7 +958,7 @@ $(document).ready(function () {
 
 										activateeditname($(".explofile:eq("+i+") span"));
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");						
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);						
 										undo.class = "";
 
 									}
@@ -1059,7 +1076,7 @@ $(document).ready(function () {
 
 					});
 
-					$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+					$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 					undo.class = "";
 
 					// Ahora se mira si el directoryview que esta en la vista es el del directorio cambiado y si es así se refresca con el del nombre cambiado
@@ -1148,7 +1165,7 @@ $(document).ready(function () {
 
 							activateeditname($(".explofile:eq("+i+") span"));
 
-							$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+							$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 							undo.class = "";
 
 						}
@@ -1453,7 +1470,7 @@ $(document).ready(function () {
 
 				}
 
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 				undo.class="";
 
 				break; //--fin if class "tag archive"
@@ -1824,7 +1841,7 @@ $(document).ready(function () {
 
 				}
 
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 				undo.class="";
 
 
@@ -2736,7 +2753,7 @@ $(document).ready(function () {
 
 				}
 
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 				undo.class="";
 
 				break; //--fin if class "tag folder and subelements")
@@ -3412,7 +3429,7 @@ $(document).ready(function () {
 
 
 				setTimeout(function(){ readDirectory(dirtoexec)},  1000);
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 				undo.class = "";
 
 
@@ -3653,7 +3670,7 @@ $(document).ready(function () {
 
 				// actualizar visual
 
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 				undo.class = "";
 
 				setTimeout(function(){ 
@@ -3693,7 +3710,7 @@ $(document).ready(function () {
 					}
 
 				},  1000);
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 				undo.class = "";
 
 				break; // -- fin undo copy

@@ -28,6 +28,40 @@
 
 	<link href="../css/jqueryFileTree.css" rel="stylesheet" type="text/css">
 
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+	        language = localStorage["language"];
+
+			if (language == 'EN') {
+				$(".lang_en").css("display", "inline-block");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "none");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "block");
+				$(".lang_es_b").css("display", "none");
+				$(".lang_fr_b").css("display", "none");
+				} else if (language =='ES') {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "inline-block");
+				$(".lang_fr").css("display", "none");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "none");
+				$(".lang_es_b").css("display", "block");
+				$(".lang_fr_b").css("display", "none");		
+			} else if (language == "FR") {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "inline-block");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "none");
+				$(".lang_es_b").css("display", "none");
+				$(".lang_fr_b").css("display", "block");						
+			}			
+
+		});
+	</script>
+
 	<style>
 		#treeview {
 			top:0;
@@ -54,11 +88,13 @@
 	</style>
 
 </head>
-<body>
+<body>	
 
-	<div id="popupbg"></div>
-
-	<div id="popuptitle">SELECT FOLDER TO SEARCH IN</div>
+	<div id="popuptitle">
+		<span class="lang_en">SELECT FOLDER TO SEARCH IN</span>
+		<span class="lang_es">SELECCIONAR PARA BUSCAR EN</span>							 
+		<span class="lang_fr">SÉLECTIONNEZ POUR CHERCHER DANS</span>
+	</div>
 
 	<br>
 	<hr>
@@ -68,15 +104,36 @@
 
     </div>
 
-	<p>&larr; Click to expand, double-click to select.</p>
-	<div id="searchin" class="searchin">Search in: <div></div></div>
+	<p>
+		<span class="lang_en_b">&larr; Click to expand, double-click to select.</span>
+		<span class="lang_es_b">&larr; Clic para expandir, doble clic para seleccionar.</span>
+		<span class="lang_fr_b">&larr; Cliquez pour étendre, double-cliquez pour sélectionner.</span>
+	</p>
+	<span>
+	    <span class="lang_en_b">Search in: </span>
+	    <span class="lang_es_b">Buscar en: </span>
+	    <span class="lang_fr_b">Chercher dans: </span>
+  	</span>
+	<div id="searchin" class="searchin"><div></div></div>
 
 	<br>
 	<br>
 
-	<a class="medium button green selectfoldbutt" onclick="choseroot()">Chose ROOT</a>
-	<a class="medium button orange selectfoldbutt" onclick="cerrar()">Cancel</a>
-	<a class="medium button green selectfoldbutt" onclick="acceptsearchfolder(this); cerrar()">Accept</a>
+	<a class="medium button green selectfoldbutt" onclick="choseroot()">
+		<span class="lang_en">Choose ROOT</span>
+		<span class="lang_es">Elegir RAÍZ</span>
+		<span class="lang_fr">Choisissez ROOT</span>
+	</a>
+	<a class="medium button orange selectfoldbutt" onclick="cerrar()">
+		<span class="lang_en">Cancel</span>
+		<span class="lang_es">Cancela</span>
+		<span class="lang_fr">Annuler</span>
+	</a>
+	<a class="medium button green selectfoldbutt" onclick="acceptsearchfolder(this); cerrar()">
+		<span class="lang_en">Accept</span>
+		<span class="lang_es">Aceptar</span>
+		<span class="lang_fr">Accepter</span>
+	</a>
 
 	<script>
 		selectfoldersearchpreload();

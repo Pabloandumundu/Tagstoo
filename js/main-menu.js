@@ -20,6 +20,38 @@
 
 $(document).ready(function () {
 
+    language = localStorage["language"];
+
+    if (language == 'EN') {
+        $(".lang_en").css("display", "inline-block");
+        $(".lang_es").css("display", "none");
+        $(".lang_fr").css("display", "none");
+        //para el cut/copy
+        $(".onoffswitch-inner").removeClass("l_es");
+        $(".onoffswitch-inner").removeClass("l_fr");
+
+    } else if (language =='ES') {
+        $(".lang_en").css("display", "none");
+        $(".lang_es").css("display", "inline-block");
+        $(".lang_fr").css("display", "none");
+        // logotipo
+        $("#logotipo").css("left", "29px");       
+        //para el cut/copy
+        $(".onoffswitch-inner").addClass("l_es");
+        $(".onoffswitch-inner").removeClass("l_fr");
+
+    } else if (language =='FR') {
+        $(".lang_en").css("display", "none");
+        $(".lang_es").css("display", "none");
+        $(".lang_fr").css("display", "inline-block");
+        // logotipo
+        $("#logotipo").css("left", "35px");        
+        //para el cut/copy
+        $(".onoffswitch-inner").removeClass("l_es");
+        $(".onoffswitch-inner").addClass("l_fr");
+
+    }
+
     window.pasteaction = "copy";
 
     // seleccion de las pestañas Explore/Search
@@ -36,23 +68,23 @@ $(document).ready(function () {
 
     // Estilos un poco más ajustados para pantallas estrechas
     if ($(window).width() < 1313) {
-        $("#undo").removeClass("tooltip-right");
-        $("#undo").addClass("tooltip-left")
+        $(".undo").removeClass("tooltip-right");
+        $(".undo").addClass("tooltip-left")
 
     }
     $( window ).resize(function() {
 
         if ($(window).width() < 1313) {
-            $("#undo").removeClass("tooltip-right");
-            $("#undo").addClass("tooltip-left");
+            $(".undo").removeClass("tooltip-right");
+            $(".undo").addClass("tooltip-left");
         } else {
-            $("#undo").removeClass("tooltip-left");
-            $("#undo").addClass("tooltip-right");
+            $(".undo").removeClass("tooltip-left");
+            $(".undo").addClass("tooltip-right");
         }
 
         if ($(window).width() < 1267) {
-            $("#undo").removeClass("tooltip-left");
-            $("#undo").addClass("tooltip-right");
+            $(".undo").removeClass("tooltip-left");
+            $(".undo").addClass("tooltip-right");
         }
 
     });    

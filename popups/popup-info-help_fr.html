@@ -1,0 +1,368 @@
+<!doctype html>
+
+<!--
+* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Aide</title>
+	<script src="../js/jquery-latest.min.js"></script>
+	<link rel="stylesheet" href="chrome://resources/css/text_defaults.css">
+	<style>
+
+		body {
+
+			background-color: white;
+			font-size: 84%;
+			max-width: 1020px;
+		}
+
+		.page-title {
+
+			font-size: 164%;
+			font-weight: bold;
+			color: #4994e9;
+			text-decoration: underline;
+			display: block;
+			margin-bottom: 19px;
+		}
+
+		#index {
+
+			padding-left: 100px;
+			margin-bottom: 40px;
+		}
+
+		h2, h3 {
+
+			display: inline-block;
+			color: #333;
+			margin-bottom: 2px;
+			margin-top: 7px;
+		}
+
+		p {
+
+			font-size: 14px;
+		}
+
+		em {
+
+			color: #196dcc;
+		}
+
+		.licence span {
+
+			text-align: center;
+			display: block;
+		}
+
+		a {
+
+			color: #2981e4;
+			margin-bottom: 4px;
+			text-decoration: none;
+			font-weight: bold;
+			letter-spacing: 1px;
+			line-height: 1.4em;
+		}
+
+		a:visited {
+
+			color: #2981e4;
+		}
+
+		img {
+
+			display: inline-block;
+			vertical-align: middle;
+			margin-bottom: 6px;
+			margin-left: 5px;
+
+		}
+
+		img.capture {
+
+			display: block;
+			margin: 0 auto;
+		}
+
+	</style>
+
+</head>
+<body class="subventana">
+
+	<span class="page-title"><em>Aide</em></span>
+
+	<div id="index">
+		<a name="help"></a><h3>Index</h3><br><br>
+		<a href="#1">1. Options initiales</a><br>
+		<a href="#2">2. Interface utilisateur</a><br>
+		&nbsp;<a href="#2_1">2.1. L’explorateur</a><br>
+		&nbsp;&nbsp;<a href="#2_1_1">2.1.1. Accéder aux dossiers, voir/exécuter les fichiers</a><br>
+		&nbsp;&nbsp;<a href="#2_1_2">2.1.2. Sélectionner le mode et l’ordre d’affichage</a><br>
+		&nbsp;&nbsp;<a href="#2_1_3">2.1.3. Sélectionner les fichiers et les dossiers</a><br>
+		&nbsp;&nbsp;<a href="#2_1_4">2.1.4. Copier et déplacer les fichiers et les dossiers</a><br>
+		&nbsp;&nbsp;<a href="#2_1_5">2.1.5. Effacer</a><br>
+		&nbsp;&nbsp;<a href="#2_1_6">2.1.6. Renommer</a><br>
+		&nbsp;&nbsp;<a href="#2_1_7">2.1.7. Défaire</a><br>
+		&nbsp;&nbsp;<a href="#2_1_8">2.1.8. Accès rapide aux dossiers</a><br>
+		&nbsp;&nbsp;<a href="#2_1_9">2.1.9. Actualiser</a><br>
+		&nbsp;<a href="#2_2">2.2. Les étiquettes</a><br>
+		&nbsp;&nbsp;<a href="#2_2_1">2.2.1. Créer une nouvelle étiquette</a><br>
+		&nbsp;&nbsp;<a href="#2_2_2">2.2.2. Éditer/supprimer une étiquette</a><br>
+		&nbsp;&nbsp;<a href="#2_2_3">2.2.3. Ajouter des étiquettes aux éléments</a><br>
+		&nbsp;&nbsp;<a href="#2_2_4">2.2.4. Effacement des tags à partir des éléments</a><br>
+		&nbsp;<a href="#2_3">2.3. Le Chercheur</a><br>
+		&nbsp;&nbsp;<a href="#2_3_1">2.3.1. Options du chercheur</a><br>
+		&nbsp;&nbsp;<a href="#2_3_2">2.3.2. Spécifier les étiquettes à chercher</a><br>
+		&nbsp;&nbsp;<a href="#2_3_3">2.3.3. Options d’affichage du chercheur</a><br>
+		&nbsp;&nbsp;<a href="#2_3_4">2.3.4. Accès aux dossiers et lancement des programmes ou affichage des fichiers à partir du chercheur</a><br>
+		&nbsp;&nbsp;<a href="#2_3_5">2.3.5. Étiqueter les résultats</a><br>
+		&nbsp;&nbsp;<a href="#2_3_6">2.3.6. Copier et déplacer les résultats</a><br>
+		&nbsp;&nbsp;<a href="#2_3_7">2.3.7. Effacer les résultats</a><br>
+		&nbsp;&nbsp;<a href="#2_3_8">2.3.8. Renommer les résultats</a><br>
+		<a href="#3">3. Gestion de la bases de données et options</a><br>
+		&nbsp;<a href="#3_1">3.1. Import/export des bases de données</a><br>
+		&nbsp;<a href="#3_2">3.2. Autres options</a><br>
+	</div>
+
+	<a name="1"></a><h3>1. Options initiales</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Quand l’application démarre vous devez choisir ou créer une nouvelle base de données.</p>
+	<p>Si ce n’est pas la première fois que vous lancez le programme, la base de données dernièrement utilisées est choisie automatiquement et vous pouvez en changer en sélectionnant une autre base de données déjà créée dans la liste de sélection ‘Changer de base de données’, ou bien entrer un nouveau nom dans le champ à côté du bouton ‘Nouvelle base données’ puis le cliquer ou appuyer sur "Enter".</p>
+	<p>Si vous lancez le programme pour la première fois, vous devez entrer un nom dans ce champ.</p>	
+
+	<p>Chaque base de données est associée à une unité de disque comme ‘C:’, ‘D:’, ’G:’, etc. (sous Windows) ou ‘/’, ‘/media/user/externaldrive’, etc. (sous Linux), ou ‘/Volumes/yourdrive’ (sous macOS) mais ce disque associé peut être modifié à tout moment dans les options du programme, de façon que si vos données à étiqueter sont sur un disque externe tout fonctionne correctement, même si le système a changé le chemin d’accès à l’unité que vous avez utilisez la dernière fois, ou que vous changiez de système.</p>
+	<p>Donc, sélectionnez l’unité si nécessaire (par défaut c’est l’unité à partir de laquelle le programme est exécuté) et appuyez sur le bouton ‘Lancer!’ pour démarrer.</p>
+	<p>Les autres boutons des options initiales sont ‘Importer données’; qui vous permet de choisir un fichier dans lequel une base de données a déjà été exportée et de l’importer dans la base de données que vous avez choisie, et ‘Effacer base de données’; pour effacer la base de données que vous avez choisie.</p>
+	<p>Un bouton qui vous permet de changer l'interface entre le mode "couleur" et "nuances de gris" est également disponible, en plus d'un sélecteur de langue, dans cette fenêtre d'options initiale.</p>
+	<p>Vous trouverez plus d’information sur l’import/export et sur les bases de données dans la partie "Gestion de la bases de données et options" de l’aide.</p>
+
+	<a name="importantnote"></a>
+	<p><b><i style="color:#333">Note importante:</i></b> <em>Lorsque vous avez utilisé une certaine version du programme et que vous l'avez mise à jour dans une version plus récente, il n'y a pas de problème, mais, Si vous avez mis à jour la version et que plus tard vous utilise l'ancienne version, il est possible (pas toujours) que la liste de la base de données disparaisse. À cause de cela est recommandé d'exporter de la base de données dans un fichier de temps en temps, l'importation de données à partir du fichier fonctionne toujours bien, indépendamment de la version.</em></p>
+
+	<a name="2"></a><h3>2. Interface utilisateur</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Après avoir lancer le programme et appuyer sur ‘Lancer!’ dans les options initiales de la base de données, l’interface utilisateur est affiché.</p>
+	<p>Il y a deux fenêtres principales dans cet programme : l’explorateur, qui est affiché au départ, et le chercheur, vous pouvez aller de l’un à l’autre en sélectionnant l’onglet correspondant sous le logo "Tagstoo".</p>
+
+	<a name="2_1"></a><h3>2.1. L’explorateur</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a><br>
+
+	<a name="2_1_1"></a><h3>2.1.1. Accéder aux dossiers, voir/exécuter les fichiers</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Pour accéder à un dossier, presser et maintenir le bouton de la souris sur ce dossier (aussi bien dans l’arborescence du panneau gauche que dans les dossiers accessibles affichés dans le panneau droit à tout moment).</p>
+	<p>Pour ouvrir la structure d’un dossier dans le panneau gauche, cliquer simplement (sans maintenir le bouton enfoncé) sur le dossier choisi.</p>
+	<p>Pour lancer un fichier exécutable ou voir un fichier de données, pressez et maintenez le bouton de la souris sur le fichier. Si c’est un programme il sera lancé, si ce sont des données, par exemple une vidéo ou un fichier texte, le programme défini par défaut dans votre système pour ce type de fichier sera lancé pour l'afficher.</p>
+	<p>Une option supplémentaire est disponible pour les images, ainsi, la visionneuse d’images définie dans votre système est lancée quand vous pressez et maintenez le bouton de la souris sur le nom ou tout autre endroit de l’élément sauf l’image elle-même, si vous cliquez sur l’image, une visionneuse interne à Tagstoo sera lancée.</p>
+
+	<a name="2_1_2"></a><h3>2.1.2. Sélectionner le mode et l’ordre d’affichage</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Il y a plusieurs modes d’affichage, le premier ‘1’ (qui est le mode utilisé au départ du programme) montre les dossiers et les fichiers en liste, chaque élément occupant une ligne. Par colonne il y a premièrement une icône (ou une image réduite) et le nom, deuxièmement l’extension du fichier ou le nombre d’éléments contenus dans le dossier, troisièmement la taille des fichiers, quatrièmement les étiquettes de l’élément, cinquièmement la date de dernière modification de l’élément et sixièmement la durée du fichier si c’est un fichier audio ou vidéo.</p>
+	<p>Les autres modes, ‘2’ à ‘9’ présentent l’élément comme une carte de tailles différentes, de la plus petite (‘2’) à la plus grande (‘9’).</p>
+	<p>Chacun des modes sélectionné peut montrer les éléments triés selon l’ordre choisi dans le sélecteur ‘Trier par:’ de la barre d’outils. Par défaut, les éléments sont triés par nom en ordre croissant (A-Z), les autres options de tri sont : par nom en ordre décroissant (Z-A), par extension (A-Z) ou (Z-A), par taille de la plus petite à la plus grande ou inversement, enfin par date de dernière modification de la plus récente à la plus ancienne ou le contraire.</p>
+
+	<a name="2_1_3"></a><h3>2.1.3. Sélectionner les fichiers et les dossiers</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Ceci est utilisé pour appliquer ensuite une action système ("copy", "move", "delete") à plusieurs éléments de votre choix. Dans le panneau de droite utilisez la souris pour sélectionner plusieurs éléments, vous pouvez aussi les sélectionner un par un ou utiliser la touche "Shift" pour sélectionner une plage d’éléments entre deux éléments et combiner ces sélections pour choisir ce que vous voulez.</p>
+
+	<a name="2_1_4"></a><h3>2.1.4. Copier et déplacer les fichiers et les dossiers</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Il y a deux façons de copier ou déplacer les éléments sélectionnés, dans les deux vous devez faire attention à l’option sélectionnée dans la bascule ‘COPIE/COUPE’ de la barre d’outils.</p>
+
+	<img class="capture" src="../img/help/cutcopy_FR.png" alt="Bascule Copie/Coupe">
+
+	<p>La première façon est de "glisser/déposer" les éléments choisis dans le panneau droit sur un dossier dans le panneau gauche, ceci copiera ou déplacera les fichiers selon l’option choisie dans la bascule ci-dessus.</p>
+	<p>L’autre façon est de sélectionner un dossier dans le panneau gauche, de faire un double clic dessus puis de presser le bouton ‘COLLER’ dans la barre d’outils. Ceci déplacera ou copiera les éléments sélectionnés, selon l’option choisie dans la bascule ci-dessus.</p>
+
+	<a name="2_1_5"></a><h3>2.1.5. Effacer</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Choisir les éléments que vous voulez effacer dans le panneau droit et presser le bouton ‘EFFACER’ de la barre d’outils. Faites attention, il n’est pas possible d’annuler cette action (par sécurité, une demande de confirmation est affichée quand ce bouton est pressé).</p>
+
+	<a name="2_1_6"></a><h3>2.1.6. Renommer</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Pour renommer un fichier ou un dossier, faire un double-clic sur le nom de l’élément et écrire le nouveau nom.</p>
+
+	<a name="2_1_7"></a><h3>2.1.7. Défaire</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>On peut annuler la majorité des actions possibles sur les éléments, sauf l’effacement d’un dossier ou d’un fichier. Par exemple, déplacer ou copier des fichiers ou des dossiers, les renommer, étiqueter un fichier ou un dossier ou un dossier et son contenu et effacer une étiquette d’un élément.</p>
+	<p>Pour annuler l’action indésirable, cliquer sur le bouton ‘DÉF’ de la barre d’outils.</p>
+
+	<a name="2_1_8"></a><h3>2.1.8. Accès rapide aux dossiers</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Dans chaque base de données, à part les informations sur les étiquettes sont également stockés des chemins vers les dossiers à accès rapide</p>
+
+	<img class="capture" src="../img/help/fastaccess_FR.png" alt="Accès rapide aux dossiers">
+
+	<p>Vous pouvez ajouter un dossier à cette liste en ouvrant ce dossier et en cliquant sur ‘Ajouter Accès Rapide’, ainsi, où que vous soyez, si vous sélectionnez le dossier dans cette liste et cliquez sur ‘Aller à selec.’, le dossier sera ouvert dans l’explorateur.</p>
+	<p>Vous pouvez également enlever un dossier de cette liste en cliquant sur ‘Effacer sélec.’.</p>
+
+	<a name="2_1_9"></a><h3>2.1.9. Actualiser</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Il y a un bouton "Refresh" en haut à droite du panneau de l’arborescence des dossiers et un autre en haut à droite du panneau d’affichage des contenus, ils actualisent chacun le panneau correspondant.</p>
+	<p>C’est pratique si, pour une raison quelconque, les informations ne sont pas correctement affichées ou pas à jour (par exemple si vous avez fait une modification dans le système de fichier en dehors de Tagstoo, et que le dossier concerné était ouvert dans Tagstoo).</p>
+
+	<a name="2_2"></a><h3>2.2. Les étiquettes</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Les étiquettes sont gérées en bas de la fenêtre, et pour ajouter une étiquette à un élément, il faut la choisir et faire un "glisser/déposer" sur l’élément désiré.</p>
+	<p>On peut modifier l’ordre des étiquettes aussi bien dans leur zone de définition que dans la liste des étiquettes de chaque élément.</p>
+
+	<a name="2_2_1"></a><h3>2.2.1. Créer une nouvelle étiquette</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Pour créer une nouvelle étiquette, cliquer sur le bouton ‘Ajouter Nouveau Etiquette’. Une nouvelle fenêtre s’ouvre avec trois options à choisir: la forme de l’étiquette (à choisir dans les formes proposées) sa couleur (en cliquant dans le cercle) et le texte (à introduire dans la zone de saisie). Vous pouvez voir son aspect dans la zone d’aperçu.</p>
+
+	<p>Pressez sur ‘Créez étiquette!’ si vous êtes satisfait du résultat.</p>
+
+	<a name="2_2_2"></a><h3>2.2.2. Éditer/supprimer une étiquette</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>D’abord vous devez sélectionner l’étiquette à éditer ou à effacer dans la liste des étiquettes créées.</p>
+
+	<p>Si vous voulez éditer l’étiquette, les mêmes options que pour la création sont disponibles mais dans ce cas, les changements seront appliqués à l’étiquette choisie quand vous presserez le bouton ‘Enregistrer étiquette éditée!’.</p>
+
+	<p>Si vous souhaitez effacer une étiquette, appuyez simplement sur ‘Supprimer étiquette!’ après l’avoir sélectionnée. Faites attention car toutes les associations avec cette étiquette seront perdues, par sécurité, il est demandé une confirmation.</p>
+
+	<a name="2_2_3"></a><h3>2.2.3. Ajouter des étiquettes aux éléments</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Pour ajouter une étiquette à un élément, la choisir dans la liste du bas de la fenêtre puis la glisser/déposer dans l’élément.</p>
+	<p>Pour ajouter une étiquette à un dossier vous pouvez la glisser/déposer sur un dossier dans l’arborescence du panneau de gauche ou sur un dossier du panneau de droite. Dans les deux cas, le programme vous demandera si vous voulez étiqueter seulement le dossier ou aussi les éléments qu’il contient. Si vous choisissez cette dernière option, l’étiquette choisie sera associée à tous les éléments qu’il contient (mais pas aux éléments contenus dans les sous-dossiers de ce dossier).</p>
+
+	<p>Pour que le programme ne vous demande plus si vous désirez étiqueter les éléments contenus dans le dossier à étiqueter, cochez l’option correspondante dans le menu "Options" (voir <a href="#tagsub">ci-dessous</a>)</p>
+
+	<p>>On peut rappeler ici que vous pouvez changer l’ordre des étiquettes dans chaque élément par "glisser/déposer".</p>
+
+	<a name="2_2_4"></a><h3>2.2.4. Effacement des tags à partir des éléments</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Pour enlever une ou des étiquettes à des éléments, vous devez activer la "gomme à étiquettes" en cliquant sur la gomme (icône incolore à droite de la barre d’outils) puis cliquer sur les étiquettes à effacer.</p>
+
+	<a name="2_3"></a><h3>2.3. Le Chercheur</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Dans cette fenêtre vous pouvez chercher les éléments ayant les étiquettes désirées.</p>
+
+	<img class="capture" src="../img/help/search_FR.png" alt="Onglets de l’Explorateur et du Chercheur">
+
+	<p>>Dans le volet de gauche de la fenêtre vous pouvez choisir les options de recherche et ajouter les étiquettes dans n’importe laquelle des zones de saisie par "glisser/déposer".</p>
+
+	<a name="2_3_1"></a><h3>2.3.1. Options du chercheur</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>La première option est de choisir le dossier racine de la recherche (qui inclura tous les éléments et sous-dossiers dépendants de ce dossier), par défaut c’est la racine de l’unité associée à la base de données sélectionnée (c.a.d. "C:" ou "D:" ou une autre unité).</p>
+
+	<p>Pour changer ce dossier racine appuyez sur le bouton ‘Sélectionnez pour chercher dans..’, et choisir le dossier dans la fenêtre qui va apparaître.</p>
+
+	<p>Une autre option est de chercher soit des dossiers, soit des fichiers, soit des dossiers et des fichiers. Après avoir choisi et appuyé sur le bouton ‘Chercher’ la recherche sera faite sur le type d’éléments choisi pour les étiquettes choisies.</p>
+
+	<a name="2_3_2"></a><h3>2.3.2. Spécifier les étiquettes à chercher</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Vous pouvez ajouter toutes les zones de saisie dont vous avez besoin pour remplir vos critères de recherche, dans chaque champ vous pouvez ajouter les étiquettes que les éléments recherchés devront avoir, et en utilisant divers champs vous pouvez créer des conditions différentes que les éléments devront satisfaire pour être ajoutés à la liste des résultats.</p>
+
+    <p>Par exemple, dans un champ vous pouvez ajouter les étiquettes "chat" et "blanc" et dans un autre champ ajouter les étiquettes "chien" et "brun" pour que les résultats vous donnent tous les chats blancs et les chiens bruns.</p>
+
+    <p>Un champ peut contenir un maximum de 5 étiquettes, et vous pouvez ajouter tous les champs nécessaires en cliquant sur ‘Autre filtre (Qui ont)...’.<p>
+
+    <p>Sous ces champs il en existe une autre sorte pour spécifier les étiquettes que les éléments ne doivent pas avoir, au cas où vous en auriez besoin.</p>
+
+	<a name="2_3_3"></a><h3>2.3.3. Options d’affichage du chercheur</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<img class="capture" src="../img/help/searchviewmode_FR.png" alt="Options d’affichage du chercheur">
+
+	<p>Le chercheur a ses propres options d’affichage et de tri, indépendamment de celles de l’explorateur, elles sont accessibles par ses propres sélecteurs en haut du panneau des résultats de recherche.</p>
+
+	<p>Aussi, à droite de la sélection de la trier de recherche, il y a une icône qui affiche une feuille avec du texte, en cliquant dessus, vous pourrez afficher une vue amiable imprimable des résultats de recherche actuels avec leurs étiquettes et une liste de texte de les noms des dossiers/fichiers recherchés qui peuvent également être enregistrés sous forme de fichier texte (de sorte que cela peut être utilisé par exemple comme une liste de lecture pour un programme externe).</p>
+
+	<a name="2_3_4"></a><h3>2.3.4. Accès aux dossiers et lancement des programmes ou affichage des fichiers à partir du chercheur</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+
+	<p>Quand vous pressez et maintenez appuyé le bouton de la souris sur un dossier dans les résultats de recherche, le dossier est ouvert dans la fenêtre de l’explorateur.</p>
+	<p>Si vous appuyez et maintenez le pointeur sur un fichier, il sera exécuté ou visualisé, comme d'habitude, par la visionneuse système par défaut pour ce type de fichiers. Comme dans l'explorateur, une autre méthode est ajoutée pour les images, c'est-à-dire si vous cliquez sur une image, la visionneuse interne du programme est lancée (qui ont avantage que la sélection précédente / suivante correspond aux images des résultats recherchés).</p>
+
+	<a name="2_3_5"></a><h3>2.3.5. Étiqueter les résultats</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Vous pouvez ajouter ou enlever des étiquettes à un résultat de recherche (et changer l’ordre des étiquettes) de la même façon que dans l’explorateur.</p>
+
+	<a name="2_3_6"></a><h3>2.3.6. Copier et déplacer les résultats</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Pour copier ou déplacer des fichiers ou des dossiers résultant d’une recherche, d’abord sélectionnez les éléments en cliquant dessus, ensuite vérifiez que la position de la bascule ‘COPIE/COUPE’ dans la barre d’outils est bien ‘COUPE’ si vous voulez déplacer les éléments ou "COPIE" si vous voulez les copier. Ensuite appuyez sur le bouton ‘COLLER’.</p>
+	<p>Le programme va vous demander si vous voulez copier ou déplacer aussi les étiquettes associées. Par exemple, imaginez que vous voulez copier les résultats obtenus dans un dossier ou une unité séparés, pour une présentation qui n’a aucun rapport avec ce programme, dans ce cas vous pouvez choisir de ne pas copier les étiquettes.</p>
+	<p>Dans les deux actions de copier/déplacer, si vous choisissez de copier/déplacer aussi les étiquettes, vous devez choisir un dossier cible qui soit dans l’unité associée à la base de données active. Par contre, si vous choisissez de ne pas copier/déplacer les étiquettes, vous pouvez choisir n’importe quelle unité disponible.</p>
+	<p>Il sera probablement rare de choisir de déplacer les éléments sans leurs étiquettes, mais souvenez-vous que, dans ce cas, les associations des étiquettes aux éléments déplacés seront perdues.</p>
+
+	<a name="2_3_7"></a><h3>2.3.7. Effacer les résultats</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>De la même façon que dans l’explorateur. Choisissez simplement les éléments à effacer et appuyez sur ‘EFFACER’ dans la barre d’outils, par sécurité une confirmation vous est demandée.</p>
+
+	<a name="2_3_8"></a><h3>2.3.8. Renommer les résultats</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>De la même façon que dans l’explorateur, vous pouvez changer le nom d’un fichier par un double clic sur ce nom et le remplacer. Pour l’instant il n’est pas possible de renommer un dossier dans le chercheur (mais vous pouvez le renommer dans l’explorateur).</p>
+
+	<a name="3"></a><h3>3. Gestion de la bases de données et options</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>En cliquant sur l’icône des options (la roue dentée bleue dans la barre d’outils) une fenêtre apparait avec les options de la base de données et les options générales.</p>
+	<p>Dans cette fenêtre vous pouvez changer la base de données en cours d’utilisation ou l’unité associée, simplement en choisissant une base de données dans la liste (ou en créer une nouvelle en lui donnant un nom non encore utilisé et en cliquant sur ‘Nouvelle base données’) et choisir une unité dans la liste des unités disponibles (‘Changer lecteur associé’) respectivement.</p>
+	<p>Quand vous avez sélectionner la base de données souhaitée, vous pouvez cliquer sur ‘Chargez-le’ pour la charger avec l’unité associée dans l’application.</p>
+	<p>Vous pouvez aussi effacer la base de données sélectionnée en cliquant sur ‘Effacer base de données’.</p>
+
+	<a name="3_1"></a><h3>3.1. Import/export des bases de données</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Une autre option dans cette fenêtre est l’importation ou l’exportation des données d’une base.</p>
+	<p><b><i style="color:#333">Note:</i></b> <em>Le programme ne nécessite pas d’installation, aussi on peut se demander où sont stockées les données? Où les étiquettes et leurs associations sont-elles stockées si l’exécutable ne change pas et si rien n’est stocké dans les fichiers et dossiers concernés? La réponse est: dans une base de données stockée quelque part dans le chemin ‘C:\users\%user%\AppData\Local\Google\Chrome\User Data\Default’ (sous Windows) or ‘/home/%user%/.config/google-chrome/Default/IndexedDB/’ (sous Linux) or ‘/Users/%user%/Library/Application Support/Google/Chrome/Default/IndexedDB/’ (sous MacOS) sous une forme lisible uniquement par le programme.</em></p>
+	<p><em>Ainsi, les données sont stockées à un endroit accessible uniquement à l’utilisateur en cours dans sa machine en cours.</em></p>
+	<p><em>Si vous voulez lire les données dans une autre session ou dans la session d’un autre utilisateur ou sur un autre ordinateur, ou si vous voulez avoir les données dans un fichier et effacer la base de données pour une raison quelconque, ou simplement avoir une sauvegarde, vous pouvez exporter les données dans un fichier et importer ce fichier plus tard, où vous le souhaitez.</em></p>
+	<p>Pour exporter les données de la base de données sélectionnée, s’assurer que la base que vous souhaitez exporter est bien la base sélectionnée (‘Base de données (BD) actuellement sélectionnée’) et qui n’est pas nécessairement la base de données en cours d’utilisation, et appuyez sur ‘Exporter données’, vous devrez sélectionner un fichier (sous Windows vous pourrez le créer par le menu contextuel ouvert par le bouton de gauche de la souris) où seront exportées les données, le fichier peut avoir l’extension que vous voulez.</p>
+	<p>Pour importer les données, sélectionnez la base de données réceptrice et cliquez sur ‘Importer données’, le programme vous demandera de choisir le fichier où se trouvent les données exportées, et, si ces données sont valides, elles seront importées et prêtes à être utilisées dans la base de données choisie.</p>
+
+	<a name="3_2"></a><h3>3.2. Autres options</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Quelques autres options sont également disponibles dans cette fenêtre:</p>
+	<p>&#8226; <span style="color:#363636">Bascule entre les modes couleur et nuances de gris</span>; une bascule pour changer les couleurs de l’interface utilisateur comme il vous convient le mieux.</p>
+	<p>&#8226; <span style="color:#363636">Confirmation pour fermer le programme</span>; elle est active par défaut.</p>
+	<p>&#8226; <span style="color:#363636">Afficher astuces lorsque le programme lancé</span>; elle est active par défaut.</p>
+	<p>&#8226; <span style="color:#363636">Chargez balises de démonstration lorsqu'une nouvelle BD est initialisée</span>; elle est active par défaut, mais il est recommandé de la désactiver quand vous connaîtrez mieux l’interface.</p>
+	<p>&#8226; <span style="color:#363636"><a name="tagsub"></a>Automatiquement ne pas ajouter d'étiquettes aux sous-éléments de dossier</span>; par défaut cette option est désactivée. Si vous la cochez, quand vous ajouterez une étiquette à un dossier, le programme ne vous demandera plus si vous voulez affecter cette étiquette à ses sous-éléments et ne le fera pas.</p>
+	<p>&#8226; <span style="color:#363636">Aperçu des images et des epubs en Vue mode 1</span>; par défaut cette option est désactivée, parce que dans ce mode, les miniatures sont véritablement très petites, mais si pour quelqu’un cette option pourrait être utile, elle est disponible.</p>	
+	<p>&#8226; <span style="color:#363636">Sur le visualiseur d'image passez à l'image suivante toutes les X secondes</span>; vous pouvez spécifier l’intervalle X et activer cette option pour que la visionneuse interne passe à l’image suivante toutes les X secondes.</p>
+
+	<hr>
+	<p>( Merci à Marceau Guihard pour la traduction en français, bien que j'ai apporté quelques modifications plus tard parce que le programme a changé, toute erreur est la mienne! ).</p>
+
+	<img src="../img/help/johnny-automatic-fern-border.svg" alt="" style="width: 90%; margin: 0 auto; display: block; max-width: 600px; margin-top: 20px; opacity: 0.5;">
+	
+
+	<script>
+
+		// para el smooth scroll
+		$('a').click(function() {
+			if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+
+				var target = $(this.hash);
+				target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+					if (target.length) {
+						$('html,body').animate({
+							scrollTop: target.offset().top
+						}, 600);
+					return false;
+				}
+			}
+		});
+
+
+		// para que habra el enlace del help a la v1.4 en el navegador normal
+		$('a[target=_blank]').on('click', function(){
+		   require('nw.gui').Shell.openExternal( this.href );
+		   return false;
+		});
+
+
+		// el greyscale mode
+		if (localStorage["colortagstoo"]=="not"){
+			var ls = document.createElement('link');
+	        ls.rel="stylesheet";
+	        ls.href= "../css/version_grey.css";
+	        $('head')[0].appendChild(ls);
+    	}	
+
+	</script>
+
+</body>
+</html>

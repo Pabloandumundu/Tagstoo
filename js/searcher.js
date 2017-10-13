@@ -56,6 +56,172 @@ $(document).ready(function () {
 	});
 	////////////////////////\\\\\\\\
 
+	language = localStorage["language"];
+
+  	if (language == 'EN') {
+		$(".lang_en").css("display", "inline-block");
+		$(".lang_es").css("display", "none");
+		$(".lang_fr").css("display", "none");
+		// display:block (para algun span)
+			$(".lang_en_b").css("display", "block");
+			$(".lang_es_b").css("display", "none");
+			$(".lang_fr_b").css("display", "none");
+		// para el bottom
+		$("#bottomleft, #bottomright").removeClass("l_es");
+		$("#bottomleft, #bottomright").removeClass("l_fr");
+	} else if (language =='ES') {
+		$(".lang_en").css("display", "none");
+		$(".lang_es").css("display", "inline-block");
+		$(".lang_fr").css("display", "none");
+		// display:block (para algun span)
+		$(".lang_en_b").css("display", "none");
+		$(".lang_es_b").css("display", "block");
+		$(".lang_fr_b").css("display", "none");
+		// para el bottom
+		$("#bottomleft, #bottomright").addClass("l_es");
+		$("#bottomleft, #bottomright").removeClass("l_fr");
+	} else if (language == "FR") {
+		$(".lang_en").css("display", "none");
+		$(".lang_es").css("display", "none");
+		$(".lang_fr").css("display", "inline-block");
+		// display:block (para algun span)
+		$(".lang_en_b").css("display", "none");
+		$(".lang_es_b").css("display", "none");
+		$(".lang_fr_b").css("display", "block");
+		// para el bottom
+		$("#bottomleft, #bottomright").removeClass("l_es");
+		$("#bottomleft, #bottomright").addClass("l_fr");
+
+		// boton del search, caso especial para frances "Chercher"
+		$("#searchaction").css("left","calc(83% - 70px)")
+	}
+
+	// frases segun idioma
+
+	if (language == "EN") {
+
+		ph_nofilesfound = "No files found, ";
+		ph_nofoldersfound = "No folders found, ";
+		ph_foundfolders_a = "Found ";
+		ph_foundfolders_b = " folders, ";
+		ph_foundfiles_a = "Found ";
+		ph_foundfiles_b = " files, ";
+		ph_copying = "Copying ...";
+		ph_moving = "Moving ...";
+		ph_deleting = "Deleting ...";
+		ph_searchfold = "Searching folders ...,";
+		ph_searchfile = "Searching files ...,";
+		ph_infolder = " in folder";
+		ph_filesize = "File Size";
+		ph_medialenght = "Media Length";
+		ph_alr_01 = "You choosed to create a printable friendly list of searched results, but there are not searched results at the moment.";
+		ph_alr_02 = "Maximum 5 tags are permitted for each filter.";
+		ph_alr_03 = "Only 1 tag is permitted in this kind of filter.";
+		ph_alr_04 = "No elements selected to copy.";
+		ph_alr_05 = "No elements selected to move.";
+		ph_alr_06a = "Origin and destination folders are the same in the case of <em>'";
+		ph_alr_06b = "'</em> and will be not copied.";
+		ph_alr_07a = "Origin and destination files are the same in the case of <em>'";
+		ph_alr_07b = "'</em> and will be not copied.";
+		ph_alr_08 = "No elements selected to delete.";
+		ph_alc_01a = "Attention, the folder <em>'";
+		ph_alc_01b = "'</em> is on the search results, but it can't be read (probably don't exists because it was deleted in some way). Do you want to remove it from database?. If you choose Yes, click again on Search to see results.";
+		ph_alc_02 = "When the <em>Copy</em> is made, do you want the associated tags to be copied too?";
+		ph_alc_03 = "When the <em>Move</em> is made, do you want the associated tags to be copied too?";
+		ph_alc_04a = " files and ";
+		ph_alc_04b = " folders (and all it´s contents) have been selected to delete. There is no undo for delete. Are you sure?";
+		ph_alc_05 = " files are selected to delete. There is no undo for delete. Are you sure?";
+		ph_calc_folder = "(FOLDER OPENING IN EXPLORE)...";
+		ph_dato_tagarch = "UNDO (tag archive)";
+		ph_dato_tagfold = "UNDO (tag folder)";
+		ph_dato_renarch = "UNDO (rename archive)";
+		ph_dato_erasefoldtag = "UNDO (erase folder tag)";
+		ph_dato_erasearchtag = "UNDO (erase archive tag)";
+		ph_dato_no = "UNDO (not action to undo)";
+
+	} else if (language == "ES") {
+
+		ph_nofilesfound = "No se encontraron archivos, ";
+		ph_nofoldersfound = "No se encontraron carpetas, ";
+		ph_foundfolders_a = "Encontradas ";
+		ph_foundfolders_b = " carpetas, ";
+		ph_foundfiles_a = "Encontrados ";
+		ph_foundfiles_b = " archivos, ";
+		ph_copying = "Copiando ...";
+		ph_moving = "Moviendo ...";
+		ph_deleting = "Eliminando ...";
+		ph_searchfold = "Buscando carpetas ...,";
+		ph_searchfile = "Buscando archivos ...,";
+		ph_infolder = " en carpeta";
+		ph_filesize = "Tamaño Archivo";
+		ph_medialenght = "Duración de Media";
+		ph_alr_01 ="Ha elegido crear una lista de resultados de búsqueda que se puede imprimir, pero no hay resultados de búsqueda en este momento.";
+		ph_alr_02 = "Se permiten 5 etiquetas como máximo para cada filtro.";
+		ph_alr_03 = "Sólo se permite 1 etiqueta en este tipo de filtro.";
+		ph_alr_04 = "No hay elementos seleccionados para copiar.";
+		ph_alr_05 = "No hay elementos seleccionados para mover.";
+		ph_alr_06a = "Las carpetas de origen y destino son las mismas en el caso de <em>'";
+		ph_alr_06b = "'</em> y no se copiará.";
+		ph_alr_07a = "Los archivos de origen y destino son los mismos en el caso de <em>'";
+		ph_alr_07b = "'</em> y no se copiará.";
+		ph_alr_08 = "No hay elementos seleccionados para eliminar.";
+		ph_alc_01a = "Atención, la carpeta <em>'";
+		ph_alc_01b = "'</em> está en los resultados de búsqueda, pero no se puede leer (probablemente no existe porque se ha eliminado de alguna manera). ¿Desea eliminarlo de la base de datos ?. Si selecciona Sí, haga clic de nuevo en Buscar para ver los resultados.";
+		ph_alc_02 = "Cuando se realice la <em>Copia</em>, ¿también desea copiar las etiquetas asociadas?";
+		ph_alc_03 = "Cuando se realiza el <em>Mover</em>, ¿desea que las etiquetas asociadas se muevan también? (si elige 'No' esas etiquetas se perderán cuando los elementos seleccionados se muevan)";
+		ph_alc_04a = " archivos y ";
+		ph_alc_04b = " carpetas (y todo su contenido) han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?"
+		ph_alc_05 = " archivos han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?";
+		ph_calc_folder = "(ABERTURA DE CARPETA EN EXPLORA)...";
+		ph_dato_tagarch = "DESHACER (etiquetar archivo)";
+		ph_dato_tagfold = "DESHACER (etiquetar carpeta)";
+		ph_dato_renarch = "DESHACER (renombrar archivo)";
+		ph_dato_erasefoldtag = "DESHACER (borrar etiqueta de carpeta)";
+		ph_dato_erasearchtag = "DESHACER (eliminar etiqueta de archivo)";
+		ph_dato_no = "DESHACER (no hay acción para deshacer)";
+
+	} else if (language == "FR") {
+
+		ph_nofilesfound = "Aucun fichier trouvé, ";
+		ph_nofoldersfound = "Aucun dossier trouvé, ";
+		ph_foundfolders_a = "Trouvé ";
+		ph_foundfolders_b = " dossiers, ";
+		ph_foundfiles_a = "Trouvé ";
+		ph_foundfiles_b = " fichiers, ";
+		ph_copying = "En copiant ...";
+		ph_moving = "En déplaçant ...";
+		ph_deleting = "En supprimant ...";
+		ph_searchfold = "À la recherche de dossiers ...,";
+		ph_searchfile = "À la recherche de archives ...,";
+		ph_infolder = " dans dossier";
+		ph_filesize = "Taille Fichier";
+		ph_medialenght = "Longueur du Média";
+		ph_alr_01 = "Vous avez choisi de créer une liste des résultats de recherche qui peuvent être imprimés, mais il n'y a pas de résultats de recherche pour le moment.";
+		ph_alr_02 = "Un maximum de 5 étiquettes sont autorisés pour chaque filtre";
+		ph_alr_03 = "Seulement 1 étiquette est autorisée dans ce type de filtre.";
+		ph_alr_04 = "Aucun élément sélectionné pour copier.";
+		ph_alr_05 = "Aucun élément sélectionné pour se déplacer";
+		ph_alr_06a = "Les dossiers d'origine et de destination sont les mêmes dans le cas de <em>'";
+		ph_alr_06b = "'</em> et ne sera pas copié.";
+		ph_alr_07a = "Les fichiers d'origine et de destination sont les mêmes dans le cas de <em>'";
+		ph_alr_07b = "'</em> et ne sera pas copié.";
+		ph_alr_08 = "Aucun élément sélectionné pour supprimer.";
+		ph_alc_01a = "Attention, the folder <em>'";
+		ph_alc_01b = "'</em> est sur les résultats de la recherche, mais il ne peut pas être lu (probablement il n'existe pas car il a été supprimé d'une façon ou d'une autre). Voulez-vous le supprimer de la base de données? Si vous choisissez Oui, cliquez à nouveau sur Rechercher pour voir les résultats.";
+		ph_alc_02 = "Lors de la <em>Copie</em>, souhaitez-vous également copier les étiquettes associées?";
+		ph_alc_03 = "Lorsque le <em>Déplacer</em> est terminé, voulez-vous que les balises associées se déplacent aussi? (si vous choisissez 'Non', ces étiquettes seront perdues lorsque les éléments sélectionnés seront déplacés)";
+		ph_alc_04a = " archives et ";
+		ph_alc_04b = " dossiers (et tout son contenu) ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
+		ph_alc_05 = " archives ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
+		ph_calc_folder = "(OUVERTURE DE DOSSIER EN EXPLORE)...";
+		ph_dato_tagarch = "DÉFAIRE (étiqueter archive)";
+		ph_dato_tagfold = "DÉFAIRE (étiqueter dossier)";
+		ph_dato_renarch = "DÉFAIRE (renommer archive)";
+		ph_dato_erasefoldtag = "DÉFAIRE (supprimer étiquette du dossier)";
+		ph_dato_erasearchtag = "DÉFAIRE (supprimer étiquette du archive)";
+		ph_dato_no = "DÉFAIRE (aucune action à défaire)";
+	}
+
 
 	// para poder regular anchuras divs
 	columnaswidth = [];
@@ -583,7 +749,7 @@ $(document).ready(function () {
 
 	});
 
-	$("#searchorder").on('change', function() {
+	$(".searchorder").on('change', function() {
 
 		searchorder = $(this)["0"].value;
 		readsearchredresults();
@@ -607,8 +773,17 @@ $(document).ready(function () {
 		$('#locationinfo, #dirview-wrapper').width(''+ 74 + '%');
 		$('#searchview').width(''+ 24.8 + '%');
 		$('#searchdirview-wrapper').width(''+ 74 + '%');
-		$('#bottomleft').width('205px');
-		$('#bottomright').width('calc(100% - 215px)');
+				
+		if (language == "EN") {
+			$('#bottomleft').width('205px');
+			$('#bottomright').width('calc(100% - 215px)');
+		} else if (language == "ES") {
+			$('#bottomleft').width('298px');
+			$('#bottomright').width('calc(100% - 308px)');
+		} else if (language == "FR") {
+			$('#bottomleft').width('332px');
+			$('#bottomright').width('calc(100% - 342px)');
+		}
 
 	});
 
@@ -623,11 +798,9 @@ $(document).ready(function () {
 		}
 
 		else {
-			alertify.alert("You choosed to create a printable friendly list of searched results, but there are not searched results at the moment.");
-		}
 
-		
-    	
+			alertify.alert(ph_alr_01);
+		}   	
 
 	})
 
@@ -831,7 +1004,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 				}
 		    	else {
 
-		    		alertify.alert("Maximum 5 tags are permitted for each input field.");
+		    		alertify.alert(ph_alr_02);
 		    	 	ui.draggable.draggable('option','revert',true);
 		    	}
 
@@ -970,7 +1143,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 				}
 		    	else {
 
-		    		alertify.alert("Only 1 tag is permitted in this input.");
+		    		alertify.alert(ph_alr_03);
 		    	 	ui.draggable.draggable('option','revert',true);
 		    	}
 
@@ -1115,7 +1288,19 @@ function addtagfield(thisbutton){
 
 	var lastcleartagbutton = $( ".cleartagfield" ).last();
 
-	var htmltoadd = '<div class="searchinput"><span>..or tag(s): (max 5 tags)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Add tags input field</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+	if (language == 'EN') {
+
+		var htmltoadd = '<div class="searchinput"><span>..or have the tags(s): (max 5 tags)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	} else if (language == 'ES') {
+
+		var htmltoadd = '<div class="searchinput"><span>..o tienen la(s) etiqueta(s): (max 5 etiquetas)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	} else if (language == 'FR') {
+
+		var htmltoadd = '<div class="searchinput"><span>..ou ont le(s) étiquette(s): (max 5 etiquettes)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	}
 
 	$(htmltoadd).insertAfter(lastcleartagbutton);
 
@@ -1224,7 +1409,7 @@ function addtagfield(thisbutton){
 				}
 		    	else {
 
-		    		alertify.alert("Maximum 5 tags are permitted for each input field.");
+		    		alertify.alert(ph_alr_02);
 		    	 	ui.draggable.draggable('option','revert',true);
 		    	}
 
@@ -1267,7 +1452,19 @@ function addnottagfield(thisbutton){
 
 	var lastclearnottagbutton = $( ".clearnottagfield" ).last();
 
-	var htmltoadd = '<div class="searchnotinput"><span>..and do not have the tag:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Add input field</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+	if (language == 'EN') {
+
+		var htmltoadd = '<div class="searchnotinput"><span>..and don\'t have the tag:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	} else if (language == 'ES') {
+
+		var htmltoadd = '<div class="searchnotinput"><span>..y no tienen la etiqueta:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	} else if (language == 'FR') {
+
+		var htmltoadd = '<div class="searchnotinput"><span>..et n\'ont pas l\'étiquette:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	}
 
 	$(htmltoadd).insertAfter(lastclearnottagbutton);
 
@@ -1376,7 +1573,7 @@ function addnottagfield(thisbutton){
 				}
 		    	else {
 
-		    		alertify.alert("Only 1 tag is permitted in this input.");
+		    		alertify.alert(ph_alr_03);
 		    	 	ui.draggable.draggable('option','revert',true);
 		    	}
 
@@ -1409,12 +1606,27 @@ function removetagfield(removebutton) {
 
 	if ($(".searchinput").length == 2) { // si solo queda este y el 1er field no se le añade la x para borrar
 
-		var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Add tags input field</a>';
+		if (language == 'EN') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a>';
+		} else if (language == 'ES') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a>';	
+		} else if (language == 'FR') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a>';		
+		}
+
+
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
 
 	} else { // si quedan más campos se le añade la x
 
-		var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Add tags input field</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		if (language == 'EN') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		} else if (language == 'ES') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span>';	
+		} else if (language == 'FR') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span>';		
+		}
+
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
 
 	}
@@ -1432,12 +1644,24 @@ function removenottagfield(removebutton) {
 
 	if ($(".searchnotinput").length == 2) { // si solo queda este y el 1er field no se le añade la x para borrar
 
-		var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Add input field</a>';
+		if (language == 'EN') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a>';
+		} else if (language == 'ES') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a>';
+		} else if (language == 'FR') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a>';
+		}
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
 
 	} else { // si quedan más campos se le añade la x
-
-		var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Add input field</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		
+		if (language == 'EN') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		} else if (language == 'ES') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		} else if (language == 'FR') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		}
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
 
 	}
@@ -1688,7 +1912,7 @@ function searchinfolders() {
 
 		actualfoldergrouptosearch = t;
 
-		$('#numeroderesultadoscarpetas').html("Searching folders ...");
+		$('#numeroderesultadoscarpetas').html(ph_searchfold);
 
 		resultsfolders[t] = [];
 		resultsfolderstemp[t] = [];
@@ -2228,7 +2452,7 @@ function searchinfolders() {
 
 		if (actualfoldergrouptosearch == totalfoldergrouptosearch && resultsfolders[0].length == 0) {
 
-			$('#numeroderesultadoscarpetas').html("No folders found. ")
+			$('#numeroderesultadoscarpetas').html(ph_nofoldersfound)
 
 		}
 
@@ -2239,8 +2463,7 @@ function searchinfolders() {
 // búsquedas de todas las carpetas para cuando solo se definen tags que NO deben tener los resultados (luego se filtrarán en el concentrador).
 function searchnoinfolders() {
 
-
-	$('#numeroderesultadoscarpetas').html("Searching folders ...");
+	$('#numeroderesultadoscarpetas').html(ph_searchfold);
 
 	resultsfolders = [];
 	resultsfolderstemp = [];
@@ -2300,7 +2523,7 @@ function searchnoinfolders() {
 
 function searchinfiles() {
 
-	$('#numeroderesultadosarchivos').html("Searching files ...");
+	$('#numeroderesultadosarchivos').html(ph_searchfile);
 
 	var i=0;
 	var folderidintosearch = [];
@@ -2355,7 +2578,7 @@ function searchinfiles() {
 
 			var actualgroup = t;
 
-			$('#numeroderesultadosarchivos').html("Searching files ...");
+			$('#numeroderesultadosarchivos').html(ph_searchfile);
 
 			resultsfiles[t] = [];
 			resultsfilestemp[t] = [];
@@ -2372,7 +2595,7 @@ function searchinfiles() {
 
 				$.each (folderidintosearch, function(n) {
 
-					$('#numeroderesultadosarchivos').html("Searching files ...");
+					$('#numeroderesultadosarchivos').html(ph_searchfile);					
 
 					var req = objectStore.openCursor();
 
@@ -2458,7 +2681,7 @@ function searchinfiles() {
 				});
 
 				if (actualgroup == totalgroup && flagg=="no") {
-					$('#numeroderesultadosarchivos').html("No files found. ")
+					$('#numeroderesultadosarchivos').html(ph_nofilesfound)
 				}
 
 				trans.oncomplete = function(event) {
@@ -2561,7 +2784,7 @@ function searchinfiles() {
 							trans.oncomplete = function(event) {
 
 								if (actualgroup == totalgroup && flagg=="no") {
-									$('#numeroderesultadosarchivos').html("No files found. ")
+									$('#numeroderesultadosarchivos').html(ph_nofilesfound)
 								}
 								flagg = "no"
 
@@ -2676,7 +2899,7 @@ function searchinfiles() {
 										trans.oncomplete = function(event) {
 
 											if (actualgroup == totalgroup && flagg=="no") {
-												$('#numeroderesultadosarchivos').html("No files found. ")
+												$('#numeroderesultadosarchivos').html(ph_nofilesfound)
 											}
 											flagg = "no"
 
@@ -2790,7 +3013,7 @@ function searchinfiles() {
 													trans.oncomplete = function(event) {
 
 														if (actualgroup == totalgroup && flagg=="no") {
-															$('#numeroderesultadosarchivos').html("No files found. ")
+															$('#numeroderesultadosarchivos').html(ph_nofilesfound)
 														}
 														flagg = "no"
 
@@ -2905,7 +3128,7 @@ function searchinfiles() {
 																trans.oncomplete = function(event) {
 
 																	if (actualgroup == totalgroup && flagg=="no") {
-																		$('#numeroderesultadosarchivos').html("No files found. ")
+																		$('#numeroderesultadosarchivos').html(ph_nofilesfound)
 																	}
 																	flagg = "no";
 
@@ -2974,7 +3197,7 @@ function searchinfiles() {
 // búsquedas de todos los archivos para cuando solo se definen tags que NO deben tener los resultados (luego se filtrarán en el concentrador).
 function searchnoinfiles() {
 
-	$('#numeroderesultadosarchivos').html("Searching files ...");
+	$('#numeroderesultadosarchivos').html(ph_searchfile);
 
 	var i=0;
 	var folderidintosearch = [];
@@ -3016,9 +3239,7 @@ function searchnoinfiles() {
 
 	trans.oncomplete = function(event) {
 
-
-
-		$('#numeroderesultadosarchivos').html("Searching files ...");
+		$('#numeroderesultadosarchivos').html(ph_searchfile);		
 
 		resultsfiles = [];
 		resultsfilestemp = [];
@@ -3029,7 +3250,7 @@ function searchnoinfiles() {
 
 		$.each (folderidintosearch, function(n) {
 
-			$('#numeroderesultadosarchivos').html("Searching files ...");
+			$('#numeroderesultadosarchivos').html(ph_searchfile);			
 
 			var req = objectStore.openCursor();
 
@@ -3156,7 +3377,7 @@ function concetradoresultadoscarpetas(entradas) {
 
 		if (resultadoscarpetas.length == 0) {
 
-			$('#numeroderesultadoscarpetas').html("No folders found. ")
+			$('#numeroderesultadoscarpetas').html(ph_nofoldersfound)
 		}
 
 		readsearchredresults();
@@ -3229,7 +3450,7 @@ function concetradoresultadosarchivos(entradas) {
 
 		if (resultadosarchivos.length == 0) {
 
-			$('#numeroderesultadosarchivos').html("No files found. ")
+			$('#numeroderesultadosarchivos').html(ph_nofilesfound)
 		}
 
 		readsearchredresults();
@@ -3481,7 +3702,7 @@ function drawSearchFolders (searchviewmode, order) {
 
 			var folderelements = Object.size(this.arorfo); // el tamaño del objeto arorfo que contiene el numero de subelementos en una carpeta
 
-			t += '<div class="exploelement folder"><div class="imgmode1 folder"></div><div class="explofolder" value="' + v.name + '"  title="' + nameSinBarra + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ' in folder</div><div class="explosize"><span class="placehold">File Size</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span>&nbsp;</div></div>';
+			t += '<div class="exploelement folder"><div class="imgmode1 folder"></div><div class="explofolder" value="' + v.name + '"  title="' + nameSinBarra + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span>&nbsp;</div></div>';
 
 			// los tag se separan y presentan en divs aparte en la función drawdirectoryviewtags()
 
@@ -3498,7 +3719,7 @@ function drawSearchFolders (searchviewmode, order) {
 
 			var folderelements = Object.size(this.arorfo); // el tamaño del objeto arorfo que contiene el numero de subelementos en una carpeta
 
-			t += '<div class="exploelement folder"><div class="imgmode'+searchviewmode+' folder">&nbsp;</div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ' in folder</div><div class="explosize"><span class="placehold">File Size</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div>';
+			t += '<div class="exploelement folder"><div class="imgmode'+searchviewmode+' folder">&nbsp;</div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
 
 			// los tag se separan y presentan en divs aparte en la función drawdirectoryviewtags()
 
@@ -3566,7 +3787,7 @@ function drawSearchArchives (searchviewmode, order) {
 
 			}
 
-			t += '<div class="exploelement archive"><div class="imgmode1 ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '" title="' + v.filepath + '">'+exploname+' <span class="placehold2" value="'+ v.filepath +'">'+ v.filepath +'</span></div><div class="exploext">' + v.ext + '</div><div class="explosize">' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div>';
+			t += '<div class="exploelement archive"><div class="imgmode1 ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '" title="' + v.filepath + '">'+exploname+' <span class="placehold2" value="'+ v.filepath +'">'+ v.filepath +'</span></div><div class="exploext">' + v.ext + '</div><div class="explosize">' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
 
 		});
 
@@ -3616,7 +3837,7 @@ function drawSearchArchives (searchviewmode, order) {
 				var imagen="<img src='/img/icons/420px/420x420.png'>";
 			}
 
-			t += '<div class="exploelement archive"><div class="imgmode'+searchviewmode+' ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '"  title="' + v.filepath + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">&nbsp' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">Media Length</span></div></div>';
+			t += '<div class="exploelement archive"><div class="imgmode'+searchviewmode+' ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '"  title="' + v.filepath + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">&nbsp' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
 
 		});
 
@@ -3635,10 +3856,10 @@ function drawSearchAfter() {
 	$('#numeroderesultados').html("")
 
 	if (resultadoscarpetas.length > 0) {
-		$('#numeroderesultadoscarpetas').html("Found " + resultadoscarpetas.length + " folders. ");
+		$('#numeroderesultadoscarpetas').html(ph_foundfolders_a + resultadoscarpetas.length + ph_foundfolders_b);
 	}
 	if (resultadosarchivos.length > 0) {
-		$('#numeroderesultadosarchivos').html("Found " + resultadosarchivos.length + " files. ");
+		$('#numeroderesultadosarchivos').html(ph_foundfiles_a + resultadosarchivos.length + ph_foundfiles_b);
 	}
 
 
@@ -3723,7 +3944,7 @@ function drawSearchAfter() {
 
 		} catch (err) { // si la búsqueda da una carpeta que no existe
 
-			alertify.confirm( "Attention, the folder <em>'"+driveunit + $(this)[0].getAttribute("value")+"'</em> is on the search results, but it can´t be read (probably don't exists because is deleted in some way). Do you want to remove it from database?. If you choose Yes, click again on Search to see results.", function (e) {
+			alertify.confirm( ph_alc_01a +driveunit + $(this)[0].getAttribute("value") + ph_alc_01b, function (e) {
 	            if (!e) {
 	              	x = "You pressed Cancel!";
 	              	console.log(x);
@@ -3829,7 +4050,7 @@ function drawSearchAfter() {
 
 			catch(err) {
 
-				alertify.confirm( "Attention, the file <em>'"+filenametotest+"'</em> is on the search results, but it can´t be read (probably don't exists because is deleted, renamed or moved outside Tagstoo). Do you want to remove it from database?. If you choose Yes, click again on Search to see results.", function (e) {
+				alertify.confirm( ph_alc_01a + filenametotest+ ph_alc_01b, function (e) {
 
 		            if (!e) {
 		              	x = "You pressed Cancel!";
@@ -4936,7 +5157,7 @@ function interactinsforsearchdir() {
 
 												// console.log("datos nuevo fichero añadidos");
 
-												$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag archive)");
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagarch);
 												undo.class = "tag archive";
 												undo.taggaarch.archid = event.target.result;
 												undo.taggaarch.archive = fileupdate.filename;
@@ -5095,7 +5316,7 @@ function interactinsforsearchdir() {
 
 										// console.log("datos nuevo fichero añadidos");
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag archive)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagarch);
 										undo.class = "tag archive";
 										undo.taggaarch.archid = event.target.result;
 										undo.taggaarch.archive = fileupdate.filename;
@@ -5179,7 +5400,7 @@ function interactinsforsearchdir() {
 
 										// console.log("datos nuevo fichero añadidos");
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag archive)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagarch);
 										undo.class = "tag archive";
 										undo.taggaarch.archid = event.target.result;
 										undo.taggaarch.archive = fileupdate.filename;
@@ -5332,7 +5553,7 @@ function interactinsforsearchdir() {
 
 											isnewtag = "no"; // no se añadirá
 
-											$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder)");
+											$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagfold);
 											undo.class = "tag folder";
 											undo.taggfold.foldid = folderupdate.folderid;
 											undo.taggfold.tagid = taganadir;
@@ -5372,7 +5593,7 @@ function interactinsforsearchdir() {
 
 										// console.log("tag añadida!");
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagfold);
 										undo.class = "tag folder";
 										undo.taggfold.foldid = folderupdate.folderid;
 										undo.taggfold.tagid = taganadir;
@@ -5515,7 +5736,7 @@ function interactinsforsearchdir() {
 
 									// console.log("tag añadida!");
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_tagfold);
 									undo.class = "tag folder";
 									undo.taggfold.foldid = event.target.result; // el nuevo id de la carpeta
 									undo.taggfold.tagid = taganadir;
@@ -5808,7 +6029,7 @@ function interactinsforsearchdir() {
 
 			// para que el aviso de que se abre en explore, dure dependiendo el numero de archivos a abrir (para que le de tiempo a abrir)
 			var elementsinfolder = $(elemento)[0].nextSibling.innerText
-			elementsinfolder = +elementsinfolder.replace(" in folder","");
+			elementsinfolder = +elementsinfolder.replace(ph_infolder,"");
 
 			if (elementsinfolder<100){
 				elementsinfolder = 100; // para que el aviso no sea demasiado rapido
@@ -5817,7 +6038,7 @@ function interactinsforsearchdir() {
 			setTimeout(function myFunction() {
 				$("#exploretab", top.document).removeClass("animateonce");
 			}, (elementsinfolder*10.2)+400); // para que se vea el efecto un poco más de tiempo que el aviso
-			customAlert("(FOLDER OPENING IN EXPLORE)...",elementsinfolder*10.2);
+			customAlert(ph_calc_folder, elementsinfolder*10.2);
 
 
 		}
@@ -5884,7 +6105,7 @@ function interactinsforsearchdir() {
 
 				// para que el aviso de que se abre en explore, dure dependiendo el numero de archivos a abrir (para que le de tiempo a abrir)
 				var elementsinfolder = $(elemento)[0].nextSibling.nextSibling.innerText
-				elementsinfolder = +elementsinfolder.replace(" in folder","");
+				elementsinfolder = +elementsinfolder.replace(ph_infolder,"");
 
 				if (elementsinfolder<100){
 					elementsinfolder = 100; // para que el aviso no sea demasiado rapido
@@ -5893,7 +6114,7 @@ function interactinsforsearchdir() {
 				setTimeout(function myFunction() {
 					$("#exploretab", top.document).removeClass("animateonce");
 				}, (elementsinfolder*10.2)+400); // para que se vea el efecto un poco más de tiempo que el aviso
-				customAlert("(FOLDER OPENING IN EXPLORE)...",elementsinfolder*10.2);
+				customAlert(ph_calc_folder, elementsinfolder*10.2);
 
 			}
 
@@ -6412,7 +6633,7 @@ function activateeditname(item) {
 				// 					if ( err ) console.log('ERROR: ' + err);
 				// 					});
 
-				// 					$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename folder)");
+				// 					$(".undo", window.parent.document).attr("data-tooltip", "UNDO (rename folder)");
 				// 					undo.class = "rename folder";
 				// 					undo.rename.folder= driveunit + rootdirectory;
 				// 					undo.rename.original = nombreoriginal;
@@ -6542,7 +6763,7 @@ function activateeditname(item) {
 
 				// 			}
 
-				// 			$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename folder)");
+				// 			$(".undo", window.parent.document).attr("data-tooltip", "UNDO (rename folder)");
 				// 			undo.class = "rename folder";
 				// 			undo.rename.folder= driveunit + rootdirectory;
 				// 			undo.rename.original = nombreoriginal;
@@ -6754,7 +6975,7 @@ function activateeditname(item) {
 											}
 										});
 
-										$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename archive)");
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_renarch);
 										undo.class = "rename archive";
 										undo.rename.folder= driveunit + rootdirectory;
 										undo.rename.original = nombreoriginal;
@@ -6791,7 +7012,7 @@ function activateeditname(item) {
 									});
 
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename archive)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_renarch);
 									undo.class = "rename archive";
 									undo.rename.folder= driveunit + rootdirectory;
 									undo.rename.original = nombreoriginal;
@@ -6829,7 +7050,7 @@ function activateeditname(item) {
 								}
 							});
 
-							$("#undo", window.parent.document).attr("data-tooltip", "UNDO (rename archive)");
+							$(".undo", window.parent.document).attr("data-tooltip", ph_dato_renarch);
 							undo.class = "rename archive";
 							undo.rename.folder= driveunit + rootdirectory;
 							undo.rename.original = nombreoriginal;
@@ -7264,7 +7485,7 @@ function elemetstagdelete() {
 
 									var treeelementtagsinview = "";
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (erase folder tag)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
 									undo.class = "delete folder tag";
 									undo.deltaggfold.foldid = updatefolder.folderid;
 									undo.deltaggfold.tags = idtagsoriginales;
@@ -7425,7 +7646,7 @@ function elemetstagdelete() {
 
 									var treeelementtagsinview = "";
 
-									$("#undo", window.parent.document).attr("data-tooltip", "UNDO (erase folder tag)");
+									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
 									undo.class = "delete folder tag";
 									undo.deltaggfold.foldid = "";
 									undo.deltaggfold.tags = idtagsoriginales;
@@ -7530,7 +7751,7 @@ function elemetstagdelete() {
 
 												var treeelementtagsinview = "";
 
-												$("#undo", window.parent.document).attr("data-tooltip", "UNDO (erase folder tag)");
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
 												undo.class = "delete folder tag";
 												undo.deltaggfold.foldid = updatefolder.folderid;
 												undo.deltaggfold.tags = idtagsoriginales;
@@ -7618,7 +7839,7 @@ function elemetstagdelete() {
 
 			if (isfolderorarchive == "archive") {
 
-				$("#undo", window.parent.document).attr("data-tooltip", "UNDO (erase archive tag)");
+				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasearchtag);
 				undo.class = "delete archive tag";
 				undo.deltaggfile = []; // para dejar todos los valores a 0 y no se cruzen algunos datos
 				undo.deltaggfile.tags = idtagsoriginales;
@@ -7958,10 +8179,10 @@ window.parent.$("#paste").on('click', function() {
 	if (alldroppedelement.length == 0) {
 
 		if (pasteaction == "copy") {
-			alertify.alert("No elements selected to copy.");
+			alertify.alert(ph_alr_04);
 		}
 		else if (pasteaction == "cut") {
-			alertify.alert("No elements selected to move.");
+			alertify.alert(ph_alr_05);
 		}
 	}
 
@@ -7970,7 +8191,7 @@ window.parent.$("#paste").on('click', function() {
 
     	if (pasteaction == "copy") {
 
-	    	alertify.confirmny(  "When the <em>Copy</em> is made, do you want the associated tags to be copied too?", function (e) {
+	    	alertify.confirmny(ph_alc_02, function (e) {
 	    		if (e) {
 	    			alsotags = "yes";
 	    			
@@ -7989,7 +8210,7 @@ window.parent.$("#paste").on('click', function() {
 
     	else if (pasteaction == "cut") {
 
-	    	alertify.confirmny(  "When the <em>Move</em> is made, do you want the associated tags to be moved too? (if you choose 'No' those tags will be lost when selected elements moved)", function (e) {
+	    	alertify.confirmny(ph_alc_03, function (e) {
 	    		if (e) {
 	    			alsotags = "yes";
 	    			
@@ -8063,11 +8284,11 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 	});
 
 
-	$("#status").html("Copying ...");
+	$("#status").html(ph_copying);
 	$('.exploelement').css("filter","opacity(46%)");
 
 	// para que no haya ningun tipo de conflicto se limpia el undo
-	$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+	$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 	undo.class == "";
 
 
@@ -8111,8 +8332,8 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 			}
 
 			else {
-
-				alertify.alert("Origin and destination folders are the same in the case of <em>'"+ driveunit + droppedfolder[t].children[1].attributes[1].value + "'</em> and will be not copied.")
+				
+				alertify.alert(ph_alr_06a + driveunit + droppedfolder[t].children[1].attributes[1].value + ph_alr_06b)
 			}
 
 
@@ -8638,7 +8859,7 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 										else {
 
-											alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+											alertify.alert(ph_alr_07a + driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + ph_alr_07b);
 
 											if (t == droppedarchive.length-1) { //para que lo lance al final
 
@@ -8782,7 +9003,7 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 							else {
 
-								alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+								alertify.alert(ph_alr_07a + driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + ph_alr_07b);
 
 								if (t == droppedarchive.length-1) { //para que lo lance al final
 
@@ -8831,7 +9052,7 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 					else {
 
-						alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+						alertify.alert(ph_alr_07a + driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + ph_alr_07b);
 
 						if (t == droppedarchive.length-1) { //para que lo lance al final
 
@@ -8888,7 +9109,7 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 			else {
 
-				alertify.alert("Origin and destination folders are the same in the case of <em>'"+ driveunit + droppedfolder[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+				alertify.alert(ph_alr_06a + driveunit + droppedfolder[t].children[1].attributes[1].value + ph_alr_06b);
 			}
 
 		});
@@ -8920,7 +9141,7 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 			else {
 
-				alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not copied.");
+				alertify.alert(ph_alr_07a + driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + ph_alr_07b);
 
 				if (t == droppedarchive.length-1) { //para que lo lance al final
 
@@ -8965,11 +9186,11 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 	});
 
 
-	$("#status").html("Moving ...");
+	$("#status").html(ph_moving);
 	$('.exploelement').css("filter","opacity(46%)");
 
 	// para que no haya ningun tipo de conflicto se limpia el undo
-	$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+	$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 	undo.class == "";
 
 
@@ -9566,7 +9787,7 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 																else {
 
-																	alertify.alert("Origin and destination files are the same in the case of <em>'"+ driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + "'</em> and will be not moved.");
+																	alertify.alert(ph_alr_07a + driveunit + droppedarchive[t].children[1].attributes[2].value + droppedarchive[t].children[1].attributes[1].value + ph_alr_07b);
 
 																	if (t == droppedarchive.length-1) { //para que lo lance al final
 
@@ -10397,7 +10618,8 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 		});
 
-		$('#numeroderesultadosarchivos').html("Found " + ($(".exploelement").length - contadorarchivosseleccionados) + " files. ");
+
+		$('#numeroderesultadosarchivos').html(ph_foundfiles_a + ($(".exploelement").length - contadorarchivosseleccionados) + ph_foundfiles_b);
 		resultadosarchivos.length = $(".exploelement").length - contadorarchivosseleccionados;
 
 
@@ -10484,7 +10706,7 @@ window.parent.$("#delete").on('click', function() {
 
 	if (alldroppedelement.length == 0) {
 
-		alertify.alert("No elements selected to delete.")
+		alertify.alert(ph_alr_08)
 
 	}
 
@@ -10512,9 +10734,9 @@ window.parent.$("#delete").on('click', function() {
 
 	if (droppedarchive.length > 0 && droppedfolder.length > 0) {
 
-		alertify.confirm(droppedarchive.length + " files and " + droppedfolder.length + " folders (and all it´s contents) are selected to delete. There is no undo for delete. Are you sure?", function (e) {
+		alertify.confirm(droppedarchive.length + ph_alc_04a + droppedfolder.length + ph_alc_04b, function (e) {
 			if (e) {
-				$("#status").html("Deleting ...");
+				$("#status").html(ph_deleting);
 				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 				setTimeout(function() { //porque sino no escribe el "Deleting ..."
 					deleteitsearch()
@@ -10523,9 +10745,9 @@ window.parent.$("#delete").on('click', function() {
 	}
 	else if (droppedarchive.length > 0 && droppedfolder.length == 0) {
 
-		alertify.confirm( droppedarchive.length + " files are selected to delete. There is no undo for delete. Are you sure?", function (e) {
+		alertify.confirm( droppedarchive.length + ph_alc_05, function (e) {
 			if (e) {
-				$("#status").html("Deleting ...");
+				$("#status").html(ph_deleting);
 				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 				setTimeout(function() { //porque sino no escribe el "Deleting ..."
 					deleteitsearch()
@@ -10535,9 +10757,9 @@ window.parent.$("#delete").on('click', function() {
 	}
 	else if (droppedarchive.length == 0 && droppedfolder.length > 0) {
 
-		alertify.confirm(droppedfolder.length + " folders (and all it´s contents) are selected to delete. There is no undo for delete. Are you sure?", function (e) {
+		alertify.confirm(droppedfolder.length + ph_alc_04b, function (e) {
 			if (e) {
-				$("#status").html("Deleting ...");
+				$("#status").html(ph_deleting);
 				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 				setTimeout(function() { //porque sino no escribe el "Deleting ..."
 					deleteitsearch()
@@ -10550,7 +10772,7 @@ window.parent.$("#delete").on('click', function() {
 	function deleteitsearch(){
 
 		// para que no haya ningun tipo de conflicto se limpia el undo
-		$("#undo", window.parent.document).attr("data-tooltip", "UNDO (not undo action)");
+		$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 		undo.class == "";
 
 		var arraydecarpetas = {};
@@ -11082,7 +11304,7 @@ window.parent.$("#delete").on('click', function() {
 
 
 
-		$('#numeroderesultadosarchivos').html("Found " + ($(".exploelement").length - contadorarchivosseleccionados) + " files. ");
+		$('#numeroderesultadosarchivos').html(ph_foundfiles_a + ($(".exploelement").length - contadorarchivosseleccionados) + ph_foundfiles_b);
 		resultadosarchivos.length = $(".exploelement").length - contadorarchivosseleccionados;
 
 

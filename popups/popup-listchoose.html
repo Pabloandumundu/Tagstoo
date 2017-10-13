@@ -27,32 +27,73 @@
 	<title>Choose List Type</title>
 
 	<script src="../js/dom-to-json.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+	        language = localStorage["language"];
+
+			if (language == 'EN') {
+				$(".lang_en").css("display", "inline-block");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "none");
+				} else if (language =='ES') {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "inline-block");
+				$(".lang_fr").css("display", "none");		
+			} else if (language == "FR") {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "inline-block");						
+			}			
+
+		});
+	</script>
 
 </head>
 <body>
 
-	<div id="popupbg"></div>
-
-	<div id="popuptitle"><img src="../img/listaicon14.png" alt="" style="margin-top: 1px">DISPLAY PRINTABLE FRIENDLY LIST</div>
-
-	<br>
-	<hr>
-
-
-
-	<label><em>..with the list of the names of searched directories/files (text only):</em></label>
-
-	<a href="popups/printfriendly_txt.html" target="_blank" class="medium button green" onclick="storetoprintview();cerrar()">Names (TXT)</a>
-
-
-
-	<label><em>..of the current search view as is (tags included):</em></label>
-
-	<a href="popups/printfriendly_view.html" target="_blank" class="medium button green" onclick="storetoprintview();cerrar()">Current Search View</a>
+	<div id="popuptitle"><img src="../img/listaicon14.png" alt="" style="margin-top: 1px">
+		<span class="lang_en">DISPLAY PRINTABLE FRIENDLY LIST</span>
+		<span class="lang_es">MOSTRAR VERSIÓN IMPRIMIBLE DE LA LISTA</span>
+		<span class="lang_fr">SHOW LA LISTE EN VERSION D'IMPRESSION</span>
+	</div>
 
 	<br>
 	<hr>
-	<a class="large button orange close" onclick="cerrar()">Close</a>
+
+	<label><em>
+		<span class="lang_en">..with the list of the names of searched directories/files (text only):</span>
+		<span class="lang_es">..con la lista de nombres de los directorios/archivos buscados (sólo texto):</span>
+		<span class="lang_fr">..avec la liste des noms des les répertoires/fichiers recherchés (texte uniquement):</span>
+	</em></label>
+
+	<a href="popups/printfriendly_txt.html" target="_blank" class="medium button green" onclick="storetoprintview();cerrar()">
+		<span class="lang_en">Names (TXT)</span>
+		<span class="lang_es">Nombres (TXT)</span>
+		<span class="lang_fr">Noms (TXT)</span>
+	</a>
+
+
+
+	<label><em>
+		<span class="lang_en">..of the current search view as is (tags included):</span>
+		<span class="lang_es">..de la vista de búsqueda actual tal como está (etiquetas incluidas):</span>
+		<span class="lang_fr">..de la vue de recherche actuelle telle quelle (étiquettes inclus):</span>
+	</em></label>
+
+	<a href="popups/printfriendly_view.html" target="_blank" class="medium button green" onclick="storetoprintview();cerrar()">
+		<span class="lang_en">Current Search View</span>
+		<span class="lang_es">Vista de búsqueda actual</span>
+		<span class="lang_fr">Vue de recherche actuelle</span>
+	</a>
+
+	<br>
+	<hr>
+	<a class="large button orange close" onclick="cerrar()">
+		<span class="lang_en">Close</span>
+		<span class="lang_es">Cerrar</span>
+		<span class="lang_fr">Fermer</span>
+	</a>
 	
 </body>
 </html>

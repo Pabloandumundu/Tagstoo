@@ -26,20 +26,60 @@
 	<meta charset="UTF-8">
 	<title>Tag folder</title>
 
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+	        language = localStorage["language"];
+
+			if (language == 'EN') {
+				$(".lang_en").css("display", "inline-block");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "none");
+				} else if (language =='ES') {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "inline-block");
+				$(".lang_fr").css("display", "none");		
+			} else if (language == "FR") {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "inline-block");					
+			}			
+
+		});
+	</script>
+
 </head>
 <body>
 
-	<div id="popupbg"></div>
+	<div id="popuptitle">
+		<span class="lang_en">ADD TAG TO FOLDER SUBELEMENTS?</span>
+		<span class="lang_es">¿AÑADIR ETIQUETA A LOS SUBELEMENTOS DE LA CARPETA?</span>
+		<span class="lang_fr">AJOUTER ÉTIQUETTE AUX SOUS-ÉLÉMENTS DU DOSSIER?</span>
+	</div><br>
 
-	<div id="popuptitle">ADD TAG TO FOLDER SUBELEMENTS?</div><br>
+	<label><em>
+		<span class="lang_en">Add tag also to elements inside folder:</span>
+		<span class="lang_es">Añadir etiqueta también a elementos dentro de la carpeta:</span>
+		<span class="lang_fr">Ajouter étiquette également à des éléments à l'intérieur dossier:</span>
+	</em></label><br>
 
-	<label><em>Add tag also to elements inside folder:</em></label><br>
+	<a class="medium button green" onclick="addtagsubs(taganadir, ffoldertoaddtags); cerrar()">
+		<span class="lang_en">Add tag to subelements</span>
+		<span class="lang_es">Añadir etiqueta a subelementos</span>
+		<span class="lang_fr">Ajouter étiquette aux sous-éléments</span>
+	</a><br>
 
-	<a class="medium button green" onclick="addtagsubs(taganadir, ffoldertoaddtags); cerrar()">Add tag to subelements</a><br>
+	<label><em>
+		<span class="lang_en">Do not add tag to elements inside folder:</span>
+		<span class="lang_es">No añadir etiqueta a elementos dentro de la carpeta:</span>
+		<span class="lang_fr">N'ajoutez pas l'étiquette aux éléments dans le dossier:</span>
+	</em></label><br>
 
-	<label><em>Do not add tag to elements inside folder:</em></label><br>
-
-	<a class="medium button orange" onclick="cerrar()">Do not add tag to subelements</a>
+	<a class="medium button orange" onclick="cerrar()">
+		<span class="lang_en">Do not add tag to subelements</span>
+		<span class="lang_es">No añadir etiqueta a subelementos</span>
+		<span class="lang_fr">Ne pas ajouter d'étiquette aux sous-éléments</span>
+	</a>
 	
 </body>
 </html>

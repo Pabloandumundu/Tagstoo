@@ -23,6 +23,128 @@
 
 var dirtoexec =  top.explorer.dirtoexec;
 
+var language = localStorage["language"];
+
+if (language == 'EN') {
+
+	ph_p_cantloaddrive = "(Can't load this drive, select an available one.)";
+	ph_p_localdisk_nbsp = "&nbsp;(local disk)";
+	ph_p_localdisk = "local disk";
+    ph_p_exterdisk = "external disk";
+	ph_p_copy = "COPY";
+	ph_p_move = "MOVE";
+	ph_p_alr_01 = "Time between images must be more than 0!. Time not saved.";
+	ph_p_alr_02 = "Tag Added.";
+	ph_p_alr_03 = "You must select a shape for the tag.";
+	ph_p_alr_04 = "Some text is needed for the new tag.";
+	ph_p_alr_05 = "Please, first select an existing tag if you want to edit it.";
+	ph_p_alr_06 = "Tag saved!. Refresh the view if needed.";
+	ph_p_alr_07 = "Tag deleted!. Refresh the view if needed.";
+	ph_p_alr_08 = "First select the tag you want to remove.";
+	ph_p_alr_09 = "The name you chosen already exists, first delete the database that uses this name if you want to use it.";
+	ph_p_alr_10 = "You must enter a name for the database first.";
+	ph_p_alr_11 = "A file open dialog will be open, you can either select a pre existing file or, for example in Windows, create a new one (right mouse button), be careful, data in the selected file will be overwritten.";
+	ph_p_alr_12 = "'</em> written successfully.";
+	ph_p_alr_13 = "An open file dialogue will open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.";
+	ph_p_alr_14 = "Data successfully imported.";
+	ph_p_alr_15a = "It appears that <em>'";
+	ph_p_alr_15b = "'</em> do not have a valid data format, please select a valid data file.";
+	ph_p_alr_16 = "Database deleted successfully.";
+	ph_p_alr_17 = "Not possible to copy to root directory... Select a destination folder.";
+	ph_p_alr_18 = "Not possible to move to root directory... Select a destination folder.";
+	ph_p_alc_01 = "You chosen to delete the selected tag, all the associations to this tag will be unlinked, are you sure?";
+	ph_p_alc_02a = "Attention, you have selected to write in <em>'";
+	ph_p_alc_02b = "'</em>, all previous data in file will be overwritten, are you sure?";
+	ph_p_alc_03a = "Attention, the data in selected database, <em>'";
+	ph_p_alc_03b = "'</em>, will be overwritten by the content of file <em>'";
+	ph_p_alc_03c = "'</em>, are you sure?";
+	ph_p_alc_04a = "Attention, you have selected to delete <em>'";
+	ph_p_alc_04b = "'</em>, are you sure?";
+	ph_p_alc_05 = "You have chosen to delete the database currently in use, to make it possible you must delete it from the program initial start window, do you want to restart program to make possible to delete it?";
+	ph_p_calc_tagfolder = "(PLEASE, WAIT A MOMENT WHILE TAGS ARE ADDED)...";
+	ph_p_dato_tagfoldsub = "UNDO (tag folder and subelements)";
+
+} else if (language == 'ES') {
+
+	ph_p_cantloaddrive = "(No se puede cargar esta unidad, seleccione una disponible.)";
+	ph_p_localdisk_nbsp = "&nbsp;(disco local)";
+	ph_p_localdisk = "disco local"
+    ph_p_exterdisk = "disco externo";
+	ph_p_copy = "COPIAR";
+	ph_p_move = "MOVER";
+	ph_p_alr_01 = "¡El tiempo entre imágenes debe ser mayor de 0!. Tiempo no guardado.";
+	ph_p_alr_02 = "Etiqueta Añadida.";
+	ph_p_alr_03 = "Debe seleccionar una forma para la etiqueta.";
+	ph_p_alr_04 = "Se necesita algún texto para la nueva etiqueta.";
+	ph_p_alr_05 = "Por favor, primero seleccione una etiqueta existente si desea editarla.";
+	ph_p_alr_06 = "¡Etiqueta guardada!. Actualizar la vista si fuera necesario.";
+	ph_p_alr_07 = "¡Etiqueta eliminada!. Actualizar la vista si fuera necesario.";
+	ph_p_alr_08 = "Primero seleccione la etiqueta que desea eliminar.";
+	ph_p_alr_09 = "El nombre que ha elegido ya existe, elimine primero la base de datos que utiliza este nombre si desea utilizarlo."
+	ph_p_alr_10 = "Debe introducir primero un nombre para la base de datos.";
+	ph_p_alr_11 = "Se abrirá un cuadro de diálogo de abrir archivo, puede seleccionar un archivo pre existente o, por ejemplo en Windows, crear uno nuevo (botón derecho del ratón), tenga cuidado, los datos del archivo seleccionado se sobrescribirán.";
+	ph_p_alr_12 = "'</em> escrito con éxito.";
+	ph_p_alr_13 = "Se abrirá un cuadro de diálogo de abrir archivo, seleccione el archivo donde se guardó la base de datos, tenga cuidado, los datos de la base de datos seleccionada serán sobrescritos por el contenido del archivo.";
+	ph_p_alr_14 = "Datos importados correctamente.";
+	ph_p_alr_15a = "Parece que <em>'";
+	ph_p_alr_15b = "'</em> no tiene un formato de datos válido, seleccione un archivo de datos válido.";
+	ph_p_alr_16 = "Base de datos eliminada correctamente.";
+	ph_p_alr_17 = "No es posible copiar en el directorio raíz... Seleccione una carpeta de destino.";
+	ph_p_alr_18 = "No es posible mover al directorio raíz... Seleccione una carpeta de destino.";
+	ph_p_alc_01 = "Has elegido eliminar la etiqueta seleccionada, todas las asociaciones a esta etiqueta serán desvinculadas, ¿estás seguro?";
+	ph_p_alc_02a = "Atención, ha seleccionado escribir en <em>'";
+	ph_p_alc_02b = "'</em>, todos los datos anteriores en el archivo se sobrescribirán, ¿estás seguro?";
+	ph_p_alc_03a = "Atención, los datos en la base de datos seleccionada, <em>'";
+	ph_p_alc_03b = "'</em>,  serán sobrescritos por el contenido del archivo <em>'";
+	ph_p_alc_03c = "'</em>, ¿está seguro?";
+	ph_p_alc_04a = "Atención, ha seleccionado eliminar <em>'";
+	ph_p_alc_04b = "'</em>, ¿está seguro?";
+	ph_p_alc_05 = "Ha elegido eliminar la base de datos actualmente en uso, para hacerlo posible debe eliminarse desde la ventana inicial del programa, ¿desea reiniciar el programa para que sea posible eliminarlo?";
+	ph_p_calc_tagfolder = "(POR FAVOR, ESPERE UN MOMENTO MIENTRAS SE AÑADEN LAS ETIQUETAS)...";
+	ph_p_dato_tagfoldsub = "DESHACER (etiquetar carpeta y subelementos)";
+
+} else if (language == 'FR') {
+
+	ph_p_cantloaddrive = "(Cet appareil ne peut pas être chargé, sélectionnez une disponible.)";
+	ph_p_localdisk_nbsp = "&nbsp;(disque local)";
+	ph_p_localdisk = "disque local";
+    ph_p_exterdisk = "disque externe";
+	ph_p_copy = "COPIER";
+	ph_p_move = "DÉPLACER";
+	ph_p_alr_01 = "Le temps entre les images doit être supérieur à 0!. Temps non enregistré.";
+	ph_p_alr_02 = "Étiquette Ajouté.";
+	ph_p_alr_03 = "Vous devez sélectionner une forme pour l'étiquette.";
+	ph_p_alr_04 = "Un certain texte est nécessaire pour la nouvelle étiquette.";
+	ph_p_alr_05 = "Veuillez d'abord sélectionner une étiquette existante si vous souhaitez l'éditer.";
+	ph_p_alr_06 = "Étiquette enregistré!. Mettre à jour la vue si nécessaire.";
+	ph_p_alr_07 = "Étiquette supprimée!. Mettre à jour la vue si nécessaire.";
+	ph_p_alr_08 = "Sélectionnez d'abord l'étiquette que vous souhaitez supprimer.";
+	ph_p_alr_09 = "Le nom que vous avez choisi existe déjà, commencez par supprimer la base de données qui utilise ce nom si vous souhaitez l'utiliser."
+	ph_p_alr_10 = "Vous devez d'abord entrer un nom pour la base de données.";
+	ph_p_alr_11 = "Une boîte de dialogue de ouvrir fichier sera ouverte, vous pouvez soit sélectionner un fichier préexistant ou, par exemple, sous Windows créez un nouveau (bouton droit de la souris), faites attention, les données du fichier sélectionné seront écrasées.";
+	ph_p_alr_12 = "'</em> écrit avec succès.";
+	ph_p_alr_13 = "Une boîte de dialogue de ouvrir fichier sera ouverte, sélectionnez le fichier où la base de données est enregistrée, faites attention, les données dans la base de données sélectionnée seront écrasées par le contenu du fichier.";
+	ph_p_alr_14 = "Données importées avec succès.";
+	ph_p_alr_15a = "Il semble que <em>'";
+	ph_p_alr_15b = "'</em> n'ont pas de format de données valide, sélectionnez un fichier de données valide.";
+	ph_p_alr_16 = "Base de données supprimée avec succès.";
+	ph_p_alr_17 = "Impossible de copier dans le répertoire racine... Sélectionnez un dossier de destination.";
+	ph_p_alr_18 = "Impossible de déplacer dans le répertoire racine... Sélectionnez un dossier de destination.";
+	ph_p_alc_01 = "Vous avez choisi de supprimer la balise sélectionnée, toutes les associations de cette balise seront dissociées, êtes-vous sûr?";
+	ph_p_alc_02a = "Attention, vous avez choisi écrire dans <em>'";
+	ph_p_alc_02b = "'</em>, toutes les données précédentes dans le fichier seront écrasées, êtes-vous sûr?";
+	ph_p_alc_03a = "Attention, les données dans la base de données sélectionnée, <em>'";
+	ph_p_alc_03b = "'</em>, seront écrasé par le contenu du fichier <em>'";
+	ph_p_alc_03c = "'</em>, êtes-vous sûr?";
+	ph_p_alc_04a = "Attention, vous avez choisi de supprimer <em>'";
+	ph_p_alc_04b = "'</em>, êtes-vous sûr?";
+	ph_p_alc_05 = "Vous avez choisi de supprimer la base de données actuellement utilisée, pour le rendre possible, il doit être supprimé sur la fenêtre initial du programme, voulez-vous redémarrer le programme pour permettre de le supprimer?";
+	ph_p_calc_tagfolder = "(PLEASE, WAIT A MOMENT WHILE TAGS ARE ADDED)...";
+	ph_p_dato_tagfoldsub = "DÉFAIRE (étiqueter dossier et sous-éléments)";
+
+}
+
+
 function popup (popupclass, data) {
 
 	switch (popupclass) {
@@ -165,8 +287,8 @@ function saveoptions() {
 	}
 
 	var selectedtime = $("#autoslideshowtime").val()
-	if (selectedtime == 0) {
-		alert("Time between images must be more than 0!. Time not saved.");
+	if (selectedtime == 0) { 
+		alert(ph_p_alr_01);
 
 	}
 	else {
@@ -308,7 +430,7 @@ function createnewtag() {
 
 				request.onsuccess = function(event) {
 
-					alertify.alert("Tag Added.", function () {
+					alertify.alert(ph_p_alr_02, function () {
 					top.searcher.drawfootertags();
 					top.explorer.drawfootertags();
 					cerrar();
@@ -320,11 +442,11 @@ function createnewtag() {
 
 		}
 		else {
-			alertify.alert("You must select a shape for the tag.");
+			alertify.alert(ph_p_alr_03);
 		}
 	}
 	else {
-		alertify.alert("Some text is needed for the new tag.");
+		alertify.alert(ph_p_alr_04);
 	}
 
 }
@@ -436,7 +558,7 @@ function edittagpreload() {
 
 			else {
 
-				alertify.alert("Please, first select an existing tag if you want to edit it.")
+				alertify.alert(ph_p_alr_05)
 				ui.selected.classList.remove("ui-selected"); // para quitar la selección
 			}
 
@@ -462,7 +584,7 @@ function edittagpreload() {
 
 		else {
 
-			alertify.alert("Please, first select an existing tag if you want to edit it.");
+			alertify.alert(ph_p_alr_05);
 			box.close();
 			$("#colorPicker .colorInner").css("background-color","#EFEFEF");
 
@@ -626,7 +748,7 @@ function savetag() { // guardar tag
 
 					res2.onsuccess = function(event){
 
-						alertify.alert("Tag Saved!. Refresh the view if needed.", function () {
+						alertify.alert(ph_p_alr_06, function () {
 
 							top.searcher.drawfootertags();
 							top.explorer.drawfootertags();
@@ -648,7 +770,7 @@ function savetag() { // guardar tag
 
 	else {
 
-		alertify.alert("Please, first select an existing tag if you want to edit it.")
+		alertify.alert(ph_p_alr_05)
 
 	}
 
@@ -658,7 +780,7 @@ function deletetag() { // borrar tag
 
 	if (selectedtag != "") {
 
-		alertify.confirm( "You chosen to delete the selected tag, all the associations to this tag will be unlinked, are you sure?", function (e) {
+		alertify.confirm(ph_p_alc_01, function (e) {
             if (!e) {
 	            x = "You pressed Cancel!";
 	            console.log(x);
@@ -1130,7 +1252,7 @@ function deletetag() { // borrar tag
 
 						trans.oncomplete = function(event) {
 
-							alertify.alert("Tag Deleted!. Refresh the view if needed.", function () {
+							alertify.alert(ph_p_alr_07, function () {
 
 								top.searcher.drawfootertags();
 								top.explorer.drawfootertags();
@@ -1152,7 +1274,7 @@ function deletetag() { // borrar tag
 
 	else {
 
-		alertify.alert ("First select the tag you want to remove.");
+		alertify.alert (ph_p_alr_08);
 	}
 
 }
@@ -1167,7 +1289,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 	var folderidtoaddtags = "";
 	var flag1 = flag2 = 0;
 
-	$("#undo", window.parent.document).attr("data-tooltip", "UNDO (tag folder & subs.)");
+	$(".undo", window.parent.document).attr("data-tooltip", ph_p_dato_tagfoldsub);
 	undo.class = "tag folder and subelements";
 
 	// sacar el id de la carpeta madre para poder meter tags de subarchivos
@@ -1751,7 +1873,7 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 
 		var msgtime = 1000 + (bdirectorycontent.length * 40)
-		customAlert("(PLEASE, WAIT A MOMENT WHILE TAGS ARE ADDED)...",msgtime);
+		customAlert(ph_p_calc_tagfolder, msgtime);
 
 		} //-- fin trans
 
@@ -1811,10 +1933,17 @@ function optionspreload() {
 
       	var currentlydatabaseused = localStorage["currentlydatabaseused"];
 
-		$('#selecteddb').html(currentlydatabaseused);
+		$('#selecteddb').html(currentlydatabaseused);		
 
 		if (localStorage["showretroagain"] == "yes") {
-        	alertify.alert(`If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help.html#databases14' target="_blank">read this</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Do not show this message again</span>`);
+
+			if (language == 'EN'){
+        		alertify.alert(`If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don't appear in the list, don't worry, please <em><a href='popups/popup-info-help_en.html#databases14' target="_blank">read this</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Do not show this message again</span>`);
+        	} else if (language == 'ES'){
+        		alertify.alert(`Si antes de esta versión se ha utilizado la versión 1.4 o anterior de Tagstoo <br>y las bases de datos no aparecen en la lista, no te preocupes, por favor <em><a href='popups/popup-info-help_es.html#databases14' target="_blank">lee esto</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>No mostrar este mensaje de nuevo</span>`);
+        	} else if (language == 'FR'){
+        		alertify.alert(`Si avant cette version, vous avez utilisé la version 1.4 ou la précédente de Tagstoo <br>et les bases de données n'apparaissent pas dans la liste, ne vous inquiétez pas, <em><a href='popups/popup-info-help_fr.html#databases14' target="_blank">lisez ceci</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Ne plus afficher ce message</span>`);
+        	}
       	}
 
 
@@ -1842,7 +1971,6 @@ function optionspreload() {
 
 		loaddatabaseselect();
 		loaddriveslist();
-
 
 
 		// el checkbox closeconfirmation
@@ -2059,10 +2187,10 @@ function optionspreload() {
 
 						if (drives[i] == ""){
 							t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
-							tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+							tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + ph_p_localdisk + "</div>";
 						} else {
 							t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
-							tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+							tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + ph_p_exterdisk + "</div>";
 						}
 
 					});
@@ -2213,12 +2341,12 @@ function optionspreload() {
 					$('#selecteddb').html($("#newdatabasename").val())
 				}
 				else {
-					alertify.alert("The name you chosen already exists, first delete the database that use this name if you want to use it.");
+					alertify.alert(ph_p_alr_09);
 				}
 
 			}
 			else {
-				alertify.alert("You must enter a name for the database first.");
+				alertify.alert(ph_p_alr_10);
 			}
 
 		});
@@ -2242,12 +2370,12 @@ function optionspreload() {
 						$('#selecteddb').html($("#newdatabasename").val())
 					}
 					else {
-						alertify.alert("The name you chosen already exists, first delete the database that use this name if you want to use it.");
+						alertify.alert(ph_p_alr_09);
 					}
 
 				}
 				else {
-					alertify.alert("You must enter a name for the database first.");
+					alertify.alert(ph_p_alr_10);
 				}
 
      		};
@@ -2257,7 +2385,7 @@ function optionspreload() {
 
 		$("#exportdata").on('click', function(){
 
-			alertify.alert("A file open dialog will be open, you can either select a pre existing file or create a new one (right mouse button), be careful, data in the selected file will be overwritten.", function() {
+			alertify.alert(ph_p_alr_11, function() {
 
 				document.getElementById('toexportfile').value = ""; // esto es para que siempre funcione el on change
 
@@ -2289,7 +2417,7 @@ function optionspreload() {
 							else {
 
 								// console.log("Exported as JSON: " + jsonString);
-								alertify.confirm("Attention, you selected to write in <em>'"+file+ "'</em>, all previous data in file will be overwritten, are you sure?", function (e) {
+								alertify.confirm(ph_p_alc_02a + file + ph_p_alc_02b, function (e) {
 						            if (!e) {
 						              	x = "You pressed Cancel!";
 						              	console.log(x);
@@ -2299,7 +2427,7 @@ function optionspreload() {
 						            	// se escribe el fichero
 										fs.writeFile(file, jsonString, function (err) {
 											if (err) return console.log(err);
-											alertify.alert("<em>'"+file + "'</em> successfully writed.");
+											alertify.alert("<em>'" + file + ph_p_alr_12);
 
 										})
 
@@ -2324,7 +2452,7 @@ function optionspreload() {
 
   			if ($('#selecteddb').html() != "") {
 
-  				alertify.alert("A file open dialog will be open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.", function () {
+  				alertify.alert(ph_p_alr_13, function () {
 
   					document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
 
@@ -2347,7 +2475,7 @@ function optionspreload() {
   								// console.log("is JSON");
 
   								// y continua
-  								alertify.confirm("Attention, data in selected database, <em>'" + $('#selecteddb').html() + "'</em>,  will be overwritten by the content of file <em>'" + file + "'</em>, are you sure?", function (e) {
+  								alertify.confirm(ph_p_alc_03a + $('#selecteddb').html() + ph_p_alc_03b + file + ph_p_alc_03c, function (e) {
   									if (!e) {
   										x = "You pressed Cancel!";
   										console.log(x);
@@ -2425,7 +2553,7 @@ function optionspreload() {
 
   													idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
 
-  													alertify.alert('Data successfully imported.', function(){
+  													alertify.alert(ph_p_alr_14, function(){
 
   														// si es el database actualmente en uso recarga tagstoo
 														if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) {
@@ -2476,7 +2604,7 @@ function optionspreload() {
 
   							} catch (e) {
   								console.log("not JSON");
-  								alertify.alert("It appears that <em>'" +file+ "'</em> do not have a valid data format, please select a valid data file.", function () {
+  								alertify.alert(ph_p_alr_15a + file + ph_p_alr_15b, function () {
   									document.getElementById('toinportfile').click();
   								});
 
@@ -2497,7 +2625,7 @@ function optionspreload() {
 
 		$("#deletedb").on('click', function(){
 
-			alertify.confirm("Attention, you select to delete <em>'"+$('#selecteddb').html()+"'</em>, are you sure?", function (e) {
+			alertify.confirm(ph_p_alc_04a +$('#selecteddb').html()+ ph_p_alc_04b, function (e) {
 				if (!e) {
 					x = "You pressed Cancel!";
 					console.log(x);
@@ -2508,7 +2636,7 @@ function optionspreload() {
 					// comprobación de si se borra la bd actual para salir de una manera o otra (recargando inicio o no)
 					if (localStorage["currentlydatabaseused"] == $('#selecteddb').html()) {
 
-						alertify.confirm("You chosen to delete database that is currently used, to make it possible you must delete it from the program initial start window, do you want to restart program to make possible to delete it?", function (e) {
+						alertify.confirm(ph_p_alc_05, function (e) {
 							if (!e) {
 								x = "You pressed Cancel!";
 								console.log(x);
@@ -2572,7 +2700,7 @@ function optionspreload() {
 
 
 						  	// console.log("Database deleted successfully");
-				  		  	alertify.alert("Database deleted successfully.", function () {
+				  		  	alertify.alert(ph_p_alr_16, function () {
 
 						  	  	cerrar();
 							  	window.parent.document.getElementById('options').click()
@@ -2677,6 +2805,15 @@ function optionspreload() {
 		    }
 
 		});
+
+	  	// un ajuste de estilo porque sino queda demasiado espacio hueco en la versión en ingles para windows
+		if (s.os.name == "windows") {
+			if (language == 'EN') {
+				$('#databaseselect').css("max-width","29%");
+		
+
+			}
+		}
 
 	};
 
@@ -2789,7 +2926,7 @@ function loaddriveslist() { //se utiliza tanto por el popup de folder a buscar c
 			}
 
 			if($("#drivedesc").html() == "()") {
-				$("#drivedesc").html("(Can't load this drive, select available one.)")
+				$("#drivedesc").html(ph_p_cantloaddrive)
 			}
 
 			$("#drivedesc").css("display","inline-block");
@@ -2870,10 +3007,10 @@ function loaddriveslist() { //se utiliza tanto por el popup de folder a buscar c
 				console.log(drives[i].length)
 				if (drives[i].length == 0){
 					t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
-					tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+					tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + ph_p_localdisk + "</div>";
 				} else {
 					t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
-					tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+					tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + ph_p_exterdisk + "</div>";
 
 				}
 
@@ -2894,7 +3031,7 @@ function loaddriveslist() { //se utiliza tanto por el popup de folder a buscar c
 
 				}
 				if ($("#selecteddrive")[0].innerText == "/") { //para que ponga local disk cuando lanza el popup si esta en /
-					$("#drivedesc").html("&nbsp;(local disk)");
+					$("#drivedesc").html(ph_p_localdisk_nbsp);
 				}
 
 			});
@@ -3028,7 +3165,13 @@ function infopreload() {
 
 	$("#showhelp").on('click', function(){
 
-		$("#infoiframe").attr("src", "popups/popup-info-help.html");
+		if (language == "EN") {
+			$("#infoiframe").attr("src", "popups/popup-info-help_en.html");
+		} else if (language == "ES") {
+			$("#infoiframe").attr("src", "popups/popup-info-help_es.html");			
+		} else if (language == "FR") {
+			$("#infoiframe").attr("src", "popups/popup-info-help_fr.html");
+		}
 
 	});
 
@@ -3121,7 +3264,7 @@ function selectfoldersearchpreload(){
 	s = new Sniffr();
 	s.sniff(agent);
 
-	$("#searchin")["0"].children["0"].innerHTML = $("#searchin")["0"].parentNode.parentNode.childNodes[11].childNodes[1].childNodes[5].childNodes[1].textContent
+	$("#searchin")["0"].children["0"].innerHTML = $("#searchin")["0"].parentNode.parentNode.children[3].children["0"].children[2].children["0"].innerText
 
 	window.newselectedFolder = window.selectedFolder
 
@@ -3345,7 +3488,7 @@ function acceptsearchfolder(e) {
 
 	window.selectedFolder = window.newselectedFolder;
 
-	$(e)["0"].parentNode.parentNode.childNodes[11].childNodes[1].childNodes[5].childNodes[1].innerHTML = $("#searchin")["0"].children["0"].innerHTML;
+	$(e)["0"].parentNode.parentNode.children[3].children["0"].children[2].children["0"].innerHTML = $("#searchin")["0"].children["0"].innerHTML;
 }
 
 function choseroot() { // para el popup de seleccionar carpeta busqueda del Search
@@ -3416,9 +3559,9 @@ function selectfolderactionnotagpreload(){
 	s.sniff(agent);
 
 	if (window.parent.pasteaction == "copy") {
-		$("#acceptdestination").html("COPY")
+		$("#acceptdestination").html(ph_p_copy)
 	} else {
-		$("#acceptdestination").html("MOVE")
+		$("#acceptdestination").html(ph_p_move)
 	}
 
 	$("#selectedfolder")["0"].children["0"].innerHTML = treedirecorytolist;
@@ -3583,10 +3726,10 @@ function selectfolderactionnotagpreload(){
 
 					if (drives[i] == ""){
 						t += "<option value=' " + drives[i] + "'>/" + drives[i] + "</option>";
-						tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + "local disk" + "</div>";
+						tdesc += "<div value=' " + drives[i] + "' class='drivedesc'>" + ph_p_localdisk + "</div>";
 					} else {
 						t += "<option value='" + drives[i] + "'>/" + drives[i] + "</option>";
-						tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "external disk" + "</div>";
+						tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + ph_p_exterdisk + "</div>";
 					}
 
 				});
@@ -3735,9 +3878,9 @@ function selectfolderactionnotagpreload(){
 			cerrar();
 		} else {
 			if (window.parent.pasteaction == "copy"){
-				alertify.alert("Not possible to copy to root directory... Select a destination folder.")
+				alertify.alert(ph_p_alr_17);
 			} else {
-				alertify.alert("Not possible to move to root directory... Select a destination folder.")
+				alertify.alert(ph_p_alr_18);
 
 			}
 		}
@@ -4003,9 +4146,9 @@ function selectfolderactiontagpreload(){
 	s.sniff(agent);
 
 	if (window.parent.pasteaction == "copy") {
-		$("#acceptdestination").html("COPY")
+		$("#acceptdestination").html(ph_p_copy)
 	} else {
-		$("#acceptdestination").html("MOVE")
+		$("#acceptdestination").html(ph_p_move)
 	}
 
 	$("#selectedfolder")["0"].children["0"].innerHTML = treedirecorytolist;
@@ -4020,9 +4163,9 @@ function selectfolderactiontagpreload(){
 			cerrar();
 		} else {
 			if (window.parent.pasteaction == "copy"){
-				alertify.alert("Not possible to copy to root directory... Select a destination folder.")
+				alertify.alert(ph_p_alr_17);
 			} else {
-				alertify.alert("Not possible to move to root directory... Select a destination folder.")
+				alertify.alert(ph_p_alr_18);
 
 			}
 		}

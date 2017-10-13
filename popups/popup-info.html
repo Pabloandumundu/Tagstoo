@@ -25,32 +25,96 @@
 
 	<meta charset="UTF-8">
 	<title>Help &amp; product info</title>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+	        language = localStorage["language"];
+
+			if (language == 'EN') {
+				$(".lang_en").css("display", "inline-block");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "none");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "block");
+				$(".lang_es_b").css("display", "none");
+				$(".lang_fr_b").css("display", "none");			
+			} else if (language =='ES') {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "inline-block");
+				$(".lang_fr").css("display", "none");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "none");
+				$(".lang_es_b").css("display", "block");
+				$(".lang_fr_b").css("display", "none");			
+			} else if (language == "FR") {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "inline-block");
+				// display:block (para algun span)
+				$(".lang_en_b").css("display", "none");
+				$(".lang_es_b").css("display", "none");
+				$(".lang_fr_b").css("display", "block");						
+			}			
+
+		});
+	</script>
 	
 </head>
 <body>
-
-	<div id="popupbg"></div>
-
-	<div id="popuptitle"><img src="../img/info.png" alt="" style="margin-top: 1px">HELP &amp; PRODUCT INFO</div>
+	
+	<div id="popuptitle"><img src="../img/info.png" alt="" style="margin-top: 1px">
+		<span class="lang_en">HELP &amp; PRODUCT INFO</span>
+		<span class="lang_es">AYUDA E INFORMACIÓN DEL PRODUCTO</span>
+		<span class="lang_fr">AIDE ET INFORMATION PRODUIT</span>
+	</div>
 
 	<br>
 	<hr>
 
 	<div id="infopanel">
 
-		<a id="showhelp" class="medium button blue">HELP</a><span><em>Show Help!</em> </span>		
+		<a id="showhelp" class="medium button blue">
+			<span class="lang_en">HELP</span>
+			<span class="lang_es">AYUDA</span>
+			<span class="lang_fr">AIDE</span>
+		</a>
+		<span class="lang_en"><em>Show Help!</em> </span>		
+		<span class="lang_es"><em>Mostrar Ayuda!</em> </span>		
+		<span class="lang_fr"><em>Afficher L'aide!</em> </span>		
 
 		<hr>
 		
-	    <a id="showabout" class="medium button yellow">About this</a><span><em>&nbsp;Program version, author and license.</em> </span>
+	    <a id="showabout" class="medium button yellow">
+	    	<span class="lang_en">About this</span>
+	    	<span class="lang_es">Acerca de</span>
+	    	<span class="lang_fr">À propos de</span>
+		</a>
+		<span class="lang_en"><em>&nbsp;Program version, author and license.</em> </span>
+		<span class="lang_es"><em>&nbsp;Versión del programa, autor y licencia.</em> </span>
+		<span class="lang_fr"><em>&nbsp;Version du programme, auteur et licence.</em> </span>
 		
 		<br>
 
-	    <a id="showlicenses" class="medium button yellow">Libraries licenses</a><span><em>&nbsp;Licenses of used libraries.</em> </span>
+	    <a id="showlicenses" class="medium button yellow">
+	    <span class="lang_en">Libraries licenses</span>
+	    <span class="lang_es">Licencias de bibliotecas</span>
+	    <span class="lang_fr">Licences bibliothèques</span>
+		</a>
+	    <span class="lang_en"><em>&nbsp;Licenses of used libraries.</em> </span>
+	    <span class="lang_es"><em>&nbsp;Licencias de bibliotecas usadas.</em> </span>
+	    <span class="lang_fr"><em>&nbsp;Licences des bibliothèques utilisées.</em> </span>
 
 		<br>
 
-		<a id="showlicenses_nwjs" class="medium button yellow">NW.JS licenses</a><span><em>&nbsp;Licenses of libraries used by NW.JS (the core).</em></span>
+		<a id="showlicenses_nwjs" class="medium button yellow">
+			<span class="lang_en">NW.JS licenses</span>
+			<span class="lang_es">Licencias de NW.JS</span>
+			<span class="lang_fr">Licences de NW.JS</span>
+		</a>
+		<span class="lang_en"><em>&nbsp;Licenses of libraries used by NW.JS (the core).</em></span>
+		<span class="lang_es"><em>&nbsp;Licencias de bibliotecas utilizadas por NW.JS (el núcleo).</em></span>
+		<span class="lang_fr"><em>&nbsp;Licences des bibliothèques utilisées par NW.JS (le noyau).</em></span>
 
 		<br>	
 		<hr>
@@ -59,7 +123,11 @@
 	
 	<iframe id="infoiframe" src="popups/popup-info-blank.html" frameborder="0" ></iframe>	
 
-	<a class="large button orange closeopt" onclick="cerrar()" style="margin-bottom: 3px">Close</a>
+	<a class="large button orange closeopt" onclick="cerrar()" style="margin-bottom: 3px">
+	<span class="lang_en">Close</span>
+	<span class="lang_es">Cerrar</span>
+	<span class="lang_fr">Fermer</span>
+	</a>
 
 	<script>
 		infopreload();
