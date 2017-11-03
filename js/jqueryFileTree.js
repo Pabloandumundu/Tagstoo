@@ -500,8 +500,6 @@ if(jQuery) (function ($){
 // Tags e interacciones que se activan en la primera carga del filetree
 function filetrerefreshtags() {
 
-
-
 	var currentlydatabaseused_toshow = currentlydatabaseused.replace("tagstoo_", "");
 	if (driveunit != "") {
 		if (s.os.name != "macos") { //esto es porque en macos añadiremos un espacio por tema visual
@@ -608,7 +606,7 @@ function filetrerefreshtags() {
 	}
 
 
-	var subcarpetas = $('.directory span');
+	var subcarpetas = document.querySelectorAll('.directory span');
 
 	var trans = db.transaction(["folders"], "readonly");
 	var objectStore = trans.objectStore("folders");
@@ -653,6 +651,7 @@ function filetrerefreshtags() {
 		var objectStore = trans.objectStore("tags")
 
 		var elementostree = $(".directory .fttags");
+		var elementostree = $(".directory .fttags");
 
 		var tagvalue = [];
 		var tagsdivs = [];
@@ -681,7 +680,7 @@ function filetrerefreshtags() {
 		});
 
 		// se lee cada etiqueta (solo con id) del html
-		elementostreetags = $(".directory .fttags .tagticket");
+		elementostreetags = document.querySelectorAll(".directory .fttags .tagticket");
 
 		$.each(elementostreetags, function(i) {
 
@@ -1168,8 +1167,9 @@ function filetreeinteractions() {
 					if (rootdirectory != targetfolder) {
 
 						$("#folderreadstatus").html(ph_moving);
-						$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
-
+						document.querySelectorAll('.exploelement, .exploelementfolderup').forEach(function(el) {
+						  el.style.filter = "opacity(46%)";
+						});
 						$("#filetree ul li span.selected").addClass("animateonce");
 
 						$(".undo", window.parent.document).attr("data-tooltip", ph_dato_move);
@@ -1321,18 +1321,13 @@ function filetreeinteractions() {
 
 														});
 
-
 														cursor.continue();
-
 
 													}
 
-
-												}									
-
+												}
 
 											}
-
 
 										}
 
@@ -1387,7 +1382,6 @@ function filetreeinteractions() {
 									}
 
 								}
-
 
 								trans.oncomplete = function(event) {
 
@@ -1511,6 +1505,7 @@ function filetreeinteractions() {
 														// console.log("carpeta destino no borrada de bd");
 
 													}
+
 												}
 
 												cursor11.continue();
@@ -2195,7 +2190,9 @@ function filetreeinteractions() {
 					if (rootdirectory != targetfolder) {
 
 						$("#folderreadstatus").html(ph_copying);
-						$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+						document.querySelectorAll('.exploelement, .exploelementfolderup').forEach(function(el) {
+						  el.style.filter = "opacity(46%)";
+						});
 
 						$(".undo", window.parent.document).attr("data-tooltip", ph_dato_copy);
 						undo.class = "copy";
@@ -3267,7 +3264,9 @@ window.parent.$("#paste").on('click', function() {
 			if (rootdirectory != targetfolder) {
 
 				$("#folderreadstatus").html(ph_moving);
-				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+				document.querySelectorAll('.exploelement, .exploelementfolderup').forEach(function(el) {
+				  el.style.filter = "opacity(46%)";
+				});
 				if (viewmode==1){
 					$(".ui-selected, .ui-selecting").next().remove(); // los <br>
 				}
@@ -4292,7 +4291,9 @@ window.parent.$("#paste").on('click', function() {
 			if (rootdirectory != targetfolder) {
 
 				$("#folderreadstatus").html(ph_copying);
-				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+				document.querySelectorAll('.exploelement, .exploelementfolderup').forEach(function(el) {
+				  el.style.filter = "opacity(46%)";
+				});
 
 				$("#filetree ul li span.selected").addClass("animateonce");
 

@@ -101,7 +101,7 @@
 	position: relative;
 	top: 56px;
 	height: calc(100% - 130px); /* se hace un calc y se resta la altura del header (60) y el bottom (70) */
-	width: 75%;
+	width: 75.2%;
 	box-sizing: border-box;
 	vertical-align: top;
 	background-color: white;

@@ -59,41 +59,88 @@ $(document).ready(function () {
 	language = localStorage["language"];
 
   	if (language == 'EN') {
-		$(".lang_en").css("display", "inline-block");
-		$(".lang_es").css("display", "none");
-		$(".lang_fr").css("display", "none");
-		// display:block (para algun span)
-			$(".lang_en_b").css("display", "block");
-			$(".lang_es_b").css("display", "none");
-			$(".lang_fr_b").css("display", "none");
-		// para el bottom
-		$("#bottomleft, #bottomright").removeClass("l_es");
-		$("#bottomleft, #bottomright").removeClass("l_fr");
-	} else if (language =='ES') {
-		$(".lang_en").css("display", "none");
-		$(".lang_es").css("display", "inline-block");
-		$(".lang_fr").css("display", "none");
-		// display:block (para algun span)
-		$(".lang_en_b").css("display", "none");
-		$(".lang_es_b").css("display", "block");
-		$(".lang_fr_b").css("display", "none");
-		// para el bottom
-		$("#bottomleft, #bottomright").addClass("l_es");
-		$("#bottomleft, #bottomright").removeClass("l_fr");
-	} else if (language == "FR") {
-		$(".lang_en").css("display", "none");
-		$(".lang_es").css("display", "none");
-		$(".lang_fr").css("display", "inline-block");
-		// display:block (para algun span)
-		$(".lang_en_b").css("display", "none");
-		$(".lang_es_b").css("display", "none");
-		$(".lang_fr_b").css("display", "block");
-		// para el bottom
-		$("#bottomleft, #bottomright").removeClass("l_es");
-		$("#bottomleft, #bottomright").addClass("l_fr");
 
+  		document.querySelectorAll('.lang_en').forEach(function(el) {
+		  el.style.display = "inline-block";
+		});
+		document.querySelectorAll('.lang_es').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_fr').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		// display:block (para algun span)
+		document.querySelectorAll('.lang_en_b').forEach(function(el) {
+		  el.style.display = "block";
+		});
+		document.querySelectorAll('.lang_es_b').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_fr_b').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		// para el bottom
+		document.querySelectorAll("#bottomleft, #bottomright").forEach(function(el) {
+		  el.classList.remove("l_es");
+		  el.classList.remove("l_fr");
+		});
+	
+	} else if (language =='ES') {
+
+		document.querySelectorAll('.lang_en').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_es').forEach(function(el) {
+		  el.style.display = "inline-block";
+		});
+		document.querySelectorAll('.lang_fr').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		// display:block (para algun span)
+		document.querySelectorAll('.lang_en_b').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_es_b').forEach(function(el) {
+		  el.style.display = "block";
+		});
+		document.querySelectorAll('.lang_fr_b').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		// para el bottom
+		document.querySelectorAll("#bottomleft, #bottomright").forEach(function(el) {
+		  el.classList.add("l_es");
+		  el.classList.remove("l_fr");
+		});
+
+	} else if (language == "FR") {
+
+		document.querySelectorAll('.lang_en').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_es').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_fr').forEach(function(el) {
+		  el.style.display = "inline-block";
+		});
+		// display:block (para algun span)
+		document.querySelectorAll('.lang_en_b').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_es_b').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_fr_b').forEach(function(el) {
+		  el.style.display = "block";
+		});
+		// para el bottom
+		document.querySelectorAll("#bottomleft, #bottomright").forEach(function(el) {
+		  el.classList.remove("l_es");
+		  el.classList.add("l_fr");
+		});
 		// boton del search, caso especial para frances "Chercher"
-		$("#searchaction").css("left","calc(83% - 70px)")
+		document.querySelector("#searchaction").style.left = "calc(83% - 70px)";
+
 	}
 
 	// frases segun idioma
@@ -236,43 +283,61 @@ $(document).ready(function () {
 
 		// se van a convertir los valores en pixeles de las columnas del panel derecho a porcentajes para que al cambiar la anchura del panel cambien las anchuras de las columnas de forma equitativa.
 		if (searchviewmode==1){
-			var pixelstotales = $('.exploelement').width();
 
-			var pixels = $('.explofolder, .explofile').width();
-			columnaswidth[1] = (100 / pixelstotales) * pixels
-			$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+			if (document.querySelector('.exploelement')){
 
-			pixels = $('.folderelements, .exploext').width();
-			columnaswidth[2] = (100 / pixelstotales) * pixels
-			$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+				var pixelstotales = document.querySelector('.exploelement').offsetWidth-2;
 
-			pixels = $('.explosize').width();
-			columnaswidth[3] = (100 / pixelstotales) * pixels
-			$('.explosize').width(''+ columnaswidth[3] + '%');
+				var pixels = document.querySelector('.explofolder, .explofile').offsetWidth-5;
+				columnaswidth[1] = (100 / pixelstotales) * pixels;
+				document.querySelectorAll('.explofolder, .explofile').forEach(function(el) {
+				  el.style.width = columnaswidth[1] + '%';
+				});						
 
-			pixels = $('.exploelement .tags').width();
-			columnaswidth[4] = (100 / pixelstotales) * pixels
-			$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+				pixels = document.querySelector('.folderelements, .exploext').offsetWidth-6;
+				columnaswidth[2] = (100 / pixelstotales) * pixels;
+				document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+				  el.style.width = columnaswidth[2] + '%';
+				});
+				
+				pixels = document.querySelector('.explosize').offsetWidth-6;
+				columnaswidth[3] = (100 / pixelstotales) * pixels;
+				document.querySelectorAll('.explosize').forEach(function(el) {
+				  el.style.width = columnaswidth[3] + '%';
+				});
 
-			pixels = $('.lastmod').width();
-			columnaswidth[5] = (100 / pixelstotales) * pixels
-			$('.lastmod').width(''+ columnaswidth[5] + '%');
+				pixels = document.querySelector('.exploelement .tags').offsetWidth-4;
+				columnaswidth[4] = (100 / pixelstotales) * pixels;
+				document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+				  el.style.width = columnaswidth[4] + '%';
+				});						
 
-			pixels = $('.duration').width();
-			columnaswidth[6] = (100 / pixelstotales) * pixels
-			$('.duration').width(''+ columnaswidth[6] + '%');
+				pixels = document.querySelector('.lastmod').offsetWidth-6;
+				columnaswidth[5] = (100 / pixelstotales) * pixels;
+				document.querySelectorAll('.lastmod').forEach(function(el) {
+				  el.style.width = columnaswidth[5] + '%';
+				});
+				
+				pixels = document.querySelector('.duration').offsetWidth-6;
+				columnaswidth[6] = (100 / pixelstotales) * pixels;
+				document.querySelectorAll('.duration').forEach(function(el) {
+				  el.style.width = columnaswidth[6] + '%';
+				});
+			}
 		}
 
-		var originalwidth = $('#searchview').width();
-		var nd_originalwidth = $('#locationinfo, #searchdirview-wrapper').width();
+		var originalwidth = document.querySelector('#searchview').offsetWidth;
+		var nd_originalwidth = document.querySelector('#locationinfo, #searchdirview-wrapper').offsetWidth;
 
 		var diference = originalwidth - event.rect.width;
-		var nd_newwithd = nd_originalwidth + diference;
-		if (nd_newwithd > 400 && nd_newwithd < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo
-			$('#searchview').width(event.rect.width);
-			$('#locationinfo, #searchdirview-wrapper').width(nd_newwithd);
-		}
+		var nd_newwidth = nd_originalwidth + diference;
 
+		if (nd_newwidth > 400 && nd_newwidth < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo				
+			document.querySelector('#searchview').style.width = event.rect.width + "px";
+			document.querySelectorAll('#locationinfo, #searchdirview-wrapper').forEach(function(el) {
+			  el.style.width = nd_newwidth + "px";
+			});		
+		}
 
 	}); // --end interact #treeview
 
@@ -285,31 +350,32 @@ $(document).ready(function () {
 	  })
 	  .on('resizemove', function (event) {
 
-	  	var originalwidth = $('#bottomleft').width();
-		var nd_originalwidth = $('#bottomright').width();
+	  	var originalwidth = document.querySelector('#bottomleft').offsetWidth;
+		var nd_originalwidth = document.querySelector('#bottomright').offsetWidth-1;
 
 		var diference = originalwidth - event.rect.width;
-		var nd_newwithd = nd_originalwidth + diference;
+		var nd_newwidth = nd_originalwidth + diference;
+
 		if (originalwidth > 20 && nd_originalwidth > 80) { //esto es solo para poner un tamño minimo
-			$('#bottomleft').width(event.rect.width);
-			$('#bottomright').width(nd_newwithd);
+			document.querySelector('#bottomleft').style.width = event.rect.width + "px";
+			document.querySelector('#bottomright').style.width = nd_newwidth + "px";			
 		}
 		else if (originalwidth <= 20) {
-			$('#bottomleft').css("width","25px");
-			$('#bottomright').css("width","calc(100% - 45px)");
+			document.querySelector('#bottomleft').style.width = "25px";			
+			document.querySelector('#bottomright').style.width = "calc(100% - 45px)";
 		}
 		else if (nd_originalwidth <= 80) {
-			$('#bottomleft').css("width","calc(100% - 105px)");
-			$('#bottomright').css("width","95px");
+			document.querySelector('#bottomleft').style.width = "calc(100% - 105px)";	
+			document.querySelector('#bottomright').style.width = "95px";			
 		}
 		// hay que poner los dos condicionales de abajo para que no monte
-		if ($('#bottomleft').width() <= 20) {
-			$('#bottomleft').css("width","25px");
-			$('#bottomright').css("width","calc(100% - 45px)");
+		if (document.querySelector('#bottomleft').offsetWidth <= 20) {
+			document.querySelector('#bottomleft').style.width = "25px";
+			document.querySelector('#bottomright').style.width = "calc(100% - 45px)";			
 		}
-		if ($('#bottomright').width() <= 80) {
-			$('#bottomleft').css("width","calc(100% - 105px)");
-			$('#bottomright').css("width","95px");
+		if (document.querySelector('#bottomright').offsetWidth <= 80) {
+			document.querySelector('#bottomleft').style.width = "calc(100% - 105px)";	
+			document.querySelector('#bottomright').style.width = "95px";			
 		}
 
 	  });
@@ -319,6 +385,49 @@ $(document).ready(function () {
 	// las diferentes "columnas" del panel derecho
 	if (searchviewmode==1){
 
+		// función para pasar las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+		function columnasaporcentajes() {
+			var pixelstotales = document.querySelector('.exploelement').offsetWidth-2;			
+			
+			var pixels = document.querySelector('.explofolder, .explofile').offsetWidth-4;			
+			columnaswidth[1] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.explofolder, .explofile').forEach(function(el) {
+			  el.style.width = columnaswidth[1] + '%';
+			});
+
+			pixels = document.querySelector('.folderelements, .exploext').offsetWidth-6;
+			// console.log(pixels)
+			// console.log($(".folderelements, .exploext").width())
+			columnaswidth[2] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+			  el.style.width = columnaswidth[2] + '%';
+			});
+
+			pixels = document.querySelector('.explosize').offsetWidth-6;
+			columnaswidth[3] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.explosize').forEach(function(el) {
+			  el.style.width = columnaswidth[3] + '%';
+			});
+
+			pixels = document.querySelector('.exploelement .tags').offsetWidth-4;
+			columnaswidth[4] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+			  el.style.width = columnaswidth[4] + '%';
+			});
+
+			pixels = document.querySelector('.lastmod').offsetWidth-6;
+			columnaswidth[5] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.lastmod').forEach(function(el) {
+			  el.style.width = columnaswidth[5] + '%';
+			});
+
+			pixels = document.querySelector('.duration').offsetWidth-6;
+			columnaswidth[6] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.duration').forEach(function(el) {
+			  el.style.width = columnaswidth[6] + '%';
+			});
+		}
+
 		interact('.explofolder, .explofile')
 
 			.resizable({
@@ -326,38 +435,18 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".explofolder, .explofile").width()
-					nd_originalwidth = $(".folderelements, .exploext").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".explofolder, .explofile").offsetWidth-4;
+					nd_originalwidth = document.querySelector(".folderelements, .exploext").offsetWidth-6;				
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+					
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
+					columnasaporcentajes();
 
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
 				}
 
 			})
@@ -369,11 +458,14 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".explofolder, .explofile").width(event.rect.width);
-					$(".folderelements, .exploext").width(nd_newwidth);
+					document.querySelectorAll('.explofolder, .explofile').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
-
 
 			});
 
@@ -384,38 +476,17 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".folderelements, .exploext").width()
-					nd_originalwidth = $(".explosize").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".folderelements, .exploext").offsetWidth-6;
+					nd_originalwidth = document.querySelector(".explosize").offsetWidth-6;
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
 				}
 
 			})
@@ -426,8 +497,12 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".folderelements, .exploext").width(event.rect.width)
-					$(".explosize").width(nd_newwidth);
+					document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.explosize').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
 
@@ -440,38 +515,18 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".explosize").width()
-					nd_originalwidth = $(".exploelement .tags").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".explosize").offsetWidth-6;
+					nd_originalwidth = document.querySelector(".exploelement .tags").offsetWidth-4;
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
+					
 				}
 
 			})
@@ -482,8 +537,12 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".explosize").width(event.rect.width)
-					$(".exploelement .tags").width(nd_newwidth);
+					document.querySelectorAll('.explosize').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
 
@@ -496,38 +555,17 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".exploelement .tags").width()
-					nd_originalwidth = $(".lastmod").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".exploelement .tags").offsetWidth-4;
+					nd_originalwidth = document.querySelector(".lastmod").offsetWidth-6;
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
 				}
 
 			})
@@ -538,8 +576,12 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".exploelement .tags").width(event.rect.width)
-					$(".lastmod").width(nd_newwidth);
+					document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.lastmod').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
 
@@ -552,38 +594,17 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".lastmod").width()
-					nd_originalwidth = $(".duration").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".lastmod").offsetWidth-6;
+					nd_originalwidth = document.querySelector(".duration").offsetWidth-6;
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
 				}
 
 			})
@@ -594,8 +615,12 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".lastmod").width(event.rect.width)
-					$(".duration").width(nd_newwidth);
+					document.querySelectorAll('.lastmod').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.duration').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
 
@@ -608,39 +633,20 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".duration").width();
+
+					originalwidth = document.querySelector(".duration").offsetWidth-6;
+					
 					var x = $(".exploelement").offset();
 					rowleftlimit = x.left + $(".exploelement")["0"].scrollWidth - 10;
-					$(".imgmode1").width("16px");
+
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
 				}
 
 			})
@@ -768,21 +774,27 @@ $(document).ready(function () {
 	// cuando se cambia el tamaño de la pantalla
 	$( window ).resize(function() {
 
+
 		// ponemos las anchuras del panel izquierdo y derecho en porcentajes para que se ajusten al tamaño de la pantalla
-		$('#content #treeview').width(''+ 24.8 + '%');
-		$('#locationinfo, #dirview-wrapper').width(''+ 74 + '%');
-		$('#searchview').width(''+ 24.8 + '%');
-		$('#searchdirview-wrapper').width(''+ 74 + '%');
-				
+
+		document.querySelector('#locationinfo').style.width = 75.2 + '%';
+		if (document.querySelector('#treeview')){
+			document.querySelector('#treeview').style.width = 24.8 + '%';
+			document.querySelector('#dirview-wrapper').style.width = 75.2 + '%';
+		} else if (document.querySelector('#searchview')){
+			document.querySelector('#searchview').style.width = 24.8 + '%';
+			document.querySelector('#searchdirview-wrapper').style.width = 75.2 + '%';
+		}
+
 		if (language == "EN") {
-			$('#bottomleft').width('205px');
-			$('#bottomright').width('calc(100% - 215px)');
+			document.querySelector('#bottomleft').style.width = '205px';
+			document.querySelector('#bottomright').style.width = 'calc(100% - 215px)';
 		} else if (language == "ES") {
-			$('#bottomleft').width('298px');
-			$('#bottomright').width('calc(100% - 308px)');
+			document.querySelector('#bottomleft').style.width = '298px';
+			document.querySelector('#bottomright').style.width = 'calc(100% - 308px)';
 		} else if (language == "FR") {
-			$('#bottomleft').width('332px');
-			$('#bottomright').width('calc(100% - 342px)');
+			document.querySelector('#bottomleft').style.width = '332px';
+			document.querySelector('#bottomright').style.width = 'calc(100% - 342px)';
 		}
 
 	});
@@ -812,14 +824,15 @@ $(document).ready(function () {
 
 	$("#eraser img").click(function() {
 
-		var cursoractual = $(".tags > div").css('cursor');
-
 		if (eraseron == "off") {
-
-			$(".tags > div").css("cursor", "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAYAAAAmaHdCAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QIFERIkBcGckAAAA2FJREFUOMuNlFtIqmkUhldaXnSYps0QA151YMjAPyEmf/DX0JIug80M1EVz6ES3ETU0SWxKC4O6CbIco4GoIJkhhgmpC0WSopkkJCoCy1Ism8ZOlpWZ71ztf3LbPqy79X3v+3zrWyxWmkajIbvdTiqV6geJRPJ9YWGhRCQSfbG9vf3H5uZmg9vtvqVPiZqamteNjY0IBoN4Hi0tLZDJZK8+5heIxeKskpKS30pLS0kkEiVdms1mqqio+Jdl2c8+CMnKylK2trYSAMrNzU0RTExMpCkUCh8RkUajeRGSXl5ezmZnZ5PL5aJwOEzp6emk1WpJpVLxIqPR+CoQCPw9Pz//tVqtJofDkUypra21NTQ0oLe3l+/F+vo6dDpdUn9CoRBYlrW8WFFfX9/NxcUFZmZm4PF4eNPd3R0GBweTQE6nEwqF4puU/2g0mp8fHx/hcrnQ09ODk5MT3nR5eQmr1crn3d3dWFpaQllZ2VcpoLq6uksA6O/vh9FoTHp9ZWUFi4uLOD4+htPpBADodLoYEVF1dfX/ELlcLh4bGwMAjI6OYnJyMgk0NTWF8fHxpLO2trallGpYlv3u4OAAt7e30Ov1MJvNvMHr9aKjowNPT0/8md/vB8Mwb5735e3kuu7v77G/vw+TyYTd3V0EAgHMzs4CAPR6fVI1NpstJpVKM1IqMhgMVwCwtraGgYEBWCwW3pRIJDA8PMzn4XAYHMf9kgRQq9Ukk8nUVqsVkUgE9fX16OzsxLths9kAAPF4HBzHXQufQw4PDykUCh1eXV3FiKjKYDDQxsYG+f1+YhiG10WjUdrb26OCggKam5sTCF6YG1peXh7yer1hIqL29nY6PT2l6elpXsMwDAWDQSIiKioqShe+C/H5fEREiMViFrFY/JNEIqGcnBxyu92Ul5dH+fn5REQUiURIJBLR6urqh/eEVCp9fXR0xA/d0NAQotEo35uRkREolcqY4H2Aqqoq2tra+r2pqenPRCJBHMfRw8MDdXV18Zrz83MSCAR/Cd8H8fl8pFaryW63zwmFwh8rKys/5ziOHA4HnZ2dEcMw5PV6aWdnp/6jq1OpVFJxcXHR27GPx+MwmUxYWFhAc3NziIgojT4xtFrtt3K5fCAjI+NLj8cjvLm5+fX6+vpNZmbmP/8BN8ZmaONW+JwAAAAASUVORK5CYII='),auto");
 
 			eraseron = "on";
 
+			document.querySelectorAll(".tags > div").forEach(function(el) {
+				el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAYAAAAmaHdCAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QIFERIkBcGckAAAA2FJREFUOMuNlFtIqmkUhldaXnSYps0QA151YMjAPyEmf/DX0JIug80M1EVz6ES3ETU0SWxKC4O6CbIco4GoIJkhhgmpC0WSopkkJCoCy1Ism8ZOlpWZ71ztf3LbPqy79X3v+3zrWyxWmkajIbvdTiqV6geJRPJ9YWGhRCQSfbG9vf3H5uZmg9vtvqVPiZqamteNjY0IBoN4Hi0tLZDJZK8+5heIxeKskpKS30pLS0kkEiVdms1mqqio+Jdl2c8+CMnKylK2trYSAMrNzU0RTExMpCkUCh8RkUajeRGSXl5ezmZnZ5PL5aJwOEzp6emk1WpJpVLxIqPR+CoQCPw9Pz//tVqtJofDkUypra21NTQ0oLe3l+/F+vo6dDpdUn9CoRBYlrW8WFFfX9/NxcUFZmZm4PF4eNPd3R0GBweTQE6nEwqF4puU/2g0mp8fHx/hcrnQ09ODk5MT3nR5eQmr1crn3d3dWFpaQllZ2VcpoLq6uksA6O/vh9FoTHp9ZWUFi4uLOD4+htPpBADodLoYEVF1dfX/ELlcLh4bGwMAjI6OYnJyMgk0NTWF8fHxpLO2trallGpYlv3u4OAAt7e30Ov1MJvNvMHr9aKjowNPT0/8md/vB8Mwb5735e3kuu7v77G/vw+TyYTd3V0EAgHMzs4CAPR6fVI1NpstJpVKM1IqMhgMVwCwtraGgYEBWCwW3pRIJDA8PMzn4XAYHMf9kgRQq9Ukk8nUVqsVkUgE9fX16OzsxLths9kAAPF4HBzHXQufQw4PDykUCh1eXV3FiKjKYDDQxsYG+f1+YhiG10WjUdrb26OCggKam5sTCF6YG1peXh7yer1hIqL29nY6PT2l6elpXsMwDAWDQSIiKioqShe+C/H5fEREiMViFrFY/JNEIqGcnBxyu92Ul5dH+fn5REQUiURIJBLR6urqh/eEVCp9fXR0xA/d0NAQotEo35uRkREolcqY4H2Aqqoq2tra+r2pqenPRCJBHMfRw8MDdXV18Zrz83MSCAR/Cd8H8fl8pFaryW63zwmFwh8rKys/5ziOHA4HnZ2dEcMw5PV6aWdnp/6jq1OpVFJxcXHR27GPx+MwmUxYWFhAc3NziIgojT4xtFrtt3K5fCAjI+NLj8cjvLm5+fX6+vpNZmbmP/8BN8ZmaONW+JwAAAAASUVORK5CYII='),auto"
+			});
+
+			$(".tags > div").draggable( 'disable' );
 			$("#eraser img").addClass('activated');
 			$("#eraseron").addClass("on");
 
@@ -827,7 +840,11 @@ $(document).ready(function () {
 
 			eraseron = "off";
 
-			$(".tags > div").css('cursor','pointer');
+			document.querySelectorAll(".tags > div").forEach(function(el) {
+				el.style.cursor = "pointer"
+			});
+
+			$(".tags > div").draggable( 'enable' );
 			$("#eraser img").removeClass('activated');
 			$("#eraseron").removeClass("on");
 
@@ -3849,7 +3866,7 @@ function drawSearchArchives (searchviewmode, order) {
 
 function drawSearchAfter() {
 
-	$('#searchdirectoryview').html(t);
+	document.getElementById('searchdirectoryview').innerHTML = t;
 
 	$("#viewmodenumber").html(searchviewmode + ".")
 
@@ -3867,25 +3884,31 @@ function drawSearchAfter() {
 
 	if (searchviewmode==1) {
 
-		$('.exploelement').addClass('viewmode1');
-		$('.exploelementfolderup').addClass('viewmode1');
-
-		$('.explofolder').addClass('viewmode1');
-		$('.explofile').addClass('viewmode1');
-		$('.folderelements').addClass('viewmode1');
-		$('.exploext').addClass('viewmode1');
-		$('.explosize').addClass('viewmode1');
-		$('.tags').addClass('viewmode1');
-		$('.lastmod').addClass('viewmode1');
-		$('.duration').addClass('viewmode1');
+		document.querySelectorAll('.exploelement, .explofolder, .explofile, .folderelements, .exploext, .explosize, .tags, .lastmod, .duration').forEach(function(el) {
+			el.classList.add("viewmode1");
+		});	
 
 		if (columnaswidth) {
-			$('.explofolder, .explofile').width(columnaswidth[1] + "%");
-			$('.folderelements, .exploext').width(columnaswidth[2] + "%");
-			$('.explosize').width(columnaswidth[3] + "%");
-			$('.exploelement .tags').width(columnaswidth[4] + "%");
-			$('.lastmod').width(columnaswidth[5] + "%");
-			$('.duration').width(columnaswidth[6] + "%");
+
+			document.querySelectorAll('.explofolder, .explofile').forEach(function(el) {
+				el.style.width = columnaswidth[1] + "%";
+			});
+			document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+				el.style.width = columnaswidth[2] + "%";
+			});
+			document.querySelectorAll('.explosize').forEach(function(el) {
+				el.style.width = columnaswidth[3] + "%";
+			});
+			document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+				el.style.width = columnaswidth[4] + "%";
+			});
+			document.querySelectorAll('.lastmod').forEach(function(el) {
+				el.style.width = columnaswidth[5] + "%";
+			});
+			document.querySelectorAll('.duration').forEach(function(el) {
+				el.style.width = columnaswidth[6] + "%";
+			});
+
 		}
 
 	}
@@ -3893,16 +3916,13 @@ function drawSearchAfter() {
 
 	if (searchviewmode!=1) {
 
-		$('.exploelement').addClass('viewmode' + searchviewmode);
-
-		$('.explofolder').addClass('viewmode' + searchviewmode);
-		$('.explofile').addClass('viewmode' + searchviewmode);
-		$('.folderelements').addClass('viewmode' + searchviewmode);
-		$('.exploext').addClass('viewmode' + searchviewmode).css("display","none");
-		$('.explosize').addClass('viewmode' + searchviewmode).css("display","none");
-		$('.tags').addClass('viewmode' + searchviewmode);
-		$('.lastmod').addClass('viewmode' + searchviewmode).css("display","none");
-		$('.duration').addClass('viewmode' + searchviewmode).css("display","none"); // será visible específicamente si es media
+		document.querySelectorAll('.exploelement, .explofolder, .explofile, .folderelements, .exploext, .explosize, .tags, .lastmod, .duration').forEach(function(el) {
+			el.classList.add('viewmode' + searchviewmode);
+		});
+		document.querySelectorAll('.exploext, .explosize, .lastmod, .duration').forEach(function(el){
+			el.style.display = "none";
+			// ".duration" será visible específicamente si es media
+		})
 
 	}
 
@@ -4492,7 +4512,7 @@ function drawSearchAfter() {
 
 			//para tomar el tiempo del audio mediante la etiqueta audio
 
-			$.each ($(".explofile"), function(u) {
+			$.each ($(".explofile"), function() {
 
 				var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
 				if (extension == "mp3" || extension=="m4a" || extension=="mpeg" || extension == "ogg" || extension == "oga"  || extension == "aac" || extension == "wav") {
@@ -4564,7 +4584,7 @@ function drawSearchAfter() {
 			}
 
 			// para el preview de los audios
-			$.each ($(".explofile"), function(u) {
+			$.each ($(".explofile"), function() {
 
 				var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
 				if (extension == "mp3" || extension=="m4a" || extension=="mpeg" || extension == "ogg" || extension == "oga"  || extension == "aac" || extension == "wav") {
@@ -4684,7 +4704,7 @@ function drawSearchAfter() {
 
 			// para tomar el tiempo del video mediante la etiqueta video
 
-			$.each ($(".explofile"), function(u) {
+			$.each ($(".explofile"), function() {
 
 				var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
 				if (extension == "mp4" || extension == "m4v" || extension == "webm" || extension == "ogv") {
@@ -4925,7 +4945,7 @@ function drawdirectoryviewtags (){
 	var trans = db.transaction(["tags"], "readonly")
 	var objectStore = trans.objectStore("tags")
 
-	var elementosdirectorio = $(".exploelement .tags");
+	var elementosdirectorio = document.querySelectorAll(".exploelement .tags");
 
 	var tagvalue = [];
 	var tagsdivs = [];
@@ -4944,15 +4964,15 @@ function drawdirectoryviewtags (){
 				tagsdivs[i] += "<div class='tagticket' value='"+ tagticket[i][k] +"'> " + tagticket[i][k] +  "</div>" ;
 
 			};
-			// se mete el contenido (los tagsticket) en el html
-			$( ".exploelement .tags:eq( "+ i +" )" ).html(tagsdivs[i]);
+			// se mete el contenido (los tagsticket) en el html			
+			document.querySelectorAll( ".exploelement .tags")[i].innerHTML = tagsdivs[i];
 
 		}
 
 	});
 
 	// se lee cada etiqueta (solo con id) del html
-	elementosdirectoriotags = $(".exploelement .tags .tagticket");
+	elementosdirectoriotags = document.querySelectorAll(".exploelement .tags .tagticket");
 
 	if (elementosdirectoriotags.length > 0) {
 
@@ -6326,9 +6346,11 @@ function KeyPress(e) {
 
 	    }
 	    else if (evtobj.keyCode == 65 && evtobj.ctrlKey) { // Ctrl+a
-	    	$(".exploelement").removeClass("ui-selected");
-	    	$(".exploelement").removeClass("ui-selecting");
-	    	$(".exploelement").addClass("ui-selecting");
+	    	document.querySelectorAll(".exploelement").forEach(function(el) {
+	    		el.classList.remove("ui-selected");
+	    		el.classList.remove("ui-selecting");
+	    		el.classList.add("ui-selecting");
+	    	});
 	    	return false; //para que no seleccione otras cosas (por defecto)
 
 	    }
@@ -7125,23 +7147,40 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 				elementtagorder = elementtagorder.split(","); // a array (todavía viejo orden)
 
 				for (i in elementtagorder) {
-
 					if (elementtagorder[i] == droppid) {
-						elementtagorder[i] = "temp";
+						posiciondrop = i
+						tempdrop = elementtagorder[i]
 					}
-				}
-				for (i in elementtagorder) {
-
 					if (elementtagorder[i] == draggid) {
-						elementtagorder[i] = droppid;
+						posiciondragg = i
+						tempdragg = elementtagorder[i]
 					}
 				}
-				for (i in elementtagorder) {
 
-					if (elementtagorder[i] == "temp") {
-						elementtagorder[i] = draggid;
-					}
-				}
+				// se reposicionan los tags en el array
+				elementtagorder.splice(posiciondragg,1); //se borra el dragg
+				elementtagorder.splice(posiciondrop, 0, tempdragg); //se inserta en la posición del drop
+
+
+				// se reposicionan los tags en el array (versión antigua, intercambio)
+				// for (i in elementtagorder) {
+
+				// 	if (elementtagorder[i] == droppid) {
+				// 		elementtagorder[i] = "temp";
+				// 	}
+				// }
+				// for (i in elementtagorder) {
+
+				// 	if (elementtagorder[i] == draggid) {
+				// 		elementtagorder[i] = droppid;
+				// 	}
+				// }
+				// for (i in elementtagorder) {
+
+				// 	if (elementtagorder[i] == "temp") {
+				// 		elementtagorder[i] = draggid;
+				// 	}
+				// }
 
 				// ahora realizamos el cambio de orden en la visualización (value del tags y posición de los propios tagtickets)
 				elementtagorder = elementtagorder.toString(); // de nuevo a string
@@ -10694,14 +10733,14 @@ window.parent.$("#delete").on('click', function() {
 
 	}
 
-	if ($(".exploelement.ui-selecting").length > 0) {
+	if (document.querySelectorAll(".ui-selecting").length > 0) {
 
-		alldroppedelement = $(".exploelement.ui-selecting");
+		alldroppedelement = document.querySelectorAll(".ui-selecting");
 
 	}
-	else if ($(".exploelement.ui-selected").length > 0) {
+	else if (document.querySelectorAll(".ui-selected").length > 0) {
 
-		alldroppedelement = $(".exploelement.ui-selected");
+		alldroppedelement = document.querySelectorAll(".ui-selected");
 	}
 
 	if (alldroppedelement.length == 0) {
@@ -10737,7 +10776,9 @@ window.parent.$("#delete").on('click', function() {
 		alertify.confirm(droppedarchive.length + ph_alc_04a + droppedfolder.length + ph_alc_04b, function (e) {
 			if (e) {
 				$("#status").html(ph_deleting);
-				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+				document.querySelectorAll('.exploelement').forEach(function(el) {
+					  el.style.filter = "opacity(46%)";
+					});
 				setTimeout(function() { //porque sino no escribe el "Deleting ..."
 					deleteitsearch()
 				}, 50);
@@ -10748,7 +10789,9 @@ window.parent.$("#delete").on('click', function() {
 		alertify.confirm( droppedarchive.length + ph_alc_05, function (e) {
 			if (e) {
 				$("#status").html(ph_deleting);
-				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+				document.querySelectorAll('.exploelement').forEach(function(el) {
+					  el.style.filter = "opacity(46%)";
+					});
 				setTimeout(function() { //porque sino no escribe el "Deleting ..."
 					deleteitsearch()
 				}, 50);
@@ -10760,7 +10803,9 @@ window.parent.$("#delete").on('click', function() {
 		alertify.confirm(droppedfolder.length + ph_alc_04b, function (e) {
 			if (e) {
 				$("#status").html(ph_deleting);
-				$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+				document.querySelectorAll('.exploelement').forEach(function(el) {
+					  el.style.filter = "opacity(46%)";
+					});
 				setTimeout(function() { //porque sino no escribe el "Deleting ..."
 					deleteitsearch()
 				}, 50);
@@ -11323,9 +11368,11 @@ window.parent.$("#delete").on('click', function() {
 				if (flagg == droppedarchive.length && droppedfolder.length == 0) { //para que lo lance al final
 
 					$("#status").html("");
-					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting');
-					$('.exploelement').removeClass('ui-selected');
+					document.querySelectorAll(".exploelement").forEach(function(el) {
+						el.style.filter = "none";
+						el.classList.remove = "ui-selecting";
+						el.classList.remove = "ui-selected";
+					})
 
 				}
 
@@ -11350,9 +11397,11 @@ window.parent.$("#delete").on('click', function() {
 				if (flagg2 == droppedfolder.length) { //para que lo lance al final
 
 					$("#status").html("");
-					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting');
-					$('.exploelement').removeClass('ui-selected');
+					document.querySelectorAll(".exploelement").forEach(function(el) {
+						el.style.filter = "none";
+						el.classList.remove = "ui-selecting";
+						el.classList.remove = "ui-selected";
+					})
 
 					//si se han borrado carpetas por si acaso se vuelve a lanzar el search para que no se muestren archivos inexistentes
 					$( "#searchaction" ).trigger( "click" );

@@ -56,6 +56,9 @@ var searchviewmode = top.searcher.searchviewmode; // es solo para que no de erro
 
 iniciarfolderview(); // inicia cadena de acciones, carga de explorador, tags etc..
 
+NodeList.prototype.forEach = Array.prototype.forEach;
+
+
 
 $(document).ready(function () {
 
@@ -70,26 +73,55 @@ $(document).ready(function () {
 	language = localStorage["language"];
 
   	if (language == 'EN') {
-		$(".lang_en").css("display", "inline-block");
-		$(".lang_es").css("display", "none");
-		$(".lang_fr").css("display", "none");
+
+		document.querySelectorAll('.lang_en').forEach(function(el) {
+		  el.style.display = "inline-block";
+		});
+		document.querySelectorAll('.lang_es').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_fr').forEach(function(el) {
+		  el.style.display = "none";
+		});
 		// para el bottom
-		$("#bottomleft, #bottomright").removeClass("l_es");
-		$("#bottomleft, #bottomright").removeClass("l_fr");
+		document.querySelectorAll("#bottomleft, #bottomright").forEach(function(el) {
+		  el.classList.remove("l_es");
+		  el.classList.remove("l_fr");
+		});
+
 	} else if (language =='ES') {
-		$(".lang_en").css("display", "none");
-		$(".lang_es").css("display", "inline-block");
-		$(".lang_fr").css("display", "none");
+
+		document.querySelectorAll('.lang_en').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_es').forEach(function(el) {
+		  el.style.display = "inline-block";
+		});
+		document.querySelectorAll('.lang_fr').forEach(function(el) {
+		  el.style.display = "none";
+		});
 		// para el bottom
-		$("#bottomleft, #bottomright").addClass("l_es");
-		$("#bottomleft, #bottomright").removeClass("l_fr");
+		document.querySelectorAll("#bottomleft, #bottomright").forEach(function(el) {
+		  el.classList.add("l_es");
+		  el.classList.remove("l_fr");
+		});
+
 	} else if (language == "FR") {
-		$(".lang_en").css("display", "none");
-		$(".lang_es").css("display", "none");
-		$(".lang_fr").css("display", "inline-block");
+
+		document.querySelectorAll('.lang_en').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_es').forEach(function(el) {
+		  el.style.display = "none";
+		});
+		document.querySelectorAll('.lang_fr').forEach(function(el) {
+		  el.style.display = "inline-block";
+		});		
 		// para el bottom
-		$("#bottomleft, #bottomright").removeClass("l_es");
-		$("#bottomleft, #bottomright").addClass("l_fr");
+		document.querySelectorAll("#bottomleft, #bottomright").forEach(function(el) {
+		  el.classList.remove("l_es");
+		  el.classList.add("l_fr");
+		});
 	}
 
 	// para poder regular anchuras divs
@@ -104,8 +136,9 @@ $(document).ready(function () {
 			onstart: function (event) {
 
 				if (viewmode==1) {
-					$(".imgmode1").width("16px")
-
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
 				}
 
 			},
@@ -113,61 +146,77 @@ $(document).ready(function () {
 
 				// se van a convertir los valores en pixeles de las columnas del panel derecho a porcentajes para que al cambiar la anchura del panel cambien las anchuras de las columnas de forma equitativa.
 				if (viewmode==1){
-					var pixelstotales = $('.exploelement').width();
 
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
+					if (document.querySelector('.exploelement')){
 
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
+						var pixelstotales = document.querySelector('.exploelement').offsetWidth-2;
 
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
+						var pixels = document.querySelector('.explofolder, .explofile').offsetWidth-5;
+						columnaswidth[1] = (100 / pixelstotales) * pixels;
+						document.querySelectorAll('.explofolder, .explofile').forEach(function(el) {
+						  el.style.width = columnaswidth[1] + '%';
+						});						
 
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
+						pixels = document.querySelector('.folderelements, .exploext').offsetWidth-6;
+						columnaswidth[2] = (100 / pixelstotales) * pixels;
+						document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+						  el.style.width = columnaswidth[2] + '%';
+						});
+						
+						pixels = document.querySelector('.explosize').offsetWidth-6;
+						columnaswidth[3] = (100 / pixelstotales) * pixels;
+						document.querySelectorAll('.explosize').forEach(function(el) {
+						  el.style.width = columnaswidth[3] + '%';
+						});
+	
+						pixels = document.querySelector('.exploelement .tags').offsetWidth-4;
+						columnaswidth[4] = (100 / pixelstotales) * pixels;
+						document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+						  el.style.width = columnaswidth[4] + '%';
+						});						
 
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+						pixels = document.querySelector('.lastmod').offsetWidth-6;
+						columnaswidth[5] = (100 / pixelstotales) * pixels;
+						document.querySelectorAll('.lastmod').forEach(function(el) {
+						  el.style.width = columnaswidth[5] + '%';
+						});
+						
+						pixels = document.querySelector('.duration').offsetWidth-6;
+						columnaswidth[6] = (100 / pixelstotales) * pixels;
+						document.querySelectorAll('.duration').forEach(function(el) {
+						  el.style.width = columnaswidth[6] + '%';
+						});
+					}
 				}
 
 			}
 	  })
 	  .on('resizemove', function (event) {
 
-			var originalwidth = $('#treeview').width();
-			var nd_originalwidth = $('#locationinfo, #dirview-wrapper').width();
+			var originalwidth = document.querySelector('#treeview').offsetWidth;
+			var nd_originalwidth = document.querySelector('#locationinfo, #dirview-wrapper').offsetWidth;
 
 			var diference = originalwidth - event.rect.width;
 			var nd_newwidth = nd_originalwidth + diference;
 
-			if (nd_newwidth > 400 && nd_newwidth < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo
-				$('#treeview').width(event.rect.width);
-				$('#locationinfo, #dirview-wrapper').width(nd_newwidth);
+			if (nd_newwidth > 400 && nd_newwidth < window.innerWidth - 45) { //esto es para poner un tamaño minimo y máximo				
+				document.querySelector('#treeview').style.width = event.rect.width + "px";
+				document.querySelectorAll('#locationinfo, #dirview-wrapper').forEach(function(el) {
+				  el.style.width = nd_newwidth + "px";
+				});		
 			}
 
 
-			// este es un apaño necesario para que se pueda leer la dirección del location cuando hay poca anchura
-			if ($("#locationinfo").width() <= 52 + $("#location").width() + 75 + 26) {
-				$("#previousnextleft").css("display", "none")
-				$("#previousnextright").css("display", "inline-block")
-				$("#location").css("padding-left", "2px")
-
+			// este es un apaño necesario para que se pueda leer la dirección del location cuando hay poca anchura			
+			if (document.querySelector("#locationinfo").offsetWidth <= 52 + document.querySelector("#location").offsetWidth + 75 + 26) {
+				document.querySelector("#previousnextleft").style.display = "none";
+				document.querySelector("#previousnextright").style.display = "inline-block";
+				document.querySelector("#location").style.paddingLeft = "2px";
 			}
 			else {
-				$("#previousnextleft").css("display", "inline-block")
-				$("#previousnextright").css("display", "none");
-				$("#location").css("padding-left", "0")
-
+				document.querySelector("#previousnextleft").style.display = "inline-block";
+				document.querySelector("#previousnextright").style.display = "none";
+				document.querySelector("#location").style.paddingLeft = "0";
 			}
 
 
@@ -182,31 +231,32 @@ $(document).ready(function () {
 	  })
 	  .on('resizemove', function (event) {
 
-	  	var originalwidth = $('#bottomleft').width();
-		var nd_originalwidth = $('#bottomright').width();
+	  	var originalwidth = document.querySelector('#bottomleft').offsetWidth;
+		var nd_originalwidth = document.querySelector('#bottomright').offsetWidth-1;
 
 		var diference = originalwidth - event.rect.width;
 		var nd_newwidth = nd_originalwidth + diference;
+
 		if (originalwidth > 20 && nd_originalwidth > 80) { //esto es solo para poner un tamño minimo
-			$('#bottomleft').width(event.rect.width);
-			$('#bottomright').width(nd_newwidth);
+			document.querySelector('#bottomleft').style.width = event.rect.width + "px";
+			document.querySelector('#bottomright').style.width = nd_newwidth + "px";			
 		}
 		else if (originalwidth <= 20) {
-			$('#bottomleft').css("width","25px");
-			$('#bottomright').css("width","calc(100% - 45px)");
+			document.querySelector('#bottomleft').style.width = "25px";			
+			document.querySelector('#bottomright').style.width = "calc(100% - 45px)";
 		}
 		else if (nd_originalwidth <= 80) {
-			$('#bottomleft').css("width","calc(100% - 105px)");
-			$('#bottomright').css("width","95px");
+			document.querySelector('#bottomleft').style.width = "calc(100% - 105px)";	
+			document.querySelector('#bottomright').style.width = "95px";			
 		}
 		// hay que poner los dos condicionales de abajo para que no monte
-		if ($('#bottomleft').width() <= 20) {
-			$('#bottomleft').css("width","25px");
-			$('#bottomright').css("width","calc(100% - 45px)");
+		if (document.querySelector('#bottomleft').offsetWidth <= 20) {
+			document.querySelector('#bottomleft').style.width = "25px";
+			document.querySelector('#bottomright').style.width = "calc(100% - 45px)";			
 		}
-		if ($('#bottomright').width() <= 80) {
-			$('#bottomleft').css("width","calc(100% - 105px)");
-			$('#bottomright').css("width","95px");
+		if (document.querySelector('#bottomright').offsetWidth <= 80) {
+			document.querySelector('#bottomleft').style.width = "calc(100% - 105px)";	
+			document.querySelector('#bottomright').style.width = "95px";			
 		}
 
 	  });
@@ -216,6 +266,47 @@ $(document).ready(function () {
 	// las diferentes "columnas" del panel derecho
 	if (viewmode==1){
 
+		// función para pasar las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
+		function columnasaporcentajes() {
+			var pixelstotales = document.querySelector('.exploelement').offsetWidth-2;
+			
+			var pixels = document.querySelector('.explofolder, .explofile').offsetWidth-5;
+			columnaswidth[1] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.explofolder, .explofile').forEach(function(el) {
+			  el.style.width = columnaswidth[1] + '%';
+			});
+
+			pixels = document.querySelector('.folderelements, .exploext').offsetWidth-6;
+			columnaswidth[2] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+			  el.style.width = columnaswidth[2] + '%';
+			});
+
+			pixels = document.querySelector('.explosize').offsetWidth-6;
+			columnaswidth[3] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.explosize').forEach(function(el) {
+			  el.style.width = columnaswidth[3] + '%';
+			});
+
+			pixels = document.querySelector('.exploelement .tags').offsetWidth-4;
+			columnaswidth[4] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+			  el.style.width = columnaswidth[4] + '%';
+			});
+
+			pixels = document.querySelector('.lastmod').offsetWidth-6;
+			columnaswidth[5] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.lastmod').forEach(function(el) {
+			  el.style.width = columnaswidth[5] + '%';
+			});
+
+			pixels = document.querySelector('.duration').offsetWidth-6;
+			columnaswidth[6] = (100 / pixelstotales) * pixels;
+			document.querySelectorAll('.duration').forEach(function(el) {
+			  el.style.width = columnaswidth[6] + '%';
+			});
+		}
+
 		interact('.explofolder, .explofile')
 
 			.resizable({
@@ -223,38 +314,18 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".explofolder, .explofile").width()
-					nd_originalwidth = $(".folderelements, .exploext").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".explofolder, .explofile").offsetWidth-5;
+					nd_originalwidth = document.querySelector(".folderelements, .exploext").offsetWidth-6;				
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+					
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
+					columnasaporcentajes();
 
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
 				}
 
 			})
@@ -266,11 +337,14 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".explofolder, .explofile").width(event.rect.width);
-					$(".folderelements, .exploext").width(nd_newwidth);
+					document.querySelectorAll('.explofolder, .explofile').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
-
 
 			});
 
@@ -281,38 +355,17 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".folderelements, .exploext").width()
-					nd_originalwidth = $(".explosize").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".folderelements, .exploext").offsetWidth-6;
+					nd_originalwidth = document.querySelector(".explosize").offsetWidth-6;
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
 				}
 
 			})
@@ -323,8 +376,12 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".folderelements, .exploext").width(event.rect.width)
-					$(".explosize").width(nd_newwidth);
+					document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.explosize').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
 
@@ -337,38 +394,18 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".explosize").width()
-					nd_originalwidth = $(".exploelement .tags").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".explosize").offsetWidth-6;
+					nd_originalwidth = document.querySelector(".exploelement .tags").offsetWidth-4;
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
+					
 				}
 
 			})
@@ -379,8 +416,12 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".explosize").width(event.rect.width)
-					$(".exploelement .tags").width(nd_newwidth);
+					document.querySelectorAll('.explosize').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
 
@@ -393,38 +434,17 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".exploelement .tags").width()
-					nd_originalwidth = $(".lastmod").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".exploelement .tags").offsetWidth-4;
+					nd_originalwidth = document.querySelector(".lastmod").offsetWidth-6;
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
 				}
 
 			})
@@ -435,8 +455,12 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".exploelement .tags").width(event.rect.width)
-					$(".lastmod").width(nd_newwidth);
+					document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.lastmod').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
 
@@ -449,38 +473,17 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".lastmod").width()
-					nd_originalwidth = $(".duration").width()
-					$(".imgmode1").width("16px");
+
+					originalwidth = document.querySelector(".lastmod").offsetWidth-6;
+					nd_originalwidth = document.querySelector(".duration").offsetWidth-6;
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
 				}
 
 			})
@@ -491,8 +494,12 @@ $(document).ready(function () {
 
 				if (event.rect.width > 15 && nd_newwidth > 15) {
 
-					$(".lastmod").width(event.rect.width)
-					$(".duration").width(nd_newwidth);
+					document.querySelectorAll('.lastmod').forEach(function(el) {
+					  el.style.width = event.rect.width + "px";
+					});
+					document.querySelectorAll('.duration').forEach(function(el) {
+					  el.style.width = nd_newwidth + "px";
+					});
 
 				}
 
@@ -505,39 +512,20 @@ $(document).ready(function () {
 				edges: { left: false, right: true, bottom: false, top: false },
 
 				onstart: function (event) {
-					originalwidth = $(".duration").width();
+
+					originalwidth = document.querySelector(".duration").offsetWidth-6;
+					
 					var x = $(".exploelement").offset();
 					rowleftlimit = x.left + $(".exploelement")["0"].scrollWidth - 10;
-					$(".imgmode1").width("16px");
+
+					document.querySelectorAll('.imgmode1').forEach(function(el) {
+					  el.style.width = "16px";
+					});
+
 				},
 				onend: function (event) {
 
-					// se pasan las anchuras a porcentaje para que si se cambia el tamaño de la ventana mantenga los limites
-					var pixelstotales = $('.exploelement').width();
-
-					var pixels = $('.explofolder, .explofile').width();
-					columnaswidth[1] = (100 / pixelstotales) * pixels
-					$('.explofolder, .explofile').width(''+ columnaswidth[1] + '%');
-
-					pixels = $('.folderelements, .exploext').width();
-					columnaswidth[2] = (100 / pixelstotales) * pixels
-					$('.folderelements, .exploext').width(''+ columnaswidth[2] + '%');
-
-					pixels = $('.explosize').width();
-					columnaswidth[3] = (100 / pixelstotales) * pixels
-					$('.explosize').width(''+ columnaswidth[3] + '%');
-
-					pixels = $('.exploelement .tags').width();
-					columnaswidth[4] = (100 / pixelstotales) * pixels
-					$('.exploelement .tags').width(''+ columnaswidth[4] + '%');
-
-					pixels = $('.lastmod').width();
-					columnaswidth[5] = (100 / pixelstotales) * pixels
-					$('.lastmod').width(''+ columnaswidth[5] + '%');
-
-					pixels = $('.duration').width();
-					columnaswidth[6] = (100 / pixelstotales) * pixels
-					$('.duration').width(''+ columnaswidth[6] + '%');
+					columnasaporcentajes();
 				}
 
 			})
@@ -602,20 +590,25 @@ $(document).ready(function () {
 	$( window ).resize(function() {
 
 		// ponemos las anchuras del panel izquierdo y derecho en porcentajes para que se ajusten al tamaño de la pantalla
-		$('#treeview').width(''+ 24.8 + '%');
-		$('#locationinfo, #dirview-wrapper').width(''+ 74 + '%');
-		$('#searchview').width(''+ 24.8 + '%');
-		$('#searchdirview-wrapper').width(''+ 74 + '%');
+
+		document.querySelector('#locationinfo').style.width = 75.2 + '%';
+		if (document.querySelector('#treeview')){
+			document.querySelector('#treeview').style.width = 24.8 + '%';
+			document.querySelector('#dirview-wrapper').style.width = 75.2 + '%';
+		} else if (document.querySelector('#searchview')){
+			document.querySelector('#searchview').style.width = 24.8 + '%';
+			document.querySelector('#searchdirview-wrapper').style.width = 75.2 + '%';
+		}
 
 		if (language == "EN") {
-			$('#bottomleft').width('205px');
-			$('#bottomright').width('calc(100% - 223px)');
+			document.querySelector('#bottomleft').style.width = '205px';
+			document.querySelector('#bottomright').style.width = 'calc(100% - 223px)';
 		} else if (language == "ES") {
-			$('#bottomleft').width('298px');
-			$('#bottomright').width('calc(100% - 316px)');
+			document.querySelector('#bottomleft').style.width = '298px';
+			document.querySelector('#bottomright').style.width = 'calc(100% - 316px)';
 		} else if (language == "FR") {
-			$('#bottomleft').width('332px');
-			$('#bottomright').width('calc(100% - 350px)');
+			document.querySelector('#bottomleft').style.width = '332px';
+			document.querySelector('#bottomright').style.width = 'calc(100% - 350px)';
 		}
 
 	});
@@ -626,13 +619,13 @@ $(document).ready(function () {
 
 	$("#eraser img").click(function() {
 
-		var cursoractual = $(".tags > div").css('cursor')
-
 		if (eraseron == "off") {
 
-			$(".tags > div").css("cursor", "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAYAAAAmaHdCAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QIFERIkBcGckAAAA2FJREFUOMuNlFtIqmkUhldaXnSYps0QA151YMjAPyEmf/DX0JIug80M1EVz6ES3ETU0SWxKC4O6CbIco4GoIJkhhgmpC0WSopkkJCoCy1Ism8ZOlpWZ71ztf3LbPqy79X3v+3zrWyxWmkajIbvdTiqV6geJRPJ9YWGhRCQSfbG9vf3H5uZmg9vtvqVPiZqamteNjY0IBoN4Hi0tLZDJZK8+5heIxeKskpKS30pLS0kkEiVdms1mqqio+Jdl2c8+CMnKylK2trYSAMrNzU0RTExMpCkUCh8RkUajeRGSXl5ezmZnZ5PL5aJwOEzp6emk1WpJpVLxIqPR+CoQCPw9Pz//tVqtJofDkUypra21NTQ0oLe3l+/F+vo6dDpdUn9CoRBYlrW8WFFfX9/NxcUFZmZm4PF4eNPd3R0GBweTQE6nEwqF4puU/2g0mp8fHx/hcrnQ09ODk5MT3nR5eQmr1crn3d3dWFpaQllZ2VcpoLq6uksA6O/vh9FoTHp9ZWUFi4uLOD4+htPpBADodLoYEVF1dfX/ELlcLh4bGwMAjI6OYnJyMgk0NTWF8fHxpLO2trallGpYlv3u4OAAt7e30Ov1MJvNvMHr9aKjowNPT0/8md/vB8Mwb5735e3kuu7v77G/vw+TyYTd3V0EAgHMzs4CAPR6fVI1NpstJpVKM1IqMhgMVwCwtraGgYEBWCwW3pRIJDA8PMzn4XAYHMf9kgRQq9Ukk8nUVqsVkUgE9fX16OzsxLths9kAAPF4HBzHXQufQw4PDykUCh1eXV3FiKjKYDDQxsYG+f1+YhiG10WjUdrb26OCggKam5sTCF6YG1peXh7yer1hIqL29nY6PT2l6elpXsMwDAWDQSIiKioqShe+C/H5fEREiMViFrFY/JNEIqGcnBxyu92Ul5dH+fn5REQUiURIJBLR6urqh/eEVCp9fXR0xA/d0NAQotEo35uRkREolcqY4H2Aqqoq2tra+r2pqenPRCJBHMfRw8MDdXV18Zrz83MSCAR/Cd8H8fl8pFaryW63zwmFwh8rKys/5ziOHA4HnZ2dEcMw5PV6aWdnp/6jq1OpVFJxcXHR27GPx+MwmUxYWFhAc3NziIgojT4xtFrtt3K5fCAjI+NLj8cjvLm5+fX6+vpNZmbmP/8BN8ZmaONW+JwAAAAASUVORK5CYII='),auto");
-
 			eraseron = "on";
+
+			document.querySelectorAll(".tags > div").forEach(function(el) {
+				el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAYAAAAmaHdCAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QIFERIkBcGckAAAA2FJREFUOMuNlFtIqmkUhldaXnSYps0QA151YMjAPyEmf/DX0JIug80M1EVz6ES3ETU0SWxKC4O6CbIco4GoIJkhhgmpC0WSopkkJCoCy1Ism8ZOlpWZ71ztf3LbPqy79X3v+3zrWyxWmkajIbvdTiqV6geJRPJ9YWGhRCQSfbG9vf3H5uZmg9vtvqVPiZqamteNjY0IBoN4Hi0tLZDJZK8+5heIxeKskpKS30pLS0kkEiVdms1mqqio+Jdl2c8+CMnKylK2trYSAMrNzU0RTExMpCkUCh8RkUajeRGSXl5ezmZnZ5PL5aJwOEzp6emk1WpJpVLxIqPR+CoQCPw9Pz//tVqtJofDkUypra21NTQ0oLe3l+/F+vo6dDpdUn9CoRBYlrW8WFFfX9/NxcUFZmZm4PF4eNPd3R0GBweTQE6nEwqF4puU/2g0mp8fHx/hcrnQ09ODk5MT3nR5eQmr1crn3d3dWFpaQllZ2VcpoLq6uksA6O/vh9FoTHp9ZWUFi4uLOD4+htPpBADodLoYEVF1dfX/ELlcLh4bGwMAjI6OYnJyMgk0NTWF8fHxpLO2trallGpYlv3u4OAAt7e30Ov1MJvNvMHr9aKjowNPT0/8md/vB8Mwb5735e3kuu7v77G/vw+TyYTd3V0EAgHMzs4CAPR6fVI1NpstJpVKM1IqMhgMVwCwtraGgYEBWCwW3pRIJDA8PMzn4XAYHMf9kgRQq9Ukk8nUVqsVkUgE9fX16OzsxLths9kAAPF4HBzHXQufQw4PDykUCh1eXV3FiKjKYDDQxsYG+f1+YhiG10WjUdrb26OCggKam5sTCF6YG1peXh7yer1hIqL29nY6PT2l6elpXsMwDAWDQSIiKioqShe+C/H5fEREiMViFrFY/JNEIqGcnBxyu92Ul5dH+fn5REQUiURIJBLR6urqh/eEVCp9fXR0xA/d0NAQotEo35uRkREolcqY4H2Aqqoq2tra+r2pqenPRCJBHMfRw8MDdXV18Zrz83MSCAR/Cd8H8fl8pFaryW63zwmFwh8rKys/5ziOHA4HnZ2dEcMw5PV6aWdnp/6jq1OpVFJxcXHR27GPx+MwmUxYWFhAc3NziIgojT4xtFrtt3K5fCAjI+NLj8cjvLm5+fX6+vpNZmbmP/8BN8ZmaONW+JwAAAAASUVORK5CYII='),auto"
+			});
 
 			$(".tags > div").draggable( 'disable' );
 			$("#eraser img").addClass('activated');
@@ -642,7 +635,10 @@ $(document).ready(function () {
 
 			eraseron = "off";
 
-			$(".tags > div").css('cursor','pointer')
+			document.querySelectorAll(".tags > div").forEach(function(el) {
+				el.style.cursor = "pointer"
+			});
+
 			$(".tags > div").draggable( 'enable' );
 			$("#eraser img").removeClass('activated');
 			$("#eraseron").removeClass("on");
@@ -780,8 +776,8 @@ $(document).ready(function () {
 			"<b>Tip</b>: If is the first time you launch Tagstoo, it will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no longer load demo tags when a new database is created uncheck the checkbox in the options menu.",
 			"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
 			"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
-			"<b>Tip</b>: At the current application's development stage, depending on computer, manage folders with more than few hundred of elements can be heavy and slow when load.",
 			"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
+			"<b>Tip</b>: When a search has been carried out, you also have the option of creating either a printable list in graphic mode (with labels) or a list in plain text, with the routes and names of the searched elements, which can be used externally (as a playlist for a player, for example)",
 			"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
 			"<b>Tip</b>: Sometimes depending the action you do (or if you move somethin using external program) the view cannot be actualized, to actualize it simply press refresh icons (arrows in circle).",
 			"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and will be ready."
@@ -795,8 +791,8 @@ $(document).ready(function () {
 			"<b>Tip</b>: Si es la primera vez que inicia Tagstoo, se habrán cargado las etiquetas de demostración en la parte inferior, puede modificarlas o eliminarlas o agregar nuevas a su conveniencia, para no cargar etiquetas de demostración cuando se crea una nueva base de datos desmarque la casilla de verificación en el menú de opciones.",
 			"<b>Tip</b>: Haga doble clic en una carpeta de la izquierda para seleccionar, luego al pulsar el botón de pegar, las carpetas y archivos que seleccionó a la derecha se copiarán o moverán a esta carpeta dependiendo de lo que haya seleccionado en el interruptor de copia/corta.",
 			"<b>Tip</b>: Puede seleccionar varios elementos al mismo tiempo presionando shift mientras selecciona.",
-			"<b>Tip</b>: En la fase actual de desarrollo de la aplicacion, dependiendo de la computadora, administrar carpetas con más de unos pocos cientos de elementos puede ser pesado y lento cuando se carga.",
 			"<b>Tip</b>: En la búsqueda puedes agregar todos los campos de entrada que necesites para que puedas construir fácilmente búsquedas como “<em>Buscar archivos que tengan (tag1 + tag2 + tag7 + tag8) o (tag1 + tag2 + tag6 + tag9) o (tag4 + tag6) + tag9) pero no tienen (tag10) y (tag11).</em>”",
+			"<b>Tip</b>: Cuando se ha realizado una búsqueda, también tiene la opción de crear o bien una lista imprimible en modo gráfico (con etiquetas) o bien una lista en texto plano, con las rutas y los nombres de los elementos buscados, que puede ser usada externamente (como una lista de reproducción para un reproductor, por ejemplo).",
 			"<b>Tip</b>: Si el nombre de la etiqueta es largo, elija una forma de etiqueta que tenga esquinas afiladas para que se ajuste mejor.",
 			"<b>Tip</b>: A veces dependiendo de la acción que hagas (o si mueves algo usando un programa externo) la vista no se puede actualizar, actualizarla simplemente pulsa los iconos de actualización (flechas en círculo).",
 			"<b>Tip</b>: Debido a que hay versiones de Tagstoo para varios sistemas (Windows, Linux y macOS), puede administrar los mismos datos, en una unidad externa, por ejemplo, desde diferentes sistemas alternativamente: Exporte los datos a un archivo e importerlo donde lo necesite y estarán listos."
@@ -811,8 +807,8 @@ $(document).ready(function () {
 			"<b>Tip</b>: Si c'est la première fois que vous démarrez Tagstoo, les étiquettes de démonstration ont été chargées en bas, vous pouvez les modifier ou les supprimer ou en ajouter de nouvelles à votre convenance, pour ne pas charger les balises de démonstration lorsqu'une nouvelle base de données est créée, décochez la case cochez en le menu d'option.",
 			"<b>Tip</b>: Double-cliquez sur un dossier à gauche pour être sélectionné, puis, lorsque vous appuyez sur le bouton de collage, les dossiers et les fichiers que vous avez sélectionnés dans la droite seront copiés ou déplacés dans ce dossier en fonction de ce que vous avez sélectionné dans le commutateur copie/coupe.",
 			"<b>Tip</b>: Vous pouvez sélectionner plusieurs éléments en même temps en appuyant sur shift tout en sélectionnant.",
-			"<b>Tip</b>: À la phase de développement de l'application actuelle, selon l'ordinateur, gérer les dossiers avec plus de quelques centaines d'éléments peut être lourd et lent lors de la charge.",
 			"<b>Tip</b>: Dans la recherche, vous pouvez ajouter tous les champs de saisie dont vous avez besoin afin que vous puissiez construire facilement des recherches comme “<em>Rechercher des fichiers qui ont (tag1 + tag2 + tag7 + tag8) ou (tag1 + tag2 + tag6 + tag9) ou (tag4 + tag6 + tag9) mais n'ont pas (tag10) et (tag11).</em>”",
+			"<b>Tip</b>: Lorsqu'une recherche a été effectuée, vous avez également la possibilité de créer soit une liste imprimable en mode graphique (avec étiquettes) ou une liste en texte brut, avec les routes et les noms des éléments recherchés, qui peuvent être utilisés en externe (comme une playlist pour un lecteur, par exemple).",
 			"<b>Tip</b>: Si votre nom de balise est long, choisissez une forme d'étiquette qui a des angles vifs pour mieux l'adapter.",
 			"<b>Tip</b>: Parfois, selon l'action que vous faites (ou si vous déplacez quelque chose en utilisant un programme externe), la vue ne peut pas être actualisée, pour l'actualiser appuyez simplement sur les icônes de rafraîchissement (flèches en cercle).",
 			"<b>Tip</b>: Étant donné qu'il existe des versions de Tagstoo pour plusieurs systèmes (Windows, Linux et MacOS), vous pouvez gérer les mêmes données, par exemple sur un lecteur externe, par exemple à partir de différents systèmes: Exportez les données vers un fichier et importez-les là où vous en avez besoin et elles seront prêt."
@@ -1048,9 +1044,12 @@ function KeyPress(e) {
 
 	    }
 	    else if (evtobj.keyCode == 65 && evtobj.ctrlKey) { // Ctrl+a
-	    	$(".exploelement").removeClass("ui-selected");
-	    	$(".exploelement").removeClass("ui-selecting");
-	    	$(".exploelement").addClass("ui-selecting");
+
+	    	document.querySelectorAll(".exploelement").forEach(function(el) {
+	    		el.classList.remove("ui-selected");
+	    		el.classList.remove("ui-selecting");
+	    		el.classList.add("ui-selecting");
+	    	});
 	    	return false; //para que no seleccione otras cosas (por defecto)
 	    }
 
@@ -1059,29 +1058,6 @@ function KeyPress(e) {
 }
 
 document.onkeydown = KeyPress;
-// --fin teclas accesos directos
-
-// conmutador copy/paste
-// window.parent.$(".onoffswitch-inner, .onoffswitch-switch").bind('click', function() {
-
-// 	console.log(pasteaction)
-
-// 	if(pasteaction == "copy") {
-
-// 		pasteaction = "cut";
-// 		window.parent.$(".onoffswitch-checkbox").addClass("check");
-// 		window.parent.$(".onoffswitch-switch").css("background-color","#d5695d"); //red
-
-// 	} else if (pasteaction == "cut") {
-
-// 		pasteaction = "copy";
-// 		window.parent.$(".onoffswitch-checkbox").removeClass("check");
-// 		window.parent.$(".onoffswitch-switch").css("background-color","#439bd6"); //blue
-
-// 	}
-
-// });
-
 
 
 // Botones localización anterior/siguiente y añadir a favoritos
@@ -1398,14 +1374,14 @@ window.parent.$("#delete").on('click', function() {
 	var numerooriginalelementos = $("#folderreadstatus").html();
 	numerooriginalelementos = numerooriginalelementos.substr(0,numerooriginalelementos.indexOf(' '));
 
-	if ($(".ui-selecting").length > 0) {
+	if (document.querySelectorAll(".ui-selecting").length > 0) {
 
-		var todeleteelements = $(".ui-selecting");
+		var todeleteelements = document.querySelectorAll(".ui-selecting");
 
 	}
-	else if ($(".ui-selected").length > 0) {
+	else if (document.querySelectorAll(".ui-selected").length > 0) {
 
-		var todeleteelements = $(".ui-selected");
+		var todeleteelements = document.querySelectorAll(".ui-selected");
 	}
 
 	if (!todeleteelements) {
@@ -1445,7 +1421,10 @@ window.parent.$("#delete").on('click', function() {
 			alertify.confirm(todeletearchives.length + ph_alc_01a + todeletefolders.length + ph_alc_01b, function (e) {
 				if (e) {
 					$("#folderreadstatus").html(ph_deleting);
-					$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+					document.querySelectorAll('.exploelement, .exploelementfolderup').forEach(function(el) {
+					  el.style.filter = "opacity(46%)";
+					});
+					// $('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
 					setTimeout(function() { //porque sino no escribe el "Deleting ..."
 						deleteit()
 					}, 50);
@@ -1456,7 +1435,9 @@ window.parent.$("#delete").on('click', function() {
 			alertify.confirm( todeletearchives.length + ph_alc_02, function (e) {
 				if (e) {
 					$("#folderreadstatus").html(ph_deleting);
-					$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+					document.querySelectorAll('.exploelement, .exploelementfolderup').forEach(function(el) {
+					  el.style.filter = "opacity(46%)";
+					});
 					setTimeout(function() { //porque sino no escribe el "Deleting ..."
 						deleteit()
 					}, 50);
@@ -1468,7 +1449,9 @@ window.parent.$("#delete").on('click', function() {
 			alertify.confirm(todeletefolders.length + ph_alc_01b, function (e) {
 				if (e) {
 					$("#folderreadstatus").html(ph_deleting);
-					$('.exploelement, .exploelementfolderup').css("filter","opacity(46%)");
+					document.querySelectorAll('.exploelement, .exploelementfolderup').forEach(function(el) {
+					  el.style.filter = "opacity(46%)";
+					});
 					setTimeout(function() { //porque sino no escribe el "Deleting ..."
 						deleteit()
 					}, 50);
@@ -1483,15 +1466,16 @@ window.parent.$("#delete").on('click', function() {
 			var numberofelementtodelete = 0;
 			var numberofelements = "";
 
-			$.each($('.exploelement'), function(u) {
+
+			document.querySelectorAll('.exploelement').forEach(function() {
 				previousnumberofelements++
 			})
 
-			$.each($('.ui-selecting'), function(u) {
+			document.querySelectorAll('.ui-selecting').forEach(function() {
 				numberofelementtodelete++
 			})
 
-			$.each($('.ui-selected'), function(u) {
+			document.querySelectorAll('.ui-selected').forEach(function() {
 				numberofelementtodelete++
 			})
 
@@ -2034,7 +2018,9 @@ window.parent.$("#delete").on('click', function() {
 						}
 						$(".ui-selecting, ui-selected").remove();						
 						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length - todeletefolders.length + ph_elementsinfolder);						
-						$('.exploelement, .exploelementfolderup').css("filter","none");						
+						document.querySelectorAll(".exploelement, .exploelementfolderup").forEach(function(el) {
+							el.style.filter = "none";
+						});												
 
 					}, timetowaitf);
 
@@ -2049,7 +2035,9 @@ window.parent.$("#delete").on('click', function() {
 						}						
 						$(".ui-selecting, ui-selected").remove();						
 						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length + ph_elementsinfolder);			
-						$('.exploelement, .exploelementfolderup').css("filter","none");
+						document.querySelectorAll(".exploelement, .exploelementfolderup").forEach(function(el) {
+							el.style.filter = "none";
+						});
 
 					}, timetowaitf);
 
@@ -2093,7 +2081,9 @@ function readDirectory (dirtoread) {
 
 		// tag eraser off
 		eraseron = "off";
-		$(".tags > div").css('cursor','pointer')
+		document.querySelectorAll(".tags > div").forEach(function(el) {
+			el.style.cursor = "pointer"
+		});
 		$("#eraser img").removeClass('activated');
 		$("#eraseron").removeClass("on");
 
@@ -2866,7 +2856,7 @@ function drawDirectoryArchives (viewmode, order) {
 
 function drawDirectoryAfter() {
 
-	$('#directoryview').append(t);
+	document.getElementById('directoryview').innerHTML += t;
 
 	window.parent.$("#viewmodenumber").html(viewmode + ".");
 	
@@ -2876,44 +2866,47 @@ function drawDirectoryAfter() {
 
 	if (viewmode==1) {
 
-		$('.exploelement').addClass('viewmode1');
-		$('.exploelementfolderup').addClass('viewmode1');
-
-		$('.explofolder').addClass('viewmode1');
-		$('.explofile').addClass('viewmode1');
-		$('.folderelements').addClass('viewmode1');
-		$('.exploext').addClass('viewmode1');
-		$('.explosize').addClass('viewmode1');
-		$('.tags').addClass('viewmode1');
-		$('.lastmod').addClass('viewmode1');
-		$('.duration').addClass('viewmode1');
+		document.querySelectorAll('.exploelement, .exploelementfolderup, .explofolder, .explofile, .folderelements, .exploext, .explosize, .tags, .lastmod, .duration').forEach(function(el) {
+			el.classList.add("viewmode1");
+		});
+		
 
 		if (columnaswidth) {
-			$('.explofolder, .explofile').width(columnaswidth[1] + "%");
-			$('.folderelements, .exploext').width(columnaswidth[2] + "%");
-			$('.explosize').width(columnaswidth[3] + "%");
-			$('.exploelement .tags').width(columnaswidth[4] + "%");
-			$('.lastmod').width(columnaswidth[5] + "%");
-			$('.duration').width(columnaswidth[6] + "%");
+
+			document.querySelectorAll('.explofolder, .explofile').forEach(function(el) {
+				el.style.width = columnaswidth[1] + "%";
+			});
+			document.querySelectorAll('.folderelements, .exploext').forEach(function(el) {
+				el.style.width = columnaswidth[2] + "%";
+			});
+			document.querySelectorAll('.explosize').forEach(function(el) {
+				el.style.width = columnaswidth[3] + "%";
+			});
+			document.querySelectorAll('.exploelement .tags').forEach(function(el) {
+				el.style.width = columnaswidth[4] + "%";
+			});
+			document.querySelectorAll('.lastmod').forEach(function(el) {
+				el.style.width = columnaswidth[5] + "%";
+			});
+			document.querySelectorAll('.duration').forEach(function(el) {
+				el.style.width = columnaswidth[6] + "%";
+			});
+			
 		}
 
 	}
 
 	else if (viewmode!=1) {
 
-		$('.exploelement').addClass('viewmode' + viewmode);
-		$('.exploelementfolderup').addClass('viewmode' + viewmode);
+		document.querySelectorAll('.exploelement, .exploelementfolderup, .explofolder, .explofile, .folderelements, .exploext, .explosize, .tags, .lastmod, .duration').forEach(function(el) {
+			el.classList.add('viewmode' + viewmode);
+		});
+		document.querySelectorAll('.exploext, .explosize, .lastmod, .duration').forEach(function(el){
+			el.style.display = "none";
+			// ".duration" será visible específicamente si es media
+		})
 
-		$('.explofolder').addClass('viewmode' + viewmode);
-		$('.explofile').addClass('viewmode' + viewmode);
-		$('.folderelements').addClass('viewmode' + viewmode);
-		$('.exploext').addClass('viewmode' + viewmode).css("display","none");
-		$('.explosize').addClass('viewmode' + viewmode).css("display","none");
-		$('.tags').addClass('viewmode' + viewmode);
-		$('.lastmod').addClass('viewmode' + viewmode).css("display","none");
-		$('.duration').addClass('viewmode' + viewmode).css("display","none"); // será visible específicamente si es media
 	}
-
 
 	drawdirectoryviewtags(); // para añadir los divs de los tags
 	interactions(); // activa los eventos de arrastre, click, hold para los elementos añadidos.
@@ -2931,7 +2924,7 @@ function drawDirectoryAfter() {
 
 		var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
 
-		$.each ($(".explofolder"), function(u) {
+		$.each ($(".explofolder"), function() {
 
 			var ext_generic = 0; // zip, rar, 7z, undefined
 			var ext_image = 0; // jpg, jpeg, gif, png, svg, ico
@@ -3156,7 +3149,7 @@ function drawDirectoryAfter() {
 	if (viewmode==1) {
 
 		// para tomar el tiempo del audio mediante la etiqueta audio
-		$.each ($(".explofile"), function(u) {
+		$.each ($(".explofile"), function() {
 
 			var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
 			if (extension == "mp3" || extension=="m4a" || extension=="mpeg" || extension == "ogg" || extension == "oga"  || extension == "aac" || extension == "wav") {
@@ -3227,7 +3220,7 @@ function drawDirectoryAfter() {
 		}
 
 		// para el preview de los audios
-		$.each ($(".explofile"), function(u) {
+		$.each ($(".explofile"), function() {
 
 			var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
 			if (extension == "mp3" || extension=="m4a" || extension=="mpeg" || extension == "ogg" || extension == "oga"  || extension == "aac" || extension == "wav") {
@@ -3344,7 +3337,7 @@ function drawDirectoryAfter() {
 	if (viewmode==1) {
 
 		// para tomar el tiempo del video mediante la etiqueta video
-		$.each ($(".explofile"), function(u) {
+		$.each ($(".explofile"), function() {
 
 			var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
 			if (extension == "mp4" || extension == "m4v" || extension == "webm" || extension == "ogv") {
@@ -3408,7 +3401,7 @@ function drawDirectoryAfter() {
 		}
 
 		//para el preview de los videos
-		$.each ($(".explofile"), function(u) {
+		$.each ($(".explofile"), function() {
 
 			var extension = $(this)["0"].nextSibling.innerText.toLowerCase();
 			if (extension == "mp4" || extension == "m4v" || extension == "webm" || extension == "ogv") {
@@ -3565,7 +3558,7 @@ function drawdirectoryviewtags (){
 	var trans = db.transaction(["tags"], "readonly")
 	var objectStore = trans.objectStore("tags")
 
-	var elementosdirectorio = $(".exploelement .tags");
+	var elementosdirectorio = document.querySelectorAll(".exploelement .tags");
 
 	var tagvalue = [];
 	var tagsdivs = [];
@@ -3585,14 +3578,14 @@ function drawdirectoryviewtags (){
 
 			};
 			// se mete el contenido (los tagsticket) en el html
-			$( ".exploelement .tags:eq( "+ i +" )" ).html(tagsdivs[i]);
+			document.querySelectorAll( ".exploelement .tags")[i].innerHTML = tagsdivs[i];
 
 		}
 
 	});
 
 	// se lee cada etiqueta (solo con id) del html
-	elementosdirectoriotags = $(".exploelement .tags .tagticket");
+	elementosdirectoriotags = document.querySelectorAll(".exploelement .tags .tagticket");
 
 	if (elementosdirectoriotags.length > 0) {
 
@@ -3702,25 +3695,41 @@ function elementstagsorder() {
 
 				elementtagorder = elementtagorder.split(","); // a array
 
-				// se reposicionan los tags en el array
 				for (i in elementtagorder) {
-
 					if (elementtagorder[i] == droppid) {
-						elementtagorder[i] = "temp";
+						posiciondrop = i
+						tempdrop = elementtagorder[i]
 					}
-				}
-				for (i in elementtagorder) {
-
 					if (elementtagorder[i] == draggid) {
-						elementtagorder[i] = droppid;
+						posiciondragg = i
+						tempdragg = elementtagorder[i]
 					}
 				}
-				for (i in elementtagorder) {
 
-					if (elementtagorder[i] == "temp") {
-						elementtagorder[i] = draggid;
-					}
-				}
+				// se reposicionan los tags en el array
+				elementtagorder.splice(posiciondragg,1); //se borra el dragg
+				elementtagorder.splice(posiciondrop, 0, tempdragg); //se inserta en la posición del drop
+
+
+				// se reposicionan los tags en el array (versión antigua, intercambio)
+				// for (i in elementtagorder) {
+
+				// 	if (elementtagorder[i] == droppid) {
+				// 		elementtagorder[i] = "temp";
+				// 	}
+				// }
+				// for (i in elementtagorder) {
+
+				// 	if (elementtagorder[i] == draggid) {
+				// 		elementtagorder[i] = droppid;
+				// 	}
+				// }
+				// for (i in elementtagorder) {
+
+				// 	if (elementtagorder[i] == "temp") {
+				// 		elementtagorder[i] = draggid;
+				// 	}
+				// }
 
 				// ahora realizamos el cambio de orden en la visualización (value del tags y posición de los propios tagtickets)
 				elementtagorder = elementtagorder.toString(); // de nuevo a string
@@ -7751,7 +7760,6 @@ function interactions() {
 	var startDate = "";
 	var endDate   = "";
 	var numeroejecuciones = 0; // para prevenir que abra carpeta varias veces
-
 
 	$('.exploelementfolderup').on('mousedown', function() {
 
