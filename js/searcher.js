@@ -47,6 +47,7 @@ var searchorder = "nameasc"
 var resultadoscarpetas=[];
 var resultadosarchivos=[];
 var searchfor="";
+var resizefromimage = "no"; // para poder diferenciar cuando se hace resize desde imagen o de la propia ventana
 
 $(document).ready(function () {
 
@@ -771,30 +772,36 @@ $(document).ready(function () {
 	});
 
 
-	// cuando se cambia el tamaño de la pantalla
+	// el resize...
 	$( window ).resize(function() {
 
+		// cuando se cambia el tamaño de la pantalla
+		if (resizefromimage == "no"){
 
-		// ponemos las anchuras del panel izquierdo y derecho en porcentajes para que se ajusten al tamaño de la pantalla
+			// ponemos las anchuras del panel izquierdo y derecho en porcentajes para que se ajusten al tamaño de la pantalla
+			document.querySelector('#locationinfo').style.width = 75.1 + '%';
+			if (document.querySelector('#treeview')){
+				document.querySelector('#treeview').style.width = 24.8 + '%';
+				document.querySelector('#dirview-wrapper').style.width = 75.1 + '%';
+			} else if (document.querySelector('#searchview')){
+				document.querySelector('#searchview').style.width = 24.8 + '%';
+				document.querySelector('#searchdirview-wrapper').style.width = 75.1 + '%';
+			}
 
-		document.querySelector('#locationinfo').style.width = 75.2 + '%';
-		if (document.querySelector('#treeview')){
-			document.querySelector('#treeview').style.width = 24.8 + '%';
-			document.querySelector('#dirview-wrapper').style.width = 75.2 + '%';
-		} else if (document.querySelector('#searchview')){
-			document.querySelector('#searchview').style.width = 24.8 + '%';
-			document.querySelector('#searchdirview-wrapper').style.width = 75.2 + '%';
-		}
-
-		if (language == "EN") {
-			document.querySelector('#bottomleft').style.width = '205px';
-			document.querySelector('#bottomright').style.width = 'calc(100% - 215px)';
-		} else if (language == "ES") {
-			document.querySelector('#bottomleft').style.width = '298px';
-			document.querySelector('#bottomright').style.width = 'calc(100% - 308px)';
-		} else if (language == "FR") {
-			document.querySelector('#bottomleft').style.width = '332px';
-			document.querySelector('#bottomright').style.width = 'calc(100% - 342px)';
+			if (language == "EN") {
+				document.querySelector('#bottomleft').style.width = '205px';
+				document.querySelector('#bottomright').style.width = 'calc(100% - 215px)';
+			} else if (language == "ES") {
+				document.querySelector('#bottomleft').style.width = '298px';
+				document.querySelector('#bottomright').style.width = 'calc(100% - 308px)';
+			} else if (language == "FR") {
+				document.querySelector('#bottomleft').style.width = '332px';
+				document.querySelector('#bottomright').style.width = 'calc(100% - 342px)';
+			}
+		} 
+		// cuando se cambia pero porque es al ssalir de la visualización de imagen
+		else {
+			resizefromimage = "no"; //no se cambian valores y se vuelve a resetear a "no";
 		}
 
 	});
@@ -3931,9 +3938,12 @@ function drawSearchAfter() {
 	$('.exploelement .imgmode'+searchviewmode+' a').abigimage({
 
         onopen: function(target) {
-
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
             this.filename.html(filenametoshow);
+        	resizefromimage = "yes";
+        },
+        onclose: function(){
+        	resizefromimage = "yes";
         }
 
 	});
@@ -3941,9 +3951,12 @@ function drawSearchAfter() {
 	$('.exploelement .viewmode'+searchviewmode+' a').abigimage({
 
         onopen: function(target) {
-
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
             this.filename.html(filenametoshow);
+        	resizefromimage = "yes";
+        },
+        onclose: function(){
+        	resizefromimage = "yes";
         }
 
 	});

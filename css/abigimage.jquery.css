@@ -101,6 +101,7 @@
     top: 0.9em;
     /*bottom: 2.5em;*/
     bottom: 2.9em;
+    z-index: 25;
 }
 
 .abigimage-prevBtnBox,
