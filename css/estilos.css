@@ -590,7 +590,7 @@ header h1 {
 
 #locationinfonotfixed {
 
-	width: calc(100% - 75px);
+	width: calc(100% - 95px);
 }
 
 #locationinfonotfixed > div {
@@ -621,11 +621,27 @@ header h1 {
 	display: none;
 }
 
+#eraseron, #copieron {
+	display: none !important;
+	position: fixed;
+	top: 63px;
+	right: 105px;
+	z-index: 20;
+	background-color: rgba(168, 226, 240,0.7);
+	border-radius: 5px;
+	height: 16px;
+}
+
+#eraseron.on, #copieron.on {
+
+	display: initial !important;
+}
+
 #eraser {
 
 	position: fixed;
 	top: 60px;
-	right: 50px;
+	right: 81px;
 	z-index: 20;
 	cursor: pointer;
 }
@@ -654,25 +670,23 @@ header h1 {
   }
 }
 
-#eraseron {
-	display: none !important;
+#copytags{
 	position: fixed;
-	top: 63px;
-	right: 74px;
+	top: 60px;
+	right: 50px;
 	z-index: 20;
-	background-color: rgba(255,255,255,0.7);
-	background-color: rgba(179, 255, 230,0.7);
-	background-color: rgba(207, 229, 252,0.7);
-	background-color: rgba(153, 221, 238,0.7);
-	background-color: rgba(168, 226, 240,0.7);
-	border-radius: 5px;
-	height: 16px;
+	cursor: pointer;
 }
 
-#eraseron.on {
+#copytags .activated {
 
-	display: initial !important;
+	animation: bounceOut .5s linear;
+	animation-iteration-count: infinite;
 }
+
+
+
+
 
 #dirviewrefresh {
 

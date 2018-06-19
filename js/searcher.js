@@ -162,8 +162,8 @@ $(document).ready(function () {
 		ph_infolder = " in folder";
 		ph_filesize = "File Size";
 		ph_medialenght = "Media Length";
-		ph_alr_01 = "You choosed to create a printable friendly list of searched results, but there are not searched results at the moment.";
-		ph_alr_02 = "Maximum 5 tags are permitted for each filter.";
+		ph_alr_01 = "You choosed to create a printable friendly list of searched results, but there are not searched results at this moment.";
+		/*ph_alr_02 = "Maximum 5 tags are permitted for each filter.";*/
 		ph_alr_03 = "Only 1 tag is permitted in this kind of filter.";
 		ph_alr_04 = "No elements selected to copy.";
 		ph_alr_05 = "No elements selected to move.";
@@ -204,7 +204,7 @@ $(document).ready(function () {
 		ph_filesize = "Tamaño Archivo";
 		ph_medialenght = "Duración de Media";
 		ph_alr_01 ="Ha elegido crear una lista de resultados de búsqueda que se puede imprimir, pero no hay resultados de búsqueda en este momento.";
-		ph_alr_02 = "Se permiten 5 etiquetas como máximo para cada filtro.";
+		/*ph_alr_02 = "Se permiten 5 etiquetas como máximo para cada filtro.";*/
 		ph_alr_03 = "Sólo se permite 1 etiqueta en este tipo de filtro.";
 		ph_alr_04 = "No hay elementos seleccionados para copiar.";
 		ph_alr_05 = "No hay elementos seleccionados para mover.";
@@ -245,7 +245,7 @@ $(document).ready(function () {
 		ph_filesize = "Taille Fichier";
 		ph_medialenght = "Longueur du Média";
 		ph_alr_01 = "Vous avez choisi de créer une liste des résultats de recherche qui peuvent être imprimés, mais il n'y a pas de résultats de recherche pour le moment.";
-		ph_alr_02 = "Un maximum de 5 étiquettes sont autorisés pour chaque filtre";
+		/*ph_alr_02 = "Un maximum de 5 étiquettes sont autorisés pour chaque filtre";*/
 		ph_alr_03 = "Seulement 1 étiquette est autorisée dans ce type de filtre.";
 		ph_alr_04 = "Aucun élément sélectionné pour copier.";
 		ph_alr_05 = "Aucun élément sélectionné pour se déplacer";
@@ -825,7 +825,6 @@ $(document).ready(function () {
 
 
 
-
 	// goma de borrar
 	window.eraseron = "off";
 
@@ -933,7 +932,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
-				if ($(this)[0].children.length < 5) {
+				/*if ($(this)[0].children.length < 5) {*/
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px"
@@ -1025,12 +1024,12 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 					};
 
-				}
+				/*}
 		    	else {
 
 		    		alertify.alert(ph_alr_02);
 		    	 	ui.draggable.draggable('option','revert',true);
-		    	}
+		    	}*/
 
 		    }
 
@@ -1307,22 +1306,25 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 function addtagfield(thisbutton){
 
+
+	var previoustags = thisbutton.previousElementSibling.previousElementSibling.innerHTML;
+	var previoustagsvalues = thisbutton.previousElementSibling.previousElementSibling.getAttribute("value");
 	$(thisbutton).next('span').remove() //se quita la x de eliminar campo para que no se acumule
-	$(thisbutton).remove(); //se quita boton previamente existente
+	$(thisbutton).remove(); //se quita boton previamente existente	
 
 	var lastcleartagbutton = $( ".cleartagfield" ).last();
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchinput"><span>..or have the tags(s): (max 5 tags)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..or have the tags(s):</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchinput"><span>..o tienen la(s) etiqueta(s): (max 5 etiquetas)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..o tienen la(s) etiqueta(s):</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchinput"><span>..ou ont le(s) étiquette(s): (max 5 etiquettes)</span><div class="taginput" value=""></div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..ou ont le(s) étiquette(s):</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	}
 
@@ -1338,7 +1340,7 @@ function addtagfield(thisbutton){
 
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
-				if ($(this)[0].children.length < 5) {
+				/*if ($(this)[0].children.length < 5) {*/
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px"
@@ -1430,12 +1432,12 @@ function addtagfield(thisbutton){
 
 					};
 
-				}
+				/*}
 		    	else {
 
 		    		alertify.alert(ph_alr_02);
 		    	 	ui.draggable.draggable('option','revert',true);
-		    	}
+		    	}*/
 
 		    }
 
@@ -1919,570 +1921,127 @@ function footertagsinteractions(){
 }
 
 
+function comparaArrays(a, b) {
 
+	if (typeof b == "string") {
+		b = b.split(",")
+	}
+    var sorted_a = a;
+    var sorted_b = b.concat().sort();
+    var common = 0;
+    var a_i = 0;
+    var b_i = 0;
+
+    while (a_i < a.length
+           && b_i < b.length)
+    {
+        if (sorted_a[a_i] === sorted_b[b_i]) {
+            common++
+            a_i++;
+            b_i++;
+        }
+        else if(sorted_a[a_i] < sorted_b[b_i]) {
+            a_i++;
+        }
+        else {
+            b_i++;
+        }
+        
+    }
+    return common;
+}
 
 function searchinfolders() {
+
+	$('#numeroderesultadoscarpetas').html(ph_searchfold);
 
 	var totalfoldergrouptosearch = 0;
 	var actualfoldergrouptosearch="";
 
-	$.each (taggroup, function(t) {
+    var folderstosearch = []
 
-		totalfoldergrouptosearch ++;
 
-	})
+	var trans = db.transaction(["folders"], "readonly")
+	var objectStore = trans.objectStore("folders")
+	var req = objectStore.openCursor();
 
-	$.each (taggroup, function(t) {
+	req.onerror = function(event) {
 
-		actualfoldergrouptosearch = t;
+		console.log("error: " + event);
+	};
 
-		$('#numeroderesultadoscarpetas').html(ph_searchfold);
+	req.onsuccess = function(event) {
 
-		resultsfolders[t] = [];
-		resultsfolderstemp[t] = [];
+		var cursor = event.target.result;
 
-		if (taggroup[t] != "") {
+		if (selectedFolder == "\/") {
+			selectedFolder = ""
+		}
 
-			arraydetagsabuscar[t] = taggroup[t].split(",");
+		if(cursor){			
 
-			// se busca el 1er tag
+			if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
 
-			var trans = db.transaction(["folders"], "readonly")
-			var objectStore = trans.objectStore("folders")
-			var req = objectStore.openCursor();
-
-			req.onerror = function(event) {
-
-				console.log("error: " + event);
-			};
-
-			req.onsuccess = function(event) {
-
-				var cursor = event.target.result;
-
-				if(cursor){
-
-					if (selectedFolder == "\/") {
-						selectedFolder = ""
-					}
-
-					if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
-
-						tagsdelelemento[t] = cursor.value.foldertags;
-						var foldertoad = [];
-						var coincidetag = "no";
-
-						if (typeof tagsdelelemento[t] == "string") {
-							tagsdelelemento[t] = tagsdelelemento[t].split(",");
-						}
-
-						$.each (tagsdelelemento[t], function(u) {
-
-							if (tagsdelelemento[t][u] == arraydetagsabuscar[t][0]) {
-
-								coincidetag = "si"
-							}
-
-						});
-
-						if (coincidetag == "si") {
-
-							if (resultsfolders[t].length == 0) { // si no hay resultados previos
-
-								foldertoad.folderid = cursor.value.folderid
-								foldertoad.name = cursor.value.folder
-								foldertoad.tagsid = cursor.value.foldertags
-
-								// console.log("coincide el primer tag con: " + cursor.value.folder)
-
-								resultsfolderstemp[t].push(foldertoad);
-
-							}
-
-						}
-
-					}
-
-					cursor.continue();
-
-				}
-
+				foldertosearch = [];
+				foldertosearch.folderid = cursor.value.folderid
+				foldertosearch.name = cursor.value.folder
+				foldertosearch.tagsid = cursor.value.foldertags
+				folderstosearch.push(foldertosearch)
 			}
 
-			trans.oncomplete = function(event) {
-
-				$.each (resultsfolderstemp[t], function(u) {
-
-					resultsfolders[t].push(resultsfolderstemp[t][u]);
-
-				});
-
-				if (arraydetagsabuscar[t].length < 2) {
-
-					concetradoresultadoscarpetas(resultsfolders[t]);
-
-				}
-
-				// a por el 2º tag
-
-				else if (arraydetagsabuscar[t].length >= 2) { // si hay al menos 2 tags para buscar
-
-					resultadopreviovalido[t] = [];
-
-					if (resultsfolders[t].length > 0) { // si  hay resultados previos
-						$.each (resultsfolders[t], function(u) {
-
-							resultadopreviovalido[t][u] = "no"; // valor por defecto
-
-						});
-					}
-
-					var trans = db.transaction(["folders"], "readonly")
-					var objectStore = trans.objectStore("folders")
-					var req = objectStore.openCursor();
-
-					req.onerror = function(event) {
-
-						console.log("error: " + event);
-					};
-
-					req.onsuccess = function(event) {
-
-						if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada pues no tiene todos los tags)
-
-							var cursor = event.target.result;
-
-							if(cursor){
-
-								if (selectedFolder == "\/") {
-									selectedFolder = ""
-								}
-
-								if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
-
-									tagsdelelemento[t] = cursor.value.foldertags;
-
-									var coincidetag = "no";
-
-									if (typeof tagsdelelemento[t] == "string") {
-										tagsdelelemento[t] = tagsdelelemento[t].split(",");
-									}
-									$.each (tagsdelelemento[t], function(u) {
-
-										if (tagsdelelemento[t][u] == arraydetagsabuscar[t][1]) { // el segundo tag a buscar
-
-											coincidetag = "si"
-										}
-
-									});
-
-									if (coincidetag == "si") {
-
-										// console.log("coincide segundo tag con: " + cursor.value.folder)
-
-										$.each (resultsfolders[t], function(u) {
-
-											if (resultsfolders[t][u].folderid == cursor.value.folderid) {
-
-												window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
-											}
-
-										});
-
-									}
-
-								}
-
-								cursor.continue();
-
-							}
-
-						}
-
-					}
-
-					trans.oncomplete = function(event) {
-
-						resultsfolderstemp[t] = jQuery.extend({}, resultsfolders[t])
-
-						$.each (resultsfolders[t], function(u) {
-
-							if (resultadopreviovalido[t][u] == "no") {
-
-								resultsfolderstemp[t][u] = undefined;
-							}
-
-						})
-
-						resultsfolders[t]=[];
-
-						$.each (resultsfolderstemp[t], function(u) {
-
-							if (resultsfolderstemp[t][u] != undefined) {
-								resultsfolders[t].push(resultsfolderstemp[t][u]);
-							}
-
-						})
-
-						if (arraydetagsabuscar[t].length < 3) {
-
-							concetradoresultadoscarpetas(resultsfolders[t]);
-
-						}
-
-						// a por el 3er tag
-
-						else if (arraydetagsabuscar[t].length >= 3) { // si hay al menos 3 tags para buscar
-
-							resultadopreviovalido[t] = [];
-
-							if (resultsfolders[t].length > 0) { // si  hay resultados previos
-								$.each (resultsfolders[t], function(u) {
-
-									resultadopreviovalido[t][u] = "no"; // valor por defecto
-
-								});
-							}
-
-							var trans = db.transaction(["folders"], "readonly")
-							var objectStore = trans.objectStore("folders")
-							var req = objectStore.openCursor();
-
-							req.onerror = function(event) {
-
-								console.log("error: " + event);
-							};
-
-							req.onsuccess = function(event) {
-
-								if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada pues no tiene todos los tags)
-
-									var cursor = event.target.result;
-
-									if(cursor){
-
-										if (selectedFolder == "\/") {
-											selectedFolder = ""
-										}
-
-										if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
-
-											tagsdelelemento[t] = cursor.value.foldertags;
-
-											var coincidetag = "no";
-
-											if (typeof tagsdelelemento[t] == "string") {
-												tagsdelelemento[t] = tagsdelelemento[t].split(",");
-											}
-											$.each (tagsdelelemento[t], function(u) {
-
-												if (tagsdelelemento[t][u] == arraydetagsabuscar[t][2]) { // el segundo tag a buscar
-
-													coincidetag = "si";
-												}
-
-											});
-
-
-											if (coincidetag == "si") {
-
-												// console.log("coincide tercer tag con: " + cursor.value.folder)
-
-												$.each (resultsfolders[t], function(u) {
-
-													if (resultsfolders[t][u].folderid == cursor.value.folderid) {
-
-														window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
-
-													}
-
-												});
-
-											}
-
-										}
-
-										cursor.continue();
-
-									}
-
-								}
-
-							}
-
-							trans.oncomplete = function(event) {
-
-								resultsfolderstemp[t] = jQuery.extend({}, resultsfolders[t])
-
-								$.each (resultsfolders[t], function(u) {
-
-									if (resultadopreviovalido[t][u] == "no") {
-
-										resultsfolderstemp[t][u] = undefined;
-									}
-
-								})
-
-								resultsfolders[t]=[];
-
-								$.each (resultsfolderstemp[t], function(u) {
-
-									if (resultsfolderstemp[t][u] != undefined) {
-										resultsfolders[t].push(resultsfolderstemp[t][u]);
-									}
-
-								})
-
-								if (arraydetagsabuscar[t].length < 4) {
-
-									concetradoresultadoscarpetas(resultsfolders[t]);
-
-								}
-
-								// a por el 4to tag
-
-								else if (arraydetagsabuscar[t].length >= 4) { // si hay al menos 4 tags para buscar
-
-									resultadopreviovalido[t] = [];
-
-									if (resultsfolders[t].length > 0) { // si  hay resultados previos
-										$.each (resultsfolders[t], function(u) {
-
-											resultadopreviovalido[t][u] = "no"; // valor por defecto
-
-										});
-									}
-
-									var trans = db.transaction(["folders"], "readonly")
-									var objectStore = trans.objectStore("folders")
-									var req = objectStore.openCursor();
-
-									req.onerror = function(event) {
-
-										console.log("error: " + event);
-									};
-
-									req.onsuccess = function(event) {
-
-										if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada pues no tiene todos los tags)
-
-											var cursor = event.target.result;
-
-											if(cursor){
-
-												if (selectedFolder == "\/") {
-													selectedFolder = ""
-												}
-
-												if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
-
-													tagsdelelemento[t] = cursor.value.foldertags;
-
-													var coincidetag = "no";
-
-													if (typeof tagsdelelemento[t] == "string") {
-														tagsdelelemento[t] = tagsdelelemento[t].split(",");
-													}
-													$.each (tagsdelelemento[t], function(u) {
-
-														if (tagsdelelemento[t][u] == arraydetagsabuscar[t][3]) { // el tercer tag a buscar
-
-															coincidetag = "si";
-														}
-
-													});
-
-
-													if (coincidetag == "si") {
-
-														// console.log("coincide tercer tag con: " + cursor.value.folder)
-
-														$.each (resultsfolders[t], function(u) {
-
-															if (resultsfolders[t][u].folderid == cursor.value.folderid) {
-
-																window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
-
-															}
-
-														});
-
-													}
-
-												}
-
-												cursor.continue();
-
-											}
-
-										}
-
-									}
-
-									trans.oncomplete = function(event) {
-
-										resultsfolderstemp[t] = jQuery.extend({}, resultsfolders[t])
-
-										$.each (resultsfolders[t], function(u) {
-
-											if (resultadopreviovalido[t][u] == "no") {
-
-												resultsfolderstemp[t][u] = undefined;
-											}
-
-										})
-
-										resultsfolders[t]=[];
-
-										$.each (resultsfolderstemp[t], function(u) {
-
-											if (resultsfolderstemp[t][u] != undefined) {
-												resultsfolders[t].push(resultsfolderstemp[t][u]);
-											}
-
-										})
-
-										if (arraydetagsabuscar[t].length < 5) {
-
-											concetradoresultadoscarpetas(resultsfolders[t]);
-
-										}
-
-										// a por el 5º tag
-
-										else if (arraydetagsabuscar[t].length == 5) { // si hay al menos 4 tags para buscar
-
-											resultadopreviovalido[t] = [];
-
-											if (resultsfolders[t].length > 0) { // si hay resultados previos
-												$.each (resultsfolders[t], function(u) {
-
-													resultadopreviovalido[t][u] = "no"; // valor por defecto
-
-												});
-											}
-
-											var trans = db.transaction(["folders"], "readonly")
-											var objectStore = trans.objectStore("folders")
-											var req = objectStore.openCursor();
-
-											req.onerror = function(event) {
-
-												console.log("error: " + event);
-											};
-
-											req.onsuccess = function(event) {
-
-												if (resultsfolders[t].length > 0) { // si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
-
-													var cursor = event.target.result;
-
-													if(cursor){
-
-														if (selectedFolder == "\/") {
-															selectedFolder = ""
-														}
-
-														if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
-
-															tagsdelelemento[t] = cursor.value.foldertags;
-
-															var coincidetag = "no";
-
-															if (typeof tagsdelelemento[t] == "string") {
-																tagsdelelemento[t] = tagsdelelemento[t].split(",");
-															}
-															$.each (tagsdelelemento[t], function(u) {
-
-																if (tagsdelelemento[t][u] == arraydetagsabuscar[t][4]) { // el quinto tag a buscar
-
-																	coincidetag = "si";
-
-																}
-
-															});
-
-
-															if (coincidetag == "si") {
-
-																// console.log("coincide cuarto tag con: " + cursor.value.folder)
-
-																$.each (resultsfolders[t], function(u) {
-
-																	if (resultsfolders[t][u].folderid == cursor.value.folderid) {
-
-																		window.resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
-
-																	}
-
-																});
-
-															}
-
-														}
-
-														cursor.continue();
-
-													}
-
-												}
-
-											}
-
-											trans.oncomplete = function(event) {
-
-												resultsfolderstemp[t] = jQuery.extend({}, resultsfolders[t])
-
-												$.each (resultsfolders[t], function(u) {
-
-													if (resultadopreviovalido[t][u] == "no") {
-
-														resultsfolderstemp[t][u] = undefined;
-													}
-
-												})
-
-												resultsfolders[t]=[];
-
-												$.each (resultsfolderstemp[t], function(u) {
-
-													if (resultsfolderstemp[t][u] != undefined) {
-														resultsfolders[t].push(resultsfolderstemp[t][u]);
-													}
-
-												})
-
-												concetradoresultadoscarpetas(resultsfolders[t]);
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
+		cursor.continue();
 
 		}
 
-		if (actualfoldergrouptosearch == totalfoldergrouptosearch && resultsfolders[0].length == 0) {
+	}
 
-			$('#numeroderesultadoscarpetas').html(ph_nofoldersfound)
+	trans.oncomplete = function(event) {
 
+		folderstoadd = [];
+		hayresultados = "no";
+
+		$.each (taggroup, function(t) {
+
+			if (taggroup[t].length > 0){
+
+				folderstoadd[t] = [];
+
+				$('#numeroderesultadoscarpetas').html(ph_searchfold);
+
+				if (taggroup[t] != "") {
+
+					var arraydetagsabuscar = taggroup[t].split(",");
+					var sorted_arraydetagsabuscar = arraydetagsabuscar.concat().sort();
+
+					$.each (folderstosearch, function(f) {
+
+						var coincidencias = comparaArrays(sorted_arraydetagsabuscar, folderstosearch[f].tagsid);
+
+						if (coincidencias == arraydetagsabuscar.length) {
+							folderstoadd[t].push(folderstosearch[f]);
+						}
+
+					});
+				}
+
+				concetradoresultadoscarpetas(folderstoadd[t]);
+				if (folderstoadd[t].length > 0) {
+					hayresultados="si";
+				}
+			}
+
+		});
+
+		if (hayresultados == "no") {
+			$('#numeroderesultadoscarpetas').html(ph_nofoldersfound);
 		}
 
-	});
 
-} // --fin searchinfolders()
+	}
+
+}
+
+
 
 // búsquedas de todas las carpetas para cuando solo se definen tags que NO deben tener los resultados (luego se filtrarán en el concentrador).
 function searchnoinfolders() {
@@ -2515,7 +2074,6 @@ function searchnoinfolders() {
 
 				var foldertoad = [];
 
-
 				foldertoad.folderid = cursor.value.folderid
 				foldertoad.name = cursor.value.folder
 				foldertoad.tagsid = cursor.value.foldertags
@@ -2543,8 +2101,6 @@ function searchnoinfolders() {
 
 }
 
-
-
 function searchinfiles() {
 
 	$('#numeroderesultadosarchivos').html(ph_searchfile);
@@ -2552,6 +2108,9 @@ function searchinfiles() {
 	var i=0;
 	var folderidintosearch = [];
 	var foldernametoserach = [];
+
+	var	filestosearch = [];
+
 
 	var trans = db.transaction(["folders"], "readonly")
 	var objectStore = trans.objectStore("folders")
@@ -2589,634 +2148,107 @@ function searchinfiles() {
 
 	trans.oncomplete = function(event) {
 
-		var flagg="no";
-		var totalgroup = 0;
+		$('#numeroderesultadosarchivos').html(ph_searchfile);		
 
-		$.each (taggroup, function(t) {
+		var trans = db.transaction(["files"], "readonly");
+		var objectStore = trans.objectStore("files");
+		var req = objectStore.openCursor();
 
-			totalgroup ++;
+		req.onerror = function(event) {
 
-		});
+			console.log("error: " + event);
+		};
 
-		$.each (taggroup, function(t) {
-
-			var actualgroup = t;
-
-			$('#numeroderesultadosarchivos').html(ph_searchfile);
-
-			resultsfiles[t] = [];
-			resultsfilestemp[t] = [];
-			var filetoad = [];
-
-			var resultadopreviovalido = [];
-
-			if (taggroup[t] != "") {
-
-				arraydetagsabuscar[t] = taggroup[t].split(",");
-
-				var trans = db.transaction(["files"], "readonly")
-				var objectStore = trans.objectStore("files")
-
-				$.each (folderidintosearch, function(n) {
-
-					$('#numeroderesultadosarchivos').html(ph_searchfile);					
-
-					var req = objectStore.openCursor();
-
-					req.onerror = function(event) {
-
-						console.log("error: " + event);
-					};
-
-					req.onsuccess = function(event) {
-
-						var cursor = event.target.result;
-
-						if(cursor){
-
-							if (cursor.value.filefolder == folderidintosearch[n]) { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
-
-								$.each (arraydetagsabuscar[t], function(u) {
-
-									filetoad = [];
-									var coincidetag = "no";
-									var tagsdelelemento = cursor.value.filetags;
-
-									if (typeof tagsdelelemento == "string") {
-										tagsdelelemento = tagsdelelemento.split(",")
-									}
-
-									$.each (tagsdelelemento, function(m) {
-
-										if (tagsdelelemento[m] == arraydetagsabuscar[t][0]) {
-
-											coincidetag = "si";
-
-										}
-
-									});
-
-									if (coincidetag == "si") {
-
-										if (resultsfiles[t].length == 0) { // si no hay resultados previos
-
-											var aniadir = "yes";
-
-											filetoad.fileid = cursor.value.fileid;
-											filetoad.name = cursor.value.filename;
-											filetoad.filefolder = cursor.value.filefolder;
-											filetoad.filepath = foldernametoserach[n];
-											filetoad.ext = cursor.value.fileext;
-											filetoad.tagsid = cursor.value.filetags;
-
-											flagg="yes";
-
-											// console.log("coincide el primer tag con: " + cursor.value.filename)
-
-											$.each (resultsfilestemp[t], function(a){
-
-												if (resultsfilestemp[t][a].fileid == filetoad.fileid) {
-													aniadir="no";
-												}
-
-											})
-
-											if (aniadir == "yes") {
-
-												resultsfilestemp[t].push(filetoad);
-
-											}
-
-										}
-
-									}
+		req.onsuccess = function(event) {
 
 
-								})
+			var cursor = event.target.result;
 
-							}
+			if(cursor){
 
-							cursor.continue();
+				$.each (folderidintosearch, function(n) {						
 
-						}
+					if (cursor.value.filefolder == folderidintosearch[n]) { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+						filetosearch = [];
+
+						filetosearch.fileid = cursor.value.fileid;
+						filetosearch.name = cursor.value.filename;
+						filetosearch.filefolder = cursor.value.filefolder;
+						filetosearch.filepath = foldernametoserach[n];
+						filetosearch.ext = cursor.value.fileext;
+						filetosearch.tagsid = cursor.value.filetags;
+
+						filestosearch.push(filetosearch);
 
 					}
 
 				});
 
-				if (actualgroup == totalgroup && flagg=="no") {
-					$('#numeroderesultadosarchivos').html(ph_nofilesfound)
-				}
+			cursor.continue();
 
-				trans.oncomplete = function(event) {
+			}
 
-					flagg="no";
 
-					$.each (resultsfilestemp[t], function(u) {
+		}
 
-						resultsfiles[t].push(resultsfilestemp[t][u]);
+		trans.oncomplete = function(event) {7
 
-					});
+			filestoadd = [];
+			var hayresultados="no";
 
-					if (arraydetagsabuscar[t].length < 2) {
+			$.each (taggroup, function(t) {
 
-						concetradoresultadosarchivos(resultsfiles[t]);
+				if (taggroup[t].length > 0){
 
-					}
+					var actualgroup = t;						
 
-					// a por el 2º tag
+					$('#numeroderesultadosarchivos').html(ph_searchfile);
 
-					else if (arraydetagsabuscar[t].length >= 2) { // si hay al menos 2 tags para buscar
+					resultsfiles[t] = [];
+					resultsfilestemp[t] = [];
+					filestoadd[t] = [];				
 
-						resultadopreviovalido[t] = [];
+					var resultadopreviovalido = [];
 
-						if (resultsfiles[t].length > 0) { // si hay resultados previos
-							$.each (resultsfiles[t], function(u) {
+					if (taggroup[t] != "") {
 
-								resultadopreviovalido[t][u] = "no"; //vañor por defecto
+						var arraydetagsabuscar = taggroup[t].split(",");
+						var sorted_arraydetagsabuscar = arraydetagsabuscar.concat().sort();
 
-							});
-						}
+						$.each (filestosearch, function(f) {
 
-						var trans = db.transaction(["files"], "readonly")
-						var objectStore = trans.objectStore("files")
+							var coincidencias = comparaArrays(sorted_arraydetagsabuscar, filestosearch[f].tagsid);
 
-						$.each (folderidintosearch, function(n) {
-
-							var req = objectStore.openCursor();
-
-							req.onerror = function(event) {
-
-								console.log("error: " + event);
-							};
-
-							req.onsuccess = function(event) {
-
-								if (resultsfiles[t].length > 0) { // si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
-									var cursor = event.target.result;
-
-									if(cursor){
-
-										if (cursor.value.filefolder == folderidintosearch[n]) {
-
-											var coincidetag = "no";
-
-											tagsdelelemento = cursor.value.filetags;
-
-											if (typeof tagsdelelemento == "string") {
-												tagsdelelemento = tagsdelelemento.split(",")
-											}
-
-											$.each (tagsdelelemento, function(m) {
-
-												if (tagsdelelemento[m] == arraydetagsabuscar[t][1]) { // el segundo tag a buscar
-
-													coincidetag = "si"
-												}
-
-											});
-
-
-											if (coincidetag == "si") {
-
-												// console.log("coincide segundo tag con: " + cursor.value.filename)
-
-												$.each (resultsfiles[t], function(u) {
-
-													if (resultsfiles[t][u].fileid == cursor.value.fileid) {
-
-														resultadopreviovalido[t][u] = "yes"; // al tener todos los tags se respeta el elemento
-
-														flagg="yes";
-
-													}
-
-												});
-
-											}
-
-										}
-
-										cursor.continue();
-
-									}
-
-								}
-
-							}
-
-							trans.oncomplete = function(event) {
-
-								if (actualgroup == totalgroup && flagg=="no") {
-									$('#numeroderesultadosarchivos').html(ph_nofilesfound)
-								}
-								flagg = "no"
-
-								resultsfilestemp[t] = jQuery.extend({}, resultsfiles[t])
-
-								$.each (resultsfiles[t], function(u) {
-
-									if (resultadopreviovalido[t][u] == "no") {
-
-										resultsfilestemp[t][u] = undefined;
-									}
-
-								})
-
-								resultsfiles[t]=[];
-
-								$.each (resultsfilestemp[t], function(u) {
-
-									if (resultsfilestemp[t][u] != undefined) {
-										resultsfiles[t].push(resultsfilestemp[t][u]);
-									}
-
-								})
-
-								if (arraydetagsabuscar[t].length < 3) {
-
-									concetradoresultadosarchivos(resultsfiles[t]);
-
-								}
-
-
-								// a por el 3er tag
-
-								else if (arraydetagsabuscar[t].length >= 3) { // si hay al menos 3 tags para buscar
-
-									resultadopreviovalido[t] = [];
-
-									if (resultsfiles[t].length > 0) { // si hay resultados previos
-										$.each (resultsfiles[t], function(u) {
-
-											resultadopreviovalido[t][u] = "no"; // valor por defecto
-
-										});
-									}
-
-									var trans = db.transaction(["files"], "readonly")
-									var objectStore = trans.objectStore("files")
-
-									$.each (folderidintosearch, function(n) {
-
-										var req = objectStore.openCursor();
-
-										req.onerror = function(event) {
-
-											console.log("error: " + event);
-										};
-
-										req.onsuccess = function(event) {
-
-											if (resultsfiles[t].length > 0) { // si hay resultados previos (si no no se añade nada, pues no tiene todos los tags)
-
-												var cursor = event.target.result;
-
-												if(cursor){
-
-													if (cursor.value.filefolder == folderidintosearch[n]) {
-
-														var coincidetag = "no";
-
-														tagsdelelemento = cursor.value.filetags;
-
-														if (typeof tagsdelelemento == "string") {
-															tagsdelelemento = tagsdelelemento.split(",")
-														}
-
-														$.each (tagsdelelemento, function(m) {
-
-															if (tagsdelelemento[m] == arraydetagsabuscar[t][2]) { //el tercer tag a buscar
-
-																coincidetag = "si"
-															}
-
-														});
-
-
-														if (coincidetag == "si") {
-
-															// console.log("coincide tercer tag con: " + cursor.value.filename)
-															$.each (resultsfiles[t], function(u) {
-
-																if (resultsfiles[t][u].fileid == cursor.value.fileid) {
-
-																	resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento
-
-																	flagg = "yes";
-																}
-
-															});
-
-														}
-
-													}
-
-													cursor.continue();
-
-												}
-
-											}
-
-										}
-
-										trans.oncomplete = function(event) {
-
-											if (actualgroup == totalgroup && flagg=="no") {
-												$('#numeroderesultadosarchivos').html(ph_nofilesfound)
-											}
-											flagg = "no"
-
-											resultsfilestemp[t] = jQuery.extend({}, resultsfiles[t])
-
-											$.each (resultsfiles[t], function(u) {
-
-												if (resultadopreviovalido[t][u] == "no") {
-
-													resultsfilestemp[t][u] = undefined;
-												}
-
-											})
-
-											resultsfiles[t]=[];
-
-											$.each (resultsfilestemp[t], function(u) {
-
-												if (resultsfilestemp[t][u] != undefined) {
-													resultsfiles[t].push(resultsfilestemp[t][u]);
-												}
-
-											})
-
-											if (arraydetagsabuscar[t].length < 4) {
-
-												concetradoresultadosarchivos(resultsfiles[t]);
-
-											}
-
-											// a por el 4to tag
-
-											else if (arraydetagsabuscar[t].length >= 4) { // si hay al menos 4 tags para buscar
-
-												resultadopreviovalido[t] = [];
-
-												if (resultsfiles[t].length > 0) { // si hay resultados previos
-													$.each (resultsfiles[t], function(u) {
-
-														resultadopreviovalido[t][u] = "no"; // valor por defecto
-
-													});
-												}
-
-												var trans = db.transaction(["files"], "readonly")
-												var objectStore = trans.objectStore("files")
-
-												$.each (folderidintosearch, function(n) {
-
-													var req = objectStore.openCursor();
-
-													req.onerror = function(event) {
-
-														console.log("error: " + event);
-													};
-
-													req.onsuccess = function(event) {
-
-														if (resultsfiles[t].length > 0) { // si hay resultados previos (si no no se añade nada, pues no tiene todos los tags)
-
-															var cursor = event.target.result;
-
-															if(cursor){
-
-																if (cursor.value.filefolder == folderidintosearch[n]) {
-
-																	var coincidetag = "no";
-
-																	tagsdelelemento = cursor.value.filetags;
-
-																	if (typeof tagsdelelemento == "string") {
-																		tagsdelelemento = tagsdelelemento.split(",")
-																	}
-
-																	$.each (tagsdelelemento, function(m) {
-
-																		if (tagsdelelemento[m] == arraydetagsabuscar[t][3]) { //el cuarto tag a buscar
-
-																			coincidetag = "si"
-																		}
-
-																	});
-
-
-																	if (coincidetag == "si") {
-
-																		// console.log("coincide tercer tag con: " + cursor.value.filename)
-																		$.each (resultsfiles[t], function(u) {
-
-																			if (resultsfiles[t][u].fileid == cursor.value.fileid) {
-
-																				resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento
-
-																				flagg = "yes";
-																			}
-
-																		});
-
-																	}
-
-																}
-
-																cursor.continue();
-
-															}
-
-														}
-
-													}
-
-													trans.oncomplete = function(event) {
-
-														if (actualgroup == totalgroup && flagg=="no") {
-															$('#numeroderesultadosarchivos').html(ph_nofilesfound)
-														}
-														flagg = "no"
-
-														resultsfilestemp[t] = jQuery.extend({}, resultsfiles[t])
-
-														$.each (resultsfiles[t], function(u) {
-
-															if (resultadopreviovalido[t][u] == "no") {
-
-																resultsfilestemp[t][u] = undefined;
-															}
-
-														})
-
-														resultsfiles[t]=[];
-
-														$.each (resultsfilestemp[t], function(u) {
-
-															if (resultsfilestemp[t][u] != undefined) {
-																resultsfiles[t].push(resultsfilestemp[t][u]);
-															}
-
-														})
-
-														if (arraydetagsabuscar[t].length < 5) {
-
-															concetradoresultadosarchivos(resultsfiles[t]);
-
-														}
-
-														// a por el 5º tag
-
-														else if (arraydetagsabuscar[t].length == 5) { // si hay 5 tags para buscar
-
-															resultadopreviovalido[t] = [];
-
-															if (resultsfiles[t].length > 0) { // si hay resultados previos
-																$.each (resultsfiles[t], function(u) {
-
-																	resultadopreviovalido[t][u] = "no"; // valor por defecto
-
-																});
-															}
-
-															var trans = db.transaction(["files"], "readonly")
-															var objectStore = trans.objectStore("files")
-
-															$.each (folderidintosearch, function(n) {
-
-																var req = objectStore.openCursor();
-
-																req.onerror = function(event) {
-
-																	console.log("error: " + event);
-																};
-
-																req.onsuccess = function(event) {
-
-																	if (resultsfiles[t].length > 0) { //si hay resultados previos (si no, no se añade nada, pues no tiene todos los tags)
-
-																		var cursor = event.target.result;
-
-																		if(cursor){
-
-																			if (cursor.value.filefolder == folderidintosearch[n]) {
-
-																				var coincidetag = "no";
-
-																				tagsdelelemento = cursor.value.filetags;
-
-																				if (typeof tagsdelelemento == "string") {
-																					tagsdelelemento = tagsdelelemento.split(",")
-																				}
-
-																				$.each (tagsdelelemento, function(m) {
-
-																					if (tagsdelelemento[m] == arraydetagsabuscar[t][4]) { //el quinto tag a buscar
-
-																						coincidetag = "si"
-																					}
-
-																				});
-
-
-																				if (coincidetag == "si") {
-
-																					// console.log("coincide cuarto tag con: " + cursor.value.filename)
-
-																					$.each (resultsfiles[t], function(u) {
-
-																						if (resultsfiles[t][u].fileid == cursor.value.fileid) {
-
-																							resultadopreviovalido[t][u] = "yes"; //al tener todos los tags se respeta el elemento
-
-																							flagg="yes";
-																						}
-
-																					});
-
-																				}
-
-																			}
-
-																			cursor.continue();
-
-																		}
-
-																	}
-
-																}
-
-																trans.oncomplete = function(event) {
-
-																	if (actualgroup == totalgroup && flagg=="no") {
-																		$('#numeroderesultadosarchivos').html(ph_nofilesfound)
-																	}
-																	flagg = "no";
-
-																	resultsfilestemp[t] = jQuery.extend({}, resultsfiles[t])
-
-																	$.each (resultsfiles[t], function(u) {
-
-																		if (resultadopreviovalido[t][u] == "no") {
-
-																			resultsfilestemp[t][u] = undefined;
-																		}
-
-																	})
-
-																	resultsfiles[t]=[];
-
-																	$.each (resultsfilestemp[t], function(u) {
-
-																		if (resultsfilestemp[t][u] != undefined) {
-																			resultsfiles[t].push(resultsfilestemp[t][u]);
-																		}
-
-																	})
-
-																	if (arraydetagsabuscar[t].length == 5) {
-
-																		concetradoresultadosarchivos(resultsfiles[t]);
-
-																	}
-
-																}
-
-															});
-
-														}
-
-													}
-
-												});
-
-											}
-
-										}
-
-									});
-
-								}
-
+							if (coincidencias == arraydetagsabuscar.length) {
+								filestoadd[t].push(filestosearch[f]);
 							}
 
 						});
 
 					}
 
+					concetradoresultadosarchivos(filestoadd[t])
+
+					if (filestoadd[t].length > 0) {
+						hayresultados="si";
+					}
+
 				}
 
-			}
+			});
 
-		});
+			if (hayresultados == "no") {
+				$('#numeroderesultadosarchivos').html(ph_nofilesfound);
+
+			}	
+
+
+		}
+		
 
 	}
 
-} // -- fin searchinfiles()
-
+}
 
 // búsquedas de todos los archivos para cuando solo se definen tags que NO deben tener los resultados (luego se filtrarán en el concentrador).
 function searchnoinfiles() {
@@ -3613,7 +2645,7 @@ function readsearchredresults() {
 
 	else if (searchfor == "foldersandfiles") {
 
-		if (searchorder == "nameasc" || searchorder == "extasc" || searchorder == "sizeasc" || searchorder == "lastdesc") {
+		if (searchorder == "nameasc" || searchorder == "extasc" || searchorder == "sizeasc" || searchorder == "lastdesc" || searchorder == "aleator") {
 			drawSearchFolders(searchviewmode, searchorder);
 			drawSearchArchives(searchviewmode, searchorder);
 		}
@@ -3686,6 +2718,24 @@ function SortByLastmodDesc(a,b) {
 	var bLastmod = b.lastmod;
 	return ((aLastmod > bLastmod) ? -1 : ((aLastmod < bLastmod) ? 1 : 0));
 }
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
 
 
 function drawSearchFolders (searchviewmode, order) {
@@ -3716,6 +2766,9 @@ function drawSearchFolders (searchviewmode, order) {
 		case "lastdesc":
 			resultadoscarpetas.sort(SortByLastmodDesc);
 			break;
+		case "aleator":
+			resultadoscarpetas = shuffle(resultadoscarpetas);
+			break;			
 	}
 
 	if (searchviewmode==1) {
@@ -3780,6 +2833,9 @@ function drawSearchArchives (searchviewmode, order) {
 			break;
 		case "lastdesc":
 			resultadosarchivos.sort(SortByLastmodDesc);
+			break;
+		case "aleator":
+			resultadosarchivos = shuffle(resultadosarchivos);
 			break;
 	}
 
@@ -10746,15 +9802,11 @@ window.parent.$("#delete").on('click', function() {
 
 	}
 
-	if (document.querySelectorAll(".ui-selecting").length > 0) {
+	if (document.querySelectorAll(".ui-selecting").length > 0 || document.querySelectorAll(".ui-selected").length > 0) {
 
-		alldroppedelement = document.querySelectorAll(".ui-selecting");
+		alldroppedelement = document.querySelectorAll(".ui-selecting, .ui-selected");
 
-	}
-	else if (document.querySelectorAll(".ui-selected").length > 0) {
-
-		alldroppedelement = document.querySelectorAll(".ui-selected");
-	}
+	}	
 
 	if (alldroppedelement.length == 0) {
 
@@ -11383,9 +10435,13 @@ window.parent.$("#delete").on('click', function() {
 					$("#status").html("");
 					document.querySelectorAll(".exploelement").forEach(function(el) {
 						el.style.filter = "none";
-						el.classList.remove = "ui-selecting";
-						el.classList.remove = "ui-selected";
 					})
+					var elems = document.querySelectorAll(".ui-selecting, .ui-selected");
+
+					[].forEach.call(elems, function(el) {
+					    el.classList.remove("ui-selecting");
+					    el.classList.remove("ui-selected");
+					});
 
 				}
 
@@ -11412,9 +10468,14 @@ window.parent.$("#delete").on('click', function() {
 					$("#status").html("");
 					document.querySelectorAll(".exploelement").forEach(function(el) {
 						el.style.filter = "none";
-						el.classList.remove = "ui-selecting";
-						el.classList.remove = "ui-selected";
 					})
+					var elems = document.querySelectorAll(".ui-selecting, .ui-selected");
+
+					[].forEach.call(elems, function(el) {
+						el.style.filter = "none";
+					    el.classList.remove("ui-selecting");
+					    el.classList.remove("ui-selected");
+					});
 
 					//si se han borrado carpetas por si acaso se vuelve a lanzar el search para que no se muestren archivos inexistentes
 					$( "#searchaction" ).trigger( "click" );

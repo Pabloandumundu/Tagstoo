@@ -266,11 +266,16 @@ function saveoptions() {
 	}
 
 	if($("#asktagsubelements").is(":checked")) {
-		localStorage["asktagsubeleents"] = "no"
+		localStorage["asktagsubeleents"] = "no";
 	} else {
-		localStorage["asktagsubeleents"] = "yes"
+		localStorage["asktagsubeleents"] = "yes";
 	}
 
+	if($("#asksearchforupdates").is(":checked")) {
+		localStorage["searchforupdates"] = "yes";
+	} else {
+		localStorage["searchforupdates"] = "no";
+	}
 
 	// la opcion de slideshow
 
@@ -1995,6 +2000,11 @@ function optionspreload() {
 			    	$('#asktagsubelements').prop('checked', true);
 			    }
 
+			    if(localStorage["searchforupdates"]=="yes"){
+			    	$('#asksearchforupdates').prop('checked', true);
+			    } else {
+			    	$('#asksearchforupdates').prop('checked', false);
+			    }
 
 			    if (localStorage["autoslideshow"]=="yes") {
 			    	$('#autoslideshow').prop('checked', true);

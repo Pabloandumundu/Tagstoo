@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+var programversion = '1.10.0';
 var fs = require('fs-extra');
 var Sniffr = require("sniffr");
 var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
@@ -30,6 +30,14 @@ window.currentlydatabaseused = localStorage["currentlydatabaseused"];
 if (!localStorage["asktagsubeleents"]){
 	localStorage["asktagsubeleents"] = "yes";
 }
+
+var searchforupdates = "no";
+if (!localStorage["searchforupdates"]){
+	localStorage["searchforupdates"] = "no";
+} else if (localStorage["searchforupdates"] == "yes"){
+	searchforupdates = "yes";
+}
+
 
 var directoryelement = [];
 var alldroppedelement = [];
@@ -48,6 +56,7 @@ window.tip = [];
 var editando = "no";
 
 var order = "nameasc";
+var ph_readingfolder = "Reading folder ...";
 
 pasteaction = window.top.pasteaction;
 
@@ -65,6 +74,170 @@ $(document).ready(function () {
 		$("#panel").removeClass("show");
 	});
 	////////////////////////\\\\\\\\
+
+
+	// frases segun idioma
+
+	if (language == "EN") {
+
+		ph_readingfolder = "Reading folder ...";
+		ph_elementsinfolder = " elements in folder.";
+		ph_moving = "Moving ...";
+		ph_deleting = "Deleting ...";
+		ph_copying = "Copying ...";
+		ph_infolder = " in folder";
+		ph_filesize = "File Size";
+		ph_tagshere = "(Tags Here)";
+		ph_medialenght = "Media Length";
+		ph_alr_00 = "Select a folder from Fast access list first";
+		ph_alr_01 = "Select a folder from Fast access list to remove.";
+		ph_alr_02 = "No elements selected to delete.";
+		ph_alr_03a = "Folder <em>'";
+		ph_alr_03b = "'</em> not possible to delete because probably some file is in use.";
+		ph_alr_04 = "Some video in this folder cannot definitively deleted because they are in use, it will be deleted when application close.";
+		ph_alr_05 = "Same origin and destination folder.";
+		ph_alr_09 = "With this tool you can copy to the elements that you selected the tags from the element that you choose later, but you don't have any element selected.";
+		ph_alr_tqa = "Don't show more Tips at launch.";
+		ph_alr_tqb = "Next Tip ";
+		ph_alc_01a = " files and ";
+		ph_alc_01b = " folders (and all it´s contents) have been selected to delete. There is no undo for delete. Are you sure?";
+		ph_alc_02 = " files are selected to delete. There is no undo for delete. Are you sure?";
+		ph_alc_03 = "Are you sure?";
+		ph_dato_no = "UNDO (not action to undo)";
+		ph_dato_erasefoldtag = "UNDO (erase folder tag)";
+		ph_dato_erasearchtag = "UNDO (erase archive tag)";
+		ph_dato_tagarch = "UNDO (tag archive)";
+		ph_dato_tagfold = "UNDO (tag folder)";
+		ph_dato_move = "UNDO (move)";
+		ph_dato_copy = "UNDO (copy)";
+		ph_dato_renfold = "UNDO (rename folder)";
+		ph_dato_renarch = "UNDO (rename archive)";		
+
+	} else if (language == "ES"){
+
+		ph_readingfolder = "Leyendo carpeta ...";
+		ph_elementsinfolder = " elementos en carpeta.";
+		ph_moving = "Moviendo ...";
+		ph_deleting = "Eliminando ...";
+		ph_copying = "Copiando ...";
+		ph_infolder = " en carpeta";
+		ph_filesize = "Tamaño Archivo";
+		ph_tagshere = "(Etiquetas Aquí)";
+		ph_medialenght = "Duración de Media";
+		ph_alr_00 = "Primero seleccione una carpeta de la lista de Acceso rápido.";
+		ph_alr_01 = "Seleccione una carpeta de la lista de Acceso rápido para eliminar.";
+		ph_alr_02 = "No hay elementos seleccionados para eliminar.";
+		ph_alr_03a = "La carpeta <em>'";
+		ph_alr_03b = "'</em> no se puede eliminar porque probablemente algún archivo está en uso.";
+		ph_alr_04 = "Algunos videos de esta carpeta no se pueden borrar definitivamente porque están en uso, se eliminarán al cerrar la aplicación.";
+		ph_alr_05 = "Carpeta de destino y origen son la misma.";
+		ph_alr_09 = "Con esta herramienta puede copiar a los elementos que seleccionó las etiquetas del elemento que elija más adelante, pero no tiene ningún elemento seleccionado.";
+		ph_alr_tqa = "No mostrar más consejos al inicio.";
+		ph_alr_tqb = "Sig. Consejo ";
+		ph_alc_01a = " archivos y ";
+		ph_alc_01b = " carpetas (y todo su contenido) han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?"
+		ph_alc_02 = " archivos han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?";
+		ph_alc_03 = "¿Estás seguro?";
+		ph_dato_no = "DESHACER (no hay acción para deshacer)";
+		ph_dato_erasefoldtag = "DESHACER (borrar etiqueta de carpeta)";
+		ph_dato_erasearchtag = "DESHACER (eliminar etiqueta de archivo)";
+		ph_dato_tagarch = "DESHACER (etiquetar archivo)";
+		ph_dato_tagfold = "DESHACER (etiquetar carpeta)";
+		ph_dato_move = "DESHACER (mover)";	
+		ph_dato_copy = "DESHACER (copiar)";		
+		ph_dato_renfold = "DESHACER (renombrar carpeta)";		
+		ph_dato_renarch = "DESHACER (renombrar archivo)";
+
+	} else if (language == "FR") {
+
+		ph_readingfolder = "En lisant le dossier ...";
+		ph_elementsinfolder = " éléments dans dossier.";
+		ph_moving = "En déplaçant ...";
+		ph_deleting = "En supprimant ...";
+		ph_copying = "En copiant ...";
+		ph_infolder = " dans dossier";
+		ph_filesize = "Taille Fichier";
+		ph_tagshere = "(Étiquettes Ici)";
+		ph_medialenght = "Longueur du Média";
+		ph_alr_00 = "Sélectionnez d'abord un dossier dans la liste d'Accès rapide.";
+		ph_alr_01 = "Sélectionnez un dossier de la liste d'Accès rapide pour supprimer.";
+		ph_alr_02 = "Aucun élément sélectionné pour supprimer.";
+		ph_alr_03a = "Le dossier <em>'";
+		ph_alr_03b = "'</em> ne peut pas être supprimé car certains fichiers sont probablement utilisés.";
+		ph_alr_04 = "Certaines vidéos de ce dossier ne peuvent pas être définitivement supprimées car elles sont utilisées, elles seront supprimées lors de la fermeture de l'application.";
+		ph_alr_05 = "Le dossier de destination et la source sont les mêmes.";
+		ph_alr_09 = "Avec cet outil, vous pouvez copier vers les éléments que vous avez sélectionnés les étiquettes de l'élément que vous choisissez plus tard, mais vous n'avez aucun élément sélectionné.";
+		ph_alr_tqa = "Pas plus conseils au lancement.";
+		ph_alr_tqb = "+ Conseil ";
+		ph_alc_01a = " archives et ";
+		ph_alc_01b = " dossiers (et tout son contenu) ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
+		ph_alc_02 = " archives ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
+		ph_alc_03 = "Tu es sûr?";
+		ph_dato_no = "DÉFAIRE (aucune action à défaire)";
+		ph_dato_erasefoldtag = "DÉFAIRE (supprimer étiquette du dossier)";
+		ph_dato_erasearchtag = "DÉFAIRE (supprimer étiquette du archive)";
+		ph_dato_tagarch = "DÉFAIRE (étiqueter archive)";
+		ph_dato_tagfold = "DÉFAIRE (étiqueter dossier)";
+		ph_dato_move = "DÉFAIRE (déplacer)";	
+		ph_dato_copy = "DÉFAIRE (copier)";		
+		ph_dato_renfold = "DÉFAIRE (renommer dossier)";		
+		ph_dato_renarch = "DÉFAIRE (renommer archive)";		
+
+	}
+
+
+	// Tips
+
+	if (language == "EN") {
+		tip = [
+			"<b>Tip</b>: To enter in a folder press and hold mouse button over the folder's name until it enters.",
+			"<b>Tip</b>: Images can be launched in two ways: holding down the mouse button in the name of the image will start in the default system viewer, otherwise clicking on the image will start the internal viewer of the program.",
+			"<b>Tip</b>: If is the first time you launch Tagstoo, it will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no longer load demo tags when a new database is created uncheck the checkbox in the options menu.",
+			"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
+			"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
+			"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
+			"<b>Tip</b>: When a search has been carried out, you also have the option of creating either a printable list in graphic mode (with labels) or a list in plain text, with the routes and names of the searched elements, which can be used externally (as a playlist for a player, for example)",
+			"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
+			"<b>Tip</b>: Sometimes depending the action you do (or if you move somethin using external program) the view cannot be actualized, to actualize it simply press refresh icons (arrows in circle).",
+			"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and will be ready."
+
+		]
+	} else if (language == "ES"){
+
+		tip = [
+			"<b>Tip</b>: Para entrar en una carpeta, mantenga presionado el botón del ratón sobre el nombre de la carpeta hasta que entre.",
+			"<b>Tip</b>: Las imágenes se pueden lanzar de dos maneras: manteniendo presionado el botón del ratón en el nombre de la imagen se iniciará en el visor por defecto del sistema, de lo contrario, haciendo clic en la imagen se iniciará el visor interno del programa.",
+			"<b>Tip</b>: Si es la primera vez que inicia Tagstoo, se habrán cargado las etiquetas de demostración en la parte inferior, puede modificarlas o eliminarlas o agregar nuevas a su conveniencia, para no cargar etiquetas de demostración cuando se crea una nueva base de datos desmarque la casilla de verificación en el menú de opciones.",
+			"<b>Tip</b>: Haga doble clic en una carpeta de la izquierda para seleccionar, luego al pulsar el botón de pegar, las carpetas y archivos que seleccionó a la derecha se copiarán o moverán a esta carpeta dependiendo de lo que haya seleccionado en el interruptor de copia/corta.",
+			"<b>Tip</b>: Puede seleccionar varios elementos al mismo tiempo presionando shift mientras selecciona.",
+			"<b>Tip</b>: En la búsqueda puedes agregar todos los campos de entrada que necesites para que puedas construir fácilmente búsquedas como “<em>Buscar archivos que tengan (tag1 + tag2 + tag7 + tag8) o (tag1 + tag2 + tag6 + tag9) o (tag4 + tag6) + tag9) pero no tienen (tag10) y (tag11).</em>”",
+			"<b>Tip</b>: Cuando se ha realizado una búsqueda, también tiene la opción de crear o bien una lista imprimible en modo gráfico (con etiquetas) o bien una lista en texto plano, con las rutas y los nombres de los elementos buscados, que puede ser usada externamente (como una lista de reproducción para un reproductor, por ejemplo).",
+			"<b>Tip</b>: Si el nombre de la etiqueta es largo, elija una forma de etiqueta que tenga esquinas afiladas para que se ajuste mejor.",
+			"<b>Tip</b>: A veces dependiendo de la acción que hagas (o si mueves algo usando un programa externo) la vista no se puede actualizar, actualizarla simplemente pulsa los iconos de actualización (flechas en círculo).",
+			"<b>Tip</b>: Debido a que hay versiones de Tagstoo para varios sistemas (Windows, Linux y macOS), puede administrar los mismos datos, en una unidad externa, por ejemplo, desde diferentes sistemas alternativamente: Exporte los datos a un archivo e importerlo donde lo necesite y estarán listos."
+
+		]
+
+	} else if (language == "FR") {
+
+		tip = [
+			"<b>Tip</b>: Pour entrer dans un dossier, maintenez le bouton de la souris sur le nom du dossier jusqu'à ce qu'il entre.",
+			"<b>Tip</b>: Les images peuvent être lancées de deux façons: en maintenant enfoncé le bouton de la souris au nom de l'image, on commencera dans la visionneuse système par défaut, sinon le fait de cliquer sur l'image va démarrer la visionneuse interne du programme.",
+			"<b>Tip</b>: Si c'est la première fois que vous démarrez Tagstoo, les étiquettes de démonstration ont été chargées en bas, vous pouvez les modifier ou les supprimer ou en ajouter de nouvelles à votre convenance, pour ne pas charger les balises de démonstration lorsqu'une nouvelle base de données est créée, décochez la case cochez en le menu d'option.",
+			"<b>Tip</b>: Double-cliquez sur un dossier à gauche pour être sélectionné, puis, lorsque vous appuyez sur le bouton de collage, les dossiers et les fichiers que vous avez sélectionnés dans la droite seront copiés ou déplacés dans ce dossier en fonction de ce que vous avez sélectionné dans le commutateur copie/coupe.",
+			"<b>Tip</b>: Vous pouvez sélectionner plusieurs éléments en même temps en appuyant sur shift tout en sélectionnant.",
+			"<b>Tip</b>: Dans la recherche, vous pouvez ajouter tous les champs de saisie dont vous avez besoin afin que vous puissiez construire facilement des recherches comme “<em>Rechercher des fichiers qui ont (tag1 + tag2 + tag7 + tag8) ou (tag1 + tag2 + tag6 + tag9) ou (tag4 + tag6 + tag9) mais n'ont pas (tag10) et (tag11).</em>”",
+			"<b>Tip</b>: Lorsqu'une recherche a été effectuée, vous avez également la possibilité de créer soit une liste imprimable en mode graphique (avec étiquettes) ou une liste en texte brut, avec les routes et les noms des éléments recherchés, qui peuvent être utilisés en externe (comme une playlist pour un lecteur, par exemple).",
+			"<b>Tip</b>: Si votre nom de balise est long, choisissez une forme d'étiquette qui a des angles vifs pour mieux l'adapter.",
+			"<b>Tip</b>: Parfois, selon l'action que vous faites (ou si vous déplacez quelque chose en utilisant un programme externe), la vue ne peut pas être actualisée, pour l'actualiser appuyez simplement sur les icônes de rafraîchissement (flèches en cercle).",
+			"<b>Tip</b>: Étant donné qu'il existe des versions de Tagstoo pour plusieurs systèmes (Windows, Linux et MacOS), vous pouvez gérer les mêmes données, par exemple sur un lecteur externe, par exemple à partir de différents systèmes: Exportez les données vers un fichier et importez-les là où vous en avez besoin et elles seront prêt."
+
+		]
+
+	}
+
+
+
 
 	var bLazy = new Blazy(); // para carga de imágenes según se hace scroll
 
@@ -620,12 +793,62 @@ $(document).ready(function () {
 	});
 
 
+	// copiador de tags
+	window.copytagson = "off";
+
+	$("#copytags img").click(function() {
+
+		if (copytagson == "off") {			
+
+			if (eraseron == "on") { // si el borrador de tags estuviera activo se desactiva
+				eraseron = "off";
+				$(".tags > div").draggable( 'enable' );
+				$("#eraser img").removeClass('activated');
+				$("#eraseron").removeClass("on");					
+			}
+
+			// se activa copiador de tags
+			copytagson = "on";
+			$("#copytags img").addClass('activated');
+			$("#copieron").addClass("on");			
+
+			document.querySelectorAll(".tags").forEach(function(el) {
+
+				if ($(el).has('div').length>0){
+					el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAWCAYAAADeiIy1AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gYOCTcb7XTA7QAAAiVJREFUSMetlTtoVFEQhr9NfBGih6ggNr+CBBUURbSIio/YpPEBBiGVoFhYqNik1Erx1aZWKxMkYqGEgAg+ULRJIawEFMwviYRAwrGIYEi0OYHrsnuv6zrV4cx/5r8zd+afEhmT1AycAY4Ca4EfwAfgtu1xGrBSBdEL4IbtoczdMqAM7LM9me5K1YLZ/lVIJOkuMGy7vxIkaTkwCmwBDgP3gLkK2Dyw0/ZMzbQkNUl6m5e6pB5J23P8GyWNSlpdzd+Uyex9QZlfA521nLa/AOeAE3lEAC0FREuB7wWYBeBnNceSDGBvQZCLwM2c0g0CrUCrpB7gku1Pf2SUuuWqpPs1gnQAnba/5XzIBDAC3AFmsiQAzYuHGGM5hNAaQngUQngTY5yQ1BZC6AO6gEMxxprtG2McCiHsAvbbPp07R4vdA1xIrTwNDNp+TINWqveBpDWpPN3p/Vj6f8/zBrapTpJtwFPgMtAGrAL2AOuBgf+SkaSWpHvttheq+K8kwge2XzZCdASYqxYkg5kEXgHtwDHbY/9Sui7gYwHmme1u2zuA/iTIdRPN/gVmReZ8KpW6bqKHwMmcspWAzRnt+wrMS1pXL1E5qceGGv5h4GzF3QiwMqt1hWZ7QdIm4ElaKX1poA8C14Fbtt9VPOsAYt1zZHvWdifwGRhMq74bOGB7oKKUW4Fp21ONqgqSeiX111ikow1JUJWgx4FradWPA7uBKeC87YlF3G/iGsK8xnnkRAAAAABJRU5ErkJggg=='),auto"
+				}
+
+			});
+
+		}
+
+		else {
+
+			copytagson = "off";
+			$("#copytags img").removeClass('activated');
+			$("#copieron").removeClass("on");
+			document.querySelectorAll(".tags").forEach(function(el) {
+				el.style.cursor = "pointer"
+			});			
+		}
+
+	});
+
 	// goma de borrar
 	window.eraseron = "off";
 
 	$("#eraser img").click(function() {
 
 		if (eraseron == "off") {
+
+			if (copytagson == "on") { // si el copiador de tags estuviera activo se desactiva
+				copytagson = "off";
+				$("#copytags img").removeClass('activated');
+				$("#copieron").removeClass("on");
+				document.querySelectorAll(".tags").forEach(function(el) {
+					el.style.cursor = "pointer"
+				});
+			}
 
 			eraseron = "on";
 
@@ -664,164 +887,6 @@ $(document).ready(function () {
 
 
 	filetreeinteractions();
-
-
-	// frases segun idioma
-
-	if (language == "EN") {
-
-		ph_readingfolder = "Reading folder ...";
-		ph_elementsinfolder = " elements in folder.";
-		ph_moving = "Moving ...";
-		ph_deleting = "Deleting ...";
-		ph_copying = "Copying ...";
-		ph_infolder = " in folder";
-		ph_filesize = "File Size";
-		ph_tagshere = "(Tags Here)";
-		ph_medialenght = "Media Length";
-		ph_alr_00 = "Select a folder from Fast access list first";
-		ph_alr_01 = "Select a folder from Fast access list to remove.";
-		ph_alr_02 = "No elements selected to delete.";
-		ph_alr_03a = "Folder <em>'";
-		ph_alr_03b = "'</em> not possible to delete because probably some file is in use.";
-		ph_alr_04 = "Some video in this folder cannot definitively deleted because they are in use, it will be deleted when application close.";
-		ph_alr_05 = "Same origin and destination folder.";
-		ph_alr_tqa = "Don't show more Tips at launch.";
-		ph_alr_tqb = "Next Tip ";
-		ph_alc_01a = " files and ";
-		ph_alc_01b = " folders (and all it´s contents) have been selected to delete. There is no undo for delete. Are you sure?";
-		ph_alc_02 = " files are selected to delete. There is no undo for delete. Are you sure?";
-		ph_alc_03 = "Are you sure?";
-		ph_dato_no = "UNDO (not action to undo)";
-		ph_dato_erasefoldtag = "UNDO (erase folder tag)";
-		ph_dato_erasearchtag = "UNDO (erase archive tag)";
-		ph_dato_tagarch = "UNDO (tag archive)";
-		ph_dato_tagfold = "UNDO (tag folder)";
-		ph_dato_move = "UNDO (move)";
-		ph_dato_copy = "UNDO (copy)";
-		ph_dato_renfold = "UNDO (rename folder)";
-		ph_dato_renarch = "UNDO (rename archive)";		
-
-	} else if (language == "ES"){
-
-		ph_readingfolder = "Leyendo carpeta ...";
-		ph_elementsinfolder = " elementos en carpeta.";
-		ph_moving = "Moviendo ...";
-		ph_deleting = "Eliminando ...";
-		ph_copying = "Copiando ...";
-		ph_infolder = " en carpeta";
-		ph_filesize = "Tamaño Archivo";
-		ph_tagshere = "(Etiquetas Aquí)";
-		ph_medialenght = "Duración de Media";
-		ph_alr_00 = "Primero seleccione una carpeta de la lista de Acceso rápido.";
-		ph_alr_01 = "Seleccione una carpeta de la lista de Acceso rápido para eliminar.";
-		ph_alr_02 = "No hay elementos seleccionados para eliminar.";
-		ph_alr_03a = "La carpeta <em>'";
-		ph_alr_03b = "'</em> no se puede eliminar porque probablemente algún archivo está en uso.";
-		ph_alr_04 = "Algunos videos de esta carpeta no se pueden borrar definitivamente porque están en uso, se eliminarán al cerrar la aplicación.";
-		ph_alr_05 = "Carpeta de destino y origen son la misma.";
-		ph_alr_tqa = "No mostrar más consejos al inicio.";
-		ph_alr_tqb = "Sig. Consejo ";
-		ph_alc_01a = " archivos y ";
-		ph_alc_01b = " carpetas (y todo su contenido) han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?"
-		ph_alc_02 = " archivos han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?";
-		ph_alc_03 = "¿Estás seguro?";
-		ph_dato_no = "DESHACER (no hay acción para deshacer)";
-		ph_dato_erasefoldtag = "DESHACER (borrar etiqueta de carpeta)";
-		ph_dato_erasearchtag = "DESHACER (eliminar etiqueta de archivo)";
-		ph_dato_tagarch = "DESHACER (etiquetar archivo)";
-		ph_dato_tagfold = "DESHACER (etiquetar carpeta)";
-		ph_dato_move = "DESHACER (mover)";	
-		ph_dato_copy = "DESHACER (copiar)";		
-		ph_dato_renfold = "DESHACER (renombrar carpeta)";		
-		ph_dato_renarch = "DESHACER (renombrar archivo)";
-
-	} else if (language == "FR") {
-
-		ph_readingfolder = "En lisant le dossier ...";
-		ph_elementsinfolder = " éléments dans dossier.";
-		ph_moving = "En déplaçant ...";
-		ph_deleting = "En supprimant ...";
-		ph_copying = "En copiant ...";
-		ph_infolder = " dans dossier";
-		ph_filesize = "Taille Fichier";
-		ph_tagshere = "(Étiquettes Ici)";
-		ph_medialenght = "Longueur du Média";
-		ph_alr_00 = "Sélectionnez d'abord un dossier dans la liste d'Accès rapide.";
-		ph_alr_01 = "Sélectionnez un dossier de la liste d'Accès rapide pour supprimer.";
-		ph_alr_02 = "Aucun élément sélectionné pour supprimer.";
-		ph_alr_03a = "Le dossier <em>'";
-		ph_alr_03b = "'</em> ne peut pas être supprimé car certains fichiers sont probablement utilisés.";
-		ph_alr_04 = "Certaines vidéos de ce dossier ne peuvent pas être définitivement supprimées car elles sont utilisées, elles seront supprimées lors de la fermeture de l'application.";
-		ph_alr_05 = "Le dossier de destination et la source sont les mêmes.";
-		ph_alr_tqa = "Pas plus conseils au lancement.";
-		ph_alr_tqb = "+ Conseil ";
-		ph_alc_01a = " archives et ";
-		ph_alc_01b = " dossiers (et tout son contenu) ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
-		ph_alc_02 = " archives ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
-		ph_alc_03 = "Tu es sûr?";
-		ph_dato_no = "DÉFAIRE (aucune action à défaire)";
-		ph_dato_erasefoldtag = "DÉFAIRE (supprimer étiquette du dossier)";
-		ph_dato_erasearchtag = "DÉFAIRE (supprimer étiquette du archive)";
-		ph_dato_tagarch = "DÉFAIRE (étiqueter archive)";
-		ph_dato_tagfold = "DÉFAIRE (étiqueter dossier)";
-		ph_dato_move = "DÉFAIRE (déplacer)";	
-		ph_dato_copy = "DÉFAIRE (copier)";		
-		ph_dato_renfold = "DÉFAIRE (renommer dossier)";		
-		ph_dato_renarch = "DÉFAIRE (renommer archive)";		
-
-	}
-
-
-	// Tips
-
-	if (language == "EN") {
-		tip = [
-			"<b>Tip</b>: To enter in a folder press and hold mouse button over the folder's name until it enters.",
-			"<b>Tip</b>: Images can be launched in two ways: holding down the mouse button in the name of the image will start in the default system viewer, otherwise clicking on the image will start the internal viewer of the program.",
-			"<b>Tip</b>: If is the first time you launch Tagstoo, it will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no longer load demo tags when a new database is created uncheck the checkbox in the options menu.",
-			"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
-			"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
-			"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
-			"<b>Tip</b>: When a search has been carried out, you also have the option of creating either a printable list in graphic mode (with labels) or a list in plain text, with the routes and names of the searched elements, which can be used externally (as a playlist for a player, for example)",
-			"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
-			"<b>Tip</b>: Sometimes depending the action you do (or if you move somethin using external program) the view cannot be actualized, to actualize it simply press refresh icons (arrows in circle).",
-			"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and will be ready."
-
-		]
-	} else if (language == "ES"){
-
-		tip = [
-			"<b>Tip</b>: Para entrar en una carpeta, mantenga presionado el botón del ratón sobre el nombre de la carpeta hasta que entre.",
-			"<b>Tip</b>: Las imágenes se pueden lanzar de dos maneras: manteniendo presionado el botón del ratón en el nombre de la imagen se iniciará en el visor por defecto del sistema, de lo contrario, haciendo clic en la imagen se iniciará el visor interno del programa.",
-			"<b>Tip</b>: Si es la primera vez que inicia Tagstoo, se habrán cargado las etiquetas de demostración en la parte inferior, puede modificarlas o eliminarlas o agregar nuevas a su conveniencia, para no cargar etiquetas de demostración cuando se crea una nueva base de datos desmarque la casilla de verificación en el menú de opciones.",
-			"<b>Tip</b>: Haga doble clic en una carpeta de la izquierda para seleccionar, luego al pulsar el botón de pegar, las carpetas y archivos que seleccionó a la derecha se copiarán o moverán a esta carpeta dependiendo de lo que haya seleccionado en el interruptor de copia/corta.",
-			"<b>Tip</b>: Puede seleccionar varios elementos al mismo tiempo presionando shift mientras selecciona.",
-			"<b>Tip</b>: En la búsqueda puedes agregar todos los campos de entrada que necesites para que puedas construir fácilmente búsquedas como “<em>Buscar archivos que tengan (tag1 + tag2 + tag7 + tag8) o (tag1 + tag2 + tag6 + tag9) o (tag4 + tag6) + tag9) pero no tienen (tag10) y (tag11).</em>”",
-			"<b>Tip</b>: Cuando se ha realizado una búsqueda, también tiene la opción de crear o bien una lista imprimible en modo gráfico (con etiquetas) o bien una lista en texto plano, con las rutas y los nombres de los elementos buscados, que puede ser usada externamente (como una lista de reproducción para un reproductor, por ejemplo).",
-			"<b>Tip</b>: Si el nombre de la etiqueta es largo, elija una forma de etiqueta que tenga esquinas afiladas para que se ajuste mejor.",
-			"<b>Tip</b>: A veces dependiendo de la acción que hagas (o si mueves algo usando un programa externo) la vista no se puede actualizar, actualizarla simplemente pulsa los iconos de actualización (flechas en círculo).",
-			"<b>Tip</b>: Debido a que hay versiones de Tagstoo para varios sistemas (Windows, Linux y macOS), puede administrar los mismos datos, en una unidad externa, por ejemplo, desde diferentes sistemas alternativamente: Exporte los datos a un archivo e importerlo donde lo necesite y estarán listos."
-
-		]
-
-	} else if (language == "FR") {
-
-		tip = [
-			"<b>Tip</b>: Pour entrer dans un dossier, maintenez le bouton de la souris sur le nom du dossier jusqu'à ce qu'il entre.",
-			"<b>Tip</b>: Les images peuvent être lancées de deux façons: en maintenant enfoncé le bouton de la souris au nom de l'image, on commencera dans la visionneuse système par défaut, sinon le fait de cliquer sur l'image va démarrer la visionneuse interne du programme.",
-			"<b>Tip</b>: Si c'est la première fois que vous démarrez Tagstoo, les étiquettes de démonstration ont été chargées en bas, vous pouvez les modifier ou les supprimer ou en ajouter de nouvelles à votre convenance, pour ne pas charger les balises de démonstration lorsqu'une nouvelle base de données est créée, décochez la case cochez en le menu d'option.",
-			"<b>Tip</b>: Double-cliquez sur un dossier à gauche pour être sélectionné, puis, lorsque vous appuyez sur le bouton de collage, les dossiers et les fichiers que vous avez sélectionnés dans la droite seront copiés ou déplacés dans ce dossier en fonction de ce que vous avez sélectionné dans le commutateur copie/coupe.",
-			"<b>Tip</b>: Vous pouvez sélectionner plusieurs éléments en même temps en appuyant sur shift tout en sélectionnant.",
-			"<b>Tip</b>: Dans la recherche, vous pouvez ajouter tous les champs de saisie dont vous avez besoin afin que vous puissiez construire facilement des recherches comme “<em>Rechercher des fichiers qui ont (tag1 + tag2 + tag7 + tag8) ou (tag1 + tag2 + tag6 + tag9) ou (tag4 + tag6 + tag9) mais n'ont pas (tag10) et (tag11).</em>”",
-			"<b>Tip</b>: Lorsqu'une recherche a été effectuée, vous avez également la possibilité de créer soit une liste imprimable en mode graphique (avec étiquettes) ou une liste en texte brut, avec les routes et les noms des éléments recherchés, qui peuvent être utilisés en externe (comme une playlist pour un lecteur, par exemple).",
-			"<b>Tip</b>: Si votre nom de balise est long, choisissez une forme d'étiquette qui a des angles vifs pour mieux l'adapter.",
-			"<b>Tip</b>: Parfois, selon l'action que vous faites (ou si vous déplacez quelque chose en utilisant un programme externe), la vue ne peut pas être actualisée, pour l'actualiser appuyez simplement sur les icônes de rafraîchissement (flèches en cercle).",
-			"<b>Tip</b>: Étant donné qu'il existe des versions de Tagstoo pour plusieurs systèmes (Windows, Linux et MacOS), vous pouvez gérer les mêmes données, par exemple sur un lecteur externe, par exemple à partir de différents systèmes: Exportez les données vers un fichier et importez-les là où vous en avez besoin et elles seront prêt."
-
-		]
-
-	}
 
 
 	window.tipquest = "<br><br><input type='checkbox' id='mostrartips' onclick='mostrartips()'><span>" + ph_alr_tqa + "</span><div id='nexttip'><a class='buttontip' onclick='shownexttip()'>" + ph_alr_tqb + "<span style='font-weight:normal'>&#x21D2</span></a></div>"; // las funciones mostrartips() y shownexttip() están definidas en popups.js (al final) la de mostrartips() además tambien esta definida abajo
@@ -867,6 +932,43 @@ $(document).ready(function () {
 
 	}
 	//tips localstorage?
+
+
+
+	if (searchforupdates == "yes"){
+		/*alertify.alert(searchforupdates);*/
+
+		jQuery.get('https://tagstoo.sourceforge.io/version.txt', function(availableversion) {    	
+
+	    	if (availableversion != programversion) {
+
+	    		if (language == "EN") {
+	    			alertify.alert('A newer version of Tagstoo is available, your version: '+ programversion +', available version: ' + availableversion + '. You can go to the <a href="https://tagstoo.sourceforge.io#downloadmain" target="_blank" class="enlaceexterno">website</a> to download it. Please be sure that you export your data to file(s) before you launch the newer version.');
+	    		}
+	    		else if (language == "ES") {
+	    			alertify.alert('Una nueva versión de Tagstoo esta disponible, su versión: '+ programversion +', versión disponible: ' + availableversion + '. Puedes ir al <a href="https://tagstoo.sourceforge.io#downloadmain" target="_blank" class="enlaceexterno">sitio web</a> para la descarga. Porfavor asegurese de que exporta sus datos a fichero(s) antes de lanzar la nueva versión.');
+	    		}
+
+	    		else if (language == "FR") {
+	    			alertify.alert('Une nouvelle version de Tagstoo est disponible, votre version: '+ programversion +', Version disponible: ' + availableversion + '. Vous pouvez aller sur le <a href="https://tagstoo.sourceforge.io#downloadmain" target="_blank" class="enlaceexterno">site web</a> pour le téléchargement. S`il vous plaît assurez-vous que vous exportez vos données vers le(s) fichier(s) avant de lancer la nouvelle version.');
+
+	    		}
+
+	    		$('.enlaceexterno').on('click', function(){
+				   require('nw.gui').Shell.openExternal( this.href );
+				   return false;
+				});
+
+
+	    	}
+		});
+
+
+	}
+//alertify.alert(localStorage["asksearchforupdates"]);/**/
+	// check for updates
+
+	
 
 }); //--fin onload
 
@@ -1380,14 +1482,12 @@ window.parent.$("#delete").on('click', function() {
 	var numerooriginalelementos = $("#folderreadstatus").html();
 	numerooriginalelementos = numerooriginalelementos.substr(0,numerooriginalelementos.indexOf(' '));
 
-	if (document.querySelectorAll(".ui-selecting").length > 0) {
+	var todeleteelements = [];
 
-		var todeleteelements = document.querySelectorAll(".ui-selecting");
+	if (document.querySelectorAll(".ui-selecting").length > 0 || document.querySelectorAll(".ui-selected").length > 0) {
 
-	}
-	else if (document.querySelectorAll(".ui-selected").length > 0) {
+		todeleteelements = document.querySelectorAll(".ui-selecting, .ui-selected");
 
-		var todeleteelements = document.querySelectorAll(".ui-selected");
 	}
 
 	if (!todeleteelements) {
@@ -2020,9 +2120,9 @@ window.parent.$("#delete").on('click', function() {
 					setTimeout(function() {
 
 						if (viewmode==1){
-							$(".ui-selecting, ui-selected").next().remove(); // para los <br>
+							$(".ui-selecting, .ui-selected").next().remove(); // para los <br>
 						}
-						$(".ui-selecting, ui-selected").remove();						
+						$(".ui-selecting, .ui-selected").remove();						
 						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length - todeletefolders.length + ph_elementsinfolder);						
 						document.querySelectorAll(".exploelement, .exploelementfolderup").forEach(function(el) {
 							el.style.filter = "none";
@@ -2037,9 +2137,9 @@ window.parent.$("#delete").on('click', function() {
 					setTimeout(function() {
 
 						if (viewmode==1){
-							$(".ui-selecting, ui-selected").next().remove(); // para los <br>
+							$(".ui-selecting, .ui-selected").next().remove(); // para los <br>
 						}						
-						$(".ui-selecting, ui-selected").remove();						
+						$(".ui-selecting, .ui-selected").remove();						
 						$("#folderreadstatus").html(numerooriginalelementos - todeletearchives.length + ph_elementsinfolder);			
 						document.querySelectorAll(".exploelement, .exploelementfolderup").forEach(function(el) {
 							el.style.filter = "none";
@@ -2092,6 +2192,15 @@ function readDirectory (dirtoread) {
 		});
 		$("#eraser img").removeClass('activated');
 		$("#eraseron").removeClass("on");
+
+		// tag copier off
+		copytagson = "off";
+		document.querySelectorAll(".tags").forEach(function(el) {
+			el.style.cursor = "pointer"
+		});
+		$("#copytags img").removeClass('activated');
+		$("#copieron").removeClass("on");			
+
 
 		try {
 
@@ -2397,7 +2506,7 @@ function readDirectory (dirtoread) {
 
 									t = "";
 
-									if (order == "nameasc" || order == "extasc" || order == "sizeasc" || order == "lastdesc") {
+									if (order == "nameasc" || order == "extasc" || order == "sizeasc" || order == "lastdesc" || order == "aleator") {
 										drawDirectoryFolders(viewmode, order)
 										drawDirectoryArchives(viewmode, order)
 									}
@@ -2669,6 +2778,24 @@ function SortByLastmodDesc(a,b) {
 	var bLastmod = b.lastmod;
 	return ((aLastmod > bLastmod) ? -1 : ((aLastmod < bLastmod) ? 1 : 0));
 }
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
 
 
 function drawDirectoryFolders (viewmode, order) {
@@ -2697,6 +2824,9 @@ function drawDirectoryFolders (viewmode, order) {
 			break;
 		case "lastdesc":
 			directoryfolders.sort(SortByLastmodDesc);
+			break;
+		case "aleator":
+			directoryfolders = shuffle(directoryfolders);
 			break;
 	}
 
@@ -2761,6 +2891,9 @@ function drawDirectoryArchives (viewmode, order) {
 			break;
 		case "lastdesc":
 			directoryarchives.sort(SortByLastmodDesc);
+			break;
+		case "aleator":
+			directoryarchives = shuffle(directoryarchives);
 			break;
 	}
 
@@ -3640,6 +3773,7 @@ function drawdirectoryviewtags (){
 
 				elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 				elemetstagdelete(); // activa sistema borrado tags
+				elementstagcopier(); // activa sistema de copiado de tags
 
 			}
 
@@ -3650,6 +3784,7 @@ function drawdirectoryviewtags (){
 
 		elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 		elemetstagdelete(); // activa sistema borrado tags
+		elementstagcopier(); // activa sistema de copiado de tags
 
 	}
 
@@ -3787,6 +3922,7 @@ function elementstagsorder() {
 
 								elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 								elemetstagdelete(); // activa sistema borrado tags
+								elementstagcopier(); // activa sistema de copiado de tags
 
 							}
 
@@ -3993,6 +4129,772 @@ function elementstagsorder() {
 	}); // --fin droppable
 
 } // --fin elementstagsorder()
+
+
+
+function elementstagcopier() {
+
+	$('.tags').unbind('click');
+
+	$(".tags").on('click', function() {
+
+		if (copytagson == "on" && $(this).has('div').length>0){
+
+			// para que no se vea selección de todo el elemento cuando se selecciona para copiar los tags
+			if ($(this).parent().hasClass("ui-selecting")) {
+				$(this).parent().removeClass("ui-selecting");
+			}
+			else {
+				$(this).parent().addClass("ui-selecting");
+				$(this).parent().addClass("whitebackground");
+			}
+
+			// se recogen los seleccionados en este momento
+			if (document.querySelectorAll(".ui-selecting").length > 0) {
+
+				var tocopyonelements = document.querySelectorAll(".ui-selecting");
+
+			}
+			else if (document.querySelectorAll(".ui-selected").length > 0) {
+
+				var tocopyonelements = document.querySelectorAll(".ui-selected");
+			}
+
+			if (!tocopyonelements) {
+
+				alertify.alert(ph_alr_09);
+				/*copytagson = "off";
+				$("#copytags img").removeClass('activated');
+				$("#copieron").removeClass("on");
+				document.querySelectorAll(".tags").forEach(function(el) {
+					el.style.cursor = "pointer"
+				});*/
+
+			}
+
+			else {
+
+				var tagsacopiar = this.attributes[1].value;
+				tagsacopiar = tagsacopiar.split(","); // se convierte en array
+
+				isnewfolds = [];
+
+
+				// para aplicarles los estilos a los tags hay que recurrir a la bd
+				var propiedadestags = [];
+				var trans2 = db.transaction(["tags"], "readonly")
+				var objectStore2 = trans2.objectStore("tags")
+
+				var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+
+				var req2 = objectStore2.openCursor();
+
+				req2.onerror = function(event) {
+					console.log("error: " + event);
+				};
+				req2.onsuccess = function(event) {
+					var cursor2 = event.target.result;
+					if (cursor2) {
+
+
+						propiedadestags.push(cursor2.value);
+
+						
+
+						cursor2.continue();
+
+					}
+
+				};	
+
+				trans2.oncomplete = function(event) {		
+
+					var trans = db.transaction(["folders"], "readwrite")
+					var objectStore = trans.objectStore("folders")
+					var req = objectStore.openCursor();
+
+					req.onerror = function(event) {
+
+						console.log("error: " + event);
+					};
+
+					req.onsuccess = function(event) {
+
+						var cursor = event.target.result;
+
+						if(cursor){
+
+							$.each (tocopyonelements, function(en) {
+
+								if ($(tocopyonelements[en]).hasClass("folder")) {
+				
+									var arraydetags=[];
+
+									var addtagtosubelements = "no";
+									var treeelementtagsinview = [];
+
+									var carpeta = $(tocopyonelements[en]).children('.explofolder').attr("value"); // desde el value del div
+
+									if (rootdirectory == "\/") {
+										rootdirectory = "";
+									}
+									rootdirectory = rootdirectory.slice(0);
+
+									folder = rootdirectory + carpeta; // la ruta completa donde esta el item
+
+									isnewfolds[en]="yes"; // valor por defecto que dice que la carpeta no estaba previamente en la base de datos	
+
+									folderupdate = {}; // objeto que luego hay que pasar con todos sus valore para hacer un update en la base de datos
+
+									$.each (tagsacopiar, function(ta){
+
+										var taganadir = tagsacopiar[ta];
+
+										if(cursor.value.folder == folder){ // si el folder de la posición del cursor es igual al nombre con ruta del folder dibujado
+
+											isnewfolds[en]="no"; // la carpeta ya esta en la base de datos
+
+											folderupdate.folderid = cursor.value.folderid; //se pasan valores que ya tenía desde el cursor
+											folderupdate.folder = cursor.value.folder;
+
+											var arraydetags = cursor.value.foldertags; // variable temporal donde se mete el array de tags desde el curso para hacer unas comprobaciones a continuación. El array puede estar vacío
+											if (typeof arraydetags == "string") {
+												arraydetags = arraydetags.split(',')
+											}
+											arraydetags.push(taganadir);
+
+											arraydetags = arraydetags.filter(function(item, pos) { //si hay tag duplicado lo quita
+											    return arraydetags.indexOf(item) == pos;
+											});
+
+											folderupdate.foldertags = arraydetags;
+
+											// ahora que ya tenemos todos los datos del objeto hacemos update con el en la base de datos
+											var res = cursor.update(folderupdate);
+
+											res.onerror = function(event){
+
+												console.log("error tag no añadida: " + event);
+
+											}
+
+											res.onsuccess = function(event){
+
+												var treviewvisible = "no";
+
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+												undo.class == "";
+
+												// Actualizar visual
+												elementtagsinview = $('.explofolder').filter('[value="' + carpeta + '"]').siblings('.tags');
+												arraydetags = arraydetags.toString() // de array a string
+												elementtagsinview[0].setAttribute("value", arraydetags);
+
+												// se redibujarán los tags del treeview si están desplegadas las subcarpetas
+												treeelementtagsinview=[];
+												$.each (tocopyonelements, function(en) {
+
+													if ($(tocopyonelements[en]).hasClass("folder")) {
+
+														var carpeta = $(tocopyonelements[en]).children('.explofolder').attr("value"); // desde el value del div
+
+														if (rootdirectory == "\/") {
+															rootdirectory = "";
+														}
+														rootdirectory = rootdirectory.slice(0);
+
+														folder = rootdirectory + carpeta; // la ruta completa donde esta el item
+														$.each ($("#filetree span"), function(t) {
+															if($("#filetree span:eq("+t+")").attr("rel2") == folder) {
+
+																treeelementtagsinview[t] = $("#filetree span:eq("+t+")")[0].children[2] //el div tags del treeview
+																treviewvisible = "yes";
+																return false; //salir del each
+															}
+
+														});
+
+													}
+
+												});
+
+												// y ahora redibujamos los tags..
+												arraydetags = arraydetags.split(','); // volvemos a convertirlo en array
+												var tagsdivs = "";
+												for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
+													tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+												};
+												elementtagsinview[0].innerHTML = tagsdivs;
+
+												if (treviewvisible == "yes") { // si está visible la carpeta en el treeview
+
+													if (rootdirectory == "" || rootdirectory == "\/"){
+														filetreerefresh();
+													}
+													else {
+
+														$.each ($("#filetree span"), function(l) {
+
+															if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+																// contraer y expandir
+																$("#filetree span:eq("+l+")").trigger( "click" );
+																$("#filetree span:eq("+l+")").trigger( "click" );
+
+															}
+
+														});
+
+													}
+
+												}
+
+												// para aplicarles los estilos a los tags
+
+												var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+													
+												$.each(elementosdirectoriotags, function(n) {
+													$.each(propiedadestags, function(p) {
+														if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+															var color = "#" + propiedadestags[p].tagcolor;
+															var complecolor = hexToComplimentary(color);
+
+															elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+															elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+															elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+															elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+														}
+													})
+												});
+
+												// finalizando
+
+												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+
+												elemetstagdelete(); // activa sistema borrado tags
+												elementstagcopier(); // activa sistema de copiado de tags
+												
+
+											}
+
+										}									
+
+									});
+
+								}
+
+							});
+
+							cursor.continue(); // avanzar posición cursor en base de datos capetas y reiterar
+
+						} // --fin cursor
+
+					}; // -- fin req.onsuccess (del opencursor)
+
+					trans.oncomplete = function(e) { // tras completar la transacción (que habrá añadido el tag si la carpeta ya estaba en la base de datos)					
+
+						$.each (tocopyonelements, function(en) {
+
+							if ($(tocopyonelements[en]).hasClass("folder")) {
+
+								if (isnewfolds[en] == "yes") {
+
+									var carpeta = $(tocopyonelements[en]).children('.explofolder').attr("value"); // desde el value del div
+
+									if (rootdirectory == "\/") {
+										rootdirectory = "";
+									}
+									rootdirectory = rootdirectory.slice(0);
+
+									folder = rootdirectory + carpeta; // la ruta completa donde esta el item
+
+									// añadimos el objeto con sus parámetros mediante put
+									var request = db.transaction(["folders"], "readwrite")
+									.objectStore("folders")
+									.put({ folder: folder, foldertags: tagsacopiar }); // el id no hace falta pues es autoincremental
+
+									request.onerror = function(event){
+
+										console.log("error tag no añadida: " + event);
+
+									}
+
+									request.onsuccess = function(event){
+
+										// console.log("tag añadida!");
+										var treviewvisible = "no";
+										treeelementtagsinview = [];
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+									    undo.class == "";
+
+										// actualizar visual
+										var elementtagsinview = $('.explofolder').filter('[value="' + carpeta + '"]').siblings('.tags');
+										arraydetags = tagsacopiar;
+										elementtagsinview[0].setAttribute("value", arraydetags);
+		
+										$.each ($("#filetree span"), function(t) {
+											if($("#filetree span:eq("+t+")").attr("rel2") == folder) {
+
+												treeelementtagsinview[t] = $("#filetree span:eq("+t+")")[0].children[2] //el div tags del treeview
+												treviewvisible = "yes"
+											}
+
+										});
+
+										// y ahora redibujamos los tags..
+										
+										var tagsdivs = "";
+										for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
+											tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+										};
+										elementtagsinview[0].innerHTML = tagsdivs;
+
+
+										if (treviewvisible == "yes") { // si está visible la carpeta en el treeview
+
+											if (rootdirectory == "" || rootdirectory == "\/"){
+												filetreerefresh();
+											}
+
+											$.each ($("#filetree span"), function(l) {
+
+												if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+													// contraer y expandir
+													$("#filetree span:eq("+l+")").trigger( "click" );
+													$("#filetree span:eq("+l+")").trigger( "click" );
+
+												}
+
+											});
+
+										}										
+
+										// para aplicarles los estilos a los tags
+
+										var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+											
+										$.each(elementosdirectoriotags, function(n) {
+											$.each(propiedadestags, function(p) {
+												if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+													var color = "#" + propiedadestags[p].tagcolor;
+													var complecolor = hexToComplimentary(color);
+
+													elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+													elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+													elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+													elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+												}
+											})
+										});
+
+										// finalizando
+
+										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+										elemetstagdelete(); // activa sistema borrado tags
+										elementstagcopier(); // activa sistema de copiado de tags
+
+										
+
+									}
+
+								}
+
+							}
+
+
+						}) 					
+					
+
+					}// -- fin trans.oncomplete	
+
+
+
+					// Se trabaja con los ficheros
+					
+					var isnewfiles = [];
+
+					$.each (tocopyonelements, function(en) {
+
+						if ($(tocopyonelements[en]).hasClass("archive")){
+
+							var arraydetags=[];
+
+							var filename = $(tocopyonelements[en]).children('.explofile');
+							filename = filename.attr("value");
+
+							var extension = $(tocopyonelements[en]).children('.exploext');
+							extension = extension[0].textContent;
+
+							var folder = rootdirectory;
+
+							var fileupdate = {};
+
+							// vamos a comprobar si ya estaba la carpeta y si no está la añadimos a la base de dato (aunque sea sin tags)
+
+							isnewfiles[en]="yes";
+
+							var trans = db.transaction(["folders"], "readwrite")
+							var objectStore = trans.objectStore("folders")
+							var req = objectStore.openCursor();
+
+							req.onerror = function(event) {
+
+								console.log("error: " + event);
+
+							};
+
+							req.onsuccess = function(event) {
+
+								var cursor = event.target.result;
+
+								if(cursor){
+
+									if(cursor.value.folder == folder){ // si la carpeta madre ya esta en la base de datos
+
+										isnewfiles[en]="no";
+										fileupdate.filefolder = cursor.value.folderid; // para añadir luego
+										return;
+									}
+
+									cursor.continue();
+								}
+
+							}
+
+							trans.oncomplete = function(e) { // vamos a añadir nueva carpeta madre
+
+								if (isnewfiles[en]=="yes") {
+						
+									var trans = db.transaction(["folders"], "readwrite")
+									var request = trans.objectStore("folders")
+										.put({ folder: folder, foldertags: [] }); // el id no hace falta pues es autoincremental
+
+
+									request.onerror = function(event){
+
+										console.log("error carpeta madre no añadida: " + event);
+
+									}
+
+									request.onsuccess = function(event){
+
+										// console.log("carpeta madre añadida!");
+
+										trans.oncomplete = function(e) { // vamos a tomar el id de la carpeta añadida
+
+											var trans = db.transaction(["folders"], "readonly")
+											var objectStore = trans.objectStore("folders")
+											var req = objectStore.openCursor();
+
+											req.onerror = function(event) {
+
+												console.log("error: " + event);
+
+											};
+
+											req.onsuccess = function(event) {
+
+												var cursor = event.target.result;
+
+												if(cursor){
+
+													if(cursor.value.folder == folder){
+
+														fileupdate.filefolder = cursor.value.folderid;
+
+													}
+
+													cursor.continue();
+												}
+
+												trans.oncomplete = function(e) { // vamos a añadir los datos del nuevo fichero (si la carpeta era nueva el fichero también)
+
+													fileupdate.filename = filename;
+													fileupdate.fileext = extension;
+													fileupdate.filetags = tagsacopiar;
+
+													var trans = db.transaction(["files"], "readwrite")
+													var request = trans.objectStore("files")
+														.add(fileupdate);
+
+													request.onerror = function(event) {
+
+														console.log("error datos nuevo fichero no añadidos:" + event);
+
+													};
+													request.onsuccess = function(event) {
+
+														// console.log("datos nuevo fichero añadidos");
+
+														$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+														undo.class == ""
+
+														// Actualizar visual
+
+														var elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
+														var arraydetags = tagsacopiar; // solo hay un tag a añadir
+														elementtagsinview[0].setAttribute("value", arraydetags);
+
+														// y ahora redibujamos los tags..
+														if (typeof arraydetags == "string") {
+															arraydetags = arraydetags.split(',')
+														} // volvemos a convertirlo en array
+														var tagsdivs = "";
+														for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
+															tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+														};
+														elementtagsinview[0].innerHTML = tagsdivs;
+
+														// para aplicarles los estilos a los tags
+
+														var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+															
+														$.each(elementosdirectoriotags, function(n) {
+															$.each(propiedadestags, function(p) {
+																if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+																	var color = "#" + propiedadestags[p].tagcolor;
+																	var complecolor = hexToComplimentary(color);
+
+																	elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+																	elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+																	elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+																	elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+																}
+															})
+														});
+
+														// finalizando
+
+														elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+														elemetstagdelete(); // activa sistema borrado tags
+														elementstagcopier(); // activa sistema de copiado de tags
+														
+
+													};
+
+												} // -- fin trans (añadir nuevo fichero dentro de nueva carpeta)
+
+											} // -- fin onsuccess
+
+										} // -- fin trans (tomar id nueva carpeta)
+
+									} // -- fin onsuccess
+
+								} // -- fin if (si el archivo esta en una nueva carpeta)
+								else { // -- si el archivo esta en una carpeta ya añadida a la base de datos
+
+									// hay que comprobar que si el fichero es nuevo o no
+									
+									isnewfiles[en]="yes"; // valor por defecto (dejar asi, no poner window)
+									
+									var trans = db.transaction(["files"], "readwrite")
+									var objectStore = trans.objectStore("files")
+									var req = objectStore.openCursor();
+
+									req.onerror = function(event) {
+
+										console.log("error: " + event);
+									};
+
+									req.onsuccess = function(event) {
+
+									 // fileupdate.filefolder ya esta definido más arriba
+										fileupdate.filename = filename;
+										fileupdate.fileext = extension;
+										//fileupdate.filetags = taganadir;
+
+										var cursor = event.target.result;
+
+										if(cursor){
+
+											if (cursor.value.filefolder == fileupdate.filefolder) { // cuando el id del folder coincide
+
+												if (cursor.value.filename == fileupdate.filename) { // si el archivo ya estaba en la bd
+
+													isnewfiles[en] = "no";
+													console.log("no:" + fileupdate.filename)
+													fileupdate.fileid = cursor.value.fileid;  // nos da el id del último success (el fichero añadido)
+													arraydetags = cursor.value.filetags;
+												}
+											}
+
+											cursor.continue();
+										}
+
+									}
+
+									trans.oncomplete = function(e) { // a meter los datos del fichero tanto si es nuevo como si no
+
+										if (isnewfiles[en]=="no") { // si el fichero no es nuevo
+
+											$.each (tagsacopiar, function(ta){
+
+												var taganadir = tagsacopiar[ta];
+
+												if (typeof arraydetags == "string") {
+
+													arraydetags = arraydetags.split(',')
+												}
+												arraydetags.push(taganadir);											
+
+											});
+
+											arraydetags = arraydetags.filter(function(item, pos) { //si hay tag duplicado lo quita
+											    return arraydetags.indexOf(item) == pos;
+											});
+
+											fileupdate.filetags = arraydetags;
+
+											var trans = db.transaction(["files"], "readwrite")
+													var request = trans.objectStore("files")
+														.put(fileupdate);
+
+											request.onerror = function(event) {
+
+												console.log("error datos nuevo fichero no añadidos:" + event);
+
+											};
+
+											request.onsuccess = function(event) {
+
+												// console.log("datos nuevo fichero añadidos");
+
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+												undo.class == "";
+
+												// Actualizar visual
+												var elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
+												arraydetags = arraydetags.toString() // de array a string
+
+												elementtagsinview[0].setAttribute("value", arraydetags);
+
+												// y ahora redibujamos los tags..
+												arraydetags = arraydetags.split(','); // volvemos a convertirlo en array
+												var tagsdivs = "";
+												for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
+													tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+												};
+												elementtagsinview[0].innerHTML = tagsdivs;
+
+												// para aplicarles los estilos a los tags									
+
+												var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+
+												$.each(elementosdirectoriotags, function(n) {
+													$.each(propiedadestags, function(p) {
+														if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+															var color = "#" + propiedadestags[p].tagcolor;
+															var complecolor = hexToComplimentary(color);
+
+															elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+															elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+															elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+															elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+														}
+													})
+												});
+
+												// finalizando
+
+												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+												elemetstagdelete(); // activa sistema borrado tags
+												elementstagcopier(); // activa sistema de copiado de tags
+												
+
+											};
+
+										} // -- fin si el archivo no era nuevo (en una carpeta que ya estaba en la bd)
+										else { // si el archivo es nuevo (en una carpeta que ya estaba en la bd)
+											
+											fileupdate.filetags = tagsacopiar;
+
+											var trans = db.transaction(["files"], "readwrite")
+													var request = trans.objectStore("files")
+														.add(fileupdate);
+
+											request.onerror = function(event) {
+
+												console.log("error datos nuevo fichero no añadidos:" + event);
+
+											};
+											request.onsuccess = function(event) {
+
+												// console.log("datos nuevo fichero añadidos");
+
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+												undo.class == "";
+
+												// Actualizar visual
+												elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');												
+												arraydetags = tagsacopiar;
+												elementtagsinview[0].setAttribute("value", arraydetags);
+
+												// y ahora redibujamos los tags..
+												tagsdivs = "";
+												for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
+													tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+												};
+												elementtagsinview[0].innerHTML = tagsdivs;
+
+												// para aplicarles los estilos a los tags									
+
+												elementosdirectoriotags = elementtagsinview.children(".tagticket");										
+												$.each(elementosdirectoriotags, function(n) {
+													$.each(propiedadestags, function(p) {
+														if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+															var color = "#" + propiedadestags[p].tagcolor;
+															var complecolor = hexToComplimentary(color);
+
+															elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+															elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+															elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+															elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+														}
+													})
+												});
+
+												// finalizando
+
+												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+												elemetstagdelete(); // activa sistema borrado tags
+												elementstagcopier(); // activa sistema de copiado de tags
+												
+											};
+
+										} // --fin else (archivo nuevo, carpeta vieja)
+
+									} // --fin trans
+
+								} // --fin else (carpeta vieja)
+
+							}; // -- fin trans
+
+						}
+
+					});
+				
+				}
+
+			} //--fin else si hay elementos donde copiar
+
+		}
+
+	});
+
+}
+
+
 
 
 
@@ -4353,7 +5255,6 @@ function elemetstagdelete() {
 												$.each ($("#filetree span"), function(t) {
 
 													if($("#filetree span:eq("+t+")").attr("rel2") == undo.deltaggfold.folder) {
-														console.log($("#filetree span:eq("+t+")")[0]);
 														treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
 													}
 
@@ -5153,6 +6054,7 @@ function interactions() {
 
 													elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 													elemetstagdelete(); // activa sistema borrado tags
+													elementstagcopier(); // activa sistema de copiado de tags
 												}
 
 											};
@@ -5310,6 +6212,7 @@ function interactions() {
 
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
+											elementstagcopier(); // activa sistema de copiado de tags
 										}
 
 									};
@@ -5392,6 +6295,7 @@ function interactions() {
 
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
+											elementstagcopier(); // activa sistema de copiado de tags
 
 										}
 
@@ -5440,7 +6344,7 @@ function interactions() {
 
 					window.taganadir = ui.draggable["0"].attributes[1].value;
 
-					var escarpeta = $(this).children().hasClass('explofolder');
+					//var escarpeta = $(this).children().hasClass('explofolder');
 
 					var arraydetags=[];
 
@@ -5640,6 +6544,7 @@ function interactions() {
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 
 										elemetstagdelete(); // activa sistema borrado tags
+										elementstagcopier(); // activa sistema de copiado de tags
 
 										if(localStorage["asktagsubeleents"]=="yes"){
 											popup("addtagtosubelements");
@@ -5782,6 +6687,7 @@ function interactions() {
 
 									elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 									elemetstagdelete(); // activa sistema borrado tags
+									elementstagcopier(); // activa sistema de copiado de tags
 
 									if(localStorage["asktagsubeleents"]=="yes"){
 										popup("addtagtosubelements");

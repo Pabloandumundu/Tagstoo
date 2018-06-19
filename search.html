@@ -147,9 +147,9 @@
 
 
           <div class="searchinput">
-            <span class="lang_en">That have the tags(s): (max 5 tags)</span>
-            <span class="lang_es">Que tienen la(s) etiqueta(s): (max 5 etiquetas)</span>
-            <span class="lang_fr">Qui ont le(s) étiquette(s): (max 5 etiquettes)</span>
+            <span class="lang_en">That have the tags(s):</span>
+            <span class="lang_es">Que tienen la(s) etiqueta(s):</span>
+            <span class="lang_fr">Qui ont le(s) étiquette(s):</span>
 
             <div class="taginput" value=""></div>
             <a class="cleartagfield small button red">
@@ -223,6 +223,7 @@
             <option value="sizedesc">Size Big-Small</option>
             <option value="lastdesc">LastMod New-Old</option>
             <option value="lastasc">LastMod Old-New</option>
+            <option value="aleator">Aleatory!</option>
           </select>
         </span>
         <span class="lang_es">
@@ -235,6 +236,7 @@
             <option value="sizedesc">Grande-Pequeño</option>
             <option value="lastdesc">Modificado N-A</option>
             <option value="lastasc">Modificado A-N</option>
+            <option value="aleator">¡Aleatorio!</option>
           </select>
         </span>
         <span class="lang_fr">
@@ -247,9 +249,10 @@
             <option value="sizedesc">Large-Petit</option>
             <option value="lastdesc">Modifié N-V</option>
             <option value="lastasc">Modifié V-N</option>
+            <option value="aleator">Aléatoire!</option>
           </select>
         </span>
-      <span id="tolist"><img src="img/listaicon.png"></span>
+      <span id="tolist"><img src="img/listaicon.png" title="Display printable friendly list..."></span>
       &nbsp;
       <span id="status"></span>
 
@@ -262,7 +265,7 @@
     <span class="lang_es"><img src="img/tageraseron_ES.gif" alt=""></span>
     <span class="lang_fr"><img src="img/tageraseron_FR.gif" alt=""></span>
   </div>
-  <div id="eraser"><img src="img/eraser.png" alt=""></div>
+  <div id="eraser"><img src="img/eraser.png" alt="" title="Tag eraser."></div>
 
   <div id="searchdirview-wrapper">
   <input type="file" id="selectedactionFolder" name="selectedactionFolder" nwdirectory style="display: none;" onchange="selectedactionfolder(); this.value=null; return false;" />
