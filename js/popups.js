@@ -1531,6 +1531,14 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									valueaponer[i] = taganadir;
 								}
 
+								// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+								$.each (directoryfolders, function(drf){										
+									if (directoryfolders[drf].name  == bdirectoryfolders[i].name){
+										directoryfolders[drf].tagsid = valueaponer[i];					
+									}
+								});
+								//directoryfolders[i].tagsid = valueaponer[i]; //HABRA QUE METER UN EAVH Y EL QUE COINCIDA CARPET...
+
 								valueaponer[i] = valueaponer[i].split(','); // de string a array
 
 								// los tagdivs son tanto para el treeview como para el directoryview
@@ -1566,16 +1574,18 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 										var cursor2 = event.target.result;
 										if (cursor2) {
 											$.each (treeelementtagsinview[i].children, function(u) {
-												if (cursor2.value.tagid == treeelementtagsinview[i].children[u].getAttribute("value")) {
+												if (treeelementtagsinview[i].children[u]){
+													if (cursor2.value.tagid == treeelementtagsinview[i].children[u].getAttribute("value")) {
 
-													var color = "#" + cursor2.value.tagcolor;
-													var complecolor = hexToComplimentary(color);
+														var color = "#" + cursor2.value.tagcolor;
+														var complecolor = hexToComplimentary(color);
 
-													treeelementtagsinview[i].children[u].className += " verysmall " + cursor2.value.tagform;
-													treeelementtagsinview[i].children[u].setAttribute("value", cursor2.value.tagid);
-													treeelementtagsinview[i].children[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-													treeelementtagsinview[i].children[u].innerHTML = cursor2.value.tagtext;
+														treeelementtagsinview[i].children[u].className += " verysmall " + cursor2.value.tagform;
+														treeelementtagsinview[i].children[u].setAttribute("value", cursor2.value.tagid);
+														treeelementtagsinview[i].children[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														treeelementtagsinview[i].children[u].innerHTML = cursor2.value.tagtext;
 
+													}
 												}
 											});
 
@@ -1616,16 +1626,18 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 										var cursor2 = event.target.result;
 										if (cursor2) {
 											$.each(elementosdirectoriotags[i], function(n) {
-												if (cursor2.value.tagid == elementosdirectoriotags[i][n].getAttribute("value")) {
+												if(elementosdirectoriotags[i][n]){
+													if (cursor2.value.tagid == elementosdirectoriotags[i][n].getAttribute("value")) {
 
-													var color = "#" + cursor2.value.tagcolor;
-													var complecolor = hexToComplimentary(color);
+														var color = "#" + cursor2.value.tagcolor;
+														var complecolor = hexToComplimentary(color);
 
-													elementosdirectoriotags[i][n].className += " small " + cursor2.value.tagform;
-													elementosdirectoriotags[i][n].setAttribute("value", cursor2.value.tagid);
-													elementosdirectoriotags[i][n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-													elementosdirectoriotags[i][n].innerHTML = cursor2.value.tagtext;
+														elementosdirectoriotags[i][n].className += " small " + cursor2.value.tagform;
+														elementosdirectoriotags[i][n].setAttribute("value", cursor2.value.tagid);
+														elementosdirectoriotags[i][n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														elementosdirectoriotags[i][n].innerHTML = cursor2.value.tagtext;
 
+													}
 												}
 
 											});
@@ -1708,6 +1720,9 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 								} else {
 									fvalueaponer[i] = taganadir;
 								}
+
+								
+
 								fvalueaponer[i] = fvalueaponer[i].split(','); // de string a array
 
 								var ftagsdivs = "";
@@ -1719,6 +1734,9 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 
 							// se redibujan los tags de las subcarpetas si estámos dentro de la carpeta
 							if (dirtoexec == driveunit + ffoldertoaddtags) {
+
+								// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+								directoryarchives[i].tagsid = fvalueaponer[i];
 
 								// primero cambiamos el value de la etiqueta tags..
 								$.each ($(".explofile"), function(n) {
@@ -1745,17 +1763,18 @@ function addtagsubs(taganadir, ffoldertoaddtags) {
 									var cursor2 = event.target.result;
 									if (cursor2) {
 										$.each(felementosdirectoriotags[i], function(n) {
+											if (felementosdirectoriotags[i][n]){
+												if (cursor2.value.tagid == felementosdirectoriotags[i][n].getAttribute("value")) {
 
-											if (cursor2.value.tagid == felementosdirectoriotags[i][n].getAttribute("value")) {
+													var color = "#" + cursor2.value.tagcolor;
+													var complecolor = hexToComplimentary(color);
 
-												var color = "#" + cursor2.value.tagcolor;
-												var complecolor = hexToComplimentary(color);
+													felementosdirectoriotags[i][n].className += " small " + cursor2.value.tagform;
+													felementosdirectoriotags[i][n].setAttribute("value", cursor2.value.tagid);
+													felementosdirectoriotags[i][n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+													felementosdirectoriotags[i][n].innerHTML = cursor2.value.tagtext;
 
-												felementosdirectoriotags[i][n].className += " small " + cursor2.value.tagform;
-												felementosdirectoriotags[i][n].setAttribute("value", cursor2.value.tagid);
-												felementosdirectoriotags[i][n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-												felementosdirectoriotags[i][n].innerHTML = cursor2.value.tagtext;
-
+												}
 											}
 
 										});

@@ -851,6 +851,13 @@ function filetreeinteractions() {
 
 									}
 
+									// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+									$.each (directoryfolders, function(drf){										
+										if (directoryfolders[drf].name  == carpeta){
+											directoryfolders[drf].tagsid = arraydetags;						
+										}
+									});
+
 									// se re dibujaran los tags del treeview si están desplegadas las subcarpetas
 									$.each ($("#filetree span"), function(t) {
 
@@ -994,6 +1001,14 @@ function filetreeinteractions() {
 								if (elementtagsinview.length != 0) {
 									elementtagsinview[0].setAttribute("value", arraydetags);
 								}
+
+								// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+								$.each (directoryfolders, function(drf){										
+									if (directoryfolders[drf].name  == carpeta){
+										directoryfolders[drf].tagsid = arraydetags;						
+									}
+								});
+								
 								// se redibujarán los tags del treeview si están desplegadas las subcarpetas
 								$.each ($("#filetree span"), function(t) {
 									if($("#filetree span:eq("+t+")").attr("rel2") == undo.taggfold.folder) {
@@ -1153,7 +1168,16 @@ function filetreeinteractions() {
 
 							var arorfo = fs.readdirSync(driveunit + targetfolder);
 							var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
-							$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + " in folder";
+							$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + ph_infolder;
+
+							// se cambia valor de items del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+							$.each (directoryfolders, function(drf){
+								if (directoryfolders[drf]){ //para que no de error si borra elemento de array
+									if (directoryfolders[drf].name == $(".explofolder")[ex].attributes[1].value){
+										directoryfolders[drf].arorfo = arorfo;							
+									}
+								}
+							});
 
 						}
 					})
@@ -1570,6 +1594,7 @@ function filetreeinteractions() {
 
 											if (flagg == droppedfolder.length && refescohechoporcarpeta == "no" && droppedarchive.length == 0) { // para que haga el refresco tras mover la última carpeta y solo lo haga una vez..
 
+												
 												previousornext = "refresh"; // para refrescar sin añadir al array de los direcciones visitadas
 												readDirectory(dirtoexec);
 												refescohechoporcarpeta = "si";
@@ -1752,6 +1777,17 @@ function filetreeinteractions() {
 																					fflagg++;
 
 																					if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
+
+																						// se eliminan los elementos del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+																						$.each(droppedarchive, function(t) {
+																							$.each (directoryarchives, function(arf){
+																								if (directoryarchives[arf]){ //para que no de error si borra elemento de array
+																									if (directoryarchives[arf].name == droppedarchive[t].children[1].attributes[1].value){
+																										directoryarchives.splice(arf, 1);		
+																									}
+																								}
+																							});
+																						});
 
 																						if(droppedfolder.length > 0) {
 
@@ -1978,6 +2014,18 @@ function filetreeinteractions() {
 
 																			if (fflagg == droppedarchive.length & refrescohecho2=="no") { //para que haga el refresco tras mover la última carpeta
 
+																				// se eliminan los elementos del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+																				$.each(droppedarchive, function(t) {
+																					$.each (directoryarchives, function(arf){
+																						if (directoryarchives[arf]){ //para que no de error si borra elemento de array
+																							if (directoryarchives[arf].name == droppedarchive[t].children[1].attributes[1].value){
+																								directoryarchives.splice(arf, 1);		
+																							}
+																						}
+																					});
+																				});
+
+
 																				// para que refresque el filetree tambien si tuviera carpetas
 																				if(droppedfolder.length > 0) {
 
@@ -2112,6 +2160,18 @@ function filetreeinteractions() {
 											fflagg++;
 
 											if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
+
+												// se eliminan los elementos del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+												$.each(droppedarchive, function(t) {
+													$.each (directoryarchives, function(arf){
+														if (directoryarchives[arf]){ //para que no de error si borra elemento de array
+															if (directoryarchives[arf].name == droppedarchive[t].children[1].attributes[1].value){
+																directoryarchives.splice(arf, 1);		
+															}
+														}
+													});
+												});
+
 
 												// para que refresque el filetree también si tuviera carpetas
 												if(droppedfolder.length > 0) {
@@ -3251,7 +3311,16 @@ window.parent.$("#paste").on('click', function() {
 
 					var arorfo = fs.readdirSync(driveunit + targetfolder);
 					var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
-					$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + " in folder";
+					$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + ph_infolder;
+							
+					// se cambia valor de items del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+					$.each (directoryfolders, function(drf){
+						if (directoryfolders[drf]){ //para que no de error si borra elemento de array
+							if (directoryfolders[drf].name == $(".explofolder")[ex].attributes[1].value){
+								directoryfolders[drf].arorfo = arorfo;							
+							}
+						}
+					});
 
 				}
 			})
@@ -3682,6 +3751,18 @@ window.parent.$("#paste").on('click', function() {
 
 										$("#folderreadstatus").html(numerooriginalelementos - alldroppedelement.length + ph_elementsinfolder);
 										$('.exploelement, .exploelementfolderup').css("filter","none");
+
+										// se eliminan los elementos del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										$.each(droppedfolder, function(t) {
+											$.each (directoryfolders, function(drf){
+												if (directoryfolders[drf]){ //para que no de error si borra elemento de array
+													if (directoryfolders[drf].name == foldername[t]){
+														directoryfolders.splice(drf, 1);							
+													}
+												}
+											});
+										});
+
 										updatedestitems();
 										refescohechoporcarpeta = "si";
 
@@ -3864,8 +3945,19 @@ window.parent.$("#paste").on('click', function() {
 
 																			if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
 
-																				if(droppedfolder.length > 0) {
+																				// se eliminan los elementos del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+																				$.each(droppedarchive, function(t) {
+																					$.each (directoryarchives, function(arf){
+																						if (directoryarchives[arf]){ //para que no de error si borra elemento de array
+																							if (directoryarchives[arf].name == droppedarchive[t].children[1].attributes[1].value){
+																								directoryarchives.splice(arf, 1);		
+																							}
+																						}
+																					});
+																				});																				
 
+																				if(droppedfolder.length > 0) {
+																					
 																					timetowait = droppedfolder.length * 30;
 																					setTimeout(function() {
 																						$.each ($("#filetree span"), function(l) {
@@ -4085,7 +4177,19 @@ window.parent.$("#paste").on('click', function() {
 
 																	if (fflagg == droppedarchive.length & refrescohecho2=="no") { //para que haga el refresco tras mover la última carpeta
 
-																		// para que refresque el filetree tambien si tuviera carpetas
+																		// se eliminan los elementos del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+																		$.each(droppedarchive, function(t) {
+																			$.each (directoryarchives, function(arf){
+																				if (directoryarchives[arf]){ //para que no de error si borra 
+																					if (directoryarchives[arf].name == droppedarchive[t].children[1].attributes[1].value){
+																						directoryarchives.splice(arf, 1);		
+																					}
+																				}
+																			});
+																		});
+
+
+																		// para que refresque el filetree tambien si tuviera carpetas			
 																		if(droppedfolder.length > 0) {
 
 																			timetowait = droppedfolder.length * 30;
@@ -4217,6 +4321,18 @@ window.parent.$("#paste").on('click', function() {
 									fflagg++;
 
 									if (fflagg == droppedarchive.length) { // para que haga el refresco tras mover la última carpeta
+
+										
+										// se eliminan los elementos del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										$.each(droppedarchive, function(t) {
+											$.each (directoryarchives, function(arf){
+												if (directoryarchives[arf]){ //para que no de error si borra elemento de array					
+													if (directoryarchives[arf].name == droppedarchive[t].children[1].attributes[1].value){
+														directoryarchives.splice(arf, 1);		
+													}
+												}
+											});
+										});
 
 										// para que refresque el filetree también si tuviera carpetas
 										if(droppedfolder.length > 0) {

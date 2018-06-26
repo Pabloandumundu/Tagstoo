@@ -840,6 +840,13 @@ $(document).ready(function () {
 
 					if (dirtoexec == undo.rename.folder) { // si estámos dentro de la carpeta en la vista de directorio
 
+						// se actualiza el elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+						$.each (directoryarchives, function(dra){
+							if (directoryarchives[dra].name == "\/" + undo.rename.nuevo){
+								directoryarchives[dra].name = "\/" + undo.rename.original;							
+							}
+						});
+
 						var explofiles = $(".explofile")
 						$.each($(".explofile"), function(i) {
 
@@ -1322,6 +1329,13 @@ $(document).ready(function () {
 						var carraydetags = carraydetagsorig.toString() // de array a string
 
 						elementtagsinview[0].setAttribute("value", carraydetags);
+
+						// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+						$.each (directoryarchives, function(dra){										
+							if (directoryarchives[dra].name  == undo.taggaarch.archive){
+								directoryarchives[dra].tagsid = carraydetags;						
+							}
+						});
 			
 						// y ahora redibujamos los tags..										
 						carraydetags = carraydetags.split(','); // volvemos a convertirlo en array
@@ -1549,7 +1563,21 @@ $(document).ready(function () {
 										carraydetagsorig.splice(index, 1); // lo quitamos del array
 										carraydetags = carraydetagsorig.toString() // de array a string
 
+										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										// $.each (directoryfolders, function(drf){										
+											if (directoryfolders[i].name  == carpeta){
+												directoryfolders[i].tagsid = carraydetags;						
+											}
+										//});
+
 										elementtagsinview[0].setAttribute("value", carraydetags);
+
+										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										$.each (directoryfolders, function(drf){										
+											if (directoryfolders[drf].name  == undo.taggfold.folder){
+												directoryfolders[drf].tagsid = carraydetags;						
+											}
+										});
 							
 										// y ahora redibujamos los tags..										
 										carraydetags = carraydetags.split(','); //volvemos a convertirlo en array
@@ -1862,8 +1890,8 @@ $(document).ready(function () {
 				var directoryelement = [];
 				// variables globales
 				directorycontent = []; // en esta variable se meten archivos y directorios
-				directoryarchives = []; // en esta variable se meten los archivos
-				directoryfolders = []; // en esta variable se meten los directorios
+				udirectoryarchives = []; // en esta variable se meten los archivos
+				udirectoryfolders = []; // en esta variable se meten los directorios
 
 				var readedElements = fs.readdirSync(driveunit + undo.taggfold.folder);
 
@@ -1899,17 +1927,17 @@ $(document).ready(function () {
 				$.each(directorycontent, function(i) {
 
 					if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
-						directoryfolders[ii] = directorycontent[i];               
+						udirectoryfolders[ii] = directorycontent[i];               
 
 						ii++;
 					} else {
-						directoryarchives[iii] = directorycontent[i];
+						udirectoryarchives[iii] = directorycontent[i];
 						iii++;
 					};
 				});
 
 				// leemos datos subcarpetas
-				if (directoryfolders.length >= 1) {
+				if (udirectoryfolders.length >= 1) {
 
 					var trans = db.transaction(["folders"], "readonly")
 					var objectStore = trans.objectStore("folders")
@@ -1919,7 +1947,7 @@ $(document).ready(function () {
 					var valueaponer=[];
 					var tagsdivs=[];
 
-					$.each(directoryfolders, function(i) {
+					$.each(udirectoryfolders, function(i) {
 
 						var folderupdate = {};			
 						
@@ -1936,10 +1964,10 @@ $(document).ready(function () {
 							var cursor = event.target.result; 
 							if(cursor){
 
-								if(cursor.value.folder == undo.taggfold.folder + directoryfolders[i].name){ // si la subcarpera ya esta en la bd
+								if(cursor.value.folder == undo.taggfold.folder + udirectoryfolders[i].name){ // si la subcarpera ya esta en la bd
 
-									directoryfolders[i].tagsid = cursor.value.foldertags; 
-									directoryfolders[i].id = cursor.value.folderid;
+									udirectoryfolders[i].tagsid = cursor.value.foldertags; 
+									udirectoryfolders[i].id = cursor.value.folderid;
 
 								}
 								cursor.continue();
@@ -1953,13 +1981,13 @@ $(document).ready(function () {
 							treeelementtagsinview = []
 							treeelementosdirectoriotags = []
 
-							$.each(directoryfolders, function(i) {
+							$.each(udirectoryfolders, function(i) {
 
 								// se redibujarán los tags del treeview si están desplegadas las subcarpetas
 
 								$.each ($("#filetree span"), function(t) {
 
-									if($("#filetree span:eq("+t+")").attr("rel2") == undo.taggfold.folder + directoryfolders[i].name) {
+									if($("#filetree span:eq("+t+")").attr("rel2") == undo.taggfold.folder + udirectoryfolders[i].name) {
 
 										treeelementtagsinview[i] = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
 									}
@@ -1967,7 +1995,7 @@ $(document).ready(function () {
 								});
 
 								// aquí procesamos los valores que luego se pondrán en los tags del treeview y del directorio
-								valueoriginal[i] = directoryfolders[i].tagsid;
+								valueoriginal[i] = udirectoryfolders[i].tagsid;
 
 								if (typeof valueoriginal[i] == "string") {
 									valueoriginal[i] = valueoriginal[i].split(",");
@@ -1976,6 +2004,9 @@ $(document).ready(function () {
 								var index = valueoriginal[i].indexOf(undo.taggfold.tagid); // localizamos el id del tag a borrar
 								valueoriginal[i].splice(index, 1); // lo quitamos del array
 								valueaponer[i] = valueoriginal[i].toString() // de objeto a string
+								// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+								udirectoryfolders[i].tagsid = valueaponer[i];
+
 								valueaponer[i] = valueaponer[i].split(','); // de string a array
 								var tagsdivs = "";
 								for(var k = 0; k < valueaponer[i].length; k += 1){ //recorremos el array
@@ -2001,17 +2032,19 @@ $(document).ready(function () {
 									req2.onsuccess = function(event) { 
 										var cursor2 = event.target.result;
 										if (cursor2) {
-											$.each (treeelementosdirectoriotags[i], function(u) {											
-												if (cursor2.value.tagid == treeelementosdirectoriotags[i][u].getAttribute("value")) {
+											$.each (treeelementosdirectoriotags[i], function(u) {
+												if(treeelementosdirectoriotags[i][u]){										
+													if (cursor2.value.tagid == treeelementosdirectoriotags[i][u].getAttribute("value")) {
 
-													var color = "#" + cursor2.value.tagcolor;
-													var complecolor = hexToComplimentary(color);
+														var color = "#" + cursor2.value.tagcolor;
+														var complecolor = hexToComplimentary(color);
 
-													treeelementosdirectoriotags[i][u].className += " verysmall " + cursor2.value.tagform;
-													treeelementosdirectoriotags[i][u].setAttribute("value", cursor2.value.tagid);
-													treeelementosdirectoriotags[i][u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-													treeelementosdirectoriotags[i][u].innerHTML = cursor2.value.tagtext;
+														treeelementosdirectoriotags[i][u].className += " verysmall " + cursor2.value.tagform;
+														treeelementosdirectoriotags[i][u].setAttribute("value", cursor2.value.tagid);
+														treeelementosdirectoriotags[i][u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														treeelementosdirectoriotags[i][u].innerHTML = cursor2.value.tagtext;
 
+													}
 												}
 											});
 
@@ -2023,11 +2056,12 @@ $(document).ready(function () {
 
 								} // --fin si están las subcarpetas desplegadas en el treeview
 
-								if (dirtoexec == driveunit + undo.taggfold.folder) { // se redibujan los tags de las subarpetas si estámos dentro de la carpeta
+								
+								/*if (dirtoexec == driveunit + undo.taggfold.folder) { // se redibujan los tags de las subarpetas si estámos dentro de la carpeta. ----- Al final se hace refresco pues me daba problemas -----
 
 									// primero cambiamos el value de la etiqueta tags..								 
 									$.each ($(".explofolder"), function(n) {
-										if ($(".explofolder:eq("+n+")").attr("value") == directoryfolders[i].name) {
+										if ($(".explofolder:eq("+n+")").attr("value") == udirectoryfolders[i].name) {
 											elementtagsinview[i] = $(".explofolder:eq("+n+")").siblings(".tags")
 										}
 									});
@@ -2035,11 +2069,13 @@ $(document).ready(function () {
 									elementtagsinview[i][0].setAttribute("value", valueaponer[i]);
 									elementtagsinview[i][0].innerHTML = tagsdivs;
 
+
 									// para aplicarles los estilos a los tags hay que recurrir a la bd
 									var trans2 = db.transaction(["tags"], "readonly")
 									var objectStore2 = trans2.objectStore("tags")
 
 									elementosdirectoriotags[i] = elementtagsinview[i].children(".tagticket");
+									console.log(elementosdirectoriotags[i])
 
 									var req2 = objectStore2.openCursor();
 
@@ -2049,17 +2085,20 @@ $(document).ready(function () {
 									req2.onsuccess = function(event) { 
 										var cursor2 = event.target.result;
 										if (cursor2) {
-											$.each(elementosdirectoriotags[i], function(n) {											
-												if (cursor2.value.tagid == elementosdirectoriotags[i][n].getAttribute("value")) {
+											$.each(elementosdirectoriotags[i], function(n) {
+												if (elementosdirectoriotags[i][n]){											
+												console.log(elementosdirectoriotags[i][n])
+													if (cursor2.value.tagid == elementosdirectoriotags[i][n].getAttribute("value")) {
 
-													var color = "#" + cursor2.value.tagcolor;
-													var complecolor = hexToComplimentary(color);
+														var color = "#" + cursor2.value.tagcolor;
+														var complecolor = hexToComplimentary(color);
 
-													elementosdirectoriotags[i][n].className += " small " + cursor2.value.tagform;
-													elementosdirectoriotags[i][n].setAttribute("value", cursor2.value.tagid);
-													elementosdirectoriotags[i][n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-													elementosdirectoriotags[i][n].innerHTML = cursor2.value.tagtext;
+														elementosdirectoriotags[i][n].className += " small " + cursor2.value.tagform;
+														elementosdirectoriotags[i][n].setAttribute("value", cursor2.value.tagid);
+														elementosdirectoriotags[i][n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														elementosdirectoriotags[i][n].innerHTML = cursor2.value.tagtext;
 
+													}
 												}
 											});
 
@@ -2072,17 +2111,17 @@ $(document).ready(function () {
 									trans2.oncomplete = function (event) {
 
 										elementstagsorder();
-										elemetstagdelete()
+										elemetstagdelete();
 
 									}							
 
-								}
+								}*/
 
 								// ahora se van a cambiar los datos en la bd
 
 								var aborrar= [];
 
-								var arraydetags = directoryfolders[i].tagsid;
+								var arraydetags = udirectoryfolders[i].tagsid;
 								// arraydetags = Object.values(arraydetags); // CONVERTIMOS EL OBJETO EN ARRAY (ecmascript 7)
 
 								if (typeof arraydetags == "string") {
@@ -2102,8 +2141,8 @@ $(document).ready(function () {
 								}
 
 								folderupdate.foldertags = arraydetags;
-								folderupdate.folder = undo.taggfold.folder + directoryfolders[i].name;
-								folderupdate.folderid = directoryfolders[i].id;
+								folderupdate.folder = undo.taggfold.folder + udirectoryfolders[i].name;
+								folderupdate.folderid = udirectoryfolders[i].id;
 
 								if (arraydetags.length > 0) { // se conservará la subcarpeta en la bd
 						
@@ -2145,7 +2184,7 @@ $(document).ready(function () {
 										var cursor = event.target.result; 
 										if(cursor){
 
-											if (cursor.value.filefolder == directoryfolders[i].id) { // la subcarpeta esta siendo usada en la bd
+											if (cursor.value.filefolder == udirectoryfolders[i].id) { // la subcarpeta esta siendo usada en la bd
 
 												aborrar[i] = "no";
 
@@ -2153,8 +2192,8 @@ $(document).ready(function () {
 
 												folderupdate.foldertags = "";
 												folderupdate.foldertags = folderupdate.foldertags.split(); //para convertirlo a array
-												folderupdate.folder = undo.taggfold.folder + directoryfolders[i].name;
-												folderupdate.folderid = directoryfolders[i].id;
+												folderupdate.folder = undo.taggfold.folder + udirectoryfolders[i].name;
+												folderupdate.folderid = udirectoryfolders[i].id;
 
 												var trans = db.transaction(["folders"], "readwrite")
 												var request = trans.objectStore("folders")
@@ -2184,7 +2223,7 @@ $(document).ready(function () {
 										if (aborrar[i] == "yes") { // se borrará la subcarpeta de la bd
 
 											var trans = db.transaction(["folders"], "readwrite")
-											var request = trans.objectStore("folders").delete(directoryfolders[i].id);
+											var request = trans.objectStore("folders").delete(udirectoryfolders[i].id);
 
 											request.onerror = function(event) { 
 
@@ -2199,21 +2238,27 @@ $(document).ready(function () {
 
 										}
 
+										if (dirtoexec == driveunit + undo.taggfold.folder) { // // se recargaran los elementos si estamos dentro de la carpeta
+											previousornext = "refresh";
+											readDirectory(dirtoexec);
+
+										};
+
 									}
 
 								} // --fin else if araydetags = 0							
 
-							}); // --fin each directoryfolders						
+							}); // --fin each udirectoryfolders						
 
 						} // -- fin trans
 
-					}); // --fin each directoryfolders
+					}); // --fin each udirectoryfolders
 
-				} // -- fin if (directoryfolders.length >= 1)
+				} // -- fin if (udirectoryfolders.length >= 1)
 
 
 				// leemos datos subarchivos
-				if (directoryarchives.length >= 1) {
+				if (udirectoryarchives.length >= 1) {
 
 					// primero recogemos los valores tagsid e id del archivo visualizado, que esta en la bd, y que necesitaremos para tomar los valores originales de los tags a la hora de refrescar los tags en la vista (para restarles el tag que queremos quitar)
 					var trans = db.transaction(["files"], "readonly")
@@ -2224,7 +2269,7 @@ $(document).ready(function () {
 					var valueaponer=[];
 					var tagsdivs="";
 
-					$.each(directoryarchives, function(i) {
+					$.each(udirectoryarchives, function(i) {
 
 						var fileupdate = {};			
 						
@@ -2241,10 +2286,10 @@ $(document).ready(function () {
 							var cursor = event.target.result; 
 							if(cursor){
 
-								if(cursor.value.filename ==  directoryarchives[i].name){ 
+								if(cursor.value.filename ==  udirectoryarchives[i].name){ 
 
-									directoryarchives[i].tagsid = cursor.value.filetags; 
-									directoryarchives[i].id = cursor.value.fileid;
+									udirectoryarchives[i].tagsid = cursor.value.filetags; 
+									udirectoryarchives[i].id = cursor.value.fileid;
 
 								}
 								cursor.continue();
@@ -2256,22 +2301,26 @@ $(document).ready(function () {
 
 							var elementosarchivotags = [];
 
-							if (dirtoexec == driveunit + undo.taggfold.folder) {
-								$.each(directoryarchives, function(i) {	
+							/*if (dirtoexec == driveunit + undo.taggfold.folder) {
+								$.each(udirectoryarchives, function(i) {	
 
 									// primero cambiamos el value de la etiqueta tags..								 
 									$.each ($(".explofile"), function(n) {
-										if ($(".explofile:eq("+n+")").attr("value") == directoryarchives[i].name) {
+										if ($(".explofile:eq("+n+")").attr("value") == udirectoryarchives[i].name) {
 											elementtagsinview[i] = $(".explofile:eq("+n+")").siblings(".tags")
 										}
 									});
-									valueoriginal[i] = directoryarchives[i].tagsid;
+									valueoriginal[i] = udirectoryarchives[i].tagsid;
 									if (typeof valueoriginal[i] == "string") {
 										valueoriginal[i] = valueoriginal[i].split(",");
 									}
 									var index = valueoriginal[i].indexOf(undo.taggfold.tagid); //localizamos el id del tag a borrar
 									valueoriginal[i].splice(index, 1); // lo quitamos del array
 									valueaponer[i] = valueoriginal[i].toString() // de array a string
+
+									// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+								    udirectoryarchives[i].tagsid = valueaponer[i];
+
 									elementtagsinview[i][0].setAttribute("value", valueaponer[i]);
 									
 									// y ahora redibujamos los tags..										
@@ -2326,7 +2375,7 @@ $(document).ready(function () {
 
 								});
 
-							}
+							}*/
 
 							// Ahora si, vamos a utilizar la bd para trabajar directamente con ella (no el tema de la visualización)					
 							// Utilizamos el id de la carpeta para comprobar los subarchivos que la están usando y sus tags
@@ -2418,6 +2467,17 @@ $(document).ready(function () {
 
 							}
 
+							trans.oncomplete = function() {
+
+								if (dirtoexec == driveunit + undo.taggfold.folder) { // se recargaran los elementos si estamos dentro de la carpeta
+									previousornext = "refresh";
+									readDirectory(dirtoexec);
+
+								};
+
+
+							}
+
 						}
 
 					});
@@ -2454,20 +2514,28 @@ $(document).ready(function () {
 
 							// Visual
 
-							var estabavisible = "no"; // variable auxiliar necesaria para que no haga un splice del arraydetagsoriginal dos veces (una para el directoryview y otra para el treeview)
-							$.each($(".explofolder"), function(i) {	
+							//var estabavisible = "no"; // variable auxiliar necesaria para que no haga un splice del arraydetagsoriginal dos veces (una para el directoryview y otra para el treeview)
+							//$.each($(".explofolder"), function(i) {	
 
-								var carpeta = $(".explofolder:eq("+i+")").attr("value");								
+								//var carpeta = $(".explofolder:eq("+i+")").attr("value");								
 
-								if (rootdirectory + carpeta == undo.taggfold.folder){ // si la carpeta madre a la que se añadio el tag esta visible en el directorio
+								//if (rootdirectory + carpeta == undo.taggfold.folder){ // si la carpeta madre a la que se añadio el tag esta visible en el directorio
 
-									estabavisible = "si";
+									//estabavisible = "si";
 
-									// Actualizar visual
+									/*// Actualizar visual
 									var elementtagsinview = $('.explofolder').filter('[value="' + carpeta + '"]').siblings('.tags');
 									var index = carraydetagsorig.indexOf(undo.taggfold.tagid); // localizamos el id del tag a borrar
 									carraydetagsorig.splice(index, 1); // lo quitamos del array
 									carraydetags = carraydetagsorig.toString() // de array a string
+
+									// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+									$.each (directoryfolders, function(drf){										
+										if (directoryfolders[drf].name  == carpeta){
+											directoryfolders[drf].tagsid = carraydetags;						
+										}
+									});
+									
 
 									elementtagsinview[0].setAttribute("value", carraydetags);
 						
@@ -2512,18 +2580,18 @@ $(document).ready(function () {
 
 										}
 
-									};
+									};*/
 
-								} 
+								//}
 								
 
-							});
+							//});
 
 							$.each ($("#filetree span"), function(t) {
 
 								if($("#filetree span:eq("+t+")").attr("rel2") == undo.taggfold.folder) {
 
-									if (estabavisible == "no") {
+									/*if (estabavisible == "no") {
 										var index = carraydetagsorig.indexOf(undo.taggfold.tagid); // localizamos el id del tag a borrar
 										carraydetagsorig.splice(index, 1); // lo quitamos del array
 										carraydetags = carraydetagsorig.toString() // de array a string
@@ -2532,7 +2600,11 @@ $(document).ready(function () {
 
 										carraydetags = carraydetags.toString() // de array a string
 
-									}
+									}*/
+
+									var index = carraydetagsorig.indexOf(undo.taggfold.tagid); // localizamos el id del tag a borrar
+									carraydetagsorig.splice(index, 1); // lo quitamos del array
+									carraydetags = carraydetagsorig.toString() // de array a string
 
 									$("#filetree span:eq("+t+")").attr("value", carraydetags);
 						
@@ -2642,6 +2714,21 @@ $(document).ready(function () {
 
 						}
 
+						trans4.oncomplete = function(event) {
+
+							var estabavisible = "no"
+							$.each($(".explofolder"), function(i) {
+								var carpeta = $(".explofolder:eq("+i+")").attr("value");	
+								if (rootdirectory + carpeta == undo.taggfold.folder){
+									estabavisible = "yes"
+								}
+							});
+							if (estabavisible == "yes") {
+								previousornext = "refresh";
+								readDirectory(dirtoexec);
+							}
+						}
+
 					}
 
 					if (masdeuntag == "false") { // vamos a comprobar si hay archivos dependientes de la carpeta madre y si no es asi la eliminaremos de la bs
@@ -2725,6 +2812,20 @@ $(document).ready(function () {
 									// console.log("undo - se ha metido como tag de la carpeta");
 
 								}
+								trans4.oncomplete = function(event) {
+
+									var estabavisible = "no"
+									$.each($(".explofolder"), function(i) {
+										var carpeta = $(".explofolder:eq("+i+")").attr("value");	
+										if (rootdirectory + carpeta == undo.taggfold.folder){
+											estabavisible = "yes"
+										}
+									});
+									if (estabavisible == "yes") {
+										previousornext = "refresh";
+										readDirectory(dirtoexec);
+									}
+								}
 
 							}
 
@@ -2743,6 +2844,21 @@ $(document).ready(function () {
 
 									// console.log("undo - eliminada carpeta de la bd");
 
+								}
+
+								trans5.oncomplete = function(event) {
+
+									var estabavisible = "no"
+									$.each($(".explofolder"), function(i) {
+										var carpeta = $(".explofolder:eq("+i+")").attr("value");	
+										if (rootdirectory + carpeta == undo.taggfold.folder){
+											estabavisible = "yes"
+										}
+									});
+									if (estabavisible == "yes") {
+										previousornext = "refresh";
+										readDirectory(dirtoexec);
+									}
 								}
 							
 							}
@@ -3471,7 +3587,7 @@ $(document).ready(function () {
 					var directoryelement = []
 					var directorycontent = []
 					var directoryfolders = []
-					var directoryarchives = []
+					var udirectoryarchives = []
 
 
 
@@ -3510,17 +3626,17 @@ $(document).ready(function () {
 
 							ii++;
 						} else {
-							directoryarchives[iii] = directorycontent[i];
+							udirectoryarchives[iii] = directorycontent[i];
 							iii++;
 						};
 					});
 
 
-					$.each(directoryarchives, function(l) {
+					$.each(udirectoryarchives, function(l) {
 							
 					    try {
 
-						   fs.unlinkSync(driveunit + undo.copy.root + undocopyrootfolders[n] + directoryarchives[l].name);
+						   fs.unlinkSync(driveunit + undo.copy.root + undocopyrootfolders[n] + udirectoryarchives[l].name);
 						   // console.log('file deleted successfully');					  
 						}
 
@@ -3541,7 +3657,7 @@ $(document).ready(function () {
 					var directoryelement = []
 					var directorycontent = []
 					var directoryfolders = []
-					var directoryarchives = []
+					var udirectoryarchives = []
 
 					var readedElements = fs.readdirSync(driveunit + undo.copy.originalfolders[n])
 
@@ -3578,15 +3694,15 @@ $(document).ready(function () {
 
 							ii++;
 						} else {
-							directoryarchives[iii] = directorycontent[i];
+							udirectoryarchives[iii] = directorycontent[i];
 							iii++;
 						};
 					});
 
-					$.each(directoryarchives, function(l) {
+					$.each(udirectoryarchives, function(l) {
 					   
 						try {
-						   	fs.unlinkSync(driveunit + undo.copy.folders[n] + directoryarchives[l].name);
+						   	fs.unlinkSync(driveunit + undo.copy.folders[n] + udirectoryarchives[l].name);
 						   	// console.log('file deleted successfully');
 						  
 						}
