@@ -119,7 +119,8 @@
         os = overlay[0].style;
 
     $.fn.abigimage = function(options) {
-        var plugin = new ABigImage(this, options);
+        //console.log(this)
+        var plugin = new ABigImage(this, options);        
         this._abigimage = plugin;
         last = plugin;
         return this.each(function(i) {
@@ -321,6 +322,7 @@
     function ABigImage(elements, options) {
         $.extend(this, $.fn.abigimage.defaults, options);
 
+        /*this.elements    = elements;*/
         this.elements    = elements;
 
         this.overlay     = overlay;
@@ -457,7 +459,7 @@
 
     ABigImage.prototype.prev = function() {
         if (this.distance == 1 - this.elements.length) {
-            // this.close();
+            // this.close();           
              this.distance = 0;
              this.elements[this.prevIndex()].click();
         } else {
@@ -540,7 +542,9 @@
     };
 
     function createImage(className, src) {
+        if (src){
         return $('<img>').addClass(className).attr('src', src).appendTo(box);
+        }
     }
 
     function documentKeydown(event) {

@@ -848,7 +848,8 @@
 						html = html.replace("{{ok}}", this.labels.yes).replace("{{cancel}}", this.labels.no);
 						break;
 					case "prompt":
-						html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.submit));
+						//html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.submit));
+						html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.ok));
 						html = html.replace("{{ok}}", this.labels.ok).replace("{{cancel}}", this.labels.cancel);
 						break;
 					case "alert":

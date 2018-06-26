@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.10.0';
+var programversion = '1.10.2';
 var fs = require('fs-extra');
 var Sniffr = require("sniffr");
 var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
@@ -32,12 +32,12 @@ if (!localStorage["asktagsubeleents"]){
 }
 
 var searchforupdates = "no";
+
 if (!localStorage["searchforupdates"]){
 	localStorage["searchforupdates"] = "no";
 } else if (localStorage["searchforupdates"] == "yes"){
 	searchforupdates = "yes";
 }
-
 
 var directoryelement = [];
 var alldroppedelement = [];
@@ -52,6 +52,12 @@ var selectedtagtext = "";
 var selectedtagform = "";
 
 window.tip = [];
+
+// 
+var elementosselectedFolders;
+var elementosselectingFolders;
+var elementosselectedArchives;
+var elementosselectingArchives;
 
 var editando = "no";
 
@@ -97,12 +103,15 @@ $(document).ready(function () {
 		ph_alr_04 = "Some video in this folder cannot definitively deleted because they are in use, it will be deleted when application close.";
 		ph_alr_05 = "Same origin and destination folder.";
 		ph_alr_09 = "With this tool you can copy to the elements that you selected the tags from the element that you choose later, but you don't have any element selected.";
+		ph_alr_10 = "Folder not created: Make sure the selected name have valid characters.";
+		ph_alr_11 = "Folder not created: There is already a folder with the name entered.";
 		ph_alr_tqa = "Don't show more Tips at launch.";
 		ph_alr_tqb = "Next Tip ";
 		ph_alc_01a = " files and ";
 		ph_alc_01b = " folders (and all it´s contents) have been selected to delete. There is no undo for delete. Are you sure?";
 		ph_alc_02 = " files are selected to delete. There is no undo for delete. Are you sure?";
 		ph_alc_03 = "Are you sure?";
+		ph_pro_01 = "Enter the name for the new folder:";
 		ph_dato_no = "UNDO (not action to undo)";
 		ph_dato_erasefoldtag = "UNDO (erase folder tag)";
 		ph_dato_erasearchtag = "UNDO (erase archive tag)";
@@ -132,12 +141,15 @@ $(document).ready(function () {
 		ph_alr_04 = "Algunos videos de esta carpeta no se pueden borrar definitivamente porque están en uso, se eliminarán al cerrar la aplicación.";
 		ph_alr_05 = "Carpeta de destino y origen son la misma.";
 		ph_alr_09 = "Con esta herramienta puede copiar a los elementos que seleccionó las etiquetas del elemento que elija más adelante, pero no tiene ningún elemento seleccionado.";
+		ph_alr_10 = "Carpeta no creada: Asegurese de que el nombre introducido tiene caracteres válidos.";
+		ph_alr_11 = "Carpeta no creada: Ya hay una carpeta con el nombre introducido.";
 		ph_alr_tqa = "No mostrar más consejos al inicio.";
 		ph_alr_tqb = "Sig. Consejo ";
 		ph_alc_01a = " archivos y ";
 		ph_alc_01b = " carpetas (y todo su contenido) han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?"
 		ph_alc_02 = " archivos han sido seleccionados para borrar. No hay deshacer para borrar. ¿Estás seguro?";
 		ph_alc_03 = "¿Estás seguro?";
+		ph_pro_01 = "Introduzca el nombre para la nueva carpeta:";		
 		ph_dato_no = "DESHACER (no hay acción para deshacer)";
 		ph_dato_erasefoldtag = "DESHACER (borrar etiqueta de carpeta)";
 		ph_dato_erasearchtag = "DESHACER (eliminar etiqueta de archivo)";
@@ -167,12 +179,15 @@ $(document).ready(function () {
 		ph_alr_04 = "Certaines vidéos de ce dossier ne peuvent pas être définitivement supprimées car elles sont utilisées, elles seront supprimées lors de la fermeture de l'application.";
 		ph_alr_05 = "Le dossier de destination et la source sont les mêmes.";
 		ph_alr_09 = "Avec cet outil, vous pouvez copier vers les éléments que vous avez sélectionnés les étiquettes de l'élément que vous choisissez plus tard, mais vous n'avez aucun élément sélectionné.";
+		ph_alr_10 = "Dossier non créé: Assurez-vous que le nom entré a des caractères valides.";
+		ph_alr_11 = "Dossier non créé: Il existe déjà un dossier avec le nom entré.";
 		ph_alr_tqa = "Pas plus conseils au lancement.";
 		ph_alr_tqb = "+ Conseil ";
 		ph_alc_01a = " archives et ";
 		ph_alc_01b = " dossiers (et tout son contenu) ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
 		ph_alc_02 = " archives ont été sélectionnés pour supprimer. Il n'y a pas d'défaire à supprimer. Tu es sûr?";
 		ph_alc_03 = "Tu es sûr?";
+		ph_pro_01 = "Entrez le nom du nouveau dossier:";		
 		ph_dato_no = "DÉFAIRE (aucune action à défaire)";
 		ph_dato_erasefoldtag = "DÉFAIRE (supprimer étiquette du dossier)";
 		ph_dato_erasearchtag = "DÉFAIRE (supprimer étiquette du archive)";
@@ -961,8 +976,8 @@ $(document).ready(function () {
 
 
 	    	}
-		});
 
+		});		
 
 	}
 //alertify.alert(localStorage["asksearchforupdates"]);/**/
@@ -1373,6 +1388,13 @@ window.parent.$("#viewmode").on('change', function() {
 	viewmode = $(this)["0"].value;
 	window.parent.$("#viewmodenumber").html(viewmode + " ...");
 	previousornext = "refresh";
+
+	// para volver a mostrar como seleccionados en la siguiente vista los seleccionados en la actual
+	elementosselectedFolders = document.querySelectorAll(".folder.ui-selected");
+	elementosselectingFolders = document.querySelectorAll(".folder.ui-selecting");
+	elementosselectedArchives = document.querySelectorAll(".archive.ui-selected");
+	elementosselectingArchives = document.querySelectorAll(".archive.ui-selecting");
+
 	readDirectory(dirtoexec);
 
 	if (viewmode==1) {
@@ -1456,6 +1478,10 @@ window.parent.$("#viewmode").on('change', function() {
 
 
 	} // --fin if viewmode!=1
+	
+
+	
+
 
 
 });
@@ -2100,18 +2126,23 @@ window.parent.$("#delete").on('click', function() {
 				if(todeletefolders.length > 0) {
 
 					timetowait = todeletefolders.length * 30;
+					refrescarfiletree = "no";
+
 					setTimeout(function() {
-						$.each ($("#filetree span"), function(l) {
 
-							if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
-
-								// contraer y expandir
-								$("#filetree span:eq("+l+")").trigger( "click" );
-								$("#filetree span:eq("+l+")").trigger( "click" );
-
+						$.each ($("#filetree .expanded span"), function(i) {
+							if (driveunit + $("#filetree .expanded span")[i].getAttribute("rel2") == dirtoexec) { // si está visible
+								refrescarfiletree = "si";
 							}
+				 		});
 
-						});
+				 		if (dirtoexec == driveunit + "\/") {
+				 			refrescarfiletree = "si";
+				 		}
+
+				  		if (refrescarfiletree == "si") {
+				  			$('#filetreerefresh').click();
+				  		}
 
 					}, timetowait);
 
@@ -2148,6 +2179,43 @@ window.parent.$("#delete").on('click', function() {
 					}, timetowaitf);
 
 				}
+
+				// para que el AbigImage vuelva a recargar la lista de elementos sino puede dar error
+				// cuando dentro de el se intenta acceder a un elemento anterior/posterior que no existe
+				var timetowaitf = 300 + (todeletearchives.length + todeletefolders.length) * 30
+				setTimeout(function() {
+				
+					$.abigimage.unbind();
+					$('.exploelement .imgmode'+viewmode+' a').abigimage({
+
+				        onopen: function(target) {
+				        	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
+				            this.filename.html(filenametoshow);
+				        	resizefromimage = "yes";
+				        },
+				        onclose: function(){
+				        	resizefromimage = "yes";
+				   	
+				        }
+
+					});
+					// para la presentación de diapositivas click en nombre
+					$('.exploelement .viewmode'+viewmode+' a').abigimage({
+
+				        onopen: function(target) {
+
+				        	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
+				            this.filename.html(filenametoshow);
+				       		resizefromimage = "yes";
+				        },
+				        onclose: function(){
+				        	resizefromimage = "yes";      	
+				        }
+
+					});
+
+				}, timetowaitf);
+
 			}
 
 
@@ -2310,9 +2378,9 @@ function readDirectory (dirtoread) {
 
 						// obtener última modificación
 						var lastmodified = stats["mtime"];
-						var lastm_day = lastmodified.getDay()+1;
+						var lastm_day = lastmodified.getDate();						
 						var lastm_month = lastmodified.getMonth()+1;
-						var lastm_year = lastmodified.getYear()-100+2000;
+						var lastm_year = lastmodified.getFullYear();
 
 						var lastm_Hour = lastmodified.getHours()
 						var lastm_Minutes = lastmodified.getMinutes()
@@ -2501,7 +2569,7 @@ function readDirectory (dirtoread) {
 								trans3.oncomplete = function() {
 
 									$('#directoryview').html("");
-									t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+									t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 									$('#directoryview').append(t);
 
 									t = "";
@@ -2568,7 +2636,7 @@ function readDirectory (dirtoread) {
 					trans.oncomplete = function() {
 
 						$('#directoryview').html("");
-						t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+						t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 						$('#directoryview').append(t);
 
 						t = "";
@@ -2648,7 +2716,7 @@ function readDirectory (dirtoread) {
 						trans3.oncomplete = function() {
 
 							$('#directoryview').html("");
-							t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+							t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 							$('#directoryview').append(t);
 
 							t = "";
@@ -2667,7 +2735,7 @@ function readDirectory (dirtoread) {
 			else if (directoryarchives.length == 0 && directoryfolders.length == 0) {
 
 				$('#directoryview').html("");
-				var t = '<div class="exploelementfolderup"><div class="imgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+				var t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 				$('#directoryview').append(t);
 
 				t = "";
@@ -2779,22 +2847,22 @@ function SortByLastmodDesc(a,b) {
 	return ((aLastmod > bLastmod) ? -1 : ((aLastmod < bLastmod) ? 1 : 0));
 }
 function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+    var currentIndex = array.length, temporaryValue, randomIndex;
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
 
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
+	    // Pick a remaining element...
+	    randomIndex = Math.floor(Math.random() * currentIndex);
+	    currentIndex -= 1;
 
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
+	    // And swap it with the current element.
+	    temporaryValue = array[currentIndex];
+	    array[currentIndex] = array[randomIndex];
+	    array[randomIndex] = temporaryValue;
+    }
 
-  return array;
+    return array;
 }
 
 
@@ -2985,12 +3053,11 @@ function drawDirectoryArchives (viewmode, order) {
 
 		});
 
-		
+
 
 	} // --fin viewmodes2
 
 } // -- fin drawDirectoryArchives
-
 
 
 function drawDirectoryAfter() {
@@ -3643,6 +3710,74 @@ function drawDirectoryAfter() {
 		});
 
 	}
+	
+
+	// se vuelven a dejar seleccionados los elementos si el cambio ha sido de vista (si no los arrays están a 0)
+	
+	if (elementosselectedFolders){
+		if (elementosselectedFolders.length>0){
+
+			var listadocarpetas = document.querySelectorAll(".exploelement.folder");
+
+			$.each(elementosselectedFolders, function(n) {
+
+				$.each(listadocarpetas, function(m) {
+					if (elementosselectedFolders[n].children[1].children["0"].textContent == listadocarpetas[m].children[1].children["0"].textContent){ // si tienen el mismo nombre
+						listadocarpetas[m].classList.add("ui-selected");
+					}
+				});
+			});
+		}
+	}
+	elementosselectedFolders = [];
+	if (elementosselectingFolders){
+		if (elementosselectingFolders.length>0){
+
+			var listadocarpetas = document.querySelectorAll(".exploelement.folder");
+
+			$.each(elementosselectingFolders, function(n) {
+
+				$.each(listadocarpetas, function(m) {
+					if (elementosselectingFolders[n].children[1].children["0"].textContent == listadocarpetas[m].children[1].children["0"].textContent){ //si tienen el mismo nombre
+						listadocarpetas[m].classList.add("ui-selecting");
+					}
+				});
+			});
+		}
+	}
+	elementosselectingFolders = [];	
+	if (elementosselectedArchives){
+		if (elementosselectedArchives.length>0){
+
+			var listadoarchivos = document.querySelectorAll(".exploelement.archive");
+
+			$.each(elementosselectedArchives, function(n) {
+
+				$.each(listadoarchivos, function(m) {
+					if (elementosselectedArchives[n].children[1].children["0"].textContent == listadoarchivos[m].children[1].children["0"].textContent){ //si tienen el mismo nombre
+						listadoarchivos[m].classList.add("ui-selected");
+					}
+				});
+			});
+		}
+	}
+	elementosselectedArchives = [];
+	if (elementosselectingArchives){
+		if (elementosselectingArchives.length>0){
+
+			var listadoarchivos = document.querySelectorAll(".exploelement.archive");
+
+			$.each(elementosselectingArchives, function(n) {
+
+				$.each(listadoarchivos, function(m) {
+					if (elementosselectingArchives[n].children[1].children["0"].textContent == listadoarchivos[m].children[1].children["0"].textContent){ //si tienen el mismo nombre
+						listadoarchivos[m].classList.add("ui-selecting");
+					}
+				});
+			});
+		}
+	}
+	elementosselectingArchives = [];
 
 
 	// para cargar, segun se hace scroll, las imágenes (y videos)
@@ -3728,59 +3863,52 @@ function drawdirectoryviewtags (){
 
 	if (elementosdirectoriotags.length > 0) {
 
-		$.each(elementosdirectoriotags, function(i) {
+		// para aplicarles los estilos a los tags hay que recurrir a la bd
+		var propiedadestags = [];
+		var trans2 = db.transaction(["tags"], "readonly")
+		var objectStore2 = trans2.objectStore("tags")
+		var req2 = objectStore2.openCursor();
 
-			var req = objectStore.openCursor();
+		req2.onerror = function(event) {
+			console.log("error: " + event);
+		};
+		req2.onsuccess = function(event) {
+			var cursor2 = event.target.result;
+			if (cursor2) {
 
-			req.onerror = function(event) {
+				propiedadestags.push(cursor2.value);				
 
-				console.log("error: " + event);
-
-			};
-
-			req.onsuccess = function(event) {
-
-				var cursor = event.target.result;
-
-				if (cursor) {
-
-					if (cursor.value.tagid == elementosdirectoriotags[i].attributes[1].nodeValue) {
-
-						var color = "#" + cursor.value.tagcolor;
-
-						if (cursor.value.tagcolor == "808080") {
-							var complecolor = "#000"
-						} else if (cursor.value.tagcolor == "000000"){
-							var complecolor = "#FFF"
-						} else {
-							var complecolor = hexToComplimentary(color);
-						}
-
-						elementosdirectoriotags[i].className += " small " + cursor.value.tagform;
-						elementosdirectoriotags[i].setAttribute("value", cursor.value.tagid);
-						elementosdirectoriotags[i].setAttribute("style", "background-color: #" + cursor.value.tagcolor + ";" + "color: " + complecolor + ";")
-						elementosdirectoriotags[i].innerHTML = cursor.value.tagtext;
-
-					}
-
-					cursor.continue();
-
-				}
-
-			};
-
-			trans.oncomplete = function() {
-
-				elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
-				elemetstagdelete(); // activa sistema borrado tags
-				elementstagcopier(); // activa sistema de copiado de tags
+				cursor2.continue();
 
 			}
 
-		});
+		};	
+
+		trans2.oncomplete = function(event) {	
+
+			$.each(elementosdirectoriotags, function(n) {
+				$.each(propiedadestags, function(p) {
+					if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+						var color = "#" + propiedadestags[p].tagcolor;
+						var complecolor = hexToComplimentary(color);
+
+						elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+						elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+						elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+						elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+					}
+				})
+			});
+
+			elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+			elemetstagdelete(); // activa sistema borrado tags
+			elementstagcopier(); // activa sistema de copiado de ta			
+		}
 
 	}
-	else {
+	else { // si no hay tags en el directorio
 
 		elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 		elemetstagdelete(); // activa sistema borrado tags
@@ -4185,7 +4313,9 @@ function elementstagcopier() {
 				var trans2 = db.transaction(["tags"], "readonly")
 				var objectStore2 = trans2.objectStore("tags")
 
-				var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+				//var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+				var elementosdirectoriotags = document.querySelectorAll(".exploelement .tags .tagticket");
+
 
 				var req2 = objectStore2.openCursor();
 
@@ -5623,11 +5753,9 @@ function elemetstagdelete() {
 } //-- fin function elementtagdelete
 
 
+function prueba() {
 
-function interactions() {
-
-
-	// para la presentación de diapositivas click en imagen
+// para la presentación de diapositivas click en imagen
 	$('.exploelement .imgmode'+viewmode+' a').abigimage({
 
         onopen: function(target) {
@@ -5651,6 +5779,43 @@ function interactions() {
         },
         onclose: function(){
         	resizefromimage = "yes";
+        }
+
+	});
+
+}
+
+
+
+
+function interactions() {
+
+
+	// para la presentación de diapositivas click en imagen
+	$('.exploelement .imgmode'+viewmode+' a').abigimage({
+
+        onopen: function(target) {
+        	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
+            this.filename.html(filenametoshow);
+        	resizefromimage = "yes";
+        },
+        onclose: function(){
+        	resizefromimage = "yes";
+   	
+        }
+
+	});
+	// para la presentación de diapositivas click en nombre
+	$('.exploelement .viewmode'+viewmode+' a').abigimage({
+
+        onopen: function(target) {
+
+        	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
+            this.filename.html(filenametoshow);
+       		resizefromimage = "yes";
+        },
+        onclose: function(){
+        	resizefromimage = "yes";      	
         }
 
 	});
@@ -8669,6 +8834,68 @@ function interactions() {
         }
 
 	}); // fin exploelement droppable
+
+
+	// Crear nueva carpeta
+	$('.nuevofolder').on('mousedown', function(e) {
+
+		e.stopPropagation(); // para evitar que actué el trigger action del padre (es decir, leer directorio)
+
+		alertify.prompt(ph_pro_01, function(evt, value){
+
+			if (value) {
+				if (value.trim().length > 0) {		
+
+					var carpetaspreviamenteexistentes = $('.explofolder .exploname').text();
+					var carpetapreviamenteexistente = "no";
+					var refrescarfiletree = "no";
+
+					$.each($('.explofolder .exploname'), function(n){
+						if ($('.explofolder .exploname:eq('+n+')').text() == value) {
+							carpetapreviamenteexistente = "yes";
+						}
+					});
+
+					if (carpetapreviamenteexistente == "no"){
+
+						fs.ensureDir(dirtoexec + '\/' + value, err => {
+						  
+						  	if(err){
+						  		//console.log(err) // => null
+						  		alertify.alert(ph_alr_10);
+						 	} else {
+
+						  		$('#dirviewrefresh').click();
+						  		
+						  		$.each ($("#filetree .expanded span"), function(i) {
+									if (driveunit + $("#filetree .expanded span")[i].getAttribute("rel2") == dirtoexec) { // si está visible
+										refrescarfiletree = "si";
+									}
+						 		});
+
+						 		if (dirtoexec == driveunit + "\/") {
+						 			refrescarfiletree = "si";
+						 		}
+
+						  		if (refrescarfiletree == "si") {
+						  			$('#filetreerefresh').click();
+						  		}
+
+							}
+
+						});
+
+					} else { //si ya existia una carpeta con ese nombre
+						alertify.alert(ph_alr_11);
+					}
+
+				}
+			}
+
+		});
+
+	}); // --fin crear nueva carpeta
+
 
 
 	// Lo siguiente es sustitutivo de press & hold (consume muchos menos recursos)
