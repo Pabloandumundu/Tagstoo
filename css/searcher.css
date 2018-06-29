@@ -49,7 +49,7 @@
 
 	position: fixed;
 	top: 60px;
-	right: 25px !important;
+	right: 54px !important;
 	z-index: 20;
 }
 
@@ -76,10 +76,25 @@
 	}
 }
 
-#eraseron {
+#eraseron, #copieron {
 
-	right: 48px;
+	right: 78px !important;
 }
+
+#copytags{
+	position: fixed;
+	top: 60px;
+	right: 23px !important;
+	z-index: 20;
+	cursor: pointer;
+}
+
+#copytags .activated {
+
+	animation: bounceOut .5s linear;
+	animation-iteration-count: infinite;
+}
+
 
 #searchview {
 

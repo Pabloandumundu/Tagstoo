@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.10.3';
+var programversion = '1.10.4';
 var fs = require('fs-extra');
 var Sniffr = require("sniffr");
 var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
@@ -946,7 +946,6 @@ $(document).ready(function () {
 		}
 
 	}
-	//tips localstorage?
 
 
 
@@ -980,10 +979,7 @@ $(document).ready(function () {
 		});		
 
 	}
-//alertify.alert(localStorage["asksearchforupdates"]);/**/
-	// check for updates
 
-	
 
 }); //--fin onload
 
@@ -1713,7 +1709,8 @@ window.parent.$("#delete").on('click', function() {
 
 							try {
 								var arorfo = "i_am_an_archive";
-								var arorfo = fs.readdirSync(dirtoreadcheck);
+								arorfo = fs.readdirSync(dirtoreadcheck).length;
+
 							}
 							catch(exception) {};
 
@@ -2230,8 +2227,7 @@ window.parent.$("#delete").on('click', function() {
 						$.each ($("#filetree .expanded span"), function(i) {
 
 							if ($("#filetree .expanded span")[i]){
-								if (driveunit + $("#filetree .expanded span")[i].getAttribute("rel2") == dirtoexec) { // si está visible
-							
+								if (driveunit + $("#filetree .expanded span")[i].getAttribute("rel2") == dirtoexec) { // si está visible	
 								
 									elemento = $("#filetree .expanded span:eq("+i+")");
 									// contraer y expandir
@@ -2515,7 +2511,8 @@ function readDirectory (dirtoread) {
 
 				try {
 					var arorfo = "i_am_an_archive";
-					var arorfo = fs.readdirSync(dirtoreadcheck);
+					arorfo = fs.readdirSync(dirtoreadcheck).length;
+
 				}
 				catch(exception) {};
 
@@ -2919,13 +2916,13 @@ function SortByExtDesc(a, b){
   } catch (err) { };
 }
 function SortByElemAsc(a,b) {
-	var aElem = Object.size(a.arorfo);
-	var bElem = Object.size(b.arorfo);
+	var aElem = a.arorfo;
+	var bElem = b.arorfo;
 	return ((aElem < bElem) ? -1 : ((aElem > bElem) ? 1 : 0));
 }
 function SortByElemDesc(a,b) {
-	var aElem = Object.size(a.arorfo);
-	var bElem = Object.size(b.arorfo);
+	var aElem = a.arorfo;
+	var bElem = b.arorfo;
 	return ((aElem > bElem) ? -1 : ((aElem < bElem) ? 1 : 0));
 }
 function SortBySizeAsc(a,b) {
@@ -3005,11 +3002,9 @@ function drawDirectoryFolders (viewmode, order) {
 
 		$.each(directoryfolders, function(i, v) {
 
-			var nameSinBarra = v.name.substring(1);
+			var nameSinBarra = v.name.substring(1);			
 
-			var folderelements = Object.size(this.arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
-
-			t += '<div class="exploelement folder"><div class="imgmode1 folder"></div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">' + ph_tagshere + '</span>&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span>&nbsp;</div></div><br>';
+			t += '<div class="exploelement folder"><div class="imgmode1 folder"></div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + this.arorfo + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">' + ph_tagshere + '</span>&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span>&nbsp;</div></div><br>';
 			// los tag se separan y presentan en divs aparte en la función drawdirectoryviewtags()
 
 		});
@@ -3021,11 +3016,9 @@ function drawDirectoryFolders (viewmode, order) {
 
 		$.each(directoryfolders, function(i, v) {
 
-			var nameSinBarra = v.name.substring(1);
+			var nameSinBarra = v.name.substring(1);			
 
-			var folderelements = Object.size(this.arorfo); //el tamaño del objeto arorfo que contiene el numero de subelementos en una carpeta
-
-			t += '<div class="exploelement folder"><div class="imgmode'+viewmode+' folder">&nbsp;</div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">' + ph_tagshere + '</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
+			t += '<div class="exploelement folder"><div class="imgmode'+viewmode+' folder">&nbsp;</div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + this.arorfo + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '<span class="placehold">' + ph_tagshere + '</span></div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
 			// los tag se separan y presentan en divs aparte en la función drawdirectoryviewtags()
 
 		});
@@ -4627,7 +4620,6 @@ function elementstagcopier() {
 												// finalizando
 
 												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
-
 												elemetstagdelete(); // activa sistema borrado tags
 												elementstagcopier(); // activa sistema de copiado de tags
 												
@@ -5254,7 +5246,7 @@ function elemetstagdelete() {
 
 									// console.log("tag de carpeta eliminada");
 
-									console.log(nombreelementocontagaborrar)
+									// console.log(nombreelementocontagaborrar)
 
 									// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
 									$.each (directoryfolders, function(drf){										
@@ -7106,9 +7098,10 @@ function interactions() {
 					$.each ($(".explofolder"), function(ex) {
 
 						if (rootdirectory + $(".explofolder")[ex].attributes[1].value == targetfolder) {
-							var arorfo = fs.readdirSync(driveunit + targetfolder);
-							var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
-							$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + ph_infolder;
+							var arorfo = "";
+							arorfo = fs.readdirSync(dirtoreadcheck).length;
+							
+							$(".explofolder")[ex].nextSibling.innerHTML = " " + arorfo + ph_infolder;
 							
 							// se cambia valor de items del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
 							$.each (directoryfolders, function(drf){
@@ -7387,7 +7380,8 @@ function interactions() {
 
 													try {
 														var arorfo = "i_am_an_archive";
-														var arorfo = fs.readdirSync(dirtoreadcheck);
+														arorfo = fs.readdirSync(dirtoreadcheck).length;
+
 													}
 													catch(exception) {};
 
@@ -8455,8 +8449,9 @@ function interactions() {
 													var dirtoreadcheck = foldertoread + "\/" + readedElements[i];
 
 													try {
-														var arorfo = "i_am_an_archive";
-														var arorfo = fs.readdirSync(dirtoreadcheck);
+														var arorfo = "i_am_an_archive";														
+														arorfo = fs.readdirSync(dirtoreadcheck).length;
+														
 													}
 													catch(exception) {};
 

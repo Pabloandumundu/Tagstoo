@@ -97,7 +97,7 @@ if(jQuery) (function ($){
 	        tdirtoreadcheck = tdirtoread + treadedElements[i] + "\/";
 	        try {
 	            var tarorfo = "i_am_an_archive";
-	            var tarorfo = fs.readdirSync(tdirtoreadcheck);
+	            var tarorfo = fs.readdirSync(tdirtoreadcheck).length;
 	        }
 	        catch(exception) {};
 
@@ -1166,9 +1166,8 @@ function filetreeinteractions() {
 
 						if (rootdirectory + $(".explofolder")[ex].attributes[1].value == targetfolder) {
 
-							var arorfo = fs.readdirSync(driveunit + targetfolder);
-							var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
-							$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + ph_infolder;
+							var arorfo = fs.readdirSync(driveunit + targetfolder).length;
+							$(".explofolder")[ex].nextSibling.innerHTML = " " + arorfo + ph_infolder;
 
 							// se cambia valor de items del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
 							$.each (directoryfolders, function(drf){
@@ -1439,7 +1438,7 @@ function filetreeinteractions() {
 
 												try {
 													var arorfo = "i_am_an_archive";
-													var arorfo = fs.readdirSync(dirtoreadcheck);
+													var arorfo = fs.readdirSync(dirtoreadcheck).length;
 												}
 												catch(exception) {};
 
@@ -2478,7 +2477,7 @@ function filetreeinteractions() {
 
 												trans12.oncomplete = function(event) {
 
-													if (refrescohecho3 == "no" && droppedarchive.legth == 0) {
+													if (refrescohecho3 == "no" && droppedarchive.length == 0) {
 														refrescohecho3 = "si";
 
 														// para que refresque el filetree también si tuviera carpetas
@@ -2564,7 +2563,7 @@ function filetreeinteractions() {
 
 											try {
 												var arorfo = "i_am_an_archive";
-												var arorfo = fs.readdirSync(dirtoreadcheck);
+												var arorfo = fs.readdirSync(dirtoreadcheck).length;
 											}
 											catch(exception) {};
 
@@ -3309,9 +3308,8 @@ window.parent.$("#paste").on('click', function() {
 
 				if (rootdirectory + $(".explofolder")[ex].attributes[1].value == targetfolder) {
 
-					var arorfo = fs.readdirSync(driveunit + targetfolder);
-					var folderelements = Object.size(arorfo); // el tamaño del objeto arorfo que contiene el número de subelementos en una carpeta
-					$(".explofolder")[ex].nextSibling.innerHTML = " " + folderelements + ph_infolder;
+					var arorfo = fs.readdirSync(driveunit + targetfolder).length;					
+					$(".explofolder")[ex].nextSibling.innerHTML = " " + arorfo + ph_infolder;
 							
 					// se cambia valor de items del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
 					$.each (directoryfolders, function(drf){
@@ -3595,7 +3593,7 @@ window.parent.$("#paste").on('click', function() {
 
 										try {
 											var arorfo = "i_am_an_archive";
-											var arorfo = fs.readdirSync(dirtoreadcheck);
+											var arorfo = fs.readdirSync(dirtoreadcheck).length;
 										}
 										catch(exception) {};
 
@@ -4684,7 +4682,7 @@ window.parent.$("#paste").on('click', function() {
 
 									try {
 										var arorfo = "i_am_an_archive";
-										var arorfo = fs.readdirSync(dirtoreadcheck);
+										var arorfo = fs.readdirSync(dirtoreadcheck).length;
 									}
 									catch(exception) {};
 

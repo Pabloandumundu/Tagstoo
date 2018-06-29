@@ -161,7 +161,7 @@ $(document).ready(function () {
 		ph_searchfile = "Searching files ...,";
 		ph_infolder = " in folder";
 		ph_filesize = "File Size";
-		ph_medialenght = "Media Length";
+		ph_medialength = "Media Length";
 		ph_alr_01 = "You choosed to create a printable friendly list of searched results, but there are not searched results at this moment.";
 		/*ph_alr_02 = "Maximum 5 tags are permitted for each filter.";*/
 		ph_alr_03 = "Only 1 tag is permitted in this kind of filter.";
@@ -172,6 +172,7 @@ $(document).ready(function () {
 		ph_alr_07a = "Origin and destination files are the same in the case of <em>'";
 		ph_alr_07b = "'</em> and will be not copied.";
 		ph_alr_08 = "No elements selected to delete.";
+		ph_alr_09 = "With this tool you can copy to the elements that you selected the tags from the element that you choose later, but you don't have any element selected.";
 		ph_alc_01a = "Attention, the folder <em>'";
 		ph_alc_01b = "'</em> is on the search results, but it can't be read (probably don't exists because it was deleted in some way). Do you want to remove it from database?. If you choose Yes, click again on Search to see results.";
 		ph_alc_02 = "When the <em>Copy</em> is made, do you want the associated tags to be copied too?";
@@ -202,7 +203,7 @@ $(document).ready(function () {
 		ph_searchfile = "Buscando archivos ...,";
 		ph_infolder = " en carpeta";
 		ph_filesize = "Tamaño Archivo";
-		ph_medialenght = "Duración de Media";
+		ph_medialength = "Duración de Media";
 		ph_alr_01 ="Ha elegido crear una lista de resultados de búsqueda que se puede imprimir, pero no hay resultados de búsqueda en este momento.";
 		/*ph_alr_02 = "Se permiten 5 etiquetas como máximo para cada filtro.";*/
 		ph_alr_03 = "Sólo se permite 1 etiqueta en este tipo de filtro.";
@@ -213,6 +214,7 @@ $(document).ready(function () {
 		ph_alr_07a = "Los archivos de origen y destino son los mismos en el caso de <em>'";
 		ph_alr_07b = "'</em> y no se copiará.";
 		ph_alr_08 = "No hay elementos seleccionados para eliminar.";
+		ph_alr_09 = "Con esta herramienta puede copiar a los elementos que seleccionó las etiquetas del elemento que elija más adelante, pero no tiene ningún elemento seleccionado.";
 		ph_alc_01a = "Atención, la carpeta <em>'";
 		ph_alc_01b = "'</em> está en los resultados de búsqueda, pero no se puede leer (probablemente no existe porque se ha eliminado de alguna manera). ¿Desea eliminarlo de la base de datos ?. Si selecciona Sí, haga clic de nuevo en Buscar para ver los resultados.";
 		ph_alc_02 = "Cuando se realice la <em>Copia</em>, ¿también desea copiar las etiquetas asociadas?";
@@ -243,7 +245,7 @@ $(document).ready(function () {
 		ph_searchfile = "À la recherche de archives ...,";
 		ph_infolder = " dans dossier";
 		ph_filesize = "Taille Fichier";
-		ph_medialenght = "Longueur du Média";
+		ph_medialength = "Longueur du Média";
 		ph_alr_01 = "Vous avez choisi de créer une liste des résultats de recherche qui peuvent être imprimés, mais il n'y a pas de résultats de recherche pour le moment.";
 		/*ph_alr_02 = "Un maximum de 5 étiquettes sont autorisés pour chaque filtre";*/
 		ph_alr_03 = "Seulement 1 étiquette est autorisée dans ce type de filtre.";
@@ -254,6 +256,7 @@ $(document).ready(function () {
 		ph_alr_07a = "Les fichiers d'origine et de destination sont les mêmes dans le cas de <em>'";
 		ph_alr_07b = "'</em> et ne sera pas copié.";
 		ph_alr_08 = "Aucun élément sélectionné pour supprimer.";
+		ph_alr_09 = "Avec cet outil, vous pouvez copier vers les éléments que vous avez sélectionnés les étiquettes de l'élément que vous choisissez plus tard, mais vous n'avez aucun élément sélectionné.";
 		ph_alc_01a = "Attention, the folder <em>'";
 		ph_alc_01b = "'</em> est sur les résultats de la recherche, mais il ne peut pas être lu (probablement il n'existe pas car il a été supprimé d'une façon ou d'une autre). Voulez-vous le supprimer de la base de données? Si vous choisissez Oui, cliquez à nouveau sur Rechercher pour voir les résultats.";
 		ph_alc_02 = "Lors de la <em>Copie</em>, souhaitez-vous également copier les étiquettes associées?";
@@ -672,6 +675,18 @@ $(document).ready(function () {
 
 		searchviewmode = $(this)["0"].value;
 		$("#viewmodenumber").html(searchviewmode + ".");
+
+
+		copytagson = "off";
+		$("#copytags img").removeClass('activated');
+		$("#copieron").removeClass("on");
+
+		eraseron = "off";
+		$(".tags > div").draggable( 'enable' );
+		$("#eraser img").removeClass('activated');
+		$("#eraseron").removeClass("on");
+
+
 		readsearchredresults();
 
 		if (searchviewmode==1) {
@@ -759,6 +774,16 @@ $(document).ready(function () {
 	$(".searchorder").on('change', function() {
 
 		searchorder = $(this)["0"].value;
+
+		copytagson = "off";
+		$("#copytags img").removeClass('activated');
+		$("#copieron").removeClass("on");
+
+		eraseron = "off";
+		$(".tags > div").draggable( 'enable' );
+		$("#eraser img").removeClass('activated');
+		$("#eraseron").removeClass("on");
+
 		readsearchredresults();
 
 	});
@@ -824,6 +849,46 @@ $(document).ready(function () {
 	})
 
 
+	// copiador de tags
+	window.copytagson = "off";
+
+	$("#copytags img").click(function() {
+
+		if (copytagson == "off") {			
+
+			if (eraseron == "on") { // si el borrador de tags estuviera activo se desactiva
+				eraseron = "off";
+				$(".tags > div").draggable( 'enable' );
+				$("#eraser img").removeClass('activated');
+				$("#eraseron").removeClass("on");					
+			}
+
+			// se activa copiador de tags
+			copytagson = "on";
+			$("#copytags img").addClass('activated');
+			$("#copieron").addClass("on");			
+
+			document.querySelectorAll(".tags").forEach(function(el) {
+
+				if ($(el).has('div').length>0){
+					el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAWCAYAAADeiIy1AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gYOCTcb7XTA7QAAAiVJREFUSMetlTtoVFEQhr9NfBGih6ggNr+CBBUURbSIio/YpPEBBiGVoFhYqNik1Erx1aZWKxMkYqGEgAg+ULRJIawEFMwviYRAwrGIYEi0OYHrsnuv6zrV4cx/5r8zd+afEhmT1AycAY4Ca4EfwAfgtu1xGrBSBdEL4IbtoczdMqAM7LM9me5K1YLZ/lVIJOkuMGy7vxIkaTkwCmwBDgP3gLkK2Dyw0/ZMzbQkNUl6m5e6pB5J23P8GyWNSlpdzd+Uyex9QZlfA521nLa/AOeAE3lEAC0FREuB7wWYBeBnNceSDGBvQZCLwM2c0g0CrUCrpB7gku1Pf2SUuuWqpPs1gnQAnba/5XzIBDAC3AFmsiQAzYuHGGM5hNAaQngUQngTY5yQ1BZC6AO6gEMxxprtG2McCiHsAvbbPp07R4vdA1xIrTwNDNp+TINWqveBpDWpPN3p/Vj6f8/zBrapTpJtwFPgMtAGrAL2AOuBgf+SkaSWpHvttheq+K8kwge2XzZCdASYqxYkg5kEXgHtwDHbY/9Sui7gYwHmme1u2zuA/iTIdRPN/gVmReZ8KpW6bqKHwMmcspWAzRnt+wrMS1pXL1E5qceGGv5h4GzF3QiwMqt1hWZ7QdIm4ElaKX1poA8C14Fbtt9VPOsAYt1zZHvWdifwGRhMq74bOGB7oKKUW4Fp21ONqgqSeiX111ikow1JUJWgx4FradWPA7uBKeC87YlF3G/iGsK8xnnkRAAAAABJRU5ErkJggg=='),auto"
+				}
+
+			});
+
+		}
+
+		else {
+
+			copytagson = "off";
+			$("#copytags img").removeClass('activated');
+			$("#copieron").removeClass("on");
+			document.querySelectorAll(".tags").forEach(function(el) {
+				el.style.cursor = "pointer"
+			});			
+		}
+
+	});
 
 	// goma de borrar
 	window.eraseron = "off";
@@ -831,6 +896,15 @@ $(document).ready(function () {
 	$("#eraser img").click(function() {
 
 		if (eraseron == "off") {
+
+			if (copytagson == "on") { // si el copiador de tags estuviera activo se desactiva
+				copytagson = "off";
+				$("#copytags img").removeClass('activated');
+				$("#copieron").removeClass("on");
+				document.querySelectorAll(".tags").forEach(function(el) {
+					el.style.cursor = "pointer"
+				});
+			}
 
 			eraseron = "on";
 
@@ -1196,8 +1270,17 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 	$( "#searchaction" ).click(function() {
 
-		window.eraseron = "off";
+		/*window.eraseron = "off";
 		$(".tags > div").css('cursor','pointer');
+		$("#eraser img").removeClass('activated');
+		$("#eraseron").removeClass("on");*/
+
+		copytagson = "off";
+		$("#copytags img").removeClass('activated');
+		$("#copieron").removeClass("on");
+
+		eraseron = "off";
+		$(".tags > div").draggable( 'enable' );
 		$("#eraser img").removeClass('activated');
 		$("#eraseron").removeClass("on");
 
@@ -2547,7 +2630,7 @@ function readsearchredresults() {
 
 		try {
 			var arorfo = "i_am_an_archive";
-			var arorfo = fs.readdirSync(dirtoreadcheck); // viene bien para luego mostrar numero de elementos en una carpeta
+			var arorfo = fs.readdirSync(dirtoreadcheck).length; // viene bien para luego mostrar numero de elementos en una carpeta
 		}
 		catch(exception) {};
 
@@ -2620,7 +2703,7 @@ function readsearchredresults() {
 
 		try {
 			var arorfo = "i_am_an_archive"; // esta claro que es un archivo pero este método esta copiado del main, y puede venir bien.
-			var arorfo = fs.readdirSync(dirtoreadcheck); // viene bien para luego mostrar numero de elementos en una carpeta
+			var arorfo = fs.readdirSync(dirtoreadcheck).length; // viene bien para luego mostrar numero de elementos en una carpeta
 		}
 		catch(exception) {};
 
@@ -2686,13 +2769,13 @@ function SortByExtDesc(a, b){
 
 }
 function SortByElemAsc(a,b) {
-	var aElem = Object.size(a.arorfo);
-	var bElem = Object.size(b.arorfo);
+	var aElem = a.arorfo;
+	var bElem = b.arorfo;
 	return ((aElem < bElem) ? -1 : ((aElem > bElem) ? 1 : 0));
 }
 function SortByElemDesc(a,b) {
-	var aElem = Object.size(a.arorfo);
-	var bElem = Object.size(b.arorfo);
+	var aElem = a.arorfo;
+	var bElem = b.arorfo;
 	return ((aElem > bElem) ? -1 : ((aElem < bElem) ? 1 : 0));
 }
 function SortBySizeAsc(a,b) {
@@ -2775,11 +2858,9 @@ function drawSearchFolders (searchviewmode, order) {
 
 		$.each(resultadoscarpetas, function(i, v) {
 
-			var nameSinBarra = v.name.substring(1);
+			var nameSinBarra = v.name.substring(1);			
 
-			var folderelements = Object.size(this.arorfo); // el tamaño del objeto arorfo que contiene el numero de subelementos en una carpeta
-
-			t += '<div class="exploelement folder"><div class="imgmode1 folder"></div><div class="explofolder" value="' + v.name + '"  title="' + nameSinBarra + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span>&nbsp;</div></div>';
+			t += '<div class="exploelement folder"><div class="imgmode1 folder"></div><div class="explofolder" value="' + v.name + '"  title="' + nameSinBarra + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + this.arorfo + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialength + '</span>&nbsp;</div></div>';
 
 			// los tag se separan y presentan en divs aparte en la función drawdirectoryviewtags()
 
@@ -2792,11 +2873,9 @@ function drawSearchFolders (searchviewmode, order) {
 
 		$.each(resultadoscarpetas, function(i, v) {
 
-			var nameSinBarra = v.name.substring(1);
+			var nameSinBarra = v.name.substring(1);			
 
-			var folderelements = Object.size(this.arorfo); // el tamaño del objeto arorfo que contiene el numero de subelementos en una carpeta
-
-			t += '<div class="exploelement folder"><div class="imgmode'+searchviewmode+' folder">&nbsp;</div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + folderelements + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
+			t += '<div class="exploelement folder"><div class="imgmode'+searchviewmode+' folder">&nbsp;</div><div class="explofolder" value="' + v.name + '"><span class="exploname">' + nameSinBarra + '</span></div><div class="folderelements"> ' + this.arorfo + ph_infolder + '</div><div class="explosize"><span class="placehold">' + ph_filesize + '</span></div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialength + '</span></div></div>';
 
 			// los tag se separan y presentan en divs aparte en la función drawdirectoryviewtags()
 
@@ -2867,7 +2946,7 @@ function drawSearchArchives (searchviewmode, order) {
 
 			}
 
-			t += '<div class="exploelement archive"><div class="imgmode1 ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '" title="' + v.filepath + '">'+exploname+' <span class="placehold2" value="'+ v.filepath +'">'+ v.filepath +'</span></div><div class="exploext">' + v.ext + '</div><div class="explosize">' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
+			t += '<div class="exploelement archive"><div class="imgmode1 ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '" title="' + v.filepath + '">'+exploname+' <span class="placehold2" value="'+ v.filepath +'">'+ v.filepath +'</span></div><div class="exploext">' + v.ext + '</div><div class="explosize">' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialength + '</span></div></div>';
 
 		});
 
@@ -2917,7 +2996,7 @@ function drawSearchArchives (searchviewmode, order) {
 				var imagen="<img src='/img/icons/420px/420x420.png'>";
 			}
 
-			t += '<div class="exploelement archive"><div class="imgmode'+searchviewmode+' ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '"  title="' + v.filepath + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">&nbsp' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialenght + '</span></div></div>';
+			t += '<div class="exploelement archive"><div class="imgmode'+searchviewmode+' ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '"  title="' + v.filepath + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">&nbsp' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialength + '</span></div></div>';
 
 		});
 
@@ -4090,6 +4169,7 @@ function drawdirectoryviewtags (){
 
 				elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 				elemetstagdelete(); // activa sistema borrado tags
+				elementstagcopier(); // activa sistema de copiado de tags
 
 			}
 
@@ -4100,6 +4180,7 @@ function drawdirectoryviewtags (){
 
 		elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 		elemetstagdelete(); // activa sistema borrado tags
+		elementstagcopier(); // activa sistema de copiado de tags
 
 	}
 
@@ -4258,6 +4339,13 @@ function interactinsforsearchdir() {
 												var arraydetags = taganadir // solo hay un tag a añadir
 												elementtagsinview[0].setAttribute("value", arraydetags);
 
+												// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+												$.each (resultadosarchivos, function(dra){										
+													if (resultadosarchivos[dra].name  == filename && resultadosarchivos[dra].filepath == filefoldername){
+														resultadosarchivos[dra].tagsid = arraydetags;						
+													}
+												});
+
 												// y ahora redibujamos los tags..
 												arraydetags = arraydetags.split(','); // volvemos a convertirlo en array (aunque solo haya un tag)
 												var tagsdivs = "";
@@ -4303,6 +4391,7 @@ function interactinsforsearchdir() {
 
 													elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 													elemetstagdelete(); // activa sistema borrado tags
+													elementstagcopier(); // activa sistema de copiado de tags
 
 												}
 
@@ -4418,7 +4507,15 @@ function interactinsforsearchdir() {
 										var elementtagsinview = $(".explofile").filter("[filepath='" + filefoldername + "']").filter("[value='" + filename + "']").siblings(".tags");
 										// console.log($(".placehold2").filter("[value='" + filefoldername + "']"))
 										arraydetags = arraydetags.toString() // de array a string
+
 										elementtagsinview[0].setAttribute("value", arraydetags);
+
+										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										$.each (resultadosarchivos, function(dra){										
+											if (resultadosarchivos[dra].name  == filename && resultadosarchivos[dra].filepath == filefoldername){
+												resultadosarchivos[dra].tagsid = arraydetags;						
+											}
+										});
 
 										// y ahora redibujamos los tags..
 										arraydetags = arraydetags.split(','); // volvemos a convertirlo en array
@@ -4466,6 +4563,7 @@ function interactinsforsearchdir() {
 
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
+											elementstagcopier(); // activa sistema de copiado de tags
 
 										}
 
@@ -4500,6 +4598,13 @@ function interactinsforsearchdir() {
 										var elementtagsinview = $(".explofile").filter("[filepath='" + filefoldername + "']").filter("[value='" + filename + "']").siblings(".tags");
 										var arraydetags = taganadir // solo hay un tag a añadir
 										elementtagsinview[0].setAttribute("value", arraydetags);
+
+										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										$.each (resultadosarchivos, function(dra){										
+											if (resultadosarchivos[dra].name  == filename && resultadosarchivos[dra].filepath == filefoldername){
+												resultadosarchivos[dra].tagsid = arraydetags;						
+											}
+										});
 
 										// y ahora redibujamos los tags..
 										arraydetags = arraydetags.split(','); // volvemos a convertirlo en array (aunque solo haya un tag)
@@ -4547,6 +4652,7 @@ function interactinsforsearchdir() {
 
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
+											elementstagcopier(); // activa sistema de copiado de tags
 
 										}
 
@@ -4566,7 +4672,7 @@ function interactinsforsearchdir() {
 
 		}
 
-	});
+	}); // --fin añadir tag en archivo
 
 
 	// Añadir tag a carpeta
@@ -4693,15 +4799,22 @@ function interactinsforsearchdir() {
 										arraydetags = arraydetags.toString() // de array a string
 										elementtagsinview[0].setAttribute("value", arraydetags);
 
+										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										$.each (resultadoscarpetas, function(drf){										
+											if (resultadoscarpetas[drf].name  == carpeta){
+												resultadoscarpetas[drf].tagsid = arraydetags;					
+											}
+										});
+
 										// se redibujarán los tags del treeview si están desplegadas las subcarpetas
-										$.each ($("#filetree span"), function(t) {
+										/*$.each ($("#filetree span"), function(t) {
 
 											if($("#filetree span:eq("+t+")").attr("rel2") == undo.taggfold.folder) {
 
 												treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
 											}
 
-										});
+										});*/
 
 										// y ahora redibujamos los tags..
 										arraydetags = arraydetags.split(','); // volvemos a convertirlo en array
@@ -4711,7 +4824,7 @@ function interactinsforsearchdir() {
 										};
 										elementtagsinview[0].innerHTML = tagsdivs;
 
-										if (treeelementtagsinview) { // si está visible la carpeta en el treeview
+										/*if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 											treeelementtagsinview.innerHTML = tagsdivs;
 											treeelementosdirectoriotags = treeelementtagsinview.children
@@ -4750,7 +4863,7 @@ function interactinsforsearchdir() {
 
 											};
 
-										}
+										}*/
 
 										// para aplicarles los estilos a los tags del directorio también hay que recurrir a la bd
 										var trans2 = db.transaction(["tags"], "readonly")
@@ -4790,6 +4903,7 @@ function interactinsforsearchdir() {
 
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
+											elementstagcopier(); // activa sistema de copiado de tags
 											if(localStorage["asktagsubeleents"]=="yes"){
 												popup("addtagtosubelements");
 											}
@@ -4836,14 +4950,21 @@ function interactinsforsearchdir() {
 									arraydetags = taganadir //solo hay un tag a añadir
 									elementtagsinview[0].setAttribute("value", arraydetags);
 
+									// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+									$.each (resultadoscarpetas, function(drf){										
+										if (resultadoscarpetas[drf].name  == carpeta){
+											resultadoscarpetas[drf].tagsid = arraydetags;					
+										}
+									});
+
 									// se redibujarán los tags del treeview si están desplegadas las subcarpetas
-									$.each ($("#filetree span"), function(t) {
+									/*$.each ($("#filetree span"), function(t) {
 										if($("#filetree span:eq("+t+")").attr("rel2") == undo.taggfold.folder) {
 											// console.log($("#filetree span:eq("+t+")")[0]);
 											treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
 										}
 
-									});
+									});*/
 
 									// y ahora redibujamos los tags..
 									arraydetags = arraydetags.split(','); // volvemos a convertirlo en array (aunque solo haya un tag)
@@ -4853,7 +4974,7 @@ function interactinsforsearchdir() {
 									};
 									elementtagsinview[0].innerHTML = tagsdivs;
 
-									if (treeelementtagsinview) { // si está visible la carpeta en el treeview
+									/*if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 										treeelementtagsinview.innerHTML = tagsdivs;
 										treeelementosdirectoriotags = treeelementtagsinview.children
@@ -4890,7 +5011,7 @@ function interactinsforsearchdir() {
 
 										};
 
-									}
+									}*/
 
 									// para aplicarles los estilos a los tags hay que recurrir a la bd
 									var trans2 = db.transaction(["tags"], "readonly")
@@ -4930,6 +5051,7 @@ function interactinsforsearchdir() {
 
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 										elemetstagdelete(); // activa sistema borrado tags
+										elementstagcopier(); // activa sistema de copiado de tags
 
 										if(localStorage["asktagsubeleents"]=="yes"){
 											popup("addtagtosubelements");
@@ -6253,6 +6375,23 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 				// ahora realizamos el cambio de orden en la visualización (value del tags y posición de los propios tagtickets)
 				elementtagorder = elementtagorder.toString(); // de nuevo a string
+
+				// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+				if (elementtags["0"].parentNode.classList.contains("archive")){
+					$.each (resultadosarchivos, function(dra){										
+						if (resultadosarchivos[dra].name  == elementtags["0"].parentElement.children[1].attributes[1].value){
+							resultadosarchivos[dra].tagsid = elementtagorder;						
+						}
+					});
+				} else if (elementtags["0"].parentNode.classList.contains("folder")){
+					$.each (resultadoscarpetas, function(drf){										
+						if (resultadoscarpetas[drf].name  == elementtags["0"].parentElement.children[1].attributes[1].value){
+							resultadoscarpetas[drf].tagsid = elementtagorder;					
+						}
+					});
+				}
+
+
 				elementtags.attr("value", elementtagorder); // le ponemos el nuevo value a div tags
 
 				elementtagorder = elementtagorder.split(","); // de nuevo a array
@@ -6302,6 +6441,7 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 								elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 								elemetstagdelete(); // activa sistema borrado tags
+								elementstagcopier(); // activa sistema de copiado de tags
 
 							}
 
@@ -6515,6 +6655,784 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 } // --fin elementstagsorder()
 
 
+
+function elementstagcopier() {
+
+	$('.tags').unbind('click');
+
+	$(".tags").on('click', function() {
+
+		if (copytagson == "on" && $(this).has('div').length>0){
+
+			// para que no se vea selección de todo el elemento cuando se selecciona para copiar los tags
+			if ($(this).parent().hasClass("ui-selecting")) {
+				$(this).parent().removeClass("ui-selecting");
+			}
+			else {
+				$(this).parent().addClass("ui-selecting");
+				$(this).parent().addClass("whitebackground");
+			}
+
+			// se recogen los seleccionados en este momento
+			if (document.querySelectorAll(".ui-selecting").length > 0) {
+
+				var tocopyonelements = document.querySelectorAll(".ui-selecting");
+
+			}
+			else if (document.querySelectorAll(".ui-selected").length > 0) {
+
+				var tocopyonelements = document.querySelectorAll(".ui-selected");
+			}
+
+			if (!tocopyonelements) {
+
+				alertify.alert(ph_alr_09);
+				/*copytagson = "off";
+				$("#copytags img").removeClass('activated');
+				$("#copieron").removeClass("on");
+				document.querySelectorAll(".tags").forEach(function(el) {
+					el.style.cursor = "pointer"
+				});*/
+
+			}
+
+			else {
+
+				var tagsacopiar = this.attributes[1].value;
+				tagsacopiar = tagsacopiar.split(","); // se convierte en array
+
+				isnewfolds = [];
+
+
+				// para aplicarles los estilos a los tags hay que recurrir a la bd
+				var propiedadestags = [];
+				var trans2 = db.transaction(["tags"], "readonly")
+				var objectStore2 = trans2.objectStore("tags")
+
+				//var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+				var elementosdirectoriotags = document.querySelectorAll(".exploelement .tags .tagticket");
+
+
+				var req2 = objectStore2.openCursor();
+
+				req2.onerror = function(event) {
+					console.log("error: " + event);
+				};
+				req2.onsuccess = function(event) {
+					var cursor2 = event.target.result;
+					if (cursor2) {
+
+						propiedadestags.push(cursor2.value);					
+
+						cursor2.continue();
+
+					}
+
+				};	
+
+				trans2.oncomplete = function(event) {		
+
+					var trans = db.transaction(["folders"], "readwrite")
+					var objectStore = trans.objectStore("folders")
+					var req = objectStore.openCursor();
+
+					req.onerror = function(event) {
+
+						console.log("error: " + event);
+					};
+
+					req.onsuccess = function(event) {
+
+						var cursor = event.target.result;
+
+						if(cursor){
+
+							$.each (tocopyonelements, function(en) {
+
+								if ($(tocopyonelements[en]).hasClass("folder")) {
+				
+									var arraydetags=[];
+
+									var addtagtosubelements = "no";
+									var treeelementtagsinview = [];
+
+									var folder = $(tocopyonelements[en]).children('.explofolder').attr("value"); // desde el value del div
+											 
+									isnewfolds[en]="yes"; // valor por defecto que dice que la carpeta no estaba previamente en la base de datos	
+									folderupdate = {}; // objeto que luego hay que pasar con todos sus valore para hacer un update en la base de datos
+
+									$.each (tagsacopiar, function(ta){
+
+										var taganadir = tagsacopiar[ta];
+
+										if(cursor.value.folder == folder){ // si el folder de la posición del cursor es igual al nombre con ruta del folder dibujado
+
+											isnewfolds[en]="no"; // la carpeta ya esta en la base de datos
+
+											folderupdate.folderid = cursor.value.folderid; //se pasan valores que ya tenía desde el cursor
+											folderupdate.folder = cursor.value.folder;
+
+											var arraydetags = cursor.value.foldertags; // variable temporal donde se mete el array de tags desde el curso para hacer unas comprobaciones a continuación. El array puede estar vacío
+											if (typeof arraydetags == "string") {
+												arraydetags = arraydetags.split(',')
+											}
+											arraydetags.push(taganadir);
+
+											arraydetags = arraydetags.filter(function(item, pos) { //si hay tag duplicado lo quita
+											    return arraydetags.indexOf(item) == pos;
+											});
+
+											folderupdate.foldertags = arraydetags;
+
+											// ahora que ya tenemos todos los datos del objeto hacemos update con el en la base de datos
+											var res = cursor.update(folderupdate);
+
+											res.onerror = function(event){
+
+												console.log("error tag no añadida: " + event);
+
+											}
+
+											res.onsuccess = function(event){
+
+												var treviewvisible = "no";
+
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+												undo.class == "";
+
+												// Actualizar visual
+												elementtagsinview = $('.explofolder').filter('[value="' + folder + '"]').siblings('.tags');
+												arraydetags = arraydetags.toString() // de array a string
+												elementtagsinview[0].setAttribute("value", arraydetags);
+
+												// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+												$.each (resultadoscarpetas, function(drf){										
+													if (resultadoscarpetas[drf].name  == folder){
+														resultadoscarpetas[drf].tagsid = arraydetags;						
+													}
+												});
+
+												/*// se redibujarán los tags del treeview si están desplegadas las subcarpetas
+												treeelementtagsinview=[];
+												$.each (tocopyonelements, function(en) {
+
+													if ($(tocopyonelements[en]).hasClass("folder")) {
+
+														var folder = $(tocopyonelements[en]).children('.explofolder').attr("value"); // desde el value del div
+														
+														$.each ($("#filetree span"), function(t) {
+															if($("#filetree span:eq("+t+")").attr("rel2") == folder) {
+
+																treeelementtagsinview[t] = $("#filetree span:eq("+t+")")[0].children[2] //el div tags del treeview
+																treviewvisible = "yes";
+																return false; //salir del each
+															}
+
+														});
+
+													}
+
+												});*/
+
+												// y ahora redibujamos los tags..
+												arraydetags = arraydetags.split(','); // volvemos a convertirlo en array
+												var tagsdivs = "";
+												for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
+													tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+												};
+												elementtagsinview[0].innerHTML = tagsdivs;
+
+												/*if (treviewvisible == "yes") { // si está visible la carpeta en el treeview
+
+													if (rootdirectory == "" || rootdirectory == "\/"){
+														filetreerefresh();
+													}
+													else {
+
+														$.each ($("#filetree span"), function(l) {
+
+															if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+																// contraer y expandir
+																$("#filetree span:eq("+l+")").trigger( "click" );
+																$("#filetree span:eq("+l+")").trigger( "click" );
+
+															}
+
+														});
+
+													}
+
+												}*/
+
+												// para aplicarles los estilos a los tags
+
+												var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+													
+												$.each(elementosdirectoriotags, function(n) {
+													$.each(propiedadestags, function(p) {
+														if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+															var color = "#" + propiedadestags[p].tagcolor;
+															var complecolor = hexToComplimentary(color);
+
+															elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+															elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+															elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+															elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+														}
+													})
+												});
+
+												// finalizando
+
+												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+												elemetstagdelete(); // activa sistema borrado tags
+												elementstagcopier(); // activa sistema de copiado de tags
+												
+
+											}
+
+										}									
+
+									});
+
+								}
+
+							});
+
+							cursor.continue(); // avanzar posición cursor en base de datos capetas y reiterar
+
+						} // --fin cursor
+
+					}; // -- fin req.onsuccess (del opencursor)
+
+					trans.oncomplete = function(e) { // tras completar la transacción (que habrá añadido el tag si la carpeta ya estaba en la base de datos)					
+
+						$.each (tocopyonelements, function(en) {
+
+							if ($(tocopyonelements[en]).hasClass("folder")) {
+
+								if (isnewfolds[en] == "yes") {
+
+									var folder = $(tocopyonelements[en]).children('.explofolder').attr("value"); // desde el value del div
+
+									// añadimos el objeto con sus parámetros mediante put
+									var request = db.transaction(["folders"], "readwrite")
+									.objectStore("folders")
+									.put({ folder: folder, foldertags: tagsacopiar }); // el id no hace falta pues es autoincremental
+
+									request.onerror = function(event){
+
+										console.log("error tag no añadida: " + event);
+
+									}
+
+									request.onsuccess = function(event){
+
+										// console.log("tag añadida!");
+										var treviewvisible = "no";
+										treeelementtagsinview = [];
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+									    undo.class == "";
+
+										// actualizar visual
+										var elementtagsinview = $('.explofolder').filter('[value="' + folder + '"]').siblings('.tags');
+										arraydetags = tagsacopiar;
+										elementtagsinview[0].setAttribute("value", arraydetags);
+
+										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										$.each (resultadoscarpetas, function(drf){										
+											if (resultadoscarpetas[drf].name  == folder){
+												resultadoscarpetas[drf].tagsid = arraydetags;						
+											}
+										});
+
+		
+										/*$.each ($("#filetree span"), function(t) {
+											if($("#filetree span:eq("+t+")").attr("rel2") == folder) {
+
+												treeelementtagsinview[t] = $("#filetree span:eq("+t+")")[0].children[2] //el div tags del treeview
+												treviewvisible = "yes"
+											}
+
+										});*/
+
+										// y ahora redibujamos los tags..
+										
+										var tagsdivs = "";
+										for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
+											tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+										};
+										elementtagsinview[0].innerHTML = tagsdivs;
+
+
+										/*if (treviewvisible == "yes") { // si está visible la carpeta en el treeview
+
+											if (rootdirectory == "" || rootdirectory == "\/"){
+												filetreerefresh();
+											}
+
+											$.each ($("#filetree span"), function(l) {
+
+												if($("#filetree span:eq("+l+")").attr("rel2") == rootdirectory) {
+
+													// contraer y expandir
+													$("#filetree span:eq("+l+")").trigger( "click" );
+													$("#filetree span:eq("+l+")").trigger( "click" );
+
+												}
+
+											});
+
+										}*/										
+
+										// para aplicarles los estilos a los tags
+
+										var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+											
+										$.each(elementosdirectoriotags, function(n) {
+											$.each(propiedadestags, function(p) {
+												if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+													var color = "#" + propiedadestags[p].tagcolor;
+													var complecolor = hexToComplimentary(color);
+
+													elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+													elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+													elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+													elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+												}
+											})
+										});
+
+										// finalizando
+
+										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+										elemetstagdelete(); // activa sistema borrado tags
+										elementstagcopier(); // activa sistema de copiado de tags
+
+										
+
+									}
+
+								}
+
+							}
+
+
+						}) 					
+					
+
+					}// -- fin trans.oncomplete	
+
+
+
+					// Se trabaja con los ficheros
+					
+					var isnewfiles = [];
+
+					$.each (tocopyonelements, function(en) {
+
+						if ($(tocopyonelements[en]).hasClass("archive")){
+
+							var arraydetags=[];
+
+							var filename = $(tocopyonelements[en]).children('.explofile').attr("value");
+
+
+							var extension = $(tocopyonelements[en]).children('.exploext')[0].textContent;
+							//extension = extension[0].textContent;
+
+							var folder = $(tocopyonelements[en]).children('.explofile').attr("filepath");
+
+							var fileupdate = {};
+
+							// vamos a comprobar si ya estaba la carpeta y si no está la añadimos a la base de dato (aunque sea sin tags)
+
+							isnewfiles[en]="yes";
+
+							var trans = db.transaction(["folders"], "readwrite")
+							var objectStore = trans.objectStore("folders")
+							var req = objectStore.openCursor();
+
+							req.onerror = function(event) {
+
+								console.log("error: " + event);
+
+							};
+
+							req.onsuccess = function(event) {
+
+								var cursor = event.target.result;
+
+								if(cursor){
+
+									if(cursor.value.folder == folder){ // si la carpeta madre ya esta en la base de datos
+
+										isnewfiles[en]="no";
+										fileupdate.filefolder = cursor.value.folderid; // para añadir luego
+										return;
+									}
+
+									cursor.continue();
+								}
+
+							}
+
+							trans.oncomplete = function(e) { // vamos a añadir nueva carpeta madre
+
+								if (isnewfiles[en]=="yes") {
+						
+									var trans = db.transaction(["folders"], "readwrite")
+									var request = trans.objectStore("folders")
+										.put({ folder: folder, foldertags: [] }); // el id no hace falta pues es autoincremental
+
+
+									request.onerror = function(event){
+
+										console.log("error carpeta madre no añadida: " + event);
+
+									}
+
+									request.onsuccess = function(event){
+
+										// console.log("carpeta madre añadida!");
+
+										trans.oncomplete = function(e) { // vamos a tomar el id de la carpeta añadida
+
+											var trans = db.transaction(["folders"], "readonly")
+											var objectStore = trans.objectStore("folders")
+											var req = objectStore.openCursor();
+
+											req.onerror = function(event) {
+
+												console.log("error: " + event);
+
+											};
+
+											req.onsuccess = function(event) {
+
+												var cursor = event.target.result;
+
+												if(cursor){
+
+													if(cursor.value.folder == folder){
+
+														fileupdate.filefolder = cursor.value.folderid;
+
+													}
+
+													cursor.continue();
+												}
+
+												trans.oncomplete = function(e) { // vamos a añadir los datos del nuevo fichero (si la carpeta era nueva el fichero también)
+
+													fileupdate.filename = filename;
+													fileupdate.fileext = extension;
+													fileupdate.filetags = tagsacopiar;
+
+													var trans = db.transaction(["files"], "readwrite")
+													var request = trans.objectStore("files")
+														.add(fileupdate);
+
+													request.onerror = function(event) {
+
+														console.log("error datos nuevo fichero no añadidos:" + event);
+
+													};
+													request.onsuccess = function(event) {
+
+														// console.log("datos nuevo fichero añadidos");
+
+														$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+														undo.class == ""
+
+														// Actualizar visual
+
+														var elementtagsinview = $('.explofile').filter('[value="' + filename + '"][filepath="' + folder + '"]').siblings('.tags');
+														var arraydetags = tagsacopiar; // solo hay un tag a añadir
+														elementtagsinview[0].setAttribute("value", arraydetags);
+
+														// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+														$.each (resultadosarchivos, function(dra){										
+															if (resultadosarchivos[dra].name  == filename && resultadosarchivos[dra].filepath == folder){
+																resultadosarchivos[dra].tagsid = arraydetags;						
+															}
+														});
+
+														// y ahora redibujamos los tags..
+														if (typeof arraydetags == "string") {
+															arraydetags = arraydetags.split(',')
+														} // volvemos a convertirlo en array
+														var tagsdivs = "";
+														for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
+															tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+														};
+														elementtagsinview[0].innerHTML = tagsdivs;
+
+														// para aplicarles los estilos a los tags
+
+														var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+															
+														$.each(elementosdirectoriotags, function(n) {
+															$.each(propiedadestags, function(p) {
+																if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+																	var color = "#" + propiedadestags[p].tagcolor;
+																	var complecolor = hexToComplimentary(color);
+
+																	elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+																	elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+																	elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+																	elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+																}
+															})
+														});
+
+														// finalizando
+
+														elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+														elemetstagdelete(); // activa sistema borrado tags
+														elementstagcopier(); // activa sistema de copiado de tags
+														
+
+													};
+
+												} // -- fin trans (añadir nuevo fichero dentro de nueva carpeta)
+
+											} // -- fin onsuccess
+
+										} // -- fin trans (tomar id nueva carpeta)
+
+									} // -- fin onsuccess
+
+								} // -- fin if (si el archivo esta en una nueva carpeta)
+								else { // -- si el archivo esta en una carpeta ya añadida a la base de datos
+
+									// hay que comprobar que si el fichero es nuevo o no
+									
+									isnewfiles[en]="yes"; // valor por defecto (dejar asi, no poner window)
+									
+									var trans = db.transaction(["files"], "readwrite")
+									var objectStore = trans.objectStore("files")
+									var req = objectStore.openCursor();
+
+									req.onerror = function(event) {
+
+										console.log("error: " + event);
+									};
+
+									req.onsuccess = function(event) {
+
+									 // fileupdate.filefolder ya esta definido más arriba
+										fileupdate.filename = filename;
+										fileupdate.fileext = extension;
+										//fileupdate.filetags = taganadir;
+
+										var cursor = event.target.result;
+
+										if(cursor){
+
+											if (cursor.value.filefolder == fileupdate.filefolder) { // cuando el id del folder coincide
+
+												if (cursor.value.filename == fileupdate.filename) { // si el archivo ya estaba en la bd
+
+													isnewfiles[en] = "no";
+													//console.log("no:" + fileupdate.filename)
+													fileupdate.fileid = cursor.value.fileid;  // nos da el id del último success (el fichero añadido)
+													arraydetags = cursor.value.filetags;
+												}
+											}
+
+											cursor.continue();
+										}
+
+									}
+
+									trans.oncomplete = function(e) { // a meter los datos del fichero tanto si es nuevo como si no
+
+										if (isnewfiles[en]=="no") { // si el fichero no es nuevo
+
+											$.each (tagsacopiar, function(ta){
+
+												var taganadir = tagsacopiar[ta];
+
+												if (typeof arraydetags == "string") {
+
+													arraydetags = arraydetags.split(',')
+												}
+												arraydetags.push(taganadir);											
+
+											});
+
+											arraydetags = arraydetags.filter(function(item, pos) { //si hay tag duplicado lo quita
+											    return arraydetags.indexOf(item) == pos;
+											});
+
+											fileupdate.filetags = arraydetags;
+
+											var trans = db.transaction(["files"], "readwrite")
+													var request = trans.objectStore("files")
+														.put(fileupdate);
+
+											request.onerror = function(event) {
+
+												console.log("error datos nuevo fichero no añadidos:" + event);
+
+											};
+
+											request.onsuccess = function(event) {
+
+												// console.log("datos nuevo fichero añadidos");
+
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+												undo.class == "";
+
+												// Actualizar visual
+												var elementtagsinview = $('.explofile').filter('[value="' + filename + '"][filepath="' + folder + '"]').siblings('.tags');
+												arraydetags = arraydetags.toString() // de array a string
+												elementtagsinview[0].setAttribute("value", arraydetags);
+
+												// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+												$.each (resultadosarchivos, function(dra){										
+													if (resultadosarchivos[dra].name  == filename && resultadosarchivos[dra].filepath == folder){
+														resultadosarchivos[dra].tagsid = arraydetags;						
+													}
+												});
+														
+												// y ahora redibujamos los tags..
+												arraydetags = arraydetags.split(','); // volvemos a convertirlo en array
+												var tagsdivs = "";
+												for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
+													tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+												};
+												elementtagsinview[0].innerHTML = tagsdivs;
+
+												// para aplicarles los estilos a los tags									
+
+												var elementosdirectoriotags = elementtagsinview.children(".tagticket");
+
+												$.each(elementosdirectoriotags, function(n) {
+													$.each(propiedadestags, function(p) {
+														if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+															var color = "#" + propiedadestags[p].tagcolor;
+															var complecolor = hexToComplimentary(color);
+
+															elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+															elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+															elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+															elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+														}
+													})
+												});
+
+												// finalizando
+
+												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+												elemetstagdelete(); // activa sistema borrado tags
+												elementstagcopier(); // activa sistema de copiado de tags
+												
+
+											};
+
+										} // -- fin si el archivo no era nuevo (en una carpeta que ya estaba en la bd)
+										else { // si el archivo es nuevo (en una carpeta que ya estaba en la bd)
+											
+											fileupdate.filetags = tagsacopiar;
+
+											var trans = db.transaction(["files"], "readwrite")
+													var request = trans.objectStore("files")
+														.add(fileupdate);
+
+											request.onerror = function(event) {
+
+												console.log("error datos nuevo fichero no añadidos:" + event);
+
+											};
+											request.onsuccess = function(event) {
+
+												// console.log("datos nuevo fichero añadidos");
+
+												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
+												undo.class == "";
+
+												// Actualizar visual
+												elementtagsinview = $('.explofile').filter('[value="' + filename + '"][filepath="' + folder + '"]').siblings('.tags')												
+												arraydetags = tagsacopiar;
+												elementtagsinview[0].setAttribute("value", arraydetags);
+
+												// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+												$.each (resultadosarchivos, function(dra){										
+													if (resultadosarchivos[dra].name  == filename && resultadosarchivos[dra].filepath == folder){
+														resultadosarchivos[dra].tagsid = arraydetags;						
+													}
+												});
+
+												// y ahora redibujamos los tags..
+												tagsdivs = "";
+												for(var k = 0; k < arraydetags.length; k += 1){ // recorremos el array
+													tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+												};
+												elementtagsinview[0].innerHTML = tagsdivs;
+
+												// para aplicarles los estilos a los tags									
+
+												elementosdirectoriotags = elementtagsinview.children(".tagticket");										
+												$.each(elementosdirectoriotags, function(n) {
+													$.each(propiedadestags, function(p) {
+														if (propiedadestags[p].tagid == elementosdirectoriotags[n].getAttribute("value")) {
+
+															var color = "#" + propiedadestags[p].tagcolor;
+															var complecolor = hexToComplimentary(color);
+
+															elementosdirectoriotags[n].className += " small " + propiedadestags[p].tagform;
+															elementosdirectoriotags[n].setAttribute("value", propiedadestags[p].tagid);
+															elementosdirectoriotags[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+															elementosdirectoriotags[n].innerHTML = propiedadestags[p].tagtext;
+
+														}
+													})
+												});
+
+												// finalizando
+
+												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+												elemetstagdelete(); // activa sistema borrado tags
+												elementstagcopier(); // activa sistema de copiado de tags
+												
+											};
+
+										} // --fin else (archivo nuevo, carpeta vieja)
+
+									} // --fin trans
+
+								} // --fin else (carpeta vieja)
+
+							}; // -- fin trans
+
+						}
+
+					});
+				
+				}
+
+			} //--fin else si hay elementos donde copiar
+
+		}
+
+	});
+
+} //--fin elementstagcopier
+
+
+
+
 function elemetstagdelete() {
 
 	$('.tags > div').unbind('click'); // para restear las acciones del on click, y no haga dos veces o más veces por click una vez que se ejecuta elementstagdelete() varias veces.
@@ -6592,6 +7510,11 @@ function elemetstagdelete() {
 									// console.log("tag de carpeta eliminada");
 
 									var treeelementtagsinview = "";
+									$.each (resultadoscarpetas, function(drf){										
+										if (resultadoscarpetas[drf].name  == nombreelementocontagaborrar){
+											resultadoscarpetas[drf].tagsid = idtagsrestantes;					
+										}
+									});
 
 									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
 									undo.class = "delete folder tag";
@@ -6619,7 +7542,7 @@ function elemetstagdelete() {
 										tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
 									};
 
-									if (treeelementtagsinview) { // si está visible la carpeta en el treeview
+									/*if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 										treeelementtagsinview.innerHTML = tagsdivs;
 										var treeelementosdirectoriotags = treeelementtagsinview.children
@@ -6656,7 +7579,7 @@ function elemetstagdelete() {
 
 										};
 
-									}
+									}*/
 
 								}
 
@@ -6760,6 +7683,12 @@ function elemetstagdelete() {
 									undo.deltaggfold.tags = idtagsoriginales;
 									undo.deltaggfold.folder = nombreelementocontagaborrar;
 
+									$.each (resultadoscarpetas, function(drf){										
+										if (resultadoscarpetas[drf].name  == nombreelementocontagaborrar){
+											resultadoscarpetas[drf].tagsid = [];					
+										}
+									});
+
 									// Actualizar visual
 
 									// en el directorio solo hace falta hacer
@@ -6780,7 +7709,7 @@ function elemetstagdelete() {
 										tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
 									};
 
-									if (treeelementtagsinview) { // si está visible la carpeta en el treeview
+									/*if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 										treeelementtagsinview.innerHTML = tagsdivs;
 										treeelementosdirectoriotags = treeelementtagsinview.children
@@ -6818,7 +7747,7 @@ function elemetstagdelete() {
 
 										};
 
-									}
+									}*/
 
 								}
 
@@ -6865,6 +7794,14 @@ function elemetstagdelete() {
 												undo.deltaggfold.tags = idtagsoriginales;
 												undo.deltaggfold.folder = updatefolder.folder;
 
+												// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+												$.each (resultadoscarpetas, function(drf){										
+													if (resultadoscarpetas[drf].name  == nombreelementocontagaborrar){
+														resultadoscarpetas[drf].tagsid = idtagsrestantes;					
+													}
+												});
+
+
 												// Actualizar visual
 
 												// en el directorio solo hace falta hacer
@@ -6885,7 +7822,7 @@ function elemetstagdelete() {
 													tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
 												};
 
-												if (treeelementtagsinview) { // si está visible la carpeta en el treeview
+												/*if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
 													treeelementtagsinview.innerHTML = tagsdivs;
 													treeelementosdirectoriotags = treeelementtagsinview.children
@@ -6923,7 +7860,7 @@ function elemetstagdelete() {
 
 													};
 
-												}
+												}*/
 
 											}
 
@@ -7027,6 +7964,12 @@ function elemetstagdelete() {
 											undo.deltaggfile.fileid = fileupdate.fileid;
 											undo.deltaggfile.tagid = iddeltagaborrar;
 
+											// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+											$.each (resultadosarchivos, function(dra){										
+												if (resultadosarchivos[dra].name  == undo.deltaggfile.file && resultadosarchivos[dra].filepath == undo.deltaggfile.folder){
+													resultadosarchivos[dra].tagsid = idtagsrestantes;						
+												}
+											});
 											// actualizar visual en el directorio
 											tagaborrar.remove(); //que es el $(this) de al hacer click (el tagticket)
 
@@ -7047,6 +7990,13 @@ function elemetstagdelete() {
 				}
 
 				else { // si se queda a 0 tags
+
+					// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+					$.each (resultadosarchivos, function(dra){										
+						if (resultadosarchivos[dra].name  == undo.deltaggfile.file && resultadosarchivos[dra].filepath == undo.deltaggfile.folder){
+							resultadosarchivos[dra].tagsid = idtagsrestantes;						
+						}
+					});
 
 					// actualizar visual en el directorio
 					tagaborrar.remove(); // que es el $(this) de al hacer click (el tagticket)
@@ -7626,7 +8576,7 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 							try {
 								var arorfo = "i_am_an_archive";
-								var arorfo = fs.readdirSync(dirtoreadcheck);
+								var arorfo = fs.readdirSync(dirtoreadcheck).length;
 							}
 							catch(exception) {};
 
@@ -8546,7 +9496,7 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 								try {
 									var arorfo = "i_am_an_archive";
-									var arorfo = fs.readdirSync(dirtoreadcheck);
+									var arorfo = fs.readdirSync(dirtoreadcheck).length;
 								}
 								catch(exception) {};
 
@@ -9279,7 +10229,7 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 						try {
 							var arorfo = "i_am_an_archive";
-							var arorfo = fs.readdirSync(dirtoreadcheck);
+							var arorfo = fs.readdirSync(dirtoreadcheck).length;
 						}
 						catch(exception) {};
 
@@ -9919,7 +10869,7 @@ window.parent.$("#delete").on('click', function() {
 
 						try {
 							var arorfo = "i_am_an_archive";
-							var arorfo = fs.readdirSync(dirtoreadcheck);
+							var arorfo = fs.readdirSync(dirtoreadcheck).length;
 						}
 						catch(exception) {};
 
