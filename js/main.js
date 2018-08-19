@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.10.4';
+var programversion = '1.11.0';
 var fs = require('fs-extra');
 var Sniffr = require("sniffr");
 var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
@@ -3953,6 +3953,7 @@ function drawdirectoryviewtags (){
 
 	});
 
+
 	// se lee cada etiqueta (solo con id) del html
 	elementosdirectoriotags = document.querySelectorAll(".exploelement .tags .tagticket");
 
@@ -5177,499 +5178,351 @@ function elementstagcopier() {
 function elemetstagdelete() {
 
 	$('.tags > div').unbind('click'); // para resetear las acciones del on click, y no haga dos veces o más veces por click una vez que se ejecuta elementstagdelete() varias veces
+	$('.tags > div').unbind('contextmenu');
 
+	// con boton izquierdo (y borrador activado)
 	$(".tags > div").on('click', function() {
 
 		var cursoractual = $(".tags > div").css('cursor');
 
 		if (cursoractual != "pointer"){
-
+			
 			var tagaborrar = $(this);
+			borrartag(tagaborrar);
 
-			var iddeltagaborrar = $(this)["0"].attributes[1].value; // id del tag a borrar
-			var idtagsoriginales = $(this)["0"].parentElement.attributes[1].value; // del array de tags
+		}
 
-			var idtagsrestantes = idtagsoriginales.split(",");
-			idtagsrestantes = idtagsrestantes.filter(function(item) {
-				return item !== iddeltagaborrar;
-			});
+	});
 
-			if ($(this)["0"].parentElement.parentElement.classList.contains("folder")) {
-				isfolderorarchive = "folder"
-			}
-			if ($(this)["0"].parentElement.parentElement.classList.contains("archive")) {
-				isfolderorarchive = "archive"
-			}
+	// con boton derecho
+	$(".tags > div").on('contextmenu', function() {
 
-			var nombreelementocontagaborrar = $(this)["0"].parentElement.parentElement.children[1].attributes[1].value;
+		$(this)["0"].parentElement.parentElement.classList.toggle("ui-selecting"); // para que no se seleccione elemento
 
-			// ponemos el nuevo valor en el value del div tags
-			$(this)["0"].parentElement.setAttribute("value", idtagsrestantes.toString());
+		var tagaborrar = $(this);
+		borrartag(tagaborrar);
+
+	});
 
 
-			// si el tag pertenece a una carpeta
-			if (isfolderorarchive == "folder") {
-
-				var updatefolder = {};
-
-				if (idtagsrestantes.length > 0) { // si queda algun tag (y por lo tanto la carpeta permanece si o si en la bd)
-
-					var trans = db.transaction(["folders"], "readwrite")
-					var objectStore = trans.objectStore("folders")
-					var req = objectStore.openCursor();
-
-					req.onerror = function(event) {
-
-						console.log("error: " + event);
-					};
-
-					req.onsuccess = function(event) {
+} //-- fin function elementtagdelete
 
 
-						var cursor = event.target.result;
 
-						if(cursor){
+function borrartag(tagaborrar) {		
+			
+	var iddeltagaborrar = tagaborrar["0"].attributes[1].value; // id del tag a borrar
+	var idtagsoriginales = tagaborrar["0"].parentElement.attributes[1].value; // del array de tags
 
-							if(cursor.value.folder == rootdirectory + nombreelementocontagaborrar){
+	var idtagsrestantes = idtagsoriginales.split(",");
+	idtagsrestantes = idtagsrestantes.filter(function(item) {
+		return item !== iddeltagaborrar;
+	});
 
-								updatefolder.folderid = cursor.value.folderid;
-								updatefolder.folder = cursor.value.folder;
-								updatefolder.foldertags = idtagsrestantes;
+	if (tagaborrar["0"].parentElement.parentElement.classList.contains("folder")) {
+		isfolderorarchive = "folder"
+	}
+	if (tagaborrar["0"].parentElement.parentElement.classList.contains("archive")) {
+		isfolderorarchive = "archive"
+	}
 
-								var res2 = cursor.update(updatefolder);
+	var nombreelementocontagaborrar = tagaborrar["0"].parentElement.parentElement.children[1].attributes[1].value;
 
-								res2.onerror = function(event){
-									console.log("error: tag de carpeta no eliminada: " + event);
-								}
-
-								res2.onsuccess = function(event){
-
-									// console.log("tag de carpeta eliminada");
-
-									// console.log(nombreelementocontagaborrar)
-
-									// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
-									$.each (directoryfolders, function(drf){										
-										if (directoryfolders[drf].name  == nombreelementocontagaborrar){
-											directoryfolders[drf].tagsid = idtagsrestantes;					
-										}
-									});
-
-									var treeelementtagsinview = "";
-
-									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
-									undo.class = "delete folder tag";
-									undo.deltaggfold.foldid = updatefolder.folderid;
-									undo.deltaggfold.tags = idtagsoriginales;
-									undo.deltaggfold.folder = updatefolder.folder;
-									undo.deltaggfold.parentfolder = rootdirectory;
+	// ponemos el nuevo valor en el value del div tags
+	tagaborrar["0"].parentElement.setAttribute("value", idtagsrestantes.toString());
 
 
-									// Actualizar visual
+	// si el tag pertenece a una carpeta
+	if (isfolderorarchive == "folder") {
 
-									// en el directorio
-									tagaborrar.remove(); //que es el $(this) de al hacer click (el tagticket)
+		var updatefolder = {};
 
-									// en el treeview se redibujarán los tags si se ve la carpeta
-									$.each ($("#filetree span"), function(t) {
+		if (idtagsrestantes.length > 0) { // si queda algun tag (y por lo tanto la carpeta permanece si o si en la bd)
 
-										if($("#filetree span:eq("+t+")").attr("rel2") == undo.deltaggfold.folder) {
-											treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
-										}
+			var trans = db.transaction(["folders"], "readwrite")
+			var objectStore = trans.objectStore("folders")
+			var req = objectStore.openCursor();
 
-									});
+			req.onerror = function(event) {
 
-									// y ahora redibujamos los tags..
-									var tagsdivs = "";
-									for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
-										tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
-									};
+				console.log("error: " + event);
+			};
 
-									if (treeelementtagsinview) { // si está visible la carpeta en el treeview
+			req.onsuccess = function(event) {
 
-										treeelementtagsinview.innerHTML = tagsdivs;
-										treeelementosdirectoriotags = treeelementtagsinview.children
 
-										// vamos a pintar los estilos para los tags del treeview
-										var trans2 = db.transaction(["tags"], "readonly")
-										var objectStore2 = trans2.objectStore("tags")
-										var req2 = objectStore2.openCursor();
+				var cursor = event.target.result;
 
-										req2.onerror = function(event) {
-											console.log("error: " + event);
-										};
-										req2.onsuccess = function(event) {
-											var cursor2 = event.target.result;
-											if (cursor2) {
-												$.each (treeelementosdirectoriotags, function(u) {
-													if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
+				if(cursor){
 
-														var color = "#" + cursor2.value.tagcolor;
-														var complecolor = hexToComplimentary(color);
+					if(cursor.value.folder == rootdirectory + nombreelementocontagaborrar){
 
-														treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
-														treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
-														treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-														treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
+						updatefolder.folderid = cursor.value.folderid;
+						updatefolder.folder = cursor.value.folder;
+						updatefolder.foldertags = idtagsrestantes;
 
-													}
-												});
+						var res2 = cursor.update(updatefolder);
 
-												cursor2.continue();
-
-											}
-
-										};
-
-									}
-
-								}
-
-							}
-
-							cursor.continue();
-
+						res2.onerror = function(event){
+							console.log("error: tag de carpeta no eliminada: " + event);
 						}
 
-					}
+						res2.onsuccess = function(event){
 
-				} //-- fin if idtagsrestantes.length > 0
+							// console.log("tag de carpeta eliminada");
 
-				else { // si se queda a 0 tags
+							// console.log(nombreelementocontagaborrar)
 
-					var idcarpeta = "";
+							// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+							$.each (directoryfolders, function(drf){										
+								if (directoryfolders[drf].name  == nombreelementocontagaborrar){
+									directoryfolders[drf].tagsid = idtagsrestantes;					
+								}
+							});
 
-					// primero cogemos el id de la carpeta
-					var trans = db.transaction(["folders"], "readonly")
-					var objectStore = trans.objectStore("folders")
-					var req = objectStore.openCursor();
+							var treeelementtagsinview = "";
 
-					req.onerror = function(event) {
+							$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
+							undo.class = "delete folder tag";
+							undo.deltaggfold.foldid = updatefolder.folderid;
+							undo.deltaggfold.tags = idtagsoriginales;
+							undo.deltaggfold.folder = updatefolder.folder;
+							undo.deltaggfold.parentfolder = rootdirectory;
 
-						console.log("error: " + event);
-					};
 
-					req.onsuccess = function(event) {
+							// Actualizar visual
 
-						var cursor = event.target.result;
+							// en el directorio
+							tagaborrar.remove(); //que es el $(this) de al hacer click (el tagticket)
 
-						if(cursor){
+							// en el treeview se redibujarán los tags si se ve la carpeta
+							$.each ($("#filetree span"), function(t) {
 
-							if(cursor.value.folder == rootdirectory + nombreelementocontagaborrar){
-
-								idcarpeta = cursor.value.folderid
-
-							}
-
-							cursor.continue();
-
-						}
-
-					}
-
-					trans.oncomplete = function(event) {
-
-						var aborrardedb = "si";
-
-						// vamos a ver si hay archivos asociados a la carpeta
-						var trans = db.transaction(["files"], "readonly")
-						var objectStore = trans.objectStore("files")
-						var req = objectStore.openCursor();
-
-						req.onerror = function(event) {
-
-							console.log("error: " + event);
-						};
-
-						req.onsuccess = function(event) {
-
-							var cursor = event.target.result;
-
-							if(cursor){
-
-								if(cursor.value.filefolder == idcarpeta){
-
-									aborrardedb="no";
-
+								if($("#filetree span:eq("+t+")").attr("rel2") == undo.deltaggfold.folder) {
+									treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
 								}
 
-								cursor.continue();
+							});
 
-							}
+							// y ahora redibujamos los tags..
+							var tagsdivs = "";
+							for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
+								tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
+							};
 
-						}
+							if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
-						trans.oncomplete = function(event) {
+								treeelementtagsinview.innerHTML = tagsdivs;
+								treeelementosdirectoriotags = treeelementtagsinview.children
 
-							if (aborrardedb == "si") { // borramos de la bd
+								// vamos a pintar los estilos para los tags del treeview
+								var trans2 = db.transaction(["tags"], "readonly")
+								var objectStore2 = trans2.objectStore("tags")
+								var req2 = objectStore2.openCursor();
 
-								var trans9 = db.transaction(["folders"], "readwrite")
-								var request9 = trans9.objectStore("folders").delete(idcarpeta);
-
-								request9.onerror = function(event) {
-
-									console.log("error - no se ha eliminado carpeta de bd:" + event);
-
-								};
-								request9.onsuccess = function(event) {
-
-									// console.log("eliminada carpeta de la bd");
-
-									var treeelementtagsinview = "";
-
-									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
-									undo.class = "delete folder tag";
-									undo.deltaggfold.foldid = "";
-									undo.deltaggfold.tags = idtagsoriginales;
-									undo.deltaggfold.folder = rootdirectory + nombreelementocontagaborrar;
-									undo.deltaggfold.parentfolder = rootdirectory;
-
-
-									// Actualizar visual
-
-									// en el treeview
-									tagaborrar.remove(); // que es el $(this) de al hacer click (el tagticket)
-
-									// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
-									$.each (directoryfolders, function(drf){										
-										if (directoryfolders[drf].name  == nombreelementocontagaborrar){
-											directoryfolders[drf].tagsid = [];					
-										}
-									});
-
-									// el el treeview se redibujarán los tags si se ve la carpeta
-									$.each ($("#filetree span"), function(t) {
-
-										if($("#filetree span:eq("+t+")").attr("rel2") == undo.deltaggfold.folder) {
-											treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
-										}
-
-									});
-
-									// y ahora redibujamos los tags..
-									var tagsdivs = "";
-									for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
-										tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
-									};
-
-									if (treeelementtagsinview) { // si está visible la carpeta en el treeview
-
-										treeelementtagsinview.innerHTML = tagsdivs;
-										treeelementosdirectoriotags = treeelementtagsinview.children
-
-										// vamos a pintar los estilos para los tags del treeview
-										var trans2 = db.transaction(["tags"], "readonly")
-										var objectStore2 = trans2.objectStore("tags")
-
-										var req2 = objectStore2.openCursor();
-
-										req2.onerror = function(event) {
-											console.log("error: " + event);
-										};
-										req2.onsuccess = function(event) {
-											var cursor2 = event.target.result;
-											if (cursor2) {
-												$.each (treeelementosdirectoriotags, function(u) {
-													if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
-
-														var color = "#" + cursor2.value.tagcolor;
-														var complecolor = hexToComplimentary(color);
-
-														treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
-														treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
-														treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-														treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
-
-													}
-												});
-
-												cursor2.continue();
-											}
-
-										};
-
-									}
-
-								}
-
-							}
-
-							if (aborrardedb == "no") { // solo quitamos la etiqueta
-
-								var trans = db.transaction(["folders"], "readwrite")
-								var objectStore = trans.objectStore("folders")
-								var req = objectStore.openCursor();
-
-								req.onerror = function(event) {
-
+								req2.onerror = function(event) {
 									console.log("error: " + event);
 								};
+								req2.onsuccess = function(event) {
+									var cursor2 = event.target.result;
+									if (cursor2) {
+										$.each (treeelementosdirectoriotags, function(u) {
+											if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
 
-								req.onsuccess = function(event) {
+												var color = "#" + cursor2.value.tagcolor;
+												var complecolor = hexToComplimentary(color);
 
-									var cursor = event.target.result;
-
-									if(cursor){
-
-										if(cursor.value.folder == rootdirectory + nombreelementocontagaborrar){
-
-											updatefolder.folderid = cursor.value.folderid;
-											updatefolder.folder = cursor.value.folder;
-											updatefolder.foldertags = idtagsrestantes;
-
-											var res2 = cursor.update(updatefolder);
-
-											res2.onerror = function(event){
-												console.log("error: tag de carpeta no eliminada: " + event);
-											}
-
-											res2.onsuccess = function(event){
-
-												// console.log("tag de carpeta eliminada");
-
-												var treeelementtagsinview = "";
-
-												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
-												undo.class = "delete folder tag";
-												undo.deltaggfold.foldid = updatefolder.folderid;
-												undo.deltaggfold.tags = idtagsoriginales;
-												undo.deltaggfold.folder = updatefolder.folder;
-												undo.deltaggfold.parentfolder = rootdirectory;
-
-
-												// Actualizar visual
-
-												// en el treeview
-												tagaborrar.remove(); // que es el $(this) de al hacer click (el tagticket)
-
-												// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
-												$.each (directoryfolders, function(drf){										
-													if (directoryfolders[drf].name  == nombreelementocontagaborrar){
-														directoryfolders[drf].tagsid = idtagsrestantes;					
-													}
-												});
-
-												// se redibujarán los tags del treeview si se ve la carpeta
-												$.each ($("#filetree span"), function(t) {
-
-													if($("#filetree span:eq("+t+")").attr("rel2") == undo.deltaggfold.folder) {
-														treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
-													}
-
-												});
-
-												// y ahora redibujamos los tags..
-												var tagsdivs = "";
-												for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
-													tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
-												};
-
-												if (treeelementtagsinview) { // si está visible la carpeta en el treeview
-
-													treeelementtagsinview.innerHTML = tagsdivs;
-													treeelementosdirectoriotags = treeelementtagsinview.children
-
-													// vamos a pintar los estilos para los tags del treeview
-													var trans2 = db.transaction(["tags"], "readonly")
-													var objectStore2 = trans2.objectStore("tags")
-
-													var req2 = objectStore2.openCursor();
-
-													req2.onerror = function(event) {
-														console.log("error: " + event);
-													};
-													req2.onsuccess = function(event) {
-														var cursor2 = event.target.result;
-														if (cursor2) {
-															$.each (treeelementosdirectoriotags, function(u) {
-																if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
-
-																	var color = "#" + cursor2.value.tagcolor;
-																	var complecolor = hexToComplimentary(color);
-
-																	treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
-																	treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
-																	treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
-																	treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
-
-																}
-															});
-
-															cursor2.continue();
-														}
-
-													};
-
-												}
+												treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
+												treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
+												treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+												treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
 
 											}
+										});
 
-										}
-
-										cursor.continue();
+										cursor2.continue();
 
 									}
 
-								}
+								};
 
 							}
 
 						}
+
+					}
+
+					cursor.continue();
+
+				}
+
+			}
+
+		} //-- fin if idtagsrestantes.length > 0
+
+		else { // si se queda a 0 tags
+
+			var idcarpeta = "";
+
+			// primero cogemos el id de la carpeta
+			var trans = db.transaction(["folders"], "readonly")
+			var objectStore = trans.objectStore("folders")
+			var req = objectStore.openCursor();
+
+			req.onerror = function(event) {
+
+				console.log("error: " + event);
+			};
+
+			req.onsuccess = function(event) {
+
+				var cursor = event.target.result;
+
+				if(cursor){
+
+					if(cursor.value.folder == rootdirectory + nombreelementocontagaborrar){
+
+						idcarpeta = cursor.value.folderid
+
+					}
+
+					cursor.continue();
+
+				}
+
+			}
+
+			trans.oncomplete = function(event) {
+
+				var aborrardedb = "si";
+
+				// vamos a ver si hay archivos asociados a la carpeta
+				var trans = db.transaction(["files"], "readonly")
+				var objectStore = trans.objectStore("files")
+				var req = objectStore.openCursor();
+
+				req.onerror = function(event) {
+
+					console.log("error: " + event);
+				};
+
+				req.onsuccess = function(event) {
+
+					var cursor = event.target.result;
+
+					if(cursor){
+
+						if(cursor.value.filefolder == idcarpeta){
+
+							aborrardedb="no";
+
+						}
+
+						cursor.continue();
 
 					}
 
 				}
 
-			} // -- fin si se borra tag de carpeta
+				trans.oncomplete = function(event) {
 
-			if (isfolderorarchive == "archive") {
+					if (aborrardedb == "si") { // borramos de la bd
 
-				$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasearchtag);
-				undo.class = "delete archive tag";
-				undo.deltaggfile = []; // para dejar todos los valores a 0 y no se crucen algunos datos
-				undo.deltaggfile.tags = idtagsoriginales;
-				undo.deltaggfile.file = nombreelementocontagaborrar;
-				undo.deltaggfile.folder = rootdirectory;
+						var trans9 = db.transaction(["folders"], "readwrite")
+						var request9 = trans9.objectStore("folders").delete(idcarpeta);
 
-				if (idtagsrestantes.length > 0) { // si queda algun tag (y por lo tanto el archivo permanece si o si en la bd)
+						request9.onerror = function(event) {
 
-					//primero recogemos la id de la carpeta donde se encuentra el archivo
-					var idcarpetamadre = "";
+							console.log("error - no se ha eliminado carpeta de bd:" + event);
 
-					var trans = db.transaction(["folders"], "readonly")
-					var objectStore = trans.objectStore("folders")
-					var req = objectStore.openCursor();
+						};
+						request9.onsuccess = function(event) {
 
-					req.onerror = function(event) {
+							// console.log("eliminada carpeta de la bd");
 
-						console.log("error: " + event);
-					};
+							var treeelementtagsinview = "";
 
-					req.onsuccess = function(event) {
+							$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
+							undo.class = "delete folder tag";
+							undo.deltaggfold.foldid = "";
+							undo.deltaggfold.tags = idtagsoriginales;
+							undo.deltaggfold.folder = rootdirectory + nombreelementocontagaborrar;
+							undo.deltaggfold.parentfolder = rootdirectory;
 
-						var cursor = event.target.result;
 
-						if(cursor){
+							// Actualizar visual
 
-							if(cursor.value.folder == rootdirectory){
+							// en el treeview
+							tagaborrar.remove(); // que es el $(this) de al hacer click (el tagticket)
 
-								idcarpetamadre = cursor.value.folderid;
+							// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+							$.each (directoryfolders, function(drf){										
+								if (directoryfolders[drf].name  == nombreelementocontagaborrar){
+									directoryfolders[drf].tagsid = [];					
+								}
+							});
+
+							// el el treeview se redibujarán los tags si se ve la carpeta
+							$.each ($("#filetree span"), function(t) {
+
+								if($("#filetree span:eq("+t+")").attr("rel2") == undo.deltaggfold.folder) {
+									treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
+								}
+
+							});
+
+							// y ahora redibujamos los tags..
+							var tagsdivs = "";
+							for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
+								tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
+							};
+
+							if (treeelementtagsinview) { // si está visible la carpeta en el treeview
+
+								treeelementtagsinview.innerHTML = tagsdivs;
+								treeelementosdirectoriotags = treeelementtagsinview.children
+
+								// vamos a pintar los estilos para los tags del treeview
+								var trans2 = db.transaction(["tags"], "readonly")
+								var objectStore2 = trans2.objectStore("tags")
+
+								var req2 = objectStore2.openCursor();
+
+								req2.onerror = function(event) {
+									console.log("error: " + event);
+								};
+								req2.onsuccess = function(event) {
+									var cursor2 = event.target.result;
+									if (cursor2) {
+										$.each (treeelementosdirectoriotags, function(u) {
+											if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
+
+												var color = "#" + cursor2.value.tagcolor;
+												var complecolor = hexToComplimentary(color);
+
+												treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
+												treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
+												treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+												treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
+
+											}
+										});
+
+										cursor2.continue();
+									}
+
+								};
 
 							}
-
-							cursor.continue();
 
 						}
 
 					}
 
-					trans.oncomplete = function(event) {
+					if (aborrardedb == "no") { // solo quitamos la etiqueta
 
-						// ahora localizamos el archivo en la bd y actualizamos los datos
-						fileupdate = {};
-
-						var trans = db.transaction(["files"], "readwrite")
-						var objectStore = trans.objectStore("files")
+						var trans = db.transaction(["folders"], "readwrite")
+						var objectStore = trans.objectStore("folders")
 						var req = objectStore.openCursor();
 
 						req.onerror = function(event) {
@@ -5683,232 +5536,94 @@ function elemetstagdelete() {
 
 							if(cursor){
 
-								if(cursor.value.filefolder == idcarpetamadre){
+								if(cursor.value.folder == rootdirectory + nombreelementocontagaborrar){
 
-									if(cursor.value.filename == nombreelementocontagaborrar) {
+									updatefolder.folderid = cursor.value.folderid;
+									updatefolder.folder = cursor.value.folder;
+									updatefolder.foldertags = idtagsrestantes;
 
-										fileupdate.fileid = cursor.value.fileid;
-										fileupdate.filefolder = cursor.value.filefolder;
-										fileupdate.filename = cursor.value.filename;
-										fileupdate.fileext = cursor.value.fileext;
-										fileupdate.filetags = idtagsrestantes;
+									var res2 = cursor.update(updatefolder);
 
-										var res2 = cursor.update(fileupdate);
-
-										res2.onerror = function(event){
-											console.log("error: tag de archivo no eliminada: " + event);
-										}
-
-										res2.onsuccess = function(event){
-
-											undo.deltaggfile.fileid = fileupdate.fileid;
-											undo.deltaggfile.tagid = iddeltagaborrar;
-
-											// actualizar visual en el directorio
-											tagaborrar.remove(); // que es el $(this) de al hacer click (el tagticket)
-
-											// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
-											$.each (directoryarchives, function(dra){										
-												if (directoryarchives[dra].name  == nombreelementocontagaborrar){
-													directoryarchives[dra].tagsid = idtagsrestantes;					
-												}
-											});
-
-										}
-
+									res2.onerror = function(event){
+										console.log("error: tag de carpeta no eliminada: " + event);
 									}
 
-								}
+									res2.onsuccess = function(event){
 
-								cursor.continue();
+										// console.log("tag de carpeta eliminada");
 
-							}
+										var treeelementtagsinview = "";
 
-						}
-
-					}
-
-				}
-
-				else { // si se queda a 0 tags
-
-
-					// actualizar visual el el directorio
-					tagaborrar.remove(); //que es el $(this) de al hacer click (el tagticket)
-
-					// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
-					$.each (directoryarchives, function(dra){										
-						if (directoryarchives[dra].name  == nombreelementocontagaborrar){
-							directoryarchives[dra].tagsid = [];					
-						}
-					});
-
-					undo.deltaggfile.fileid = ""; //quitamos cualquier valor que pudira tener de antes
+										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasefoldtag);
+										undo.class = "delete folder tag";
+										undo.deltaggfold.foldid = updatefolder.folderid;
+										undo.deltaggfold.tags = idtagsoriginales;
+										undo.deltaggfold.folder = updatefolder.folder;
+										undo.deltaggfold.parentfolder = rootdirectory;
 
 
-					// recogemos la id de la carpeta donde se encuentra el archivo
-					var idcarpetamadre = "";
+										// Actualizar visual
 
-					var trans = db.transaction(["folders"], "readonly")
-					var objectStore = trans.objectStore("folders")
-					var req = objectStore.openCursor();
+										// en el treeview
+										tagaborrar.remove(); // que es el $(this) de al hacer click (el tagticket)
 
-					req.onerror = function(event) {
+										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										$.each (directoryfolders, function(drf){										
+											if (directoryfolders[drf].name  == nombreelementocontagaborrar){
+												directoryfolders[drf].tagsid = idtagsrestantes;					
+											}
+										});
 
-						console.log("error: " + event);
-					};
+										// se redibujarán los tags del treeview si se ve la carpeta
+										$.each ($("#filetree span"), function(t) {
 
-					req.onsuccess = function(event) {
+											if($("#filetree span:eq("+t+")").attr("rel2") == undo.deltaggfold.folder) {
+												treeelementtagsinview = $("#filetree span:eq("+t+")")[0].children[2] // el div tags del treeview
+											}
 
-						var cursor = event.target.result;
+										});
 
-						if(cursor){
-
-							if(cursor.value.folder == rootdirectory){
-
-								idcarpetamadre = cursor.value.folderid;
-
-							}
-
-							cursor.continue();
-						}
-
-					}
-
-					trans.oncomplete = function(event) {
-
-						// ahora localizamos el archivo en la bd y lo borramos
-						fileupdate = {};
-
-						var trans = db.transaction(["files"], "readwrite")
-						var objectStore = trans.objectStore("files")
-						var req = objectStore.openCursor();
-
-						req.onerror = function(event) {
-
-							console.log("error: " + event);
-						};
-
-						req.onsuccess = function(event) {
-
-							var cursor = event.target.result;
-
-							if(cursor){
-
-								if(cursor.value.filefolder == idcarpetamadre){
-
-									if(cursor.value.filename == nombreelementocontagaborrar) {
-
-										var idelementoaborrar = cursor.value.fileid
-
-										var trans9 = db.transaction(["files"], "readwrite")
-										var request9 = trans9.objectStore("files").delete(idelementoaborrar);
-
-										request9.onerror = function(event) {
-
-											console.log("error undo - no se ha eliminado archivo de bd:" + event);
-
+										// y ahora redibujamos los tags..
+										var tagsdivs = "";
+										for(var k = 0; k < idtagsrestantes.length; k += 1){ // recorremos el array
+											tagsdivs += "<div class='tagticket' value='"+ idtagsrestantes[k] +"'>" + idtagsrestantes[k] +  "</div>" ;
 										};
-										request9.onsuccess = function(event) { 	};
 
-										trans9.oncomplete = function(event) {
+										if (treeelementtagsinview) { // si está visible la carpeta en el treeview
 
-											var aborrardedb = "si";
+											treeelementtagsinview.innerHTML = tagsdivs;
+											treeelementosdirectoriotags = treeelementtagsinview.children
 
-											//podemos comprobar por un lado si la carpeta madre tiene tags
-											var trans = db.transaction(["folders"], "readonly")
-											var objectStore = trans.objectStore("folders")
-											var req = objectStore.openCursor();
+											// vamos a pintar los estilos para los tags del treeview
+											var trans2 = db.transaction(["tags"], "readonly")
+											var objectStore2 = trans2.objectStore("tags")
 
-											req.onerror = function(event) {
+											var req2 = objectStore2.openCursor();
 
+											req2.onerror = function(event) {
 												console.log("error: " + event);
 											};
+											req2.onsuccess = function(event) {
+												var cursor2 = event.target.result;
+												if (cursor2) {
+													$.each (treeelementosdirectoriotags, function(u) {
+														if (cursor2.value.tagid == treeelementosdirectoriotags[u].getAttribute("value")) {
 
-											req.onsuccess = function(event) {
+															var color = "#" + cursor2.value.tagcolor;
+															var complecolor = hexToComplimentary(color);
 
-												var cursor = event.target.result;
-
-												if(cursor){
-
-													if(cursor.value.folderid == idcarpetamadre){
-
-														var tagscarpetamadre = cursor.value.foldertags;
-
-														if (tagscarpetamadre.length > 0) {
-
-															aborrardedb="no";
-
-															undo.deltaggfile.folderid = idcarpetamadre;
+															treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
+															treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
+															treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+															treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
 
 														}
+													});
 
-													}
-
-													cursor.continue();
-
+													cursor2.continue();
 												}
 
-											}
-
-											trans.oncomplete = function(event) {
-
-
-												// ahora comprobamos si la carpeta madre tiene algún archivo asociados aparte del que hemos eliminado de la bd
-												var trans = db.transaction(["files"], "readonly")
-												var objectStore = trans.objectStore("files")
-												var req = objectStore.openCursor();
-
-												req.onerror = function(event) {
-
-													console.log("error: " + event);
-												};
-
-												req.onsuccess = function(event) {
-
-													var cursor = event.target.result;
-
-													if(cursor){
-
-														if(cursor.value.filefolder == idcarpetamadre){
-
-															aborrardedb="no";
-
-															undo.deltaggfile.folderid = idcarpetamadre;
-
-														}
-
-														cursor.continue();
-
-													}
-
-												}
-
-												trans.oncomplete = function(event) {
-
-													// si tras haber preguntado por los tags de la carpeta y los archivos asociados a la carpeta la respuesta sigue siendo si
-
-													if (aborrardedb == "si") { // borramos la carpeta de la bd
-
-														var trans9 = db.transaction(["folders"], "readwrite")
-														var request9 = trans9.objectStore("folders").delete(idcarpetamadre);
-
-														request9.onerror = function(event) {
-
-															console.log("error - no se ha eliminado carpeta de bd:" + event);
-
-														};
-														request9.onsuccess = function(event) {
-
-															// console.log("eliminada carpeta de la bd");
-
-														};
-
-													};
-
-												}
-
-											}
+											};
 
 										}
 
@@ -5930,9 +5645,314 @@ function elemetstagdelete() {
 
 		}
 
-	});
+	} // -- fin si se borra tag de carpeta
 
-} //-- fin function elementtagdelete
+	if (isfolderorarchive == "archive") {
+
+		$(".undo", window.parent.document).attr("data-tooltip", ph_dato_erasearchtag);
+		undo.class = "delete archive tag";
+		undo.deltaggfile = []; // para dejar todos los valores a 0 y no se crucen algunos datos
+		undo.deltaggfile.tags = idtagsoriginales;
+		undo.deltaggfile.file = nombreelementocontagaborrar;
+		undo.deltaggfile.folder = rootdirectory;
+
+		if (idtagsrestantes.length > 0) { // si queda algun tag (y por lo tanto el archivo permanece si o si en la bd)
+
+			//primero recogemos la id de la carpeta donde se encuentra el archivo
+			var idcarpetamadre = "";
+
+			var trans = db.transaction(["folders"], "readonly")
+			var objectStore = trans.objectStore("folders")
+			var req = objectStore.openCursor();
+
+			req.onerror = function(event) {
+
+				console.log("error: " + event);
+			};
+
+			req.onsuccess = function(event) {
+
+				var cursor = event.target.result;
+
+				if(cursor){
+
+					if(cursor.value.folder == rootdirectory){
+
+						idcarpetamadre = cursor.value.folderid;
+
+					}
+
+					cursor.continue();
+
+				}
+
+			}
+
+			trans.oncomplete = function(event) {
+
+				// ahora localizamos el archivo en la bd y actualizamos los datos
+				fileupdate = {};
+
+				var trans = db.transaction(["files"], "readwrite")
+				var objectStore = trans.objectStore("files")
+				var req = objectStore.openCursor();
+
+				req.onerror = function(event) {
+
+					console.log("error: " + event);
+				};
+
+				req.onsuccess = function(event) {
+
+					var cursor = event.target.result;
+
+					if(cursor){
+
+						if(cursor.value.filefolder == idcarpetamadre){
+
+							if(cursor.value.filename == nombreelementocontagaborrar) {
+
+								fileupdate.fileid = cursor.value.fileid;
+								fileupdate.filefolder = cursor.value.filefolder;
+								fileupdate.filename = cursor.value.filename;
+								fileupdate.fileext = cursor.value.fileext;
+								fileupdate.filetags = idtagsrestantes;
+
+								var res2 = cursor.update(fileupdate);
+
+								res2.onerror = function(event){
+									console.log("error: tag de archivo no eliminada: " + event);
+								}
+
+								res2.onsuccess = function(event){
+
+									undo.deltaggfile.fileid = fileupdate.fileid;
+									undo.deltaggfile.tagid = iddeltagaborrar;
+
+									// actualizar visual en el directorio
+									tagaborrar.remove(); // que es el $(this) de al hacer click (el tagticket)
+
+									// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+									$.each (directoryarchives, function(dra){										
+										if (directoryarchives[dra].name  == nombreelementocontagaborrar){
+											directoryarchives[dra].tagsid = idtagsrestantes;					
+										}
+									});
+
+								}
+
+							}
+
+						}
+
+						cursor.continue();
+
+					}
+
+				}
+
+			}
+
+		}
+
+		else { // si se queda a 0 tags
+
+
+			// actualizar visual el el directorio
+			tagaborrar.remove(); //que es el $(this) de al hacer click (el tagticket)
+
+			// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+			$.each (directoryarchives, function(dra){										
+				if (directoryarchives[dra].name  == nombreelementocontagaborrar){
+					directoryarchives[dra].tagsid = [];					
+				}
+			});
+
+			undo.deltaggfile.fileid = ""; //quitamos cualquier valor que pudira tener de antes
+
+
+			// recogemos la id de la carpeta donde se encuentra el archivo
+			var idcarpetamadre = "";
+
+			var trans = db.transaction(["folders"], "readonly")
+			var objectStore = trans.objectStore("folders")
+			var req = objectStore.openCursor();
+
+			req.onerror = function(event) {
+
+				console.log("error: " + event);
+			};
+
+			req.onsuccess = function(event) {
+
+				var cursor = event.target.result;
+
+				if(cursor){
+
+					if(cursor.value.folder == rootdirectory){
+
+						idcarpetamadre = cursor.value.folderid;
+
+					}
+
+					cursor.continue();
+				}
+
+			}
+
+			trans.oncomplete = function(event) {
+
+				// ahora localizamos el archivo en la bd y lo borramos
+				fileupdate = {};
+
+				var trans = db.transaction(["files"], "readwrite")
+				var objectStore = trans.objectStore("files")
+				var req = objectStore.openCursor();
+
+				req.onerror = function(event) {
+
+					console.log("error: " + event);
+				};
+
+				req.onsuccess = function(event) {
+
+					var cursor = event.target.result;
+
+					if(cursor){
+
+						if(cursor.value.filefolder == idcarpetamadre){
+
+							if(cursor.value.filename == nombreelementocontagaborrar) {
+
+								var idelementoaborrar = cursor.value.fileid
+
+								var trans9 = db.transaction(["files"], "readwrite")
+								var request9 = trans9.objectStore("files").delete(idelementoaborrar);
+
+								request9.onerror = function(event) {
+
+									console.log("error undo - no se ha eliminado archivo de bd:" + event);
+
+								};
+								request9.onsuccess = function(event) { 	};
+
+								trans9.oncomplete = function(event) {
+
+									var aborrardedb = "si";
+
+									//podemos comprobar por un lado si la carpeta madre tiene tags
+									var trans = db.transaction(["folders"], "readonly")
+									var objectStore = trans.objectStore("folders")
+									var req = objectStore.openCursor();
+
+									req.onerror = function(event) {
+
+										console.log("error: " + event);
+									};
+
+									req.onsuccess = function(event) {
+
+										var cursor = event.target.result;
+
+										if(cursor){
+
+											if(cursor.value.folderid == idcarpetamadre){
+
+												var tagscarpetamadre = cursor.value.foldertags;
+
+												if (tagscarpetamadre.length > 0) {
+
+													aborrardedb="no";
+
+													undo.deltaggfile.folderid = idcarpetamadre;
+
+												}
+
+											}
+
+											cursor.continue();
+
+										}
+
+									}
+
+									trans.oncomplete = function(event) {
+
+
+										// ahora comprobamos si la carpeta madre tiene algún archivo asociados aparte del que hemos eliminado de la bd
+										var trans = db.transaction(["files"], "readonly")
+										var objectStore = trans.objectStore("files")
+										var req = objectStore.openCursor();
+
+										req.onerror = function(event) {
+
+											console.log("error: " + event);
+										};
+
+										req.onsuccess = function(event) {
+
+											var cursor = event.target.result;
+
+											if(cursor){
+
+												if(cursor.value.filefolder == idcarpetamadre){
+
+													aborrardedb="no";
+
+													undo.deltaggfile.folderid = idcarpetamadre;
+
+												}
+
+												cursor.continue();
+
+											}
+
+										}
+
+										trans.oncomplete = function(event) {
+
+											// si tras haber preguntado por los tags de la carpeta y los archivos asociados a la carpeta la respuesta sigue siendo si
+
+											if (aborrardedb == "si") { // borramos la carpeta de la bd
+
+												var trans9 = db.transaction(["folders"], "readwrite")
+												var request9 = trans9.objectStore("folders").delete(idcarpetamadre);
+
+												request9.onerror = function(event) {
+
+													console.log("error - no se ha eliminado carpeta de bd:" + event);
+
+												};
+												request9.onsuccess = function(event) {
+
+													// console.log("eliminada carpeta de la bd");
+
+												};
+
+											};
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+						cursor.continue();
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+}
 
 
 function interactions() {
@@ -10389,52 +10409,65 @@ function drawfootertags() {
 		$( "#tagpar" ).html(footertagsdivspar);
 		$( "#taginpar" ).html(footertagsdivsinpar);
 
+		var tagdelfooter = $("#bottom .footertagticket");
+
+		// efecto zoom de los tags del footer
+		tagdelfooter.on('mouseover', function(){
+		  	$(this).addClass('is-hover');
+		}).on('mouseout', function(){
+		  	$(this).removeClass('is-hover');
+		})
+
+
 		// ahora se dibujarán las etiquetas para cada uno de los divs con id
+		var propiedadestags = [];
 		var trans = db.transaction(["tags"], "readonly");
 		var objectStore = trans.objectStore("tags");
+		
+		var req = objectStore.openCursor();
 
-		var tagdelfooter = $("#bottom .footertagticket");
-		$.each(tagdelfooter, function(i) {
+		req.onerror = function(event) {
 
-			var req = objectStore.openCursor();
+			console.log("error: " + event);
 
-			req.onerror = function(event) {
+		};
 
-				console.log("error: " + event);
+		req.onsuccess = function(event) {
 
-			};
+			var cursor = event.target.result;
 
-			req.onsuccess = function(event) {
+			if (cursor) {
 
-				var cursor = event.target.result;
-
-				if (cursor) {
-
-					if (cursor.value.tagid == tagdelfooter[i].attributes[1].nodeValue) {
-
-						var color = "#" + cursor.value.tagcolor;
-						var complecolor = hexToComplimentary(color);
-
-						tagdelfooter[i].className += " small " + cursor.value.tagform;
-						tagdelfooter[i].setAttribute("value", cursor.value.tagid);
-						tagdelfooter[i].setAttribute("style", "background-color: #" + cursor.value.tagcolor + ";" + "color: " + complecolor + ";")
-						tagdelfooter[i].innerHTML = cursor.value.tagtext;
-
-					};
+				propiedadestags.push(cursor.value);
 
 				cursor.continue();
 
-				}
-
-			};
-
-			trans.oncomplete = function(e) {
-
-				footertagsinteractions(); //activa eventos de arrastre para tags de footer
-
 			}
 
-		});
+		};
+
+		trans.oncomplete = function(e) {
+
+			$.each(tagdelfooter, function(n) {
+				$.each(propiedadestags, function(p) {
+					if (propiedadestags[p].tagid == tagdelfooter[n].getAttribute("value")) {
+
+						var color = "#" + propiedadestags[p].tagcolor;
+						var complecolor = hexToComplimentary(color);
+
+						tagdelfooter[n].className += " small " + propiedadestags[p].tagform;
+						tagdelfooter[n].setAttribute("value", propiedadestags[p].tagid);
+						tagdelfooter[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+						tagdelfooter[n].innerHTML = propiedadestags[p].tagtext;
+
+					}
+				})
+			});
+
+
+			footertagsinteractions(); //activa eventos de arrastre para tags de footer
+
+		}
 
 	});
 

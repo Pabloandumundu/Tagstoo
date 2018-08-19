@@ -52,12 +52,31 @@
     z-index: 40;
 }
 
+/* efecto zoom de tags */
+.tagticket, .footertagticket {  transition: font-size .1s ease-in-out }
+
+/* efecto zoom de los tags de explorador */
+.verysmall.tagticket:hover {
+
+    font-size: 11px !important;
+    filter: brightness(125%);
+    cursor: default !important;
+}
+
+/* efecto zoom de los tags del footer */
+.is-hover { 
+
+    font-size: 16px !important;
+    filter: brightness(125%);
+}
+
+
 .exploelement.viewmode1 .tagticket {
 
-    /* centrado vertical */   
-  /*  top:50%;
-    transform: translateY(-50%);
-*/    margin-top: 1px;
+    /* centrado vertical    
+    top:50%;
+    transform: translateY(-50%); */
+    margin-top: 1px;
 }
 
 .exploelement.viewmode2 .tagticket {

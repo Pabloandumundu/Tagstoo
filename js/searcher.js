@@ -1840,52 +1840,65 @@ function drawfootertags() {
 		$( "#tagpar" ).html(footertagsdivspar);
 		$( "#taginpar" ).html(footertagsdivsinpar);
 
+		var tagdelfooter = $("#bottom .footertagticket");
+
+		// efecto zoom de los tags del footer
+		tagdelfooter.on('mouseover', function(){
+		  	$(this).addClass('is-hover');
+		}).on('mouseout', function(){
+		  	$(this).removeClass('is-hover');
+		})
+
+
 		// ahora se dibujarán las etiquetas para cada uno de los divs con id
+		var propiedadestags = [];
 		var trans = db.transaction(["tags"], "readonly");
 		var objectStore = trans.objectStore("tags");
+		
+		var req = objectStore.openCursor();
 
-		var tagdelfooter = $("#bottom .footertagticket");
-		$.each(tagdelfooter, function(i) {
+		req.onerror = function(event) {
 
-			var req = objectStore.openCursor();
+			console.log("error: " + event);
 
-			req.onerror = function(event) {
+		};
 
-				console.log("error: " + event);
+		req.onsuccess = function(event) {
 
-			};
+			var cursor = event.target.result;
 
-			req.onsuccess = function(event) {
+			if (cursor) {
 
-				var cursor = event.target.result;
-
-				if (cursor) {
-
-					if (cursor.value.tagid == tagdelfooter[i].attributes[1].nodeValue) {
-
-						var color = "#" + cursor.value.tagcolor;
-						var complecolor = hexToComplimentary(color);
-
-						tagdelfooter[i].className += " small " + cursor.value.tagform;
-						tagdelfooter[i].setAttribute("value", cursor.value.tagid);
-						tagdelfooter[i].setAttribute("style", "background-color: #" + cursor.value.tagcolor + ";" + "color: " + complecolor + ";")
-						tagdelfooter[i].innerHTML = cursor.value.tagtext;
-
-					};
+				propiedadestags.push(cursor.value);
 
 				cursor.continue();
 
-				}
-
-			};
-
-			trans.oncomplete = function(e) {
-
-				footertagsinteractions(); // activa eventos de arrastre para tags de footer
-
 			}
 
-		});
+		};
+
+		trans.oncomplete = function(e) {
+
+			$.each(tagdelfooter, function(n) {
+				$.each(propiedadestags, function(p) {
+					if (propiedadestags[p].tagid == tagdelfooter[n].getAttribute("value")) {
+
+						var color = "#" + propiedadestags[p].tagcolor;
+						var complecolor = hexToComplimentary(color);
+
+						tagdelfooter[n].className += " small " + propiedadestags[p].tagform;
+						tagdelfooter[n].setAttribute("value", propiedadestags[p].tagid);
+						tagdelfooter[n].setAttribute("style", "background-color: #" + propiedadestags[p].tagcolor + ";" + "color: " + complecolor + ";")
+						tagdelfooter[n].innerHTML = propiedadestags[p].tagtext;
+
+					}
+				})
+			});
+
+
+			footertagsinteractions(); //activa eventos de arrastre para tags de footer
+
+		}
 
 	});
 
@@ -7444,9 +7457,30 @@ function elemetstagdelete() {
 		if (cursoractual != "pointer"){
 
 			var tagaborrar = $(this);
+			borrartag(tagaborrar);
+			
 
-			var iddeltagaborrar = $(this)["0"].attributes[1].value;
-			var idtagsoriginales = $(this)["0"].parentElement.attributes[1].value;
+		}
+
+	})
+
+	// con boton derecho
+	$(".tags > div").on('contextmenu', function() {
+
+		$(this)["0"].parentElement.parentElement.classList.toggle("ui-selecting"); // para que no se seleccione elemento
+
+		var tagaborrar = $(this);
+		borrartag(tagaborrar);
+
+	});
+
+} //-- fin function elementtagdelete
+
+
+function borrartag(tagaborrar) {
+
+	var iddeltagaborrar = tagaborrar["0"].attributes[1].value;
+			var idtagsoriginales = tagaborrar["0"].parentElement.attributes[1].value;
 
 			// console.log("id del tag a borrar: " + iddeltagaborrar)
 			// console.log("del array de tags: " + idtagsoriginales)
@@ -7458,17 +7492,17 @@ function elemetstagdelete() {
     			return item !== iddeltagaborrar;
 			});
 
-			if ($(this)["0"].parentElement.parentElement.classList.contains("folder")) {
+			if (tagaborrar["0"].parentElement.parentElement.classList.contains("folder")) {
 				isfolderorarchive = "folder"
 			}
-			if ($(this)["0"].parentElement.parentElement.classList.contains("archive")) {
+			if (tagaborrar["0"].parentElement.parentElement.classList.contains("archive")) {
 				isfolderorarchive = "archive"
 			}
 
-			nombreelementocontagaborrar = $(this)["0"].parentElement.parentElement.children[1].attributes[1].value;
+			nombreelementocontagaborrar = tagaborrar["0"].parentElement.parentElement.children[1].attributes[1].value;
 
 			// ponemos el nuevo valor en el value del div tags
-			$(this)["0"].parentElement.setAttribute("value", idtagsrestantes.toString());
+			tagaborrar["0"].parentElement.setAttribute("value", idtagsrestantes.toString());
 
 			// si el tag pertenec a una carpeta
 			if (isfolderorarchive == "folder") {
@@ -8189,11 +8223,10 @@ function elemetstagdelete() {
 
 			}
 
-		}
 
-	})
 
-} //-- fin function elementtagdelete
+
+}
 
 
 function newTag() {
