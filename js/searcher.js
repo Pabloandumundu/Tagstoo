@@ -161,6 +161,8 @@ $(document).ready(function () {
 		ph_searchfile = "Searching files ...,";
 		ph_infolder = " in folder";
 		ph_filesize = "File Size";
+		ph_tagshere = "(Tags Here)";
+		ph_taghere = "(Tag Here)";
 		ph_medialength = "Media Length";
 		ph_alr_01 = "You choosed to create a printable friendly list of searched results, but there are not searched results at this moment.";
 		/*ph_alr_02 = "Maximum 5 tags are permitted for each filter.";*/
@@ -203,6 +205,8 @@ $(document).ready(function () {
 		ph_searchfile = "Buscando archivos ...,";
 		ph_infolder = " en carpeta";
 		ph_filesize = "Tamaño Archivo";
+		ph_tagshere = "(Etiquetas Aquí)";
+		ph_taghere = "(Etiqueta Aquí)";
 		ph_medialength = "Duración de Media";
 		ph_alr_01 ="Ha elegido crear una lista de resultados de búsqueda que se puede imprimir, pero no hay resultados de búsqueda en este momento.";
 		/*ph_alr_02 = "Se permiten 5 etiquetas como máximo para cada filtro.";*/
@@ -245,6 +249,8 @@ $(document).ready(function () {
 		ph_searchfile = "À la recherche de archives ...,";
 		ph_infolder = " dans dossier";
 		ph_filesize = "Taille Fichier";
+		ph_tagshere = "(Étiquettes Ici)";
+		ph_taghere = "(Étiquette Ici)";
 		ph_medialength = "Longueur du Média";
 		ph_alr_01 = "Vous avez choisi de créer une liste des résultats de recherche qui peuvent être imprimés, mais il n'y a pas de résultats de recherche pour le moment.";
 		/*ph_alr_02 = "Un maximum de 5 étiquettes sont autorisés pour chaque filtre";*/
@@ -944,6 +950,13 @@ $(document).ready(function () {
 
 	}
 
+	// los placekeys del los imputs del search
+	$(".foldertaginput").html("<span class='placehold'>" + ph_tagshere + "</span>");
+	$(".taginput").html("<span class='placehold'>" + ph_tagshere + "</span>");
+	$(".nottaginput").html("<span class='placehold'>" + ph_taghere + "</span>");
+
+
+
 
 }); // --fin on document ready
 
@@ -996,8 +1009,149 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 	drawfootertags();
 
 
-	// los tags-input del buscador
+	// los folders that have tags-input del buscador
+	$('.foldertaginput').droppable({
 
+		accept: '.footertagticket',
+
+		drop: function( event, ui ) {
+
+			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
+
+				/*if ($(this)[0].children.length < 5) {*/
+
+					// devolvemos tag a posición original
+					ui.draggable["0"].style.top = "0px"
+					ui.draggable["0"].style.left = "0px"
+
+					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
+					var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta)
+					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
+
+					if (positiontop < wrapperbottom) {
+
+						var taginput = $(this)["0"];
+						var taganadir = ui.draggable["0"].attributes[1].value;
+
+						if (taginput.getAttribute("value") == "") {
+
+							taginput.setAttribute("value", taganadir);
+
+						} else {
+
+							var arraydetags = taginput.getAttribute("value").split(",");
+							var isapreviostag = "no";
+
+							$.each(arraydetags, function(n) {
+
+								if (arraydetags[n] == taganadir) {
+
+									isapreviostag = "yes";
+								}
+
+							});
+
+							if (isapreviostag == "no") {
+
+								taginput.setAttribute("value", taginput.getAttribute("value") + "," + taganadir);
+
+							}
+
+						}
+
+						// dibujamos los tags
+						arraydetags = taginput.getAttribute("value").split(',');
+
+						var tagsdivs = "";
+						for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
+							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+						};
+						taginput.innerHTML = tagsdivs;
+
+						// para aplicarles los estilos a los tags hay que recurrir a la bd
+						var trans2 = db.transaction(["tags"], "readonly")
+						var objectStore2 = trans2.objectStore("tags")
+
+						var taginputtags = $(this)["0"].children; // los tagtickets del taginput
+
+						var req2 = objectStore2.openCursor();
+
+						req2.onerror = function(event) {
+							console.log("error: " + event);
+						};
+						req2.onsuccess = function(event) {
+							var cursor2 = event.target.result;
+							if (cursor2) {
+								$.each(taginputtags, function(n) {
+
+									if (cursor2.value.tagid == taginputtags[n].attributes[1].value) {
+
+										var color = "#" + cursor2.value.tagcolor;
+										var complecolor = hexToComplimentary(color);
+
+										taginputtags[n].className += " small " + cursor2.value.tagform;
+										taginputtags[n].setAttribute("value", cursor2.value.tagid);
+										taginputtags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+										taginputtags[n].innerHTML = cursor2.value.tagtext;
+
+									}
+
+								});
+
+								cursor2.continue();
+
+							}
+
+						};
+
+						trans2.oncomplete = function(event) {
+
+						}
+
+					};
+
+				/*}
+		    	else {
+
+		    		alertify.alert(ph_alr_02);
+		    	 	ui.draggable.draggable('option','revert',true);
+		    	}*/
+
+		    }
+
+		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
+		    $("#bottomright").css("width", ajustartamanio + "px");
+
+		}
+
+	});
+
+	// boton limpiar campos (undo)
+	$( ".clearfoldertagfield" ).click(function() {
+
+		var taginput = $(this).prev(".foldertaginput")["0"]
+
+		var taginputvalue = taginput.getAttribute("value");
+
+		taginputvalue = taginputvalue.split(",");
+
+		if (taginputvalue[0]!="") { //si hay algun tag
+			taginputvalue = taginputvalue.slice(0,-1); //quitar el último
+			taginput.setAttribute("value", taginputvalue);
+		}
+
+		if (taginput.hasChildNodes()){
+			taginput.removeChild(taginput.lastChild);
+		}
+
+		if (taginput.innerHTML == ""){
+			taginput.innerHTML = '<span class="placehold">' + ph_tagshere + '</span>';
+		}
+
+	});
+
+
+	// los tags-input del buscador
 	$('.taginput').droppable({
 
 		accept: '.footertagticket',
@@ -1131,11 +1285,15 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 		if (taginput.hasChildNodes()){
 			taginput.removeChild(taginput.lastChild);
 		}
+		
+		if (taginput.innerHTML == ""){
+			taginput.innerHTML = '<span class="placehold">' + ph_tagshere + '</span>';
+		}
 
 	});
 
 
-
+	// los no-taginput del buscador
 	$('.nottaginput').droppable({
 
 		accept: '.footertagticket',
@@ -1144,7 +1302,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
-				if ($(this)[0].children.length < 1) {
+				if ($(this)[0].children.length < 1 || $(this)[0].children[0].classList.contains('placehold')) {
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px"
@@ -1259,7 +1417,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 		// var nottaginput = $(this).prev(".nottaginput")["0"] // no funciona bien asi que utilizo js puro:
 		var nottaginput = $(this).parent().find('.nottaginput')[0];
 		nottaginput.setAttribute("value", "");
-		nottaginput.innerHTML = "";
+		nottaginput.innerHTML = '<span class="placehold">' + ph_taghere + '</span>';
 
 	});
 
@@ -1284,6 +1442,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 		$("#eraser img").removeClass('activated');
 		$("#eraseron").removeClass("on");
 
+		window.foldertaggroup = []; // para los filtros de buscar en carpetas con tag..
 		window.taggroup= [];
 		window.nottaggroup= []; // para los tags que no devén estar
 
@@ -1293,8 +1452,10 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 		window.tagsdelelemento = [];
 		window.arraydetagsabuscar = [];
 
+		window.numerodecamposrellenadosfolder = 0;
 		window.numerodecamposrellenados = 0;
 		window.numerodecamposrellenadosno = 0; // para los tags que no devén estar
+
 
 		window.concentradorresultadoscarpetas = [];
 		window.concentradorresultadosarchivos = [];
@@ -1304,6 +1465,18 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 		window.resultadosarchivos=[];
 		window.resultadoscarpetas=[];
+
+
+		$.each ($(".foldertaginput"), function(u) {
+
+			foldertaggroup[u] = $(".foldertaginput:eq("+u+")")["0"].attributes[1].value
+			if (foldertaggroup[u] != "" ) {
+
+				numerodecamposrellenadosfolder ++;
+			}
+
+		});
+
 
 		$.each ($(".taginput"), function(u) {
 
@@ -1385,6 +1558,181 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 }, 500);
 
 
+// botón añadir nuevo folder tag input
+
+function addfoldertagfield(thisbutton){
+
+
+	var previoustags = thisbutton.previousElementSibling.previousElementSibling.innerHTML;
+	var previoustagsvalues = thisbutton.previousElementSibling.previousElementSibling.getAttribute("value");
+	$(thisbutton).next('span').remove() //se quita la x de eliminar campo para que no se acumule
+	$(thisbutton).remove(); //se quita boton previamente existente	
+
+	var lastcleartagbutton = $( ".clearfoldertagfield" ).last();
+
+	if (language == 'EN') {
+
+		var htmltoadd = '<div class="searchfolderinput"><span>..or have:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	} else if (language == 'ES') {
+
+		var htmltoadd = '<div class="searchfolderinput"><span>..o tienen:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+
+	} else if (language == 'FR') {
+
+		var htmltoadd = '<div class="searchfolderinput"><span>..ou ont:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+	}
+
+	$(htmltoadd).insertAfter(lastcleartagbutton);
+
+
+	// Aquí hay que volver a activar el dragg and drop en los nuevos input añadidos
+	$('.foldertaginput').droppable({
+
+		accept: '.footertagticket',
+
+		drop: function( event, ui ) {
+
+			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
+
+				/*if ($(this)[0].children.length < 5) {*/
+
+					// devolvemos tag a posición original
+					ui.draggable["0"].style.top = "0px"
+					ui.draggable["0"].style.left = "0px"
+
+					// para que no se produzca dropp en el overflow hacemos unas mediciones y ponemos un condicional
+					var positiontop = ui.offset.top + 5 //la altura a la que se ha hecho el dropp. (absoluta)
+					var wrapperbottom = $('#searchdirview-wrapper').position().top + $('#searchdirview-wrapper').outerHeight(true); // posición del limite inferior del wrapper (absoluta)
+
+					if (positiontop < wrapperbottom) {
+
+						var taginput = $(this)["0"];
+						var taganadir = ui.draggable["0"].attributes[1].value;
+
+						if (taginput.getAttribute("value") == "") {
+
+							taginput.setAttribute("value", taganadir);
+
+						} else {
+
+							var arraydetags = taginput.getAttribute("value").split(",");
+							var isapreviostag = "no";
+
+							$.each(arraydetags, function(n) {
+
+								if (arraydetags[n] == taganadir) {
+
+									isapreviostag = "yes";
+								}
+
+							});
+
+							if (isapreviostag == "no") {
+
+								taginput.setAttribute("value", taginput.getAttribute("value") + "," + taganadir);
+
+							}
+
+						}
+
+						// dibujamos los tags
+						arraydetags = taginput.getAttribute("value").split(',');
+
+						var tagsdivs = "";
+						for(var k = 0; k < arraydetags.length; k += 1){ //recorremos el array
+							tagsdivs += "<div class='tagticket' value='"+ arraydetags[k] +"'>" + arraydetags[k] +  "</div>" ;
+						};
+						taginput.innerHTML = tagsdivs;
+
+						// para aplicarles los estilos a los tags hay que recurrir a la bd
+						var trans2 = db.transaction(["tags"], "readonly")
+						var objectStore2 = trans2.objectStore("tags")
+
+						var taginputtags = $(this)["0"].children; // los tagtickets del taginput
+
+						var req2 = objectStore2.openCursor();
+
+						req2.onerror = function(event) {
+							console.log("error: " + event);
+						};
+						req2.onsuccess = function(event) {
+							var cursor2 = event.target.result;
+							if (cursor2) {
+								$.each(taginputtags, function(n) {
+
+									if (cursor2.value.tagid == taginputtags[n].attributes[1].value) {
+
+										var color = "#" + cursor2.value.tagcolor;
+										var complecolor = hexToComplimentary(color);
+
+										taginputtags[n].className += " small " + cursor2.value.tagform;
+										taginputtags[n].setAttribute("value", cursor2.value.tagid);
+										taginputtags[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+										taginputtags[n].innerHTML = cursor2.value.tagtext;
+
+									}
+
+								});
+
+								cursor2.continue();
+
+							}
+
+						};
+
+						trans2.oncomplete = function(event) {
+
+						}
+
+					};
+
+				/*}
+		    	else {
+
+		    		alertify.alert(ph_alr_02);
+		    	 	ui.draggable.draggable('option','revert',true);
+		    	}*/
+
+		    }
+
+		    var ajustartamanio = $("#bottom").width() - $('#bottomleft').width() - 20
+		    $("#bottomright").css("width", ajustartamanio + "px");
+
+		}
+
+	});
+
+	// boton limpiar campos (nuevos botones)
+	$( ".clearfoldertagfield" ).unbind(); // para que no se acumule
+	$( ".clearfoldertagfield" ).click(function() {
+
+		var taginput = $(this).prev(".foldertaginput")["0"];
+
+		var taginputvalue = taginput.getAttribute("value");
+		taginputvalue = taginputvalue.split(",");
+
+		if (taginputvalue[0]!="") { //si hay algun tag
+			taginputvalue = taginputvalue.slice(0,-1); //quitar el último
+			taginput.setAttribute("value", taginputvalue);
+		}
+
+		if (taginput.hasChildNodes()){
+			taginput.removeChild(taginput.lastChild);
+		}
+
+		if (taginput.innerHTML == ""){
+			taginput.innerHTML = '<span class="placehold">' + ph_tagshere + '</span>';
+		}
+
+	});
+
+};
+
+
+
+
+
 // botón añadir nuevo tag input field
 
 function addtagfield(thisbutton){
@@ -1399,15 +1747,15 @@ function addtagfield(thisbutton){
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchinput"><span>..or have the tags(s):</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..or have:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchinput"><span>..o tienen la(s) etiqueta(s):</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..o tienen:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchinput"><span>..ou ont le(s) étiquette(s):</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..ou ont:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	}
 
@@ -1549,6 +1897,10 @@ function addtagfield(thisbutton){
 			taginput.removeChild(taginput.lastChild);
 		}
 
+		if (taginput.innerHTML == ""){
+			taginput.innerHTML = '<span class="placehold">' + ph_tagshere + '</span>';
+		}
+
 	});
 
 };
@@ -1563,15 +1915,15 @@ function addnottagfield(thisbutton){
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..and don\'t have the tag:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..and don\'t have:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..y no tienen la etiqueta:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..y no tienen:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..et n\'ont pas l\'étiquette:</span><div class="nottaginput" value=""></div><br><a class="clearnottagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..et n\'ont pas:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
 
 	}
 
@@ -1586,7 +1938,7 @@ function addnottagfield(thisbutton){
 
 			if (ui.draggable["0"].classList.contains("footertagticket")) { // si lo que se intenta droppear es un tag (no es necesario pero lo dejo para tenerlo a mano)
 
-				if ($(this)[0].children.length < 1) {
+				if ($(this)[0].children.length < 1 || $(this)[0].children[0].classList.contains('placehold')) {
 
 					// devolvemos tag a posición original
 					ui.draggable["0"].style.top = "0px"
@@ -1702,11 +2054,49 @@ function addnottagfield(thisbutton){
 		// var nottaginput = $(this).prev(".nottaginput")  // no funciona así, asi que utilizo :
 		var nottaginput = $(this).parent().find('.nottaginput')[0];
 		nottaginput.setAttribute("value", "");
-		nottaginput.innerHTML = "";
+		nottaginput.innerHTML = '<span class="placehold">' + ph_taghere + '</span>';
 
 	});
 
 };
+
+
+function removefoldertagfield(removebutton) {
+
+	var removebuttonpreviosfieldclear = removebutton.parentElement.previousSibling;
+
+	if ($(".searchfolderinput").length == 2) { // si solo queda este y el 1er field no se le añade la x para borrar
+
+		if (language == 'EN') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a>';
+		} else if (language == 'ES') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a>';	
+		} else if (language == 'FR') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a>';		
+		}
+
+
+		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
+
+	} else { // si quedan más campos se le añade la x
+
+		if (language == 'EN') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span>';
+		} else if (language == 'ES') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span>';	
+		} else if (language == 'FR') {
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span>';		
+		}
+
+		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
+
+	}
+
+	// se quita el div
+	var parentelement = removebutton.parentElement;
+	parentelement.parentNode.removeChild(parentelement);
+
+}
 
 
 function removetagfield(removebutton) {
@@ -2047,6 +2437,58 @@ function comparaArrays(a, b) {
     return common;
 }
 
+
+
+function filtrarcarpetasparafolders(initialfolderstosearch) {
+
+	folderstosearch = [];	
+	folderstoadd = [];
+
+	$.each (foldertaggroup, function(t) {
+
+		if (foldertaggroup[t].length > 0){			
+
+			$('#numeroderesultadoscarpetas').html(ph_searchfold);
+
+			if (foldertaggroup[t] != "") {
+
+				var arraydetagsabuscar = foldertaggroup[t].split(",");
+				var sorted_arraydetagsabuscar = arraydetagsabuscar.concat().sort();
+
+				$.each (initialfolderstosearch, function(f) {	
+
+					var coincidencias = comparaArrays(sorted_arraydetagsabuscar, initialfolderstosearch[f].tagsid);
+
+					if (coincidencias == arraydetagsabuscar.length) {
+						folderstoadd.push(initialfolderstosearch[f]);
+					}
+
+				});
+
+			}
+
+		}
+
+	});
+
+	$.each (initialfolderstosearch, function(g) {
+
+		$.each (folderstoadd, function(t) {
+
+			if (initialfolderstosearch[g].name != folderstoadd[t].name && initialfolderstosearch[g].name.startsWith(folderstoadd[t].name + "\/")) {
+				folderstosearch.push(initialfolderstosearch[g])
+
+			}
+
+		});
+
+	})
+
+	return folderstosearch;
+
+}
+
+
 function searchinfolders() {
 
 	$('#numeroderesultadoscarpetas').html(ph_searchfold);
@@ -2054,7 +2496,7 @@ function searchinfolders() {
 	var totalfoldergrouptosearch = 0;
 	var actualfoldergrouptosearch="";
 
-    var folderstosearch = []
+    var folderstosearch = []; //carpetas en las que buscar definitivamente
 
 
 	var trans = db.transaction(["folders"], "readonly")
@@ -2092,6 +2534,14 @@ function searchinfolders() {
 	}
 
 	trans.oncomplete = function(event) {
+
+
+		if (numerodecamposrellenadosfolder > 0) {
+
+			folderstosearch = filtrarcarpetasparafolders(folderstosearch);
+
+
+		}
 
 		folderstoadd = [];
 		hayresultados = "no";
@@ -2197,6 +2647,64 @@ function searchnoinfolders() {
 
 }
 
+
+
+function filtrarcarpetasparafiles(initialfolderidintosearch, initialfoldernametosearch, foldertagstosearch) {
+
+	folderidintosearch = [];
+	foldernametosearch = [];
+	finalfolderidintosearch = [];
+	finalfoldernametosearch = [];
+
+	$.each (foldertaggroup, function(t) {
+
+		if (foldertaggroup[t].length > 0){			
+
+			$('#numeroderesultadosarchivos').html(ph_searchfile);
+
+			if (foldertaggroup[t] != "") {
+
+				var arraydetagsabuscar = foldertaggroup[t].split(",");
+				var sorted_arraydetagsabuscar = arraydetagsabuscar.concat().sort();
+
+				$.each (initialfoldernametosearch, function(f) {	
+
+					var coincidencias = comparaArrays(sorted_arraydetagsabuscar, foldertagstosearch[f]);
+
+					if (coincidencias == arraydetagsabuscar.length) {
+
+						folderidintosearch.push(initialfolderidintosearch[f]);
+						foldernametosearch.push(initialfoldernametosearch[f]);
+
+					}
+
+				});
+
+			}
+
+		}
+
+	});
+
+	$.each (initialfoldernametosearch, function(g) {
+
+		$.each (foldernametosearch, function(t) {
+
+			if (initialfoldernametosearch[g].startsWith(foldernametosearch[t])) {
+				finalfoldernametosearch.push(initialfoldernametosearch[g]);
+				finalfolderidintosearch.push(initialfolderidintosearch[g])
+
+			}
+
+		});
+
+	})
+
+	return [finalfolderidintosearch, finalfoldernametosearch];
+
+}
+
+
 function searchinfiles() {
 
 	$('#numeroderesultadosarchivos').html(ph_searchfile);
@@ -2204,6 +2712,7 @@ function searchinfiles() {
 	var i=0;
 	var folderidintosearch = [];
 	var foldernametoserach = [];
+	var foldertagstosearch = []; // solo se utiliza para el filtro
 
 	var	filestosearch = [];
 
@@ -2231,6 +2740,7 @@ function searchinfiles() {
 
 				folderidintosearch[i] = cursor.value.folderid;
 				foldernametoserach[i] = cursor.value.folder;
+				foldertagstosearch[i] = cursor.value.foldertags; //solo para el filtro
 
 				i++;
 
@@ -2244,7 +2754,16 @@ function searchinfiles() {
 
 	trans.oncomplete = function(event) {
 
-		$('#numeroderesultadosarchivos').html(ph_searchfile);		
+		$('#numeroderesultadosarchivos').html(ph_searchfile);
+
+		if (numerodecamposrellenadosfolder > 0) {
+
+			resfiltrarcarpetasparafiles = [];
+			resfiltrarcarpetasparafiles = filtrarcarpetasparafiles(folderidintosearch, foldernametoserach, foldertagstosearch);
+			folderidintosearch = resfiltrarcarpetasparafiles[0];
+			foldernametoserach = resfiltrarcarpetasparafiles[1];
+
+		}	
 
 		var trans = db.transaction(["files"], "readonly");
 		var objectStore = trans.objectStore("files");
@@ -7923,7 +8442,7 @@ function borrartag(tagaborrar) {
 				undo.deltaggfile = []; // para dejar todos los valores a 0 y no se cruzen algunos datos
 				undo.deltaggfile.tags = idtagsoriginales;
 				undo.deltaggfile.file = nombreelementocontagaborrar;
-				undo.deltaggfile.folder = $(this)["0"].parentElement.parentElement.children[1].attributes[2].value;
+				undo.deltaggfile.folder = tagaborrar["0"].parentElement.parentElement.children[1].attributes[2].value;
 
 				if (idtagsrestantes.length > 0) { // si queda algún tag (y por lo tanto el archivo permanece si o si en la bd)
 

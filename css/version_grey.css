@@ -177,8 +177,12 @@ input[type="radio"]:checked + label span.radio::after {
     background-color: #dadada;
 }
 
-.searchinput .button, .searchnotinput .button, .removefield {
+.searchfolderinput .button, .searchinput .button, .searchnotinput .button, .removefield {
 	filter: grayscale(85%) brightness(103%);
+}
+
+.searchfolderinput {
+	background-color: #f7f6f4;
 }
 
 #searchaction {

@@ -376,8 +376,13 @@ input[type="radio"]:checked + label span.radio::after {
 	width: 100%;
 }
 
-.searchinput, .searchnotinput {
+.searchinput, .searchnotinput, .searchfolderinput {
 	width: 100%;
+}
+
+.searchfolderinput {
+	background-color: #faf6eb;
+	border-radius: 5px;
 }
 
 .searchnotinput span:first-child {
@@ -385,7 +390,7 @@ input[type="radio"]:checked + label span.radio::after {
 }
 
 
-.taginput {
+.taginput, .foldertaginput {
 
 	width: 90%;
 	min-height: 40px;
@@ -408,11 +413,11 @@ input[type="radio"]:checked + label span.radio::after {
 
 }
 
-.taginput .tagticket, .nottaginput .tagticket {
+.taginput .tagticket, .nottaginput .tagticket, .foldertaginput .tagticket {
 	margin-top: 2px;
 }
 
-.cleartagfield, .clearnottagfield {
+.cleartagfield, .clearnottagfield, .clearfoldertagfield {
 
 	margin-bottom: 10px;
 	margin-right: 5px;
@@ -429,9 +434,8 @@ input[type="radio"]:checked + label span.radio::after {
 	cursor: pointer;
 	margin-left: 2px;
 
-
-	/*font-size: 1.1em;*/
 }
+
 .removefield img {
 	margin-top: 5px;
 	margin-bottom: 5px;
@@ -451,6 +455,11 @@ input[type="radio"]:checked + label span.radio::after {
 
 	top: -9999px;
 	left: -9999px;
+}
+
+.placehold {
+
+  margin-top: 2px;
 }
 
 

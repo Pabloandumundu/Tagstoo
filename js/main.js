@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.11.0';
+var programversion = '1.11.2';
 var fs = require('fs-extra');
 var Sniffr = require("sniffr");
 var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
@@ -210,10 +210,10 @@ $(document).ready(function () {
 			"<b>Tip</b>: If is the first time you launch Tagstoo, it will have been loaded demo labels at bottom, you can modify or delete them or add new at your convenience, to no longer load demo tags when a new database is created uncheck the checkbox in the options menu.",
 			"<b>Tip</b>: Doubleclick on a folder in the left to get selected, then when you press paste button the folders and files that you selected in the right will be copied or moved to this folder depending what you selected in the copy/cut switch.",
 			"<b>Tip</b>: You can select various elements at one time by pressing shift while selecting.",
-			"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Search files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) or (tag4 + tag6 + tag9) but dont have (tag10) and (tag11).</em>”",
+			"<b>Tip</b>: In the Search you can add all input fields as you need so you can construct easily searches like “<em>Searh under folders that have (tag50) or (tag51 + tag52) files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) but don't have (tag10) and (tag11).</em>”",
 			"<b>Tip</b>: When a search has been carried out, you also have the option of creating either a printable list in graphic mode (with labels) or a list in plain text, with the routes and names of the searched elements, which can be used externally (as a playlist for a player, for example)",
 			"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
-			"<b>Tip</b>: Sometimes depending the action you do (or if you move somethin using external program) the view cannot be actualized, to actualize it simply press refresh icons (arrows in circle).",
+			"<b>Tip</b>: Sometimes depending the action you do (or if you move somethin using external program) the view can not be actualized, to actualize it simply press refresh icons (arrows in circle).",
 			"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and will be ready."
 
 		]
@@ -225,7 +225,7 @@ $(document).ready(function () {
 			"<b>Tip</b>: Si es la primera vez que inicia Tagstoo, se habrán cargado las etiquetas de demostración en la parte inferior, puede modificarlas o eliminarlas o agregar nuevas a su conveniencia, para no cargar etiquetas de demostración cuando se crea una nueva base de datos desmarque la casilla de verificación en el menú de opciones.",
 			"<b>Tip</b>: Haga doble clic en una carpeta de la izquierda para seleccionar, luego al pulsar el botón de pegar, las carpetas y archivos que seleccionó a la derecha se copiarán o moverán a esta carpeta dependiendo de lo que haya seleccionado en el interruptor de copia/corta.",
 			"<b>Tip</b>: Puede seleccionar varios elementos al mismo tiempo presionando shift mientras selecciona.",
-			"<b>Tip</b>: En la búsqueda puedes agregar todos los campos de entrada que necesites para que puedas construir fácilmente búsquedas como “<em>Buscar archivos que tengan (tag1 + tag2 + tag7 + tag8) o (tag1 + tag2 + tag6 + tag9) o (tag4 + tag6) + tag9) pero no tienen (tag10) y (tag11).</em>”",
+			"<b>Tip</b>: En la búsqueda puedes agregar todos los campos de entrada que necesites para que puedas construir fácilmente búsquedas como “<em>Buscar bajo carpetas que tengan (tag50) o (tag51 + tag52) archivos que tengan (tag1 + tag2 + tag7 + tag8) o (tag1 + tag2 + tag6 + tag9) pero no tienen (tag10) y (tag11).</em>”",
 			"<b>Tip</b>: Cuando se ha realizado una búsqueda, también tiene la opción de crear o bien una lista imprimible en modo gráfico (con etiquetas) o bien una lista en texto plano, con las rutas y los nombres de los elementos buscados, que puede ser usada externamente (como una lista de reproducción para un reproductor, por ejemplo).",
 			"<b>Tip</b>: Si el nombre de la etiqueta es largo, elija una forma de etiqueta que tenga esquinas afiladas para que se ajuste mejor.",
 			"<b>Tip</b>: A veces dependiendo de la acción que hagas (o si mueves algo usando un programa externo) la vista no se puede actualizar, actualizarla simplemente pulsa los iconos de actualización (flechas en círculo).",
@@ -241,7 +241,7 @@ $(document).ready(function () {
 			"<b>Tip</b>: Si c'est la première fois que vous démarrez Tagstoo, les étiquettes de démonstration ont été chargées en bas, vous pouvez les modifier ou les supprimer ou en ajouter de nouvelles à votre convenance, pour ne pas charger les balises de démonstration lorsqu'une nouvelle base de données est créée, décochez la case cochez en le menu d'option.",
 			"<b>Tip</b>: Double-cliquez sur un dossier à gauche pour être sélectionné, puis, lorsque vous appuyez sur le bouton de collage, les dossiers et les fichiers que vous avez sélectionnés dans la droite seront copiés ou déplacés dans ce dossier en fonction de ce que vous avez sélectionné dans le commutateur copie/coupe.",
 			"<b>Tip</b>: Vous pouvez sélectionner plusieurs éléments en même temps en appuyant sur shift tout en sélectionnant.",
-			"<b>Tip</b>: Dans la recherche, vous pouvez ajouter tous les champs de saisie dont vous avez besoin afin que vous puissiez construire facilement des recherches comme “<em>Rechercher des fichiers qui ont (tag1 + tag2 + tag7 + tag8) ou (tag1 + tag2 + tag6 + tag9) ou (tag4 + tag6 + tag9) mais n'ont pas (tag10) et (tag11).</em>”",
+			"<b>Tip</b>: Dans la recherche, vous pouvez ajouter tous les champs de saisie dont vous avez besoin afin que vous puissiez construire facilement des recherches comme “<em>Rechercher sous dossiers qui ont (tag50) ou (tag51 + tag52) des fichiers qui ont (tag1 + tag2 + tag7 + tag8) ou (tag1 + tag2 + tag6 + tag9) mais n'ont pas (tag10) et (tag11).</em>”",
 			"<b>Tip</b>: Lorsqu'une recherche a été effectuée, vous avez également la possibilité de créer soit une liste imprimable en mode graphique (avec étiquettes) ou une liste en texte brut, avec les routes et les noms des éléments recherchés, qui peuvent être utilisés en externe (comme une playlist pour un lecteur, par exemple).",
 			"<b>Tip</b>: Si votre nom de balise est long, choisissez une forme d'étiquette qui a des angles vifs pour mieux l'adapter.",
 			"<b>Tip</b>: Parfois, selon l'action que vous faites (ou si vous déplacez quelque chose en utilisant un programme externe), la vue ne peut pas être actualisée, pour l'actualiser appuyez simplement sur les icônes de rafraîchissement (flèches en cercle).",

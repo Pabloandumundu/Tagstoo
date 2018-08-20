@@ -78,19 +78,40 @@
 
       <!-- <input type="file" id="selectedFold" name="selectedFolder" nwdirectory style="display: none;" onchange="selectedafolder()" /> -->
       <a id="selectFolder" class="medium button yellow">
-        <span class="lang_en">Select to search in..</span>
-        <span class="lang_es">Seleccionar para buscar en..</span>
-        <span class="lang_fr">Sélectionnez pour chercher dans..</span>
+        <span class="lang_en">Select to search from..</span>
+        <span class="lang_es">Seleccionar para buscar desde..</span>
+        <span class="lang_fr">Sélectionnez pour chercher à partir de..</span>
       </a>
 
       <span>
-        <span class="lang_en_b">Search in: </span>
-        <span class="lang_es_b">Buscar en: </span>
-        <span class="lang_fr_b">Chercher dans: </span>
+        <span class="lang_en_b">Search starting from: </span>
+        <span class="lang_es_b">Buscar empezando desde: </span>
+        <span class="lang_fr_b">Chercher à partir de: </span>
       </span>
       <div id="searchin">
       <div></div>
       </div>
+
+
+      <div class="searchfolderinput">
+        <span class="lang_en">Inside folders that have:</span>
+        <span class="lang_es">Dentro de carpetas que tienen:</span>
+        <span class="lang_fr">Dossiers à l'intérieur qui ont:</span>
+
+        <div class="foldertaginput" value=""></div>
+        <a class="clearfoldertagfield small button red">
+          <span class="lang_en">Remove last</span>
+          <span class="lang_es">Quitar última</span>
+          <span class="lang_fr">Enlever dernier</span>
+        </a>
+        <a class="addtagfield small button green" onclick="addfoldertagfield(this)">
+          <span class="lang_en">Another (That have) filter...</span>
+          <span class="lang_es">Otro filtro (Que tienen)...</span>
+          <span class="lang_fr">Autre filtre (Qui ont)...</span>
+        </a>
+        <!-- <br> -->
+      </div>
+
 
       <div id="searchfor">
 
@@ -104,23 +125,9 @@
 
           <input type = "radio"
                  name = "searchfor"
-                 id = "folders"
-                 value = "folders"
-                 checked = "checked" />
-          <label for = "folders">
-            <span class="radio lang_en">Folders</span>
-            <span class="radio lang_es">Carpetas</span>
-            <span class="radio lang_fr">Dossiers</span>
-          </label>
-
-        </div>
-
-        <div class="container">
-
-          <input type = "radio"
-                 name = "searchfor"
                  id = "files"
-                 value = "files" />
+                 value = "files" 
+                 checked = "checked" />
           <label for = "files">
             <span class="radio lang_en">Files</span>
             <span class="radio lang_es">Archivos</span>
@@ -133,6 +140,20 @@
 
           <input type = "radio"
                  name = "searchfor"
+                 id = "folders"
+                 value = "folders" />
+          <label for = "folders">
+            <span class="radio lang_en">Folders</span>
+            <span class="radio lang_es">Carpetas</span>
+            <span class="radio lang_fr">Dossiers</span>
+          </label>
+
+        </div>
+
+        <div class="container">
+        
+          <input type = "radio"
+                 name = "searchfor"
                  id = "foldersandfiles"
                  value = "foldersandfiles"/>
           <label for = "foldersandfiles">
@@ -140,16 +161,16 @@
             <span class="radio lang_es">Carpetas y Archivos</span>
             <span class="radio lang_fr">Dossiers et Archives</span>
           </label>
-
+        
         </div>
 
         <div id="tagstosearch">
 
 
           <div class="searchinput">
-            <span class="lang_en">That have the tags(s):</span>
-            <span class="lang_es">Que tienen la(s) etiqueta(s):</span>
-            <span class="lang_fr">Qui ont le(s) étiquette(s):</span>
+            <span class="lang_en">That have:</span>
+            <span class="lang_es">Que tienen:</span>
+            <span class="lang_fr">Qui ont:</span>
 
             <div class="taginput" value=""></div>
             <a class="cleartagfield small button red">
@@ -166,9 +187,9 @@
           </div>
 
           <div class="searchnotinput">
-            <span class="lang_en_b">That don't have the tag:</span>
-            <span class="lang_es_b">Que no tienen la etiqueta:</span>
-            <span class="lang_fr_b">Qui n'ont pas l'étiquette:</span>
+            <span class="lang_en_b">That don't have:</span>
+            <span class="lang_es_b">Que no tienen:</span>
+            <span class="lang_fr_b">Qui n'ont pas:</span>
             
             <div class="nottaginput" value=""></div><br>
             <a class="clearnottagfield small button red">
