@@ -18,12 +18,11 @@
 */
 
 
-fs = require('fs-extra');
-var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
-
+fs = window.top.fs;
+var AdmZip = window.top.AdmZip; // para manejarse con los zip (o los epub que son ficheros zip)
+var Sniffr = window.top.Sniffr;
+var CurrentWindow = window.top.CurrentWindow; // se usará para entrar/salir de pantalla completa al visualizar imágenes
 var viewmode = top.explorer.viewmode;  // recogemos el valor viewmode del iframe explorer
-// var s = top.explorer.s // el resultado del Sniffr (sistema operativo, etc..)
-var Sniffr = require("sniffr");
 var agent = navigator.userAgent;
 window.s = "";
 s = new Sniffr();
@@ -956,8 +955,6 @@ $(document).ready(function () {
 	$(".nottaginput").html("<span class='placehold'>" + ph_taghere + "</span>");
 
 
-
-
 }); // --fin on document ready
 
 
@@ -1572,15 +1569,15 @@ function addfoldertagfield(thisbutton){
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchfolderinput"><span>..or have:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchfolderinput"><span>..or have:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchfolderinput"><span>..o tienen:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchfolderinput"><span>..o tienen:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchfolderinput"><span>..ou ont:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchfolderinput"><span>..ou ont:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 	}
 
 	$(htmltoadd).insertAfter(lastcleartagbutton);
@@ -1747,15 +1744,15 @@ function addtagfield(thisbutton){
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchinput"><span>..or have:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..or have:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchinput"><span>..o tienen:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..o tienen:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchinput"><span>..ou ont:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..ou ont:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	}
 
@@ -1915,15 +1912,15 @@ function addnottagfield(thisbutton){
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..and don\'t have:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..and don\'t have:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..y no tienen:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..y no tienen:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..et n\'ont pas:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..et n\'ont pas:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	}
 
@@ -2081,11 +2078,11 @@ function removefoldertagfield(removebutton) {
 	} else { // si quedan más campos se le añade la x
 
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span>';	
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';	
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="/img/eliminar_input.png"></span>';		
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';		
 		}
 
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
@@ -2119,11 +2116,11 @@ function removetagfield(removebutton) {
 	} else { // si quedan más campos se le añade la x
 
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span>';	
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';	
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="/img/eliminar_input.png"></span>';		
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';		
 		}
 
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
@@ -2155,11 +2152,11 @@ function removenottagfield(removebutton) {
 	} else { // si quedan más campos se le añade la x
 		
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="/img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
 		}
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
 
@@ -2516,15 +2513,18 @@ function searchinfolders() {
 			selectedFolder = ""
 		}
 
-		if(cursor){			
+		if(cursor){
 
-			if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+			if (cursor.value.folder) {		
 
-				foldertosearch = [];
-				foldertosearch.folderid = cursor.value.folderid
-				foldertosearch.name = cursor.value.folder
-				foldertosearch.tagsid = cursor.value.foldertags
-				folderstosearch.push(foldertosearch)
+				if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+
+					foldertosearch = [];
+					foldertosearch.folderid = cursor.value.folderid
+					foldertosearch.name = cursor.value.folder
+					foldertosearch.tagsid = cursor.value.foldertags
+					folderstosearch.push(foldertosearch)
+				}
 			}
 
 		cursor.continue();
@@ -2539,7 +2539,6 @@ function searchinfolders() {
 		if (numerodecamposrellenadosfolder > 0) {
 
 			folderstosearch = filtrarcarpetasparafolders(folderstosearch);
-
 
 		}
 
@@ -3525,7 +3524,7 @@ function drawSearchArchives (searchviewmode, order) {
 			else {
 
 				var exploname = "<span class='exploname'>"+nameSinBarra+"</span>";
-				var imagen="<img src='/img/icons/420px/420x420.png'>";
+				var imagen="<img src='img/icons/420px/420x420.png'>";
 			}
 
 			t += '<div class="exploelement archive"><div class="imgmode'+searchviewmode+' ' + exten + '">' + imagen + '</div><div class="explofile" value="' + v.name + '" filepath="' + v.filepath + '"  title="' + v.filepath + '">'+exploname+'</div><div class="exploext">' + v.ext + '</div><div class="explosize">&nbsp' + v.sizetodraw + v.sizeterm + '</div><div class="tags" value="' + v.tagsid + '">' + v.tagsid + '&nbsp;</div><div class="lastmod">' + v.lastmodtoshow + '</div><div class="duration"><span class="placehold">' + ph_medialength + '</span></div></div>';
@@ -3606,11 +3605,13 @@ function drawSearchAfter() {
 
         onopen: function(target) {
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
+        	CurrentWindow.setFullScreen(true);
             this.filename.html(filenametoshow);
         	resizefromimage = "yes";
         },
         onclose: function(){
         	resizefromimage = "yes";
+        	CurrentWindow.setFullScreen(false);
         }
 
 	});
@@ -3619,11 +3620,13 @@ function drawSearchAfter() {
 
         onopen: function(target) {
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
+        	CurrentWindow.setFullScreen(true);
             this.filename.html(filenametoshow);
         	resizefromimage = "yes";
         },
         onclose: function(){
         	resizefromimage = "yes";
+        	CurrentWindow.setFullScreen(false);
         }
 
 	});
@@ -4012,42 +4015,42 @@ function drawSearchAfter() {
 
 			    	case "ext_generic":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Generic.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Generic.png">';
 				    	break;
 
 				    case "ext_image":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Pictures.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Pictures.png">';
 				    	break;
 
 				    case "ext_program":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Smart.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Smart.png">';
 				    	break;
 
 				    case "ext_audio":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Music.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Music.png">';
 				    	break;
 
 				    case "ext_video":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Movies.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Movies.png">';
 				    	break;
 
 				    case "ext_docs":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Library.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Library.png">';
 				    	break;
 
 				    case "ext_www":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Sites.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Sites.png">';
 				    	break;
 
 				    case "ext_document":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Document.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Document.png">';
 				    	break;
 
 				}
@@ -4064,42 +4067,42 @@ function drawSearchAfter() {
 
 			    	case "ext_generic":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Generic.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Generic.png">';
 				    	break;
 
 				    case "ext_image":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Pictures.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Pictures.png">';
 				    	break;
 
 				    case "ext_program":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Smart.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Smart.png">';
 				    	break;
 
 				    case "ext_audio":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Music.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Music.png">';
 				    	break;
 
 				    case "ext_video":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Movies.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Movies.png">';
 				    	break;
 
 				    case "ext_docs":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Library.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Library.png">';
 				    	break;
 
 				    case "ext_www":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Sites.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Sites.png">';
 				    	break;
 
 				    case "ext_document":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Document.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Document.png">';
 				    	break;
 
 				}
@@ -5727,7 +5730,7 @@ function interactinsforsearchdir() {
 				aejecutar = aejecutar.replace(/\&/g, "^&");
 				aejecutar = aejecutar.replace(/\(/g, "^(");
 				aejecutar = aejecutar.replace(/\)/g, "^)");
-				require("child_process").exec(aejecutar);
+				window.top.exec.exec(aejecutar);
 			}
 			if (s.os.name == "linux" || s.os.name == "macos") {
 
@@ -5741,17 +5744,15 @@ function interactinsforsearchdir() {
 				aejecutar = aejecutar.replace(/\]/g, '\\\]');
 
 				// si se puede visualizar con algul visualizador del sistema se visualizará aquí
-				var sys = require('sys');
-				var exec = require('child_process');
 				if (s.os.name == "linux"){
-					exec.exec('xdg-open' + ' ' + aejecutar);
+					window.top.exec.exec('xdg-open' + ' ' + aejecutar);
 				}
 				else if (s.os.name == "macos") {
-					exec.exec('open' + ' ' + aejecutar);
+					window.top.exec.exec('open' + ' ' + aejecutar);
 				}
 
 				try { // si es un ejecutable se ejecutará aquí
-					exec.execFile(aejecutar);
+					window.top.exec.execFile(aejecutar);
 				}
 				catch(exception) { }
 
@@ -5804,7 +5805,7 @@ function interactinsforsearchdir() {
 					aejecutar = aejecutar.replace(/\&/g, "^&");
 					aejecutar = aejecutar.replace(/\(/g, "^(");
 					aejecutar = aejecutar.replace(/\)/g, "^)");
-					require("child_process").exec(aejecutar);
+					window.top.exec.exec(aejecutar);
 				}
 				if (s.os.name == "linux" || s.os.name == "macos") {
 
@@ -5818,17 +5819,15 @@ function interactinsforsearchdir() {
 					aejecutar = aejecutar.replace(/\]/g, '\\\]');
 
 					// si se puede visualizar con algul visualizador del sistema se visualizará aquí
-					var sys = require('sys');
-					var exec = require('child_process');
 					if (s.os.name == "linux"){
-					exec.exec('xdg-open' + ' ' + aejecutar);
+					window.top.exec.exec('xdg-open' + ' ' + aejecutar);
 					}
 					else if (s.os.name == "macos") {
-						exec.exec('open' + ' ' + aejecutar);
+						window.top.exec.exec('open' + ' ' + aejecutar);
 					}
 
 					try { // si es un ejecutable se ejecutará aquí
-						exec.execFile(aejecutar);
+						window.top.exec.execFile(aejecutar);
 					}
 					catch(exception) { }
 				}
@@ -5873,7 +5872,7 @@ function interactinsforsearchdir() {
 
 	$("#searchdirectoryview > div").on('mouseup', function(e) {
 
-				// console.log($(this))
+				
 		var cursoractual = $(".tags > div").css('cursor');
 
 		if (cursoractual == "pointer" || cursoractual == undefined ){
@@ -5910,7 +5909,7 @@ function interactinsforsearchdir() {
 
 					 	$.each ($("#searchdirectoryview > div"), function(u) {
 
-							if (u>0) { // para evitar la carpeta ".." que no tiene propiedades y da error por undefined
+							/*if (u>0) { // para evitar la carpeta ".." que no tiene propiedades y da error por undefined*/
 
 								if ($("#searchdirectoryview > div:eq("+u+")")["0"].children[1].attributes[1].nodeValue == nombreelementoprevio ) {
 									elementpreviousindex = u;
@@ -5919,12 +5918,12 @@ function interactinsforsearchdir() {
 								if ($("#searchdirectoryview > div:eq("+u+")")["0"].children[1].attributes[1].nodeValue == nombreelemento ) {
 									elementcurrentindex = u;
 								}
-							}
+							/*}*/
 
 						});
 
 
-						if (elementpreviousindex > 0) {
+						/*if (elementpreviousindex > 0) {*/
 
 							if (elementpreviousindex > elementcurrentindex) {
 
@@ -5954,7 +5953,7 @@ function interactinsforsearchdir() {
 
 							elementpreviousindex = elementcurrentindex;
 
-						}
+						/*}*/
 
 					} else {
 
@@ -6974,6 +6973,7 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 								elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 								elemetstagdelete(); // activa sistema borrado tags
 								elementstagcopier(); // activa sistema de copiado de tags
+								mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 							}
 
@@ -7185,6 +7185,25 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 	}); // --fin droppable
 
 } // --fin elementstagsorder()
+
+
+// esta función se llamará desde diferentes partes del programa para mantener la imagen del pointer si fuera el caso
+function mantenerimagenpointer() {
+
+	if (copytagson == "on") {
+		document.querySelectorAll(".tags").forEach(function(el) {
+			if ($(el).has('div').length>0){
+				el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAWCAYAAADeiIy1AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gYOCTcb7XTA7QAAAiVJREFUSMetlTtoVFEQhr9NfBGih6ggNr+CBBUURbSIio/YpPEBBiGVoFhYqNik1Erx1aZWKxMkYqGEgAg+ULRJIawEFMwviYRAwrGIYEi0OYHrsnuv6zrV4cx/5r8zd+afEhmT1AycAY4Ca4EfwAfgtu1xGrBSBdEL4IbtoczdMqAM7LM9me5K1YLZ/lVIJOkuMGy7vxIkaTkwCmwBDgP3gLkK2Dyw0/ZMzbQkNUl6m5e6pB5J23P8GyWNSlpdzd+Uyex9QZlfA521nLa/AOeAE3lEAC0FREuB7wWYBeBnNceSDGBvQZCLwM2c0g0CrUCrpB7gku1Pf2SUuuWqpPs1gnQAnba/5XzIBDAC3AFmsiQAzYuHGGM5hNAaQngUQngTY5yQ1BZC6AO6gEMxxprtG2McCiHsAvbbPp07R4vdA1xIrTwNDNp+TINWqveBpDWpPN3p/Vj6f8/zBrapTpJtwFPgMtAGrAL2AOuBgf+SkaSWpHvttheq+K8kwge2XzZCdASYqxYkg5kEXgHtwDHbY/9Sui7gYwHmme1u2zuA/iTIdRPN/gVmReZ8KpW6bqKHwMmcspWAzRnt+wrMS1pXL1E5qceGGv5h4GzF3QiwMqt1hWZ7QdIm4ElaKX1poA8C14Fbtt9VPOsAYt1zZHvWdifwGRhMq74bOGB7oKKUW4Fp21ONqgqSeiX111ikow1JUJWgx4FradWPA7uBKeC87YlF3G/iGsK8xnnkRAAAAABJRU5ErkJggg=='),auto";
+			}
+		});
+	} else if(eraseron == "on"){				
+		document.querySelectorAll(".tags > div").forEach(function(el) {
+			el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAYAAAAmaHdCAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QIFERIkBcGckAAAA2FJREFUOMuNlFtIqmkUhldaXnSYps0QA151YMjAPyEmf/DX0JIug80M1EVz6ES3ETU0SWxKC4O6CbIco4GoIJkhhgmpC0WSopkkJCoCy1Ism8ZOlpWZ71ztf3LbPqy79X3v+3zrWyxWmkajIbvdTiqV6geJRPJ9YWGhRCQSfbG9vf3H5uZmg9vtvqVPiZqamteNjY0IBoN4Hi0tLZDJZK8+5heIxeKskpKS30pLS0kkEiVdms1mqqio+Jdl2c8+CMnKylK2trYSAMrNzU0RTExMpCkUCh8RkUajeRGSXl5ezmZnZ5PL5aJwOEzp6emk1WpJpVLxIqPR+CoQCPw9Pz//tVqtJofDkUypra21NTQ0oLe3l+/F+vo6dDpdUn9CoRBYlrW8WFFfX9/NxcUFZmZm4PF4eNPd3R0GBweTQE6nEwqF4puU/2g0mp8fHx/hcrnQ09ODk5MT3nR5eQmr1crn3d3dWFpaQllZ2VcpoLq6uksA6O/vh9FoTHp9ZWUFi4uLOD4+htPpBADodLoYEVF1dfX/ELlcLh4bGwMAjI6OYnJyMgk0NTWF8fHxpLO2trallGpYlv3u4OAAt7e30Ov1MJvNvMHr9aKjowNPT0/8md/vB8Mwb5735e3kuu7v77G/vw+TyYTd3V0EAgHMzs4CAPR6fVI1NpstJpVKM1IqMhgMVwCwtraGgYEBWCwW3pRIJDA8PMzn4XAYHMf9kgRQq9Ukk8nUVqsVkUgE9fX16OzsxLths9kAAPF4HBzHXQufQw4PDykUCh1eXV3FiKjKYDDQxsYG+f1+YhiG10WjUdrb26OCggKam5sTCF6YG1peXh7yer1hIqL29nY6PT2l6elpXsMwDAWDQSIiKioqShe+C/H5fEREiMViFrFY/JNEIqGcnBxyu92Ul5dH+fn5REQUiURIJBLR6urqh/eEVCp9fXR0xA/d0NAQotEo35uRkREolcqY4H2Aqqoq2tra+r2pqenPRCJBHMfRw8MDdXV18Zrz83MSCAR/Cd8H8fl8pFaryW63zwmFwh8rKys/5ziOHA4HnZ2dEcMw5PV6aWdnp/6jq1OpVFJxcXHR27GPx+MwmUxYWFhAc3NziIgojT4xtFrtt3K5fCAjI+NLj8cjvLm5+fX6+vpNZmbmP/8BN8ZmaONW+JwAAAAASUVORK5CYII='),auto";
+		});
+
+	}
+
+} // --fin mantenerimagenpointer()
 
 
 
@@ -7422,7 +7441,7 @@ function elementstagcopier() {
 												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 												elemetstagdelete(); // activa sistema borrado tags
 												elementstagcopier(); // activa sistema de copiado de tags
-												
+												mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)												
 
 											}
 
@@ -7545,8 +7564,7 @@ function elementstagcopier() {
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 										elemetstagdelete(); // activa sistema borrado tags
 										elementstagcopier(); // activa sistema de copiado de tags
-
-										
+										mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)										
 
 									}
 
@@ -7730,6 +7748,7 @@ function elementstagcopier() {
 														elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 														elemetstagdelete(); // activa sistema borrado tags
 														elementstagcopier(); // activa sistema de copiado de tags
+														mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 														
 
 													};
@@ -7869,6 +7888,7 @@ function elementstagcopier() {
 												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 												elemetstagdelete(); // activa sistema borrado tags
 												elementstagcopier(); // activa sistema de copiado de tags
+												mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 												
 
 											};
@@ -7937,6 +7957,7 @@ function elementstagcopier() {
 												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 												elemetstagdelete(); // activa sistema borrado tags
 												elementstagcopier(); // activa sistema de copiado de tags
+												mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 												
 											};
 
@@ -8741,9 +8762,6 @@ function borrartag(tagaborrar) {
 				}
 
 			}
-
-
-
 
 }
 

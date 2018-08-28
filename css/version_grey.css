@@ -165,7 +165,7 @@ header {
 
 
 
-#selectfolder {
+#selectFolder {
 	filter: grayscale(85%) brightness(103%);
 }
 
@@ -199,6 +199,7 @@ input[type="radio"]:checked + label span.radio::after {
 
 #popup {
 	background-image: url(../img/wood_pattern_grey.png);
+	box-shadow: inset 0px 0px 10px 0px #252525 !important;
 }
 
 #popuptitle {

@@ -22,6 +22,7 @@
 // es el customAlert del utils.js y es llamada desde este fichero (popups.js)
 
 var dirtoexec =  top.explorer.dirtoexec;
+var dialog = window.top.dialog;
 
 var language = localStorage["language"];
 
@@ -151,7 +152,7 @@ function popup (popupclass, data) {
 
 		case "addtagtosubelements":
 
-			$("#popup").load( "../popups/popup-tagfolder.html" );
+			$("#popup").load( "popups/popup-tagfolder.html" );
 			$("#popup").addClass("tagfolder");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
@@ -159,7 +160,7 @@ function popup (popupclass, data) {
 
 		case "newtag":
 
-			$("#popup").load( "../popups/popup-newtag.html" );
+			$("#popup").load( "popups/popup-newtag.html" );
 			$("#popup").addClass("newtag");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
@@ -167,7 +168,7 @@ function popup (popupclass, data) {
 
 		case "edittag":
 
-			$("#popup").load( "../popups/popup-edittag.html" );
+			$("#popup").load( "popups/popup-edittag.html" );
 			$("#popup").addClass("edittag");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
@@ -175,7 +176,7 @@ function popup (popupclass, data) {
 
 		case "options":
 
-			$("#popup").load( "../popups/popup-options.html" );
+			$("#popup").load( "popups/popup-options.html" );
 			$("#popup").addClass("options");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
@@ -183,28 +184,28 @@ function popup (popupclass, data) {
 
 		case "info":
 
-			$("#popup").load( "../popups/popup-info.html" );
+			$("#popup").load( "popups/popup-info.html" );
 			$("#popup").addClass("info");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
 			break;
 
 		case "selectfoldersearch":
-			$("#popup").load( "../popups/popup-selectfoldersearch.html" );
+			$("#popup").load( "popups/popup-selectfoldersearch.html" );
 			$("#popup").addClass("selectfoldersearch");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
 			break;
 
 		case "selectfolderactionnotag":
-			$("#popup").load( "../popups/popup-selectfolderactionnotag.html" );
+			$("#popup").load( "popups/popup-selectfolderactionnotag.html" );
 			$("#popup").addClass("selectfolderactionnotag");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
 			break;
 
 		case "selectfolderactiontag":
-			$("#popup").load( "../popups/popup-selectfolderactiontag.html" );
+			$("#popup").load( "popups/popup-selectfolderactiontag.html" );
 			$("#popup").addClass("selectfolderactiontag");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
@@ -212,7 +213,7 @@ function popup (popupclass, data) {
 
 		case "listchoose":
 
-			$("#popup").load( "../popups/popup-listchoose.html" );
+			$("#popup").load( "popups/popup-listchoose.html" );
 			$("#popup").addClass("listchoose");
 			$("#popupbackground").addClass("display");
 			$("#toppopupbackground", window.parent.document).addClass("display");
@@ -1916,7 +1917,7 @@ window.listadofiltradodeDB = [];
 
 function optionspreload() {
 
-	var Sniffr = require("sniffr");
+	var Sniffr = window.top.Sniffr;
 	var agent = navigator.userAgent
 	s = new Sniffr();
 	s.sniff(agent);
@@ -1956,19 +1957,6 @@ function optionspreload() {
 	        	var currentlydatabaseused = localStorage["currentlydatabaseused"];
 
 				$('#selecteddb').html(currentlydatabaseused);		
-
-				if (localStorage["showretroagain"] == "yes") {
-
-					if (language == 'EN'){
-		        		alertify.alert(`If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don't appear in the list, don't worry, please <em><a href='popups/popup-info-help_en.html#databases14' target="_blank">read this</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Do not show this message again</span>`);
-		        	} else if (language == 'ES'){
-		        		alertify.alert(`Si antes de esta versión se ha utilizado la versión 1.4 o anterior de Tagstoo <br>y las bases de datos no aparecen en la lista, no te preocupes, por favor <em><a href='popups/popup-info-help_es.html#databases14' target="_blank">lee esto</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>No mostrar este mensaje de nuevo</span>`);
-		        	} else if (language == 'FR'){
-		        		alertify.alert(`Si avant cette version, vous avez utilisé la version 1.4 ou la précédente de Tagstoo <br>et les bases de données n'apparaissent pas dans la liste, ne vous inquiétez pas, <em><a href='popups/popup-info-help_fr.html#databases14' target="_blank">lisez ceci</a></em><br><br><input type='checkbox' id='showretroagain' onclick='showretroagain()'><span>Ne plus afficher ce message</span>`);
-		        	}
-		      	}
-
-
 
 				if (s.os.name == "windows" || s.os.name == "macos") {
 						 $('#selecteddrive').html(driveunit)
@@ -2053,8 +2041,8 @@ function optionspreload() {
 
 					 $('#selecteddrive').html($("#unitselect").val());
 
-						var drivelist = require('drivelist');
-						var driveLetters = require('windows-drive-letters');
+						var drivelist = window.top.drivelist;
+						var driveLetters = window.top.driveLetters;
 
 						var t="";
 						var tdesc="";
@@ -2135,7 +2123,7 @@ function optionspreload() {
 
 						// Detectar y añadir unidades externas a la lista
 
-						const username = require('username');
+						const username = window.top.username;
 
 						username().then(username => {
 
@@ -2407,9 +2395,9 @@ function optionspreload() {
 
 						$('#toexportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..)
 
-						$('#toexportfile').on('change', function() {
+						$('#toexportfile').on('change', function(evt) {	
 
-							var file = $('#toexportfile')["0"].value
+							var file = evt.target.files["0"].path;
 
 							// abrimos la bd seleccionada
 							var request = window.indexedDB.open($('#selecteddb').html(), 1);
@@ -2423,7 +2411,7 @@ function optionspreload() {
 								// var objectStore;
 								var db = event.target.result;
 
-								var idbExportImport = require("indexeddb-export-import"); // to save and load the contents of an IndexedDB database
+								var idbExportImport = window.top.idbExportImport; // to save and load the contents of an IndexedDB database
 
 								idbExportImport.exportToJsonString(db, function(err, jsonString) {
 									if(err)
@@ -2474,9 +2462,9 @@ function optionspreload() {
 
 		  					$('#toinportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..);
 
-		  					$('#toinportfile').on('change', function() {
+		  					$('#toinportfile').on('change', function(evt) {
 
-		  						var file = $('#toinportfile')["0"].value
+		  						var file = evt.target.files["0"].path;
 
 		  						fs.readFile(file, 'utf8', function (err,data) {
 		  							if (err) {
@@ -2556,7 +2544,7 @@ function optionspreload() {
 
 		  											tooverwritedb = request.result;
 
-		  											var idbExportImport = require("indexeddb-export-import"); // to save and load the contents of an IndexedDB database
+		  											var idbExportImport = window.top.idbExportImport; // to save and load the contents of an IndexedDB database
 		  											// se vaciá y después se escribe en la base de datos
 		  											idbExportImport.clearDatabase(tooverwritedb, function(err) {
 
@@ -2857,8 +2845,8 @@ function loaddriveslist() { //se utiliza tanto por el popup de folder a buscar c
 	if (s.os.name == "windows") {
 
 		var availabledrives=[];
-		var drivelist = require('drivelist');
-		var driveLetters = require('windows-drive-letters');
+		var drivelist = window.top.drivelist;
+		var driveLetters = window.top.driveLetters;
 
 		var t="";
 		var tdesc="";
@@ -2949,7 +2937,7 @@ function loaddriveslist() { //se utiliza tanto por el popup de folder a buscar c
 
 		// Detectar y añadir unidades externas a la lista
 
-		const username = require('username');
+		const username = window.top.username;
 
 		username().then(username => {
 
@@ -3165,7 +3153,7 @@ function restarttagstoo() {
 
 	}
 
-	parent.location.reload();
+	window.top.reloadwin();
 };
 
 
@@ -3253,7 +3241,7 @@ function selectfoldersearchpreload(){
 	// if (colortagstoo == "not") {
 	// 	var ls = document.createElement('link');
  //        ls.rel="stylesheet";
- //        ls.href= "../css/version_grey.css";
+ //        ls.href= "css/version_grey.css";
  //        $('head')[0].appendChild(ls);
 	// } else {
 	// 	$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
@@ -3266,7 +3254,7 @@ function selectfoldersearchpreload(){
 	var carpetas = treedirecorytolist;
 	var newrefresh="no";
 
-	var Sniffr = require("sniffr");
+	var Sniffr = window.top.Sniffr;
 	var agent = navigator.userAgent;
 	window.s = "";
 	s = new Sniffr();
@@ -3501,7 +3489,7 @@ function acceptsearchfolder(e) {
 
 function choseroot() { // para el popup de seleccionar carpeta busqueda del Search
 
-	var Sniffr = require("sniffr");
+	var Sniffr = window.top.Sniffr;
 	var agent = navigator.userAgent;
 	var s = new Sniffr();
 	s.sniff(agent);
@@ -3560,7 +3548,7 @@ function selectfolderactionnotagpreload(){
 
 	}
 
-	var Sniffr = require("sniffr");
+	var Sniffr = window.top.Sniffr;
 	var agent = navigator.userAgent;
 	window.s = "";
 	s = new Sniffr();
@@ -3588,8 +3576,8 @@ function selectfolderactionnotagpreload(){
 
 		 $('#selecteddrive').html($("#unitselect").val());
 
-			var drivelist = require('drivelist');
-			var driveLetters = require('windows-drive-letters');
+			var drivelist = window.top.drivelist;
+			var driveLetters = window.top.driveLetters;
 
 			var t="";
 			var tdesc="";
@@ -3668,7 +3656,7 @@ function selectfolderactionnotagpreload(){
 
 			// Detectar y añadir unidades externas a la lista
 
-			const username = require('username');
+			const username = window.top.username;
 
 			username().then(username => {
 
@@ -4147,7 +4135,7 @@ function selectfolderactiontagpreload(){
 
 	}
 
-	var Sniffr = require("sniffr");
+	var Sniffr = window.top.Sniffr;
 	var agent = navigator.userAgent;
 	window.s = "";
 	s = new Sniffr();

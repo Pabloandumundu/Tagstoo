@@ -1,5 +1,5 @@
 /* 
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -30,8 +30,6 @@
 
 
 (function ($) {
-
-
 
     var last,
         current,
@@ -499,8 +497,8 @@
 
         // salir de Fullscreen cuando se cierra visor
         document.webkitExitFullscreen()
-        var gui = require('nw.gui');
-        gui.Window.get().leaveFullscreen()
+        /*var gui = require('nw.gui');
+        gui.Window.get().leaveFullscreen()*/
 
     };
 

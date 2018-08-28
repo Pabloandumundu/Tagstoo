@@ -1,27 +1,45 @@
 {
-  "name": "Tagstoo",
-  "description": "Chrome platform app.",
-  "version": "1.0.1",
-  "main": "initialselect.html",
-  "dependencies": {
-    "drivelist": "^5.0.4",
-    "growl": "",
-    "sniffr": "",
-    "username": "^2.3.0",
-    "windows-drive-letters": "^3.1.0"
-  },
-  "window": {
-    "icon": "img/logo-t-120.png",
-    "show": true,
-    "toolbar": true,
-    "frame": true,
-    "resizable": true,
-    "position": "center",
-    "min_width": 680,
-    "min_height": 220,
-    "fullscreen": false
+  "name": "TAGSTOO",
+  "description": "Tagstoo tagging application",
+  "author": "Pablo Andueza Munduate",
+  "version": "1.12.0",
+  "main": "app.js",
+  "build": {
+    "appId": "io.sourceforge.tagstoo",
+    "win": {
+      	"icon": "img/logo-t-256.ico",
+      	"target": [{
+      		"target": "portable"
+    	}]
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "img/logo-t-256.ico.icns",
+      "target": "dmg"
+    },
+    "linux": {
+      "category": "Utility",
+      "target": "AppImage"
+    }  
+
+
+
   },
   "scripts": {
-    "start": "nw ."
-  }
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "drivelist": "^5.0.4",
+    "fs-extra": "^1.0.0",
+    "indexeddb-export-import": "^1.0.0",
+    "sniffr": "^1.1.4",
+    "underscore": "^1.8.3",
+    "windows-drive-letters": "^3.1.0",
+    "username": "^2.3.0"
+  },
+  "devDependencies": {},
+  "license": "GNU"
 }

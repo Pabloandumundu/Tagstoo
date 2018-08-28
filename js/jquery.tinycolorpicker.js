@@ -25,7 +25,7 @@
         define(['jquery'], factory);
     }
     else if(typeof exports === 'object') {
-        module.exports = factory(require("jquery"));
+        //module.exports = factory(window.top.rec_jquery);
     }
     else {
         factory(jQuery);

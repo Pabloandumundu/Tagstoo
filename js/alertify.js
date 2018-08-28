@@ -1,5 +1,5 @@
 /* 
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -21,13 +21,15 @@
 
 
 /*global define*/
-(function (global, undefined) {
-
-	language = localStorage["language"];
-
+(function (global, undefined) {	
 
 	"use strict";
 
+	if (!localStorage["language"]) {
+    	var language = "EN";
+    } else {
+    	var language = localStorage["language"];
+    }
 
 
 	var document = global.document,
@@ -308,7 +310,8 @@
 						html = html.replace("{{ok}}", this.labels.yes).replace("{{cancel}}", this.labels.no);
 						break;
 					case "prompt":
-						html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.submit));
+						//html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.submit));
+						html = html.replace("{{buttons}}", this.appendButtons(dialogs.buttons.cancel, dialogs.buttons.ok));
 						html = html.replace("{{ok}}", this.labels.ok).replace("{{cancel}}", this.labels.cancel);
 						break;
 					case "alert":

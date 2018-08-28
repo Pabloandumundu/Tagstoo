@@ -4,7 +4,7 @@ Tag folders and files (including multimedia) by dragging the tags on them, you c
 
 ![](https://tagstoo.sourceforge.io/img_ext/demoimage1lq.png)
 
-Precise search possibilities, with various input fields, allowing to add all the necessary tags that you want. For example, in one field you can add the tags 'cat' and 'white' and in another field you can add the tags 'dog' and 'brown', so the search result will return all white cats and brown dogs.
+Precise search possibilities, with various input fields, allowing to add all the necessary tags that you want. For example, in one field you can add the tags 'cat' and 'white' and in another field you can add the tags 'dog' and 'brown', so the search result will return all white cats and brown dogs.  Another more abstract example to show the available searches can be: Searh under folders that have (tag50) or (tag51 + tag52) files that have (tag1 + tag2 + tag7 + tag8) or (tag1 + tag2 + tag6 + tag9) but don't have (tag10) and (tag11).
 
 Multimedia files preview in both explorer and searcher results cards. The cover images of epubs also are shown.
 
@@ -31,12 +31,11 @@ FEATURES
 
 To use the source code (require nw.js to launch):
 
-1. Install NW.JS (SDK edition if you want to use Chome DevTools) in some directory.
-2. Copy the source code to that directory.
-3. If you want video/audio reproduction fully available download the correspondent compiled version of ffmpeg from [https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases](https://github.com/iteufel/nwjs-ffmpeg-prebuilt/releases) and overwrite the ffmpeg.dll (in Windows), lib/libffmpeg.so (in Linux), or the one corresponding to mac os that came with NW.JS with them.
-4. Execute nw.exe (in Windows), or launch ./nw in terminal (in Linux), or execute nw (in mac OS).
+1. Install Electron (https://electronjs.org/).
+2. Put the source code of Tagstoo in a folder.
+3. Execute "electron ." in the terminal inside that folder.
 
-The code is like a web page, with some html and the /js folder where is the code in Javascript (and jQuery).
+The code is like a web page, with some html, css and the /js folder where the main code can be found in Javascript (and jQuery).
 
 Some notes about the code:
 

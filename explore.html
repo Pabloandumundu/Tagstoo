@@ -1,7 +1,7 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 
 <!--
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -26,6 +26,9 @@
   <meta charset="UTF-8">
   <title>TAGSTOO (Explore)</title>
 
+  <!-- Insert this line above script imports  -->
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
   <script src="js/jquery-latest.min.js"></script>  
   <script src="js/jquery-ui.min.js"></script> <!-- para select y dragg -->
   <script src="js/interact.min.js"></script> <!-- para adaptar anchuras -->
@@ -38,9 +41,10 @@
   <script src="js/abigimage.jquery.js" defer></script>
   <script src="js/jqueryFileTree.js"></script>
   <script src="js/blazy.min.js"></script>
-
-  <!-- <script src="js/crel.js"></script> -->
   <script src="js/main.js"></script>
+
+  <!-- Insert this line after script imports -->
+  <script>if (window.module) module = window.module;</script>
 
   <link href="css/jqueryFileTree.css" rel="stylesheet" type="text/css">
   <link href="css/tinycolorpicker.css" rel="stylesheet" type="text/css">

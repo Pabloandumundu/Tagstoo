@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -25,10 +25,16 @@
 	<meta charset="UTF-8">
 	<title>TAGSTOO</title>
 
+	<!-- Insert this line above script imports  -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
 	<script src="js/jquery-latest.min.js"></script>
 	<script src="js/jquery-ui.min.js"></script>
 	<script src="js/alertify.js"></script>
 	<script src="js/main-menu.js"></script>
+
+	<!-- Insert this line after script imports -->
+	<script>if (window.module) module = window.module;</script>
 
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css">
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css">
@@ -37,16 +43,6 @@
 
 </head>
 <body id="mainbody">
-
-	<script>
-
-		//maximizar la ventana al inicio
-		var ngui = require('nw.gui');
-		var nwin = ngui.Window.get();
-		nwin.setResizable(true);
-		nwin.maximize();
-
-	</script>
 
 	<header>
 
@@ -144,7 +140,6 @@
 				<span class="toptext">
 					<span class="lang_en">Viewmode: </span>
 					<span class="lang_es">Vista modo: </span>
-					<!-- <span class="lang_fr">Mode d'affich.: </span> -->
 					<span class="lang_fr">Vue mode: </span>
 					<span id="viewmodenumber">1 ...</span>
 				</span><br>
@@ -236,59 +231,58 @@
 
 	</div>
 
+
 	<script>
 
-		var win = nw.Window.get();
+		
+	
+    // Pedir confirmación al cerrar
+	window.onbeforeunload = (e) => {
+  		e.returnValue = false;  // this will *prevent* the closing no matter what value is passed
 
-		// para quitar un defecto de que si se había recargado la página a la hora de cerrar pedía confirmación tantas veces como recargadas
-		setTimeout(function() {
+  		var electron = require('electron');
+  		var win = electron.remote.getCurrentWindow();
 
-			$.each(win.__proto__.outerEventCBs.close, function(i) {
-				delete win.__proto__.outerEventCBs.close[i];
-			});
+		if(localStorage["closeconfirmation"]=="yes") {
+			
+			language = localStorage["language"];
+			if (language == "EN") {
 
-		}, 500);
+				alertify.confirm( "Close application ?", function (e) {
+					if (e) {
+						win.destroy();
+						
+					} 
 
-		// la función propia para pedir confirmación a la hora de cerrar
-		win.on('close', function() {
+				});
+			}
+			if (language == "ES") {
 
-			if(localStorage["closeconfirmation"]=="yes") {
+				alertify.confirm( "¿ Cerrar la aplicación ?", function (e) {
+					if (e) {
+						win.destroy();
+						
+					} 
 
-				language = localStorage["language"];
-				if (language == "EN") {
+				});
+			}
+			if (language == "FR") {
 
-					alertify.confirm( "Close application ?", function (e) {
-						if (e) {
-							win.close(true);
-						} 
+				alertify.confirm( "Fermer l'application ?", function (e) {
+					if (e) {
+						win.destroy();
+					
+					} 
 
-					});
-				}
-				if (language == "ES") {
-
-					alertify.confirm( "¿ Cerrar la aplicación ?", function (e) {
-						if (e) {
-							win.close(true);
-						} 
-
-					});
-				}
-				if (language == "FR") {
-
-					alertify.confirm( "Fermer l'application ?", function (e) {
-						if (e) {
-							win.close(true);
-						} 
-
-					});
-				}
-
-			} else {
-				win.close(true);
+				});
 			}
 
-		});
+		} else {
+			win.destroy();
+		}
 
+	};
+	
 	</script>
 
 </body>

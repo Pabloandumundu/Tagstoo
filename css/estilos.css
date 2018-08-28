@@ -1,5 +1,5 @@
 /*
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -1914,7 +1914,7 @@ header h1 {
 
 	background-image: url("../img/wood_pattern.png");
 	/*z-index:-1;*/
-	-webkit-box-shadow: inset 0px 0px 10px 0px #331a00;
+	box-shadow: inset 0px 0px 10px 0px #331a00;
 
 }
 
@@ -2329,6 +2329,16 @@ span.labele {
 	right: 0;
 }
 
+.noneyet {
+	font-family: monospace;
+	animation: blinker 2.25s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
 
 /* popup options */
 
@@ -2381,24 +2391,6 @@ span.labele {
 	vertical-align: middle;
 }
 
-#initalhelp {
-
-	position: absolute;
-	bottom: 33px;
-	right: 80px;
-	opacity: 0.952;
-}
-
-#initalhelp:hover {
-
-	filter: brightness(115%);
-}
-
-#initalhelp img {
-
-	width: 25px;
-	height: 25px;
-}
 
 #initalselect select {
 
@@ -2410,6 +2402,13 @@ span.labele {
 	margin-top: 6px;
 }
 
+#languageselect_wrapper {
+	position:fixed;
+	/*bottom: 38px;
+	left: 142px;*/
+	top: 80px;
+    right: 78px;
+}
 
 #languageselect {
 	border:  2px solid #999999;
@@ -2421,25 +2420,52 @@ span.labele {
 }
 
 
+
+#flexbox {
+
+	display: -webkit-flex;
+  	width: 100%;
+}
+
 #colorswitch_initial {
-	position:fixed;
-	bottom: 26px;
+
+	position: relative;
+	display: inline-block;
+	width: 56px;
 }
 
-#languageselect_wrapper {
-	position:fixed;
-	/*bottom: 38px;
-	left: 142px;*/
-	top: 80px;
-    right: 78px;
-}
+#launchenvoltorio{
 
+	position: relative;
+	display: inline-block;
+	flex: 1;
+	-webkit-flex: 1;	
+}
 #launch {
-
+	
 	width: 50px;
 	display: block;
-	margin: 0 auto 5px auto;
+	margin: 8px auto 5px auto;
 	text-align: center;
+}
+
+#initalhelp {
+
+	position: relative;
+	display: inline-block;
+	opacity: 0.952;
+	width: 56px;
+}
+#initalhelp:hover {
+
+	filter: brightness(115%);
+}
+#initalhelp img {
+
+	width: 25px;
+	height: 25px;
+	margin-left: 29px;
+	margin-top: 9px;
 }
 
 

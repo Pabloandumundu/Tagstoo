@@ -16,11 +16,14 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.11.2';
-var fs = require('fs-extra');
-var Sniffr = require("sniffr");
-var AdmZip = require('adm-zip'); // para manejarse con los zip (o los epub que son ficheros zip)
+var programversion = '1.12.0';
+
+var fs = window.top.fs;
+var Sniffr = window.top.Sniffr;
+var AdmZip = window.top.AdmZip; // para manejarse con los zip (o los epub que son ficheros zip)
+var CurrentWindow = window.top.CurrentWindow; // se usará para entrar/salir de pantalla completa al visualizar imágenes
 var agent = navigator.userAgent;
+
 window.s = "";
 s = new Sniffr();
 s.sniff(agent); // detectar S.O.
@@ -82,8 +85,12 @@ $(document).ready(function () {
 	////////////////////////\\\\\\\\
 
 
-	// frases segun idioma
+	// efecto fadeIn
+	$('#treeview, #locationinfo, #dirview-wrapper, #bottom').css('display', 'none');
+	$('#treeview, #locationinfo, #dirview-wrapper, #bottom ').fadeIn(1000);
 
+
+	// frases segun idioma
 	if (language == "EN") {
 
 		ph_readingfolder = "Reading folder ...";
@@ -202,7 +209,6 @@ $(document).ready(function () {
 
 
 	// Tips
-
 	if (language == "EN") {
 		tip = [
 			"<b>Tip</b>: To enter in a folder press and hold mouse button over the folder's name until it enters.",
@@ -957,22 +963,16 @@ $(document).ready(function () {
 	    	if (availableversion != programversion) {
 
 	    		if (language == "EN") {
-	    			alertify.alert('A newer version of Tagstoo is available, your version: '+ programversion +', available version: ' + availableversion + '. You can go to the <a href="https://tagstoo.sourceforge.io#downloadmain" target="_blank" class="enlaceexterno">website</a> to download it. Please be sure that you export your data to file(s) before you launch the newer version.');
+	    			alertify.alert('A newer version of Tagstoo is available, your version: '+ programversion +', available version: ' + availableversion + '. You can go to the <a href="javascript:;" target="_blank" onclick="irdescarga()">website</a> to download it. Please be sure that you export your data to file(s) before you launch the newer version.');
 	    		}
 	    		else if (language == "ES") {
-	    			alertify.alert('Una nueva versión de Tagstoo esta disponible, su versión: '+ programversion +', versión disponible: ' + availableversion + '. Puedes ir al <a href="https://tagstoo.sourceforge.io#downloadmain" target="_blank" class="enlaceexterno">sitio web</a> para la descarga. Porfavor asegurese de que exporta sus datos a fichero(s) antes de lanzar la nueva versión.');
+	    			alertify.alert('Una nueva versión de Tagstoo esta disponible, su versión: '+ programversion +', versión disponible: ' + availableversion + '. Puedes ir al <a href="javascript:;" target="_blank" onclick="irdescarga()>sitio web</a> para la descarga. Porfavor asegurese de que exporta sus datos a fichero(s) antes de lanzar la nueva versión.');
 	    		}
 
 	    		else if (language == "FR") {
-	    			alertify.alert('Une nouvelle version de Tagstoo est disponible, votre version: '+ programversion +', Version disponible: ' + availableversion + '. Vous pouvez aller sur le <a href="https://tagstoo.sourceforge.io#downloadmain" target="_blank" class="enlaceexterno">site web</a> pour le téléchargement. S`il vous plaît assurez-vous que vous exportez vos données vers le(s) fichier(s) avant de lancer la nouvelle version.');
+	    			alertify.alert('Une nouvelle version de Tagstoo est disponible, votre version: '+ programversion +', Version disponible: ' + availableversion + '. Vous pouvez aller sur le <a href="javascript:;" target="_blank" onclick="irdescarga()>site web</a> pour le téléchargement. S`il vous plaît assurez-vous que vous exportez vos données vers le(s) fichier(s) avant de lancer la nouvelle version.');
 
 	    		}
-
-	    		$('.enlaceexterno').on('click', function(){
-				   require('nw.gui').Shell.openExternal( this.href );
-				   return false;
-				});
-
 
 	    	}
 
@@ -980,8 +980,13 @@ $(document).ready(function () {
 
 	}
 
-
 }); //--fin onload
+
+
+function irdescarga(){ 
+
+    window.top.shell.openExternal("https://tagstoo.sourceforge.io#downloadmain");
+}
 
 
 function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la base de datos
@@ -1402,10 +1407,10 @@ window.parent.$("#viewmode").on('change', function() {
 
 	//readDirectory(dirtoexec);
 	if (viewmode == 1) {
-		folderupiconurl = "/img/icons/folders_16px/Folder_Up.png"
+		folderupiconurl = "img/icons/folders_16px/Folder_Up.png"
 	}
 	else if (viewmode != 1) {
-		folderupiconurl = "/img/icons/folders_420px/Folder_Up.png"
+		folderupiconurl = "img/icons/folders_420px/Folder_Up.png"
 	}
 
 	$('#directoryview').html("");
@@ -1507,8 +1512,6 @@ window.parent.$("#viewmode").on('change', function() {
 
 	} // --fin if viewmode!=1
 	
-
-	
 });
 
 
@@ -1533,13 +1536,13 @@ window.parent.$(".order").on('change', function() {
 	elementosselectingArchives = document.querySelectorAll(".archive.ui-selecting");
 
 	order = $(this)["0"].value;
-/*	previousornext = "refresh";
+	/*	previousornext = "refresh";
 	readDirectory(dirtoexec);*/
 	if (viewmode == 1) {
-		folderupiconurl = "/img/icons/folders_16px/Folder_Up.png"
+		folderupiconurl = "img/icons/folders_16px/Folder_Up.png"
 	}
 	else if (viewmode != 1) {
-		folderupiconurl = "/img/icons/folders_420px/Folder_Up.png"
+		folderupiconurl = "img/icons/folders_420px/Folder_Up.png"
 	}
 
 	$('#directoryview').html("");
@@ -1559,7 +1562,6 @@ window.parent.$(".order").on('change', function() {
 
 	drawDirectoryAfter();
 	
-
 })
 
 
@@ -2288,11 +2290,13 @@ window.parent.$("#delete").on('click', function() {
 
 				        onopen: function(target) {
 				        	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
+				        	CurrentWindow.setFullScreen(true);
 				            this.filename.html(filenametoshow);
 				        	resizefromimage = "yes";
 				        },
 				        onclose: function(){
 				        	resizefromimage = "yes";
+							CurrentWindow.setFullScreen(false); 
 				   	
 				        }
 
@@ -2303,11 +2307,13 @@ window.parent.$("#delete").on('click', function() {
 				        onopen: function(target) {
 
 				        	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
+				        	CurrentWindow.setFullScreen(true);
 				            this.filename.html(filenametoshow);
 				       		resizefromimage = "yes";
 				        },
 				        onclose: function(){
-				        	resizefromimage = "yes";      	
+				        	resizefromimage = "yes";
+				        	CurrentWindow.setFullScreen(false);
 				        }
 
 					});
@@ -2557,10 +2563,10 @@ function readDirectory (dirtoread) {
 
 
 			if (viewmode == 1) {
-				folderupiconurl = "/img/icons/folders_16px/Folder_Up.png"
+				folderupiconurl = "img/icons/folders_16px/Folder_Up.png"
 			}
 			else if (viewmode != 1) {
-				folderupiconurl = "/img/icons/folders_420px/Folder_Up.png"
+				folderupiconurl = "img/icons/folders_420px/Folder_Up.png"
 			}
 
 
@@ -3140,7 +3146,7 @@ function drawDirectoryArchives (viewmode, order) {
 			} else {
 
 				var exploname = "<span class='exploname'>"+nameSinBarra+"</span>";
-				var imagen="<img src='/img/icons/420px/420x420.png'>";
+				var imagen="<img src='img/icons/420px/420x420.png'>";
 
 			}
 
@@ -3284,42 +3290,42 @@ function drawDirectoryAfter() {
 
 			    	case "ext_generic":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Generic.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Generic.png">';
 				    	break;
 
 				    case "ext_image":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Pictures.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Pictures.png">';
 				    	break;
 
 				    case "ext_program":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Smart.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Smart.png">';
 				    	break;
 
 				    case "ext_audio":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Music.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Music.png">';
 				    	break;
 
 				    case "ext_video":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Movies.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Movies.png">';
 				    	break;
 
 				    case "ext_docs":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Library.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Library.png">';
 				    	break;
 
 				    case "ext_www":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Sites.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Sites.png">';
 				    	break;
 
 				    case "ext_document":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_16px/Glossy_Document.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_16px/Glossy_Document.png">';
 				    	break;
 
 				}
@@ -3335,42 +3341,42 @@ function drawDirectoryAfter() {
 
 			    	case "ext_generic":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Generic.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Generic.png">';
 				    	break;
 
 				    case "ext_image":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Pictures.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Pictures.png">';
 				    	break;
 
 				    case "ext_program":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Smart.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Smart.png">';
 				    	break;
 
 				    case "ext_audio":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Music.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Music.png">';
 				    	break;
 
 				    case "ext_video":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Movies.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Movies.png">';
 				    	break;
 
 				    case "ext_docs":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Library.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Library.png">';
 				    	break;
 
 				    case "ext_www":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Sites.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Sites.png">';
 				    	break;
 
 				    case "ext_document":
 
-				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="../img/icons/folders_420px/Glossy_Document.png">';
+				    	$(this)["0"].previousElementSibling.innerHTML = '<img src="img/icons/folders_420px/Glossy_Document.png">';
 				    	break;
 
 				}
@@ -4163,6 +4169,7 @@ function elementstagsorder() {
 								elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 								elemetstagdelete(); // activa sistema borrado tags
 								elementstagcopier(); // activa sistema de copiado de tags
+								mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 							}
 
@@ -4369,6 +4376,26 @@ function elementstagsorder() {
 	}); // --fin droppable
 
 } // --fin elementstagsorder()
+
+
+
+// esta función se llamará desde diferentes partes del programa para mantener la imagen del pointer si fuera el caso
+function mantenerimagenpointer() {
+
+	if (copytagson == "on") {
+		document.querySelectorAll(".tags").forEach(function(el) {
+			if ($(el).has('div').length>0){
+				el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAWCAYAAADeiIy1AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gYOCTcb7XTA7QAAAiVJREFUSMetlTtoVFEQhr9NfBGih6ggNr+CBBUURbSIio/YpPEBBiGVoFhYqNik1Erx1aZWKxMkYqGEgAg+ULRJIawEFMwviYRAwrGIYEi0OYHrsnuv6zrV4cx/5r8zd+afEhmT1AycAY4Ca4EfwAfgtu1xGrBSBdEL4IbtoczdMqAM7LM9me5K1YLZ/lVIJOkuMGy7vxIkaTkwCmwBDgP3gLkK2Dyw0/ZMzbQkNUl6m5e6pB5J23P8GyWNSlpdzd+Uyex9QZlfA521nLa/AOeAE3lEAC0FREuB7wWYBeBnNceSDGBvQZCLwM2c0g0CrUCrpB7gku1Pf2SUuuWqpPs1gnQAnba/5XzIBDAC3AFmsiQAzYuHGGM5hNAaQngUQngTY5yQ1BZC6AO6gEMxxprtG2McCiHsAvbbPp07R4vdA1xIrTwNDNp+TINWqveBpDWpPN3p/Vj6f8/zBrapTpJtwFPgMtAGrAL2AOuBgf+SkaSWpHvttheq+K8kwge2XzZCdASYqxYkg5kEXgHtwDHbY/9Sui7gYwHmme1u2zuA/iTIdRPN/gVmReZ8KpW6bqKHwMmcspWAzRnt+wrMS1pXL1E5qceGGv5h4GzF3QiwMqt1hWZ7QdIm4ElaKX1poA8C14Fbtt9VPOsAYt1zZHvWdifwGRhMq74bOGB7oKKUW4Fp21ONqgqSeiX111ikow1JUJWgx4FradWPA7uBKeC87YlF3G/iGsK8xnnkRAAAAABJRU5ErkJggg=='),auto";
+			}
+		});
+	} else if(eraseron == "on"){				
+		document.querySelectorAll(".tags > div").forEach(function(el) {
+			el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAYAAAAmaHdCAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QIFERIkBcGckAAAA2FJREFUOMuNlFtIqmkUhldaXnSYps0QA151YMjAPyEmf/DX0JIug80M1EVz6ES3ETU0SWxKC4O6CbIco4GoIJkhhgmpC0WSopkkJCoCy1Ism8ZOlpWZ71ztf3LbPqy79X3v+3zrWyxWmkajIbvdTiqV6geJRPJ9YWGhRCQSfbG9vf3H5uZmg9vtvqVPiZqamteNjY0IBoN4Hi0tLZDJZK8+5heIxeKskpKS30pLS0kkEiVdms1mqqio+Jdl2c8+CMnKylK2trYSAMrNzU0RTExMpCkUCh8RkUajeRGSXl5ezmZnZ5PL5aJwOEzp6emk1WpJpVLxIqPR+CoQCPw9Pz//tVqtJofDkUypra21NTQ0oLe3l+/F+vo6dDpdUn9CoRBYlrW8WFFfX9/NxcUFZmZm4PF4eNPd3R0GBweTQE6nEwqF4puU/2g0mp8fHx/hcrnQ09ODk5MT3nR5eQmr1crn3d3dWFpaQllZ2VcpoLq6uksA6O/vh9FoTHp9ZWUFi4uLOD4+htPpBADodLoYEVF1dfX/ELlcLh4bGwMAjI6OYnJyMgk0NTWF8fHxpLO2trallGpYlv3u4OAAt7e30Ov1MJvNvMHr9aKjowNPT0/8md/vB8Mwb5735e3kuu7v77G/vw+TyYTd3V0EAgHMzs4CAPR6fVI1NpstJpVKM1IqMhgMVwCwtraGgYEBWCwW3pRIJDA8PMzn4XAYHMf9kgRQq9Ukk8nUVqsVkUgE9fX16OzsxLths9kAAPF4HBzHXQufQw4PDykUCh1eXV3FiKjKYDDQxsYG+f1+YhiG10WjUdrb26OCggKam5sTCF6YG1peXh7yer1hIqL29nY6PT2l6elpXsMwDAWDQSIiKioqShe+C/H5fEREiMViFrFY/JNEIqGcnBxyu92Ul5dH+fn5REQUiURIJBLR6urqh/eEVCp9fXR0xA/d0NAQotEo35uRkREolcqY4H2Aqqoq2tra+r2pqenPRCJBHMfRw8MDdXV18Zrz83MSCAR/Cd8H8fl8pFaryW63zwmFwh8rKys/5ziOHA4HnZ2dEcMw5PV6aWdnp/6jq1OpVFJxcXHR27GPx+MwmUxYWFhAc3NziIgojT4xtFrtt3K5fCAjI+NLj8cjvLm5+fX6+vpNZmbmP/8BN8ZmaONW+JwAAAAASUVORK5CYII='),auto";
+		});
+
+	}
+
+} // --fin mantenerimagenpointer()
 
 
 
@@ -4623,6 +4650,7 @@ function elementstagcopier() {
 												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 												elemetstagdelete(); // activa sistema borrado tags
 												elementstagcopier(); // activa sistema de copiado de tags
+												mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 												
 
 											}
@@ -4753,8 +4781,7 @@ function elementstagcopier() {
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 										elemetstagdelete(); // activa sistema borrado tags
 										elementstagcopier(); // activa sistema de copiado de tags
-
-										
+										mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)										
 
 									}
 
@@ -4938,6 +4965,7 @@ function elementstagcopier() {
 														elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 														elemetstagdelete(); // activa sistema borrado tags
 														elementstagcopier(); // activa sistema de copiado de tags
+														mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 														
 
 													};
@@ -5077,7 +5105,7 @@ function elementstagcopier() {
 												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 												elemetstagdelete(); // activa sistema borrado tags
 												elementstagcopier(); // activa sistema de copiado de tags
-												
+												mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 											};
 
@@ -5145,6 +5173,7 @@ function elementstagcopier() {
 												elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 												elemetstagdelete(); // activa sistema borrado tags
 												elementstagcopier(); // activa sistema de copiado de tags
+												mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 												
 											};
 
@@ -5169,9 +5198,6 @@ function elementstagcopier() {
 	});
 
 } //--fin elementstagcopier
-
-
-
 
 
 // activa sistema para borrar etiquetas
@@ -5952,7 +5978,7 @@ function borrartag(tagaborrar) {
 		}
 
 	}
-}
+} //-- fin function borrartag
 
 
 function interactions() {
@@ -5961,13 +5987,15 @@ function interactions() {
 	// para la presentación de diapositivas click en imagen
 	$('.exploelement .imgmode'+viewmode+' a').abigimage({
 
-        onopen: function(target) {
+        onopen: function(target) {        	
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
             this.filename.html(filenametoshow);
+            CurrentWindow.setFullScreen(true);
         	resizefromimage = "yes";
         },
         onclose: function(){
-        	resizefromimage = "yes";
+        	resizefromimage = "yes";        	
+        	CurrentWindow.setFullScreen(false);
    	
         }
 
@@ -5979,10 +6007,12 @@ function interactions() {
 
         	var filenametoshow = target["0"].href.replace("file:///"+driveunit+"\/", "");
             this.filename.html(filenametoshow);
+            CurrentWindow.setFullScreen(true);
        		resizefromimage = "yes";
         },
         onclose: function(){
-        	resizefromimage = "yes";      	
+        	resizefromimage = "yes";
+        	CurrentWindow.setFullScreen(false);      	
         }
 
 	});
@@ -6395,6 +6425,8 @@ function interactions() {
 													elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 													elemetstagdelete(); // activa sistema borrado tags
 													elementstagcopier(); // activa sistema de copiado de tags
+													mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)												
+			
 												}
 
 											};
@@ -6560,6 +6592,7 @@ function interactions() {
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
 											elementstagcopier(); // activa sistema de copiado de tags
+											mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 										}
 
 									};
@@ -6650,6 +6683,7 @@ function interactions() {
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
 											elementstagcopier(); // activa sistema de copiado de tags
+											mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 										}
 
@@ -6903,9 +6937,9 @@ function interactions() {
 									trans2.oncomplete = function(event) {
 
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
-
 										elemetstagdelete(); // activa sistema borrado tags
 										elementstagcopier(); // activa sistema de copiado de tags
+										mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 										if(localStorage["asktagsubeleents"]=="yes"){
 											popup("addtagtosubelements");
@@ -7057,6 +7091,7 @@ function interactions() {
 									elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 									elemetstagdelete(); // activa sistema borrado tags
 									elementstagcopier(); // activa sistema de copiado de tags
+									mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 									if(localStorage["asktagsubeleents"]=="yes"){
 										popup("addtagtosubelements");
@@ -9164,9 +9199,6 @@ function interactions() {
 
 		});
 
-
-
-
 	}); // --fin crear nueva carpeta
 
 
@@ -9269,7 +9301,6 @@ function interactions() {
 
 	});
 
-
 	function presshold() {
 
 		if (!$(elemento).hasClass("exploelementfolderup")) {
@@ -9309,7 +9340,7 @@ function interactions() {
 				aejecutar = aejecutar.replace(/\&/g, "^&");
 				aejecutar = aejecutar.replace(/\(/g, "^(");
 				aejecutar = aejecutar.replace(/\)/g, "^)");
-				require("child_process").exec(aejecutar);
+				window.top.exec.exec(aejecutar);
 			}
 			if (s.os.name == "linux" || s.os.name == "macos") {
 
@@ -9323,17 +9354,16 @@ function interactions() {
 				aejecutar = aejecutar.replace(/\]/g, '\\\]');
 
 				// si se puede visualizar con algul visualizador del sistema se visualizará aquí
-				var sys = require('sys');
-				var exec = require('child_process');
+								
 				if (s.os.name == "linux"){
-					exec.exec('xdg-open' + ' ' + aejecutar);
+					window.top.exec.exec('xdg-open' + ' ' + aejecutar);
 				}
 				else if (s.os.name == "macos") {
-					exec.exec('open' + ' ' + aejecutar);
+					window.top.exec.exec('open' + ' ' + aejecutar);
 				}
 
 				try { // si es un ejecutable se ejecutará aquí
-					exec.execFile(aejecutar);
+					window.top.exec.execFile(aejecutar);
 				}
 				catch(exception) { }
 
@@ -9400,7 +9430,7 @@ function interactions() {
 					aejecutar = aejecutar.replace(/\&/g, "^&");
 					aejecutar = aejecutar.replace(/\(/g, "^(");
 					aejecutar = aejecutar.replace(/\)/g, "^)");
-					require("child_process").exec(aejecutar);
+					window.top.exec.exec(aejecutar);
 				}
 				if (s.os.name == "linux" || s.os.name == "macos") {
 
@@ -9414,17 +9444,16 @@ function interactions() {
 					aejecutar = aejecutar.replace(/\]/g, '\\\]');
 
 					// si se puede visualizar con algul visualizador del sistema se visualizará aquí
-					var sys = require('sys');
-					var exec = require('child_process');
+										
 					if (s.os.name == "linux"){
-					exec.exec('xdg-open' + ' ' + aejecutar);
+					window.top.exec.exec('xdg-open' + ' ' + aejecutar);
 					}
 					else if (s.os.name == "macos") {
-						exec.exec('open' + ' ' + aejecutar);
+						window.top.exec.exec('open' + ' ' + aejecutar);
 					}
 
 					try { // si es un ejecutable se ejecutará aquí
-						exec.execFile(aejecutar);
+						window.top.exec.execFile(aejecutar);
 					}
 					catch(exception) { }
 
@@ -10586,7 +10615,6 @@ function footertagsinteractions(){
 }
 
 
-
 function newTag() {
 
 	popup("newtag");
@@ -10597,7 +10625,6 @@ function editTag() {
 
 	popup("edittag");
 }
-
 
 
 
@@ -10616,7 +10643,7 @@ function readAllTags() {
 			cursor.continue();
 		}
 		else {
-			/* alert("No more entries!"); 
+			/* alert("No more entries!"); */
 		}
 
 	};

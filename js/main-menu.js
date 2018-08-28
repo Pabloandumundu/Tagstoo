@@ -17,7 +17,26 @@
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-$(document).ready(function () {
+
+// Los modulos de node que se utilizarán en los iframes se cargan aquí pues no se puede accceder
+// a la función require desde estos.
+window.fs = require('fs-extra'); // utilizado en main.js, searcher.js, undoactions.js
+window.Sniffr = require("sniffr"); // utilizado en main.js, searcher.js, jqueryFileTree.js
+window.AdmZip = require('adm-zip'); // utilizado en main.js, searcher.js
+window.exec = require("child_process"); // utilizado en main.js, searcher.js
+window.drivelist = require('drivelist'); // utilizado en popups.js
+window.driveLetters = require('windows-drive-letters'); // utilizado en popups.js
+window.username = require('username'); // utilizado en popups.js
+window.idbExportImport = require("indexeddb-export-import"); // utilizado en popups.js
+window.shell = require('electron').shell;
+window.CurrentWindow = require('electron').remote.getCurrentWindow(); // utilizado en main.js, searcher.js
+//window.rec_jquery = require("jquery"); // utilizado en jquery.tinycolorpicker.js
+
+
+
+
+$(document).ready(function () { 
+
 
     language = localStorage["language"];
 
@@ -145,3 +164,64 @@ $(document).ready(function () {
     }
 
 });
+
+
+// para recargar página, se llama desde popups.js
+function reloadwin() {
+
+    const {BrowserWindow} = require('electron').remote;
+    var electron = require('electron');
+    const path = require('path');
+    const url = require('url');
+    var CurrentWindow = electron.remote.getCurrentWindow();
+
+    if(CurrentWindow.isMaximized()) {
+        var posx=0;
+        var posy=0;
+        var isshow=false;
+    } else {
+        var posx=CurrentWindow.getPosition()[0];
+        var posy=CurrentWindow.getPosition()[1];
+        var isshow=true;
+    }
+
+
+    $('#mainbody').fadeOut(335, function() {   
+     
+        win = new BrowserWindow({
+            width: CurrentWindow.getSize()[0],
+            height: CurrentWindow.getSize()[1],
+            x: posx,
+            y: posy,        
+            closable: true,
+            resizable: true,
+            show: isshow,
+            icon: "img/logo-t-120.png",
+            webPreferences: {
+              nodeIntegration: true
+            }
+        })
+
+        win.setMenu(null);
+
+        if(CurrentWindow.isMaximized()) {
+            win.maximize();
+        } else {
+
+        }
+        // y carga el index.html
+        win.loadURL(url.format({
+            pathname: path.join(__dirname, 'main.html'),
+            protocol: 'file:',
+            slashes: true
+        }))
+
+        // abre las herramientas de desarrollador
+        // win.webContents.openDevTools({mode: 'detach'})        
+      
+        // se cierra ventana inicial
+        CurrentWindow.destroy();
+        
+    });
+
+}

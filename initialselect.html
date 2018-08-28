@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -26,9 +26,15 @@
 	<meta charset="UTF-8">
 	<title>TAGSTOO</title>
 
+	<!-- Insert this line above script imports  -->
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
 	<script src="js/jquery-latest.min.js"></script>
-	
+	<script src="js/alertify.js"></script>  
 	<script src="js/initialselect.js"></script>
+
+	<!-- Insert this line after script imports -->
+	<script>if (window.module) module = window.module;</script>
 
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css">
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css">
@@ -36,17 +42,6 @@
 
 </head>
 <body id="initialbody">
-
-	<script>
-
-    	// tamaño de la ventana
-     	var ngui = require('nw.gui');
-      	var nwin = ngui.Window.get();
-		nwin.setPosition("center")
-		nwin.resizeTo(680, 403);
-		nwin.setResizable(false); // para que no se pueda cambiar		
-
- 	</script>
 
  	<div id="logo-wrapper">
 
@@ -59,24 +54,7 @@
 		<div id="popuptitle" class="lang_en">INITIAL DATABASE OPTIONS</div>
 		<div id="popuptitle" class="lang_es">OPCIONES INICIALES DE LA BASE DE DATOS</div>
 		<div id="popuptitle" class="lang_fr">OPTIONS DE BASE DE DONNÉES INITIALES</div>
-		<div id="initalhelp">
-			<span class="lang_en">
-				<a href="popups/popup-info-help_en.html#1" target="_blank">
-					<img src="img/info.png" alt="">
-				</a>
-			</span>
-			<span class="lang_es">
-				<a href="popups/popup-info-help_es.html#1" target="_blank">
-					<img src="img/info.png" alt="">
-				</a>
-			</span>
-			<span class="lang_fr">
-				<a href="popups/popup-info-help_fr.html#1" target="_blank">
-					<img src="img/info.png" alt="">
-				</a>
-			</span>
-		</div>
-
+		
 		<div id="languageselect_wrapper">
 			<span class="lang_en">Language: </span>
 			<span class="lang_es">Lenguaje: </span>
@@ -150,31 +128,53 @@
 		</a>
 		<span class="lang_en labele"><em>Delete selected database</em></span>
 		<span class="lang_es labele"><em>Borrar la base de datos seleccionada</em></span>
-		<span class="lang_fr labele"><em>Effacer la base de données sélectionnée</em></span>
-
-			
+		<span class="lang_fr labele"><em>Effacer la base de données sélectionnée</em></span>			
 		
-		<hr>
+		<hr style="margin-bottom: 0">
 
-		<div id="colorswitch_initial">
-			<div class="coloronoffswitch" id="pasteaction">
+		<div id="flexbox">
 
-				<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
-				<label class="coloronoffswitch-label" for="mycoloronoffswitch" >
-						<span class="coloronoffswitch-inner"></span>
-						<span class="coloronoffswitch-switch"></span>
-				</label>
+			<div id="colorswitch_initial">
+				<div class="coloronoffswitch" id="pasteaction">
 
+					<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
+					<label class="coloronoffswitch-label" for="mycoloronoffswitch" >
+							<span class="coloronoffswitch-inner"></span>
+							<span class="coloronoffswitch-switch"></span>
+					</label>
+
+				</div>
 			</div>
+			
+			<div id="launchenvoltorio">
+				<div id="launch" class="large button green" onclick="starttagstoo()">
+					<span class="lang_en">Launch!</span>
+					<span class="lang_es">¡Iniciar!</span>
+					<span class="lang_fr">Lancer!</span>
+				</div>
+			</div>
+
+			<div id="initalhelp">
+				<span class="lang_en">
+					<a href="popups/popup-info-help_en.html#1" target="_blank">
+						<img src="img/info.png" alt="">
+					</a>
+				</span>
+				<span class="lang_es">
+					<a href="popups/popup-info-help_es.html#1" target="_blank">
+						<img src="img/info.png" alt="">
+					</a>
+				</span>
+				<span class="lang_fr">
+					<a href="popups/popup-info-help_fr.html#1" target="_blank">
+						<img src="img/info.png" alt="">
+					</a>
+				</span>
+			</div>
+
 		</div>
-		
-		<a id="launch" class="large button green" onclick="starttagstoo()">
-			<span class="lang_en">Launch!</span>
-			<span class="lang_es">¡Iniciar!</span>
-			<span class="lang_fr">Lancer!</span>
-		</a>
 
 	</div>
-<script src="js/alertify.js"></script>  
+
 </body>
 </html>

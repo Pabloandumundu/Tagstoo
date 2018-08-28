@@ -6,7 +6,21 @@ $( document ).ready(function() {
     var listdata = JSON.parse(localStorage["toprintfriendlist"]);
     listdata = toDOM(listdata); // funcion definida en dom-to-json.js
 
+    /*console.log(listdata)*/
+
     $('#listvisual').append(listdata);
+
+
+    var imagenes = $('img');
+    $.each(imagenes, function(u){
+
+    	if (!$("img:eq("+u+")").hasClass('b-lazy')) {
+    		$("img:eq("+u+")").attr('src', '../' + $("img:eq("+u+")").attr('src'))
+
+    	}
+     })
+
+    $('#listvisual').html(listdata);
 
     if (searchviewmode==1){
 

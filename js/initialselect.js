@@ -1,5 +1,5 @@
 /*
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -19,7 +19,7 @@
 
 
 
-var fs=require('fs-extra');
+var fs = require('fs-extra');
 var Sniffr = require("sniffr");
 var agent = navigator.userAgent;
 window.s = "";
@@ -29,84 +29,20 @@ console.log(s.os.name);
 
 
 window.listadofiltradodeDB = []
-
-$(document).ready(function() {
-
-  //unos estilos personalizados para linux y macos
-  if (s.os.name == "linux") {
-    $('#initalselect').css("margin","0 auto 49px auto");
-    $('#initalhelp').css("bottom","65px");
-    $('#colorswitch_initial').css("bottom","57px");
-  }
-  if (s.os.name == "macos") {
-    $('#initalselect').css("margin","0 auto 32px auto");
-    $('#initalhelp').css("bottom","47px");
-    $('#colorswitch_initial').css("bottom","38px");
-  }
+var language = "";
 
 
-  if (!localStorage["language"]) { 
-
-    language = "EN";
-    localStorage["language"] = "EN";
-
-  } else {
-
-    language = localStorage["language"];
-    $("#languageselect").val(language);
-  }
-
-
-  $("#languageselect").on('change', function() {
-
-    localStorage["language"] = this.value;
-    language = this.value
-
-    if (language == 'EN') {
-      $(".lang_en").css("display", "inline-block");
-      $(".lang_es").css("display", "none");
-      $(".lang_fr").css("display", "none");
-    } else if (language =='ES') {
-      $(".lang_en").css("display", "none");
-      $(".lang_es").css("display", "inline-block");
-      $(".lang_fr").css("display", "none");
-    } else if (language == "FR") {
-      $(".lang_en").css("display", "none");
-      $(".lang_es").css("display", "none");
-      $(".lang_fr").css("display", "inline-block");
-    }
-
-  });
-
-
-  if (language == 'EN') {
-    $(".lang_en").css("display", "inline-block");
-    $(".lang_es").css("display", "none");
-    $(".lang_fr").css("display", "none");
-  } else if (language =='ES') {
-    $(".lang_en").css("display", "none");
-    $(".lang_es").css("display", "inline-block");
-    $(".lang_fr").css("display", "none");
-  } else if (language == "FR") {
-    $(".lang_en").css("display", "none");
-    $(".lang_es").css("display", "none");
-    $(".lang_fr").css("display", "inline-block");
-  }
-  
-  // frases segun idioma
+// frases segun idioma
+function cargafrases() { 
 
   if (language == 'EN') {
 
     ph_cantloaddrive = "(Can't load this drive, select another)";
     ph_localdisk = "local disk";
-    ph_exterdisk = "external disk";
-    ph_alr_01or02a = "There is no database previously used. You must enter a new name for a new database";
+    ph_exterdisk = "external disk";    
+    ph_alr_01or02a = "There is no database previously used. You must enter a new name for a new database and press <b>New database</b> button";
     ph_alr_02b = ", or select one from the available (previously created) database list.";
-    ph_alr_03 = `Although the program was used previously databases list is empty, this can be due to one of these two cases:<br>
-
-                - The program was updated and the old version was later reused, in this case the only solution is to create a new database and import your last backup into it. As is mentioned in the <a href='popups/popup-info-help_en.html#importantnote' target="_blank">help</a> that is why is important to maintain backup files updated. <br>
-
-                - If before this version you have used version 1.4 or previous of Tagstoo <br>and databases don´t appear in the list, don´t worry, please <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">read this</a></em>`;
+    ph_alr_03 = `Although the program was used previously databases list is empty, this can be due to that the program was updated and the old version was later reused, in this case the only solution is to create a new database and import your last backup into it. As is mentioned in the <a href='popups/popup-info-help_en.html#importantnote' target="_blank">help</a> that is why is important to maintain backup files updated when changing versions.`;
     ph_alr_04 = "The name you chosen already exists, first delete the database that uses this name if you want to use it.";
     ph_alr_05 = "You must enter a name for the database first.";
     ph_alr_06 = "An open file dialogue will open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.";
@@ -129,13 +65,9 @@ $(document).ready(function() {
     ph_cantloaddrive = "(No se puede cargar esta unidad, seleccione otra)";
     ph_localdisk = "disco local"
     ph_exterdisk = "disco externo";
-    ph_alr_01or02a = "Ninguna base de datos utilizada anteriormente. Debe introducir un nuevo nombre para una nueva base de datos";
+    ph_alr_01or02a = "Ninguna base de datos utilizada anteriormente. Debe introducir un nuevo nombre para una nueva base de datos y pulsar el botón <b>Nueva base de datos</b>";
     ph_alr_02b = ", o seleccionar uno de la lista de bases de datos disponibles (previamente creadas).";
-    ph_alr_03 = `Aunque el programa se utilizó anteriormente, la lista de bases de datos está vacía, esto puede deberse a uno de estos dos casos:<br>
-
-                - Se actualizó el programa y posteriormente se volvió a utilizar la versión anterior, en este caso la única solución es crear una nueva base de datos e importar su última copia de seguridad en ella. Como se menciona en la <a href='popups/popup-info-help_es.html#importantnote' target="_blank">ayuda</a> por eso es importante mantener actualizados los archivos de copia de seguridad. <br>
-
-                - Si antes de esta versión se ha utilizado la versión 1.4 o anterior de Tagstoo <br>y las bases de datos no aparecen en la lista, no se preocupe, por favor <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">lea esto</a></em>`;
+    ph_alr_03 = `Aunque el programa se utilizó anteriormente, la lista de bases de datos está vacía, esto puede deberse a que se actualizó el programa y posteriormente se volvió a utilizar la versión anterior, en este caso la única solución es crear una nueva base de datos e importar su última copia de seguridad en ella. Como se menciona en <a href='popups/popup-info-help_es.html#importantnote' target="_blank">ayuda</a> es por eso que es importante mantener actualizados los archivos de copia de seguridad cuando se cambia de versión.`;
     ph_alr_04 = "El nombre que ha elegido ya existe, elimine primero la base de datos que utiliza este nombre si desea utilizarlo.";
     ph_alr_05 = "Debe introducir primero un nombre para la base de datos.";
     ph_alr_06 = "Se abrirá un cuadro de diálogo de abrir archivo, seleccione el archivo donde se guardó la base de datos, tenga cuidado, los datos de la base de datos seleccionada serán sobrescritos por el contenido del archivo.";
@@ -158,13 +90,9 @@ $(document).ready(function() {
     ph_cantloaddrive = "(Cet appareil ne peut pas être chargé, sélectionnez un autre)";
     ph_localdisk = "disque local";
     ph_exterdisk = "disque externe";
-    ph_alr_01or02a = "Aucune base de données utilisée précédemment. Vous devez entrer un nouveau nom pour une nouvelle base de données";
+    ph_alr_01or02a = "Aucune base de données utilisée précédemment. Vous devez entrer un nouveau nom pour une nouvelle base de données et appuyez sur le bouton <b>Nouvelle base données</b>";
     ph_alr_02b = ", ou choisissez-en un parmi la liste des bases de données disponibles (précédemment créées).";
-    ph_alr_03 = `Bien que le programme ait été utilisé précédemment, la liste des bases de données est vide, cela peut être dû à l'un de ces deux cas:<br>
-
-                - Le programme a été mis à jour et l'ancienne version a été réutilisée plus tard, dans ce cas, la seule solution est de créer une nouvelle base de données et d'importer votre dernière sauvegarde dans celle-ci. Comme mentionné dans <a href='popups/popup-info-help_fr.html#importantnote' target="_blank">l'aide</a> c'est pourquoi il est important de garder vos fichiers de sauvegarde à jour. <br>
-
-                - Si avant cette version a été utilisée la version 1.4 ou antérieure de Tagstoo <br>et les bases de données n'apparaissent pas dans la liste, ne vous inquiétez pas, <em><a href='popups/popup-info-help-retrocomp.html' target="_blank">lisez ceci</a></em>`;
+    ph_alr_03 = `Bien que le programme ait été utilisé précédemment, la liste des bases de données est vide, c'est peut-être parce que le programme a été mis à jour et l'ancienne version a été réutilisée plus tard, dans ce cas, la seule solution est de créer une nouvelle base de données et d'importer votre dernière sauvegarde dans celle-ci. Comme mentionné dans <a href='popups/popup-info-help_fr.html#importantnote' target="_blank">l'aide</a> c'est pourquoi il est important de garder vos fichiers de sauvegarde à jour en changeant de version.`;
     ph_alr_04 = "Le nom que vous avez choisi existe déjà, commencez par supprimer la base de données qui utilise ce nom si vous souhaitez l'utiliser."
     ph_alr_05 = "Vous devez d'abord entrer un nom pour la base de données.";
     ph_alr_06 = "Une boîte de dialogue de ouvrir fichier sera ouverte, sélectionnez le fichier où la base de données est enregistrée, faites attention, les données dans la base de données sélectionnée seront écrasées par le contenu du fichier.";
@@ -182,6 +110,73 @@ $(document).ready(function() {
     ph_alc_02a = "Attention, vous avez choisi de supprimer <em>'";
     ph_alc_02b = "'</em>, êtes-vous sûr?";
 
+  }
+
+}
+
+
+$(document).ready(function() {
+
+  //unos estilos personalizados para linux y macos
+  if (s.os.name == "linux") {
+    $('#initalselect').css("margin","0 auto 49px auto");
+   /* $('#initalhelp').css("bottom","65px");
+    $('#colorswitch_initial').css("bottom","57px");*/
+  }
+  if (s.os.name == "macos") {
+    $('#initalselect').css("margin","0 auto 32px auto");
+   /* $('#initalhelp').css("bottom","47px");
+    $('#colorswitch_initial').css("bottom","38px");*/
+  }
+
+  if (!localStorage["language"]) { 
+
+    language = "EN";
+    localStorage["language"] = "EN";
+
+  } else {
+
+    language = localStorage["language"];
+    $("#languageselect").val(language);
+  }
+
+  cargafrases();
+
+  $("#languageselect").on('change', function() {
+
+    localStorage["language"] = this.value;
+    language = this.value
+
+    if (language == 'EN') {
+      $(".lang_en").css("display", "inline-block");
+      $(".lang_es").css("display", "none");
+      $(".lang_fr").css("display", "none");
+    } else if (language =='ES') {
+      $(".lang_en").css("display", "none");
+      $(".lang_es").css("display", "inline-block");
+      $(".lang_fr").css("display", "none");
+    } else if (language == "FR") {
+      $(".lang_en").css("display", "none");
+      $(".lang_es").css("display", "none");
+      $(".lang_fr").css("display", "inline-block");
+    }
+
+    cargafrases();
+
+  });
+
+  if (language == 'EN') {
+    $(".lang_en").css("display", "inline-block");
+    $(".lang_es").css("display", "none");
+    $(".lang_fr").css("display", "none");
+  } else if (language =='ES') {
+    $(".lang_en").css("display", "none");
+    $(".lang_es").css("display", "inline-block");
+    $(".lang_fr").css("display", "none");
+  } else if (language == "FR") {
+    $(".lang_en").css("display", "none");
+    $(".lang_es").css("display", "none");
+    $(".lang_fr").css("display", "inline-block");
   }
 
 
@@ -221,7 +216,6 @@ $(document).ready(function() {
   	}
 
   	if (s.os.name == "linux" || s.os.name == "macos") {
-
 
         window.driveunit = " ";
         $('#selecteddrive').html("/" + driveunit)
@@ -272,13 +266,13 @@ $(document).ready(function() {
           var currentlydatabaseused = localStorage["currentlydatabaseused"];          
 
           if (!currentlydatabaseused) {
-            setTimeout(function(){
+            
             if(!listadofiltradodeDB[0]) {
-              alert(ph_alr_01or02a + ".");
-            } else {
-              alert(ph_alr_01or02a + ph_alr_02b);
-            }
-            }, 1000);
+
+              $('#selecteddb').html("<span class='noneyet'>NONE</span>");
+              
+            } 
+           
           }
 
           if (currentlydatabaseused) {
@@ -689,9 +683,9 @@ $(document).ready(function() {
 
                 $('#toinportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..);
 
-                $('#toinportfile').on('change', function() {
+                $('#toinportfile').on('change', function(evt) {
 
-                  var file = $('#toinportfile')["0"].value
+                  var file = evt.target.files["0"].path;
 
                   fs.readFile(file, 'utf8', function (err,data) {
                     if (err) {
@@ -833,7 +827,6 @@ $(document).ready(function() {
 
                   DBDeleteRequest.onsuccess = function(event) {
 
-
                     // se ha de borrar tambien del listado de bases de datos
                     var requestdblist = window.indexedDB.open("tagstoo_databaselist_1100", 1);   
 
@@ -892,25 +885,13 @@ $(document).ready(function() {
 
           });
 
-
-
-
-
-
-
         }
 
-      };
-
-
-        
-
-      
+      };       
 
   	}; // --fin onsucces
 
   }
-
 
 
   function loaddatabaseselect() {
@@ -1280,13 +1261,13 @@ $(document).ready(function() {
 
   });
 
-
 });
 
 function starttagstoo() {
 
   if ($("#selecteddrive").html() != "") {
-    if ($("#selecteddb").html() != "") {    
+
+    if ($("#selecteddb").html() != "" && $("#selecteddb").html() != '<span class="noneyet">NONE</span>') {    
       if($("#drivedesc").html() != ph_cantloaddrive) {
 
         localStorage["colortagstoo"] = window.colortagstoo;
@@ -1307,7 +1288,19 @@ function starttagstoo() {
 
         }
 
-        window.parent.location.assign("main.html")
+
+        $("#initialbody").remove(); // para dejar en blanco 
+
+        window.parent.location.assign("main.html");
+        var electron = require('electron');
+        var CurrentWindow = electron.remote.getCurrentWindow();
+        CurrentWindow.setResizable(true);
+        CurrentWindow.setMinimizable(true);
+        CurrentWindow.setMaximizable(true);
+        CurrentWindow.maximize();    
+    
+
+
 
       }
       else {
@@ -1315,7 +1308,20 @@ function starttagstoo() {
       }
 
     } else {
-      alertify.alert(ph_alr_13)
+      var currentlydatabaseused = localStorage["currentlydatabaseused"];
+      if (!currentlydatabaseused) {
+        if(!listadofiltradodeDB[0]) {  
+
+          alertify.alert(ph_alr_01or02a + ".");
+        
+        } else {
+
+          alertify.alert(ph_alr_01or02a + ph_alr_02b);
+        }
+
+      } else {
+        alertify.alert(ph_alr_13)
+      }
     }
 
   } else {
@@ -1325,7 +1331,7 @@ function starttagstoo() {
 };
 
 
-function showretroagain() {        
+/*function showretroagain() {        
   
   if ($('#showretroagain').prop('checked')){
     localStorage["showretroagain"] = "no";
@@ -1333,4 +1339,4 @@ function showretroagain() {
     localStorage["showretroagain"] = "yes";
   }
 
-};
+};*/

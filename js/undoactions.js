@@ -20,7 +20,7 @@
 
 $(document).ready(function () {
 
-	fs = require('fs-extra');
+	fs = window.top.fs;
 
 	undo = [];
 	undo.class = "";

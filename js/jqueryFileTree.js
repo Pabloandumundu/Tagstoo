@@ -63,7 +63,7 @@ var treedirecorytolist = driveunit + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WI
 var carpetas = treedirecorytolist;
 var newrefresh="no";
 
-var Sniffr = require("sniffr");
+var Sniffr = window.top.Sniffr;
 var agent = navigator.userAgent;
 window.s = "";
 s = new Sniffr();
@@ -722,10 +722,7 @@ function filetrerefreshtags() {
 
 }
 
-
 function filetreeinteractions() {
-
-
 
 	$('.jqueryFileTree li span').droppable({
 
@@ -955,6 +952,10 @@ function filetreeinteractions() {
 									trans2.oncomplete = function(event) {
 
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+										elemetstagdelete(); // activa sistema borrado tags
+										elementstagcopier(); // activa sistema de copiado de tags
+										mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
+
 										if(localStorage["asktagsubeleents"]=="yes"){
 											popup("addtagtosubelements");
 										}
@@ -1103,6 +1104,9 @@ function filetreeinteractions() {
 								trans2.oncomplete = function(event) {
 
 									elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
+									elemetstagdelete(); // activa sistema borrado tags
+									elementstagcopier(); // activa sistema de copiado de tags
+									mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 									if(localStorage["asktagsubeleents"]=="yes"){
 										popup("addtagtosubelements");
@@ -1468,15 +1472,14 @@ function filetreeinteractions() {
 												};
 											});
 
-											$.each(directoryfolders, function(t){
+											$.each(directoryfolders, function(m){										
 
-												arraydecarpetas[posicion] = foldertoread + directoryfolders[t].name;
+												arraydecarpetas[posicion] = foldertoread.replace(driveunit, "") + directoryfolders[m].name;
 												posicion++
-												recursivefolderdata(foldertoread + directoryfolders[t].name);
+												recursivefolderdata(foldertoread + directoryfolders[m].name);
 
-											});
+											});										
 											
-
 										}
 
 									});
@@ -1490,7 +1493,7 @@ function filetreeinteractions() {
 									// console.log("original folders:");
 									// console.log(arraydecarpetas);
 									// console.log("destination folders:");
-									// console.log(arraydecarpetasDest);
+									//console.log(arraydecarpetasDest);
 
 									undo.move.subfoldersorig = arraydecarpetas;
 									undo.move.subfoldersnew = arraydecarpetasDest;
@@ -2594,11 +2597,11 @@ function filetreeinteractions() {
 
 										});
 
-										$.each(directoryfolders, function(t){
+										$.each(directoryfolders, function(m){
 
-											arraydecarpetas[posicion] = foldertoread + directoryfolders[t].name;
+											arraydecarpetas[posicion] = foldertoread.replace(driveunit, "") + directoryfolders[m].name;
 											posicion++
-											recursivefolderdata(foldertoread + directoryfolders[t].name);
+											recursivefolderdata(foldertoread + directoryfolders[m].name);
 
 										});
 
@@ -3623,11 +3626,11 @@ window.parent.$("#paste").on('click', function() {
 										};
 									});
 
-									$.each(directoryfolders, function(t){
+									$.each(directoryfolders, function(m){
 
-										arraydecarpetas[posicion] = foldertoread + directoryfolders[t].name;
+										arraydecarpetas[posicion] = foldertoread.replace(driveunit, "") + directoryfolders[m].name;
 										posicion++
-										recursivefolderdata(foldertoread + directoryfolders[t].name);
+										recursivefolderdata(foldertoread + directoryfolders[m].name);
 
 									});
 									
@@ -4712,11 +4715,11 @@ window.parent.$("#paste").on('click', function() {
 									};
 								});
 
-								$.each(directoryfolders, function(t){
+								$.each(directoryfolders, function(m){
 
-									arraydecarpetas[posicion] = foldertoread + directoryfolders[t].name;
+									arraydecarpetas[posicion] = foldertoread.replace(driveunit, "") + directoryfolders[m].name;
 									posicion++
-									recursivefolderdata(foldertoread + directoryfolders[t].name);
+									recursivefolderdata(foldertoread + directoryfolders[m].name);
 
 								});
 
