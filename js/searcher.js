@@ -2641,6 +2641,13 @@ function searchnoinfolders() {
 
 		});
 
+
+		if (numerodecamposrellenadosfolder > 0) {
+
+			resultsfolders = filtrarcarpetasparafolders(resultsfolders);
+
+		}
+
 		concetradoresultadoscarpetas(resultsfolders);
 	}
 
@@ -2872,6 +2879,7 @@ function searchnoinfiles() {
 	var i=0;
 	var folderidintosearch = [];
 	var foldernametoserach = [];
+	var foldertagstosearch = []; // solo se utiliza para el filtro
 
 	var trans = db.transaction(["folders"], "readonly")
 	var objectStore = trans.objectStore("folders")
@@ -2896,6 +2904,7 @@ function searchnoinfiles() {
 
 				folderidintosearch[i] = cursor.value.folderid;
 				foldernametoserach[i] = cursor.value.folder;
+				foldertagstosearch[i] = cursor.value.foldertags; //solo para el filtro
 
 				i++;
 
@@ -2908,6 +2917,15 @@ function searchnoinfiles() {
 	}
 
 	trans.oncomplete = function(event) {
+
+		if (numerodecamposrellenadosfolder > 0) {
+
+			resfiltrarcarpetasparafiles = [];
+			resfiltrarcarpetasparafiles = filtrarcarpetasparafiles(folderidintosearch, foldernametoserach, foldertagstosearch);
+			folderidintosearch = resfiltrarcarpetasparafiles[0];
+			foldernametoserach = resfiltrarcarpetasparafiles[1];
+
+		}	
 
 		$('#numeroderesultadosarchivos').html(ph_searchfile);		
 
