@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.12.1';
+var programversion = '1.12.2';
 
 var fs = window.top.fs;
 var Sniffr = window.top.Sniffr;
@@ -1070,6 +1070,24 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 
 		}
 
+		//se añade la bd al listado de bd existentes
+		var requestdbnames = window.indexedDB.open("tagstoo_databaselist_1100", 1);
+	    requestdbnames.onerror = function(event) {
+	      // console.log("error: database not loaded");
+	    };
+
+	    requestdbnames.onsuccess = function(event){
+
+	    	var databaselistdb = requestdbnames.result;
+			var requestdbadd = databaselistdb.transaction(["databases"], "readwrite")
+							.objectStore("databases")
+							.add({ dbname: currentlydatabaseused });
+
+			requestdbadd.onsuccess = function(event) { };
+			requestdbadd.onerror = function(event) { };
+
+	    }
+
 	};
 
 	// en caso de que la base de datos no exista se le mete estructura inicial y se añade la bd a la lista de bds
@@ -1108,23 +1126,7 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 		objectStore.createIndex("favfoldname", "favfoldname", { unique: true });
 
 
-		//se añade la bd al listado de bd existentes
-		var requestdbnames = window.indexedDB.open("tagstoo_databaselist_1100", 1);
-	    requestdbnames.onerror = function(event) {
-	      // console.log("error: database not loaded");
-	    };
-
-	    requestdbnames.onsuccess = function(event){
-
-	    	var databaselistdb = requestdbnames.result;
-			var requestdbadd = databaselistdb.transaction(["databases"], "readwrite")
-							.objectStore("databases")
-							.add({ dbname: currentlydatabaseused });
-
-			requestdbadd.onsuccess = function(event) { };
-			requestdbadd.onerror = function(event) { };
-
-	    }
+		
 
 	};
 
@@ -3139,7 +3141,7 @@ function drawDirectoryArchives (viewmode, order) {
 				var imagen = '<a href="file:///'+ dirtoexec + v.name +'"><img class="b-lazy" src="' + imagentemporal + '" data-src="file:///' + dirtoexec + v.name + '" ></a>';
 
 				var exploname = "<span class='exploname imagename2'>"+nameSinBarra+"</span>";
-				var imgsrc = encodeURI(dirtoexec + v.name);
+				/*var imgsrc = encodeURI(dirtoexec + v.name);*/
 
 				$(".imgmode"+viewmode+"").addClass("conimagen"+viewmode+"");
 
@@ -3473,6 +3475,8 @@ function drawDirectoryAfter() {
 				}
 
 				var audiotopreview = encodeURI(dirtoexec + "\/" + $(this)["0"].innerText);
+				// para caracteres especiales
+		        audiotopreview = audiotopreview.replace("#","%23")
 
 				$(this)["0"].previousSibling.innerHTML = '<audio width="0" class="audio" src="file:///'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'"></audio>'
 
@@ -3547,6 +3551,10 @@ function drawDirectoryAfter() {
 				$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
 
 				var audiotopreview = encodeURI(dirtoexec + "\/" + $(this)["0"].innerText);
+				
+				// para caracteres especiales
+		        audiotopreview = audiotopreview.replace("#","%23")
+
 				$(this)["0"].previousSibling.children[0].outerHTML = '<audio width="'+audiowidth+'" class="audio" src="file:///'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'" controls></audio><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 				$(this)["0"].previousSibling.style.backgroundImage = "none";
 		      	$(this)["0"].previousSibling.classList.add("filepreview"); // para quitarle paddings y centrarlo
@@ -3655,6 +3663,9 @@ function drawDirectoryAfter() {
 
 				var videotopreview = encodeURI(dirtoexec + "\/" + $(this)["0"].innerText);
 
+				// para caracteres especiales
+		        videotopreview = videotopreview.replace("#","%23");
+
 				$(this)["0"].previousSibling.innerHTML = '<video width="0" class="video" preload="metadata" src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'"></video>'
 
 				var video = $(this)["0"].previousSibling.children["0"]; // el tag video
@@ -3721,6 +3732,10 @@ function drawDirectoryAfter() {
 				$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
 
 				var videotopreview = encodeURI(dirtoexec + "\/" + $(this)["0"].innerText);
+
+				// para caracteres especiales
+		        videotopreview = videotopreview.replace("#","%23");
+
 				$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video b-lazy" preload="metadata" data-src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 				$(this)["0"].previousSibling.style.backgroundImage = "none";
 		      	$(this)["0"].previousSibling.classList.add("filepreview"); // para quitarle paddings y centrarlo

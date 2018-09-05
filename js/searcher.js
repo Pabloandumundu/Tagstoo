@@ -3531,7 +3531,7 @@ function drawSearchArchives (searchviewmode, order) {
 				}
 
 				var exploname = "<span class='exploname imagename2'>"+nameSinBarra+"</span>";
-				var imgsrc = encodeURI(driveunit + v.filepath + v.name)
+				var imgsrc = driveunit + v.filepath + v.name;
 
 				var imagen = '<a href="file:///'+ driveunit + v.filepath + v.name +'"><img class="b-lazy" data-src="file:///' + imgsrc + '" src="' + imagentemporal + '"></a>';
 
@@ -4230,6 +4230,9 @@ function drawSearchAfter() {
 					}
 
 					var audiotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
+					// para caracteres especiales
+		        	audiotopreview = audiotopreview.replace("#","%23");
+
 
 					$(this)["0"].previousSibling.innerHTML = '<audio width="0" class="audio" src="file:///'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'"></audio>'
 
@@ -4304,6 +4307,9 @@ function drawSearchAfter() {
 					// para que muestre el div de duration
 					$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";					
 					var audiotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
+					// para caracteres especiales
+		        	audiotopreview = audiotopreview.replace("#","%23");
+
 					$(this)["0"].previousSibling.children[0].outerHTML = '<audio width="'+audiowidth+'" class="audio" src="file:///'+audiotopreview+'" type="audio/'+extension.toLowerCase()+'" controls></audio><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 					$(this)["0"].previousSibling.style.backgroundImage = "none";
 			      	$(this)["0"].previousSibling.classList.add("filepreview"); // para quitarle paddings y centrarlo
@@ -4416,6 +4422,9 @@ function drawSearchAfter() {
 
 					var videotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
 
+					// para caracteres especiales
+		        	videotopreview = videotopreview.replace("#","%23")
+
 					$(this)["0"].previousSibling.innerHTML = '<video width="0" class="video" src="file:///'+videotopreview+'" type="video/'+extension.toLowerCase()+'"></video>'
 
 					var video = $(this)["0"].previousSibling.children["0"]; // el tag video
@@ -4482,6 +4491,10 @@ function drawSearchAfter() {
 					// para que muestre el div de duration
 					$(this)["0"].nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.style.display = "inline-block";
 					var videotopreview = encodeURI(driveunit + $(this)["0"].attributes[2].value + $(this)["0"].attributes[1].value);
+
+					// para caracteres especiales
+		        	videotopreview = videotopreview.replace("#","%23")
+
 					$(this)["0"].previousSibling.children[0].outerHTML = '<video width="'+videowidth+'" class="video b-lazy" data-src="file:///'+videotopreview+'" src="" type="video/'+extension.toLowerCase()+'" controls></video><div class="mmcontrols"><button class="playpause" title="play"></button><input class="volume" min="0" max="1" step="0.1" type="range" value="0.5"/><input type="range" class="seek-bar" value="0"></div>'
 					$(this)["0"].previousSibling.style.backgroundImage = "none";
 			      	$(this)["0"].previousSibling.classList.add("filepreview"); // para quitarle paddings y centrarlo

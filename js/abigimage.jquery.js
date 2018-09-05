@@ -541,6 +541,11 @@
 
     function createImage(className, src) {
         if (src){
+
+        // para caracteres especiales
+        src = src.replace("%","%25")
+        src = src.replace("#","%23")
+        
         return $('<img>').addClass(className).attr('src', src).appendTo(box);
         }
     }
