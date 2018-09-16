@@ -1,5 +1,5 @@
 /*
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -1103,6 +1103,8 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 						trans2.oncomplete = function(event) {
 
+							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+
 						}
 
 					};
@@ -1244,6 +1246,8 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						};
 
 						trans2.oncomplete = function(event) {
+
+							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
 
 						}
 
@@ -1582,6 +1586,7 @@ function addfoldertagfield(thisbutton){
 
 	$(htmltoadd).insertAfter(lastcleartagbutton);
 
+	inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
 
 	// Aquí hay que volver a activar el dragg and drop en los nuevos input añadidos
 	$('.foldertaginput').droppable({
@@ -1680,6 +1685,8 @@ function addfoldertagfield(thisbutton){
 
 						trans2.oncomplete = function(event) {
 
+							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)						
+
 						}
 
 					};
@@ -1758,6 +1765,7 @@ function addtagfield(thisbutton){
 
 	$(htmltoadd).insertAfter(lastcleartagbutton);
 
+	inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
 
 	// Aquí hay que volver a activar el dragg and drop en los nuevos input añadidos
 	$('.taginput').droppable({
@@ -1856,6 +1864,7 @@ function addtagfield(thisbutton){
 
 						trans2.oncomplete = function(event) {
 
+							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
 						}
 
 					};
@@ -6623,9 +6632,10 @@ function activateeditname(item) {
 
 					var carpetamadreid = "";
 					var archivoenbd="no";
-					var paraextensionarchivo = $(this).parent();
 
-					var rootdirectory = $(this)["0"].parentNode.children[1].innerText
+					var rootdirectory = $(this)["0"].parentNode.attributes[2].value
+
+					var elelemento = $(this)["0"]; // solo lo utilizo cuando tnego que acceder al cambiar nombre video
 
 					$(this).parent().attr("value", '\/' + nombrenuevo); // cambiamos el atributo value
 
@@ -6636,6 +6646,14 @@ function activateeditname(item) {
 					}
 					// cambiamos el texto del div ext con el contenido de la variable ext
 					$(this).parent().siblings(".exploext")[0].innerHTML = ext;
+
+
+					// se cambian los tags del elemento del array de elementos (para no tener que rehacer la busqueda si se cambia viewmode o order)
+					$.each (resultadosarchivos, function(dra){
+						if (resultadosarchivos[dra].name  == "\/" + nombreoriginal){
+							resultadosarchivos[dra].name = "\/" + nombrenuevo;						
+						}
+					});
 
 					// se busca en la base de datos si estába el archivo con el nombre original
 					// primero se mira si la carpeta madre esta en la bd (si no está el archivo tampoco estará)
@@ -6731,12 +6749,15 @@ function activateeditname(item) {
 										fs.rename(driveunit + rootdirectory + '\/' + nombreoriginal, driveunit + rootdirectory + '\/' + nombrenuevo, function(err) {
 
 											// en el caso de que se trate de un video cambiar el src
-											if ($(this)["0"].parentElement.previousSibling.children[1].nodeName == "VIDEO") {
+											if (elelemento.parentElement.previousSibling.children[1]){
+												if (elelemento.parentElement.previousSibling.children[1].nodeName == "VIDEO") {
 
-												$(this)["0"].parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+														elelemento.parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+												}
+
+												if ( err ) console.log('ERROR: ' + err);
 											}
-
-											if ( err ) console.log('ERROR: ' + err);
+											
 										});
 
 										// en el caso de que se trate de una imagencambiar el src y href (no permite hacerlo como el video)
@@ -6767,12 +6788,15 @@ function activateeditname(item) {
 									fs.rename(driveunit + rootdirectory + '\/' + nombreoriginal, driveunit + rootdirectory + '\/' + nombrenuevo, function(err) {
 
 										// en el caso de que se trate de un video cambiar el src
-										if ($(this)["0"].parentElement.previousSibling.children[1].nodeName == "VIDEO") {
+										if (elelemento.parentElement.previousSibling.children[1]){
+											if (elelemento.parentElement.previousSibling.children[1].nodeName == "VIDEO") {
 
-											$(this)["0"].parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+													elelemento.parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+											}
+
+											if ( err ) console.log('ERROR: ' + err);
 										}
-
-										if ( err ) console.log('ERROR: ' + err);
+										
 									});
 
 									// en el caso de que se trate de una imagencambiar el src y href (no permite hacerlo como el video)
@@ -6804,14 +6828,17 @@ function activateeditname(item) {
 						if (carpetamadreid == "") {
 
 							fs.rename(driveunit + rootdirectory + '\/' + nombreoriginal, driveunit + rootdirectory + '\/' + nombrenuevo, function(err) {
-
+								
 								// en el caso de que se trate de un video cambiar el src
-								if ($(this)["0"].parentElement.previousSibling.children[1].nodeName == "VIDEO") {
+								if (elelemento.parentElement.previousSibling.children[1]){
+									if (elelemento.parentElement.previousSibling.children[1].nodeName == "VIDEO") {
 
-									$(this)["0"].parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+											elelemento.parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+									}
+
+									if ( err ) console.log('ERROR: ' + err);
 								}
-
-								if ( err ) console.log('ERROR: ' + err);
+								
 							});
 
 							// en el caso de que se trate de una imagencambiar el src y href (no permite hacerlo como el video)
@@ -7216,6 +7243,125 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 	}); // --fin droppable
 
 } // --fin elementstagsorder()
+
+
+
+function inputtagsorder() { // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+
+	$(".foldertaginput > div, .taginput > div").draggable({
+		revert: true,
+		revertDuration: 600,
+		containment: 'parent',
+
+		start: function(ev, ui) {
+
+			window.elementtagorder = $(this).parent().attr("value"); // orden de los tags original
+			window.elementtags = $(this).parent(); // el div tags (para realizar campos en la modificación visual)
+
+			
+		}
+
+	});
+
+	$('.foldertaginput > div, .taginput > div').droppable({
+
+		accept: '.foldertaginput > div, .taginput > div',
+
+		drop: function( event, ui ) {
+
+			if(ui.draggable["0"].classList.contains("tagticket")){
+
+				var draggid = ui.draggable["0"].attributes[1].value; // el id del dragg
+				var droppid = $(this).attr("value"); // el id del dropp
+
+				elementtagorder = elementtagorder.split(","); // a array (todavía viejo orden)
+
+				for (i in elementtagorder) {
+					if (elementtagorder[i] == droppid) {
+						posiciondrop = i
+						tempdrop = elementtagorder[i]
+					}
+					if (elementtagorder[i] == draggid) {
+						posiciondragg = i
+						tempdragg = elementtagorder[i]
+					}
+				}
+
+				// se reposicionan los tags en el array
+				elementtagorder.splice(posiciondragg,1); //se borra el dragg
+				elementtagorder.splice(posiciondrop, 0, tempdragg); //se inserta en la posición del drop
+
+				// ahora realizamos el cambio de orden en la visualización (value del tags y posición de los propios tagtickets)
+				elementtagorder = elementtagorder.toString(); // de nuevo a string
+
+				elementtags.attr("value", elementtagorder); // le ponemos el nuevo value a div tags
+
+				elementtagorder = elementtagorder.split(","); // de nuevo a array
+
+				var tagsdivs = "";
+
+				for(var k = 0; k < elementtagorder.length; k += 1){ //recorremos el objeto
+
+					tagsdivs += "<div class='tagticket' value='"+ elementtagorder[k] +"'> " + elementtagorder[k] +  "</div>" ;
+
+				};
+				// se mete el contenido (los tagsticket) en el html, solo ids
+				elementtags.html(tagsdivs);
+
+				// se pinta el contenido accediendo a la bd de tags para los estilos
+
+				var elementostagsreordenados = elementtags.children(); // cada uno de los divs tagticket con id recién creados
+
+				var trans = db.transaction(["tags"], "readonly")
+				var objectStore = trans.objectStore("tags")
+
+				$.each(elementostagsreordenados, function(i) {
+
+					var req = objectStore.openCursor();
+
+					req.onerror = function(event) {
+
+						console.log("error: " + event);
+
+					};
+
+					req.onsuccess = function(event) {
+
+						var cursor = event.target.result;
+
+						if (cursor) {
+
+							if (cursor.value.tagid == elementostagsreordenados[i].attributes[1].nodeValue) {
+
+								var color = "#" + cursor.value.tagcolor;
+								var complecolor = hexToComplimentary(color);
+
+								elementostagsreordenados[i].className += " small " + cursor.value.tagform;
+								elementostagsreordenados[i].setAttribute("value", cursor.value.tagid);
+								elementostagsreordenados[i].setAttribute("style", "background-color: #" + cursor.value.tagcolor + ";" + "color: " + complecolor + ";")
+								elementostagsreordenados[i].innerHTML = cursor.value.tagtext;
+
+								inputtagsorder(); // activa interacciones tagtickets de input-fields (para poder cambiar orden)							
+
+							}
+
+							cursor.continue();
+
+						}
+
+					};
+
+					
+
+				}); // --fin each elementostagsreordenados, los tagtickets del elemento
+
+			} // --fin if tagticket --- si se ha droppeado un tag para cambiar el orden
+
+		} // --fin dropp
+
+	}); // --fin droppable
+
+} // --fin inputtagsorder()
 
 
 // esta función se llamará desde diferentes partes del programa para mantener la imagen del pointer si fuera el caso

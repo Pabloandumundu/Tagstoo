@@ -413,6 +413,10 @@ input[type="radio"]:checked + label span.radio::after {
 
 }
 
+.foldertaginput div, .taginput div, .nottaginput div {
+	cursor: pointer;
+}
+
 .taginput .tagticket, .nottaginput .tagticket, .foldertaginput .tagticket {
 	margin-top: 2px;
 }

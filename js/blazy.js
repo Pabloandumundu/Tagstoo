@@ -298,7 +298,7 @@
         src = src.replace("#","%23")
 
         ele.src = src; //src 
-        console.log(ele)
+        // console.log(ele)
     }
 
     function setAttr(ele, attr, value){

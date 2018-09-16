@@ -1,5 +1,5 @@
 /*
-* Copyright 2017, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.12.2';
+var programversion = '1.12.3';
 
 var fs = window.top.fs;
 var Sniffr = window.top.Sniffr;
@@ -1586,7 +1586,8 @@ window.parent.$("#delete").on('click', function() {
 
 	}
 
-	if (!todeleteelements) {
+
+	if (todeleteelements.length == 0) {
 
 		alertify.alert(ph_alr_02)
 	}
@@ -7169,7 +7170,7 @@ function interactions() {
 
 						if (rootdirectory + $(".explofolder")[ex].attributes[1].value == targetfolder) {
 							var arorfo = "";
-							arorfo = fs.readdirSync(dirtoreadcheck).length;
+							arorfo = fs.readdirSync(driveunit + targetfolder).length;
 							
 							$(".explofolder")[ex].nextSibling.innerHTML = " " + arorfo + ph_infolder;
 							
@@ -8403,6 +8404,8 @@ function interactions() {
 													}
 
 													res20.onsuccess = function(event){
+
+														var fileupdate=[];
 
 														if (carpetapreviamenteexistente == "no") {
 															var key = event.target.result;
@@ -10162,6 +10165,8 @@ function activateeditname(item) {
 					var archivoenbd="no";
 					var paraextensionarchivo = $(this).parent();
 
+					var elelemento = $(this)["0"]; // solo lo utilizo cuando tnego que acceder al cambiar nombre video
+
 					// se actualiza el elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
 					$.each (directoryarchives, function(dra){
 						if (paraextensionarchivo["0"].attributes[1].value == directoryarchives[dra].name){
@@ -10273,12 +10278,14 @@ function activateeditname(item) {
 										fs.rename(dirtoexec + '\/' + nombreoriginal, dirtoexec + '\/' + nombrenuevo, function(err) {
 
 											// en el caso de que se trate de un video cambiar el src
-											if ($(this)["0"].parentElement.previousSibling.children[1].nodeName == "VIDEO") {
+											if (elelemento.parentElement.previousSibling.children[1]){
+												if (elelemento.parentElement.previousSibling.children[1].nodeName == "VIDEO") {
 
-												$(this)["0"].parentElement.previousSibling.children[1].src = encodeURI(dirtoexec + '\/' + nombrenuevo);
-											}
+														elelemento.parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+												}
 
-											if ( err ) console.log('ERROR: ' + err);
+												if ( err ) console.log('ERROR: ' + err);
+											};
 										});
 
 										// en el caso de que se trate de una imagencambiar el src y href (no permite hacerlo como el video)
@@ -10309,12 +10316,14 @@ function activateeditname(item) {
 									fs.rename(dirtoexec + '\/' + nombreoriginal, dirtoexec + '\/' + nombrenuevo, function(err) {
 
 										// en el caso de que se trate de un video cambiar el src
-										if ($(this)["0"].parentElement.previousSibling.children[1].nodeName == "VIDEO") {
+										if (elelemento.parentElement.previousSibling.children[1]){
+											if (elelemento.parentElement.previousSibling.children[1].nodeName == "VIDEO") {
 
-											$(this)["0"].parentElement.previousSibling.children[1].src = encodeURI(dirtoexec + '\/' + nombrenuevo);
+													elelemento.parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+											}
+
+											if ( err ) console.log('ERROR: ' + err);
 										}
-
-										if ( err ) console.log('ERROR: ' + err);
 									});
 
 									// en el caso de que se trate de una imagencambiar el src y href (no permite hacerlo como el video)
@@ -10348,12 +10357,14 @@ function activateeditname(item) {
 							fs.rename(dirtoexec + '\/' + nombreoriginal, dirtoexec + '\/' + nombrenuevo, function(err) {
 
 								// en el caso de que se trate de un video cambiar el src
-								if ($(this)["0"].parentElement.previousSibling.children[1].nodeName == "VIDEO") {
+								if (elelemento.parentElement.previousSibling.children[1]){
+									if (elelemento.parentElement.previousSibling.children[1].nodeName == "VIDEO") {
 
-									$(this)["0"].parentElement.previousSibling.children[1].src = encodeURI(dirtoexec + '\/' + nombrenuevo);
+											elelemento.parentElement.previousSibling.children[1].src = encodeURI(driveunit + rootdirectory + '\/' + nombrenuevo);
+									}
+
+									if ( err ) console.log('ERROR: ' + err);
 								}
-
-								if ( err ) console.log('ERROR: ' + err);
 							});
 
 							// en el caso de que se trate de una imagencambiar el src y href (no permite hacerlo como el video)

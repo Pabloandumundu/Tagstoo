@@ -40,7 +40,7 @@ function cargafrases() {
     ph_cantloaddrive = "(Can't load this drive, select another)";
     ph_localdisk = "local disk";
     ph_exterdisk = "external disk";    
-    ph_alr_01or02a = "There is no database previously used. You must enter a new name for a new database and press <b>New database</b> button";
+    ph_alr_01or02a = "No database selected. You must enter a new name for a new database and press <b>New database</b> button";
     ph_alr_02b = ", or select one from the available (previously created) database list.";
     ph_alr_03 = `Although the program was used previously databases list is empty, this can be due to that the program was updated and the old version was later reused, in this case the only solution is to create a new database and import your last backup into it. As is mentioned in the <a href='popups/popup-info-help_en.html#importantnote' target="_blank">help</a> that is why is important to maintain backup files updated when changing versions.`;
     ph_alr_04 = "The name you chosen already exists, first delete the database that uses this name if you want to use it.";
@@ -65,7 +65,7 @@ function cargafrases() {
     ph_cantloaddrive = "(No se puede cargar esta unidad, seleccione otra)";
     ph_localdisk = "disco local"
     ph_exterdisk = "disco externo";
-    ph_alr_01or02a = "Ninguna base de datos utilizada anteriormente. Debe introducir un nuevo nombre para una nueva base de datos y pulsar el botón <b>Nueva base de datos</b>";
+    ph_alr_01or02a = "Ninguna base de datos seleccionada. Debe introducir un nuevo nombre para una nueva base de datos y pulsar el botón <b>Nueva base de datos</b>";
     ph_alr_02b = ", o seleccionar uno de la lista de bases de datos disponibles (previamente creadas).";
     ph_alr_03 = `Aunque el programa se utilizó anteriormente, la lista de bases de datos está vacía, esto puede deberse a que se actualizó el programa y posteriormente se volvió a utilizar la versión anterior, en este caso la única solución es crear una nueva base de datos e importar su última copia de seguridad en ella. Como se menciona en <a href='popups/popup-info-help_es.html#importantnote' target="_blank">ayuda</a> es por eso que es importante mantener actualizados los archivos de copia de seguridad cuando se cambia de versión.`;
     ph_alr_04 = "El nombre que ha elegido ya existe, elimine primero la base de datos que utiliza este nombre si desea utilizarlo.";
@@ -90,7 +90,7 @@ function cargafrases() {
     ph_cantloaddrive = "(Cet appareil ne peut pas être chargé, sélectionnez un autre)";
     ph_localdisk = "disque local";
     ph_exterdisk = "disque externe";
-    ph_alr_01or02a = "Aucune base de données utilisée précédemment. Vous devez entrer un nouveau nom pour une nouvelle base de données et appuyez sur le bouton <b>Nouvelle base données</b>";
+    ph_alr_01or02a = "Aucune base de données sélectionné. Vous devez entrer un nouveau nom pour une nouvelle base de données et appuyez sur le bouton <b>Nouvelle base données</b>";
     ph_alr_02b = ", ou choisissez-en un parmi la liste des bases de données disponibles (précédemment créées).";
     ph_alr_03 = `Bien que le programme ait été utilisé précédemment, la liste des bases de données est vide, c'est peut-être parce que le programme a été mis à jour et l'ancienne version a été réutilisée plus tard, dans ce cas, la seule solution est de créer une nouvelle base de données et d'importer votre dernière sauvegarde dans celle-ci. Comme mentionné dans <a href='popups/popup-info-help_fr.html#importantnote' target="_blank">l'aide</a> c'est pourquoi il est important de garder vos fichiers de sauvegarde à jour en changeant de version.`;
     ph_alr_04 = "Le nom que vous avez choisi existe déjà, commencez par supprimer la base de données qui utilise ce nom si vous souhaitez l'utiliser."
@@ -267,12 +267,8 @@ $(document).ready(function() {
 
           if (!currentlydatabaseused) {
             
-            if(!listadofiltradodeDB[0]) {
-
               $('#selecteddb').html("<span class='noneyet'>NONE</span>");
-              
-            } 
-           
+                       
           }
 
           if (currentlydatabaseused) {
@@ -671,9 +667,10 @@ $(document).ready(function() {
             });
 
 
+          
           $("#inportdata").on('click', function(){
 
-            if ($('#selecteddb').html() != "") {
+            if ($('#selecteddb').html() != "" && $("#selecteddb").html() != '<span class="noneyet">NONE</span>') {
 
               alertify.alert(ph_alr_06, function () {
 
@@ -807,6 +804,8 @@ $(document).ready(function() {
 
           }); // --fin importdata onclick
 
+          
+
           $("#deletedb").on('click', function(){
 
             if ($('#selecteddb').html() != "") {
@@ -862,7 +861,7 @@ $(document).ready(function() {
 
                       }
 
-                    }
+                    }                   
 
 
                     // se borra del localstorage si la base de datos borrada es la que estaba señalizada en el localstorage

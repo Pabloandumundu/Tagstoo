@@ -30,6 +30,7 @@
 .alertify {
 	background: #FFF; /* dejar para que no haga efecto raro sobre el imageviewer */
 	background-image: url("../img/sneaker_mesh_fabric.png");
+	/* No hay manera de que renderize bien en el aviso de cerrar aplicacion, Se ha intentado poner varias url separadas por como y se ha intentado codificar en base64 la imagen sneaker_mesh_fabric.png para que accediera sin problemas, pero nada. */	
 
 	border: 10px solid #333; /* browsers that don't support rgba */
 	border: 10px solid rgba(0,0,0,.7);
