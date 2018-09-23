@@ -45,6 +45,14 @@
 }
 
 
+#actualpage {
+	width: 47px;
+}
+#actualpage::-webkit-outer-spin-button {
+   opacity: 1;
+}
+
+
 #eraser {
 
 	position: fixed;

@@ -2563,7 +2563,7 @@ function optionspreload() {
 																		saveoptions();
 																		cerrar();
 																		restarttagstoo();
-																	}, 500);
+																	}, 1000);
 
 																}
 
@@ -3153,7 +3153,13 @@ function restarttagstoo() {
 
 	}
 
-	window.top.reloadwin();
+	if (s.os.name != "macos") {
+		window.top.reloadwin();
+	} else {
+		alertify.alert("Due to technical difficulties is not possible in macOS to load/start a database from the options menu, please if you want to start another database reinitialize Tagstoo and load it in the 'Initial Database Options' window.");
+	}
+
+	
 };
 
 

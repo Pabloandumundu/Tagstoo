@@ -50,7 +50,7 @@
   <link href="css/alertify.default.css" rel="stylesheet" type="text/css">
   <link href="css/tags.css" rel="stylesheet" type="text/css">
   <link href="css/controlesmedia.css" rel="stylesheet" type="text/css">
-  <link href="css/abigimage.jquery.css" rel="stylesheet" type="text/css">
+  <link href="css/abigimage.jquery.css" rel="stylesheet" type="text/css">  
   <link href="css/estilos.css" rel="stylesheet" type="text/css">
   <link href="css/searcher.css" rel="stylesheet" type="text/css">
 
@@ -91,7 +91,7 @@
         <span class="lang_fr_b">Chercher à partir de: </span>
       </span>
       <div id="searchin">
-      <div></div>
+      <div contenteditable id="searchininput"></div>
       </div>
 
 
@@ -279,7 +279,73 @@
       &nbsp;
       <span id="status"></span>
 
+
+      <span class="toptext lang_en">Elements per page: </span>
+      <span class="toptext lang_es">Elementos por página: </span>
+      <span class="toptext lang_fr">Éléments par page: </span>
+      <span class="lang_en">
+
+        <select class="elempperpage">          
+              <option value="0" selected>All</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="40">40</option>
+              <option value="80">80</option>
+              <option value="150">150</option>
+              <option value="300">300</option>
+              <option value="500">500</option>
+            </select>
+
+      </span>
+
+      <span class="lang_es">
+
+        <select class="elempperpage">          
+              <option value="0" selected>Todos</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="40">40</option>
+              <option value="80">80</option>
+              <option value="150">150</option>
+              <option value="300">300</option>
+              <option value="500">500</option>
+            </select>
+
+      </span>
+
+      <span class="lang_fr">
+
+        <select class="elempperpage">          
+              <option value="0" selected>Tout</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="40">40</option>
+              <option value="80">80</option>
+              <option value="150">150</option>
+              <option value="300">300</option>
+              <option value="500">500</option>
+            </select>
+
+      </span>
+
+      <span class="toptext lang_en">Page: </span>
+      <span class="toptext lang_es">Página: </span>
+      <span class="toptext lang_fr">Page: </span>
+
+      <input type="number" name="actualpage" id="actualpage" min="1" max="1" value="1" size="3">
+      /
+      <span id="necesarypages">1</span>
+
+
+
+
+
     </div>
+
+    
 
   </div>
 

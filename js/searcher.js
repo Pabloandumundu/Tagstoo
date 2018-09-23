@@ -47,6 +47,11 @@ var resultadoscarpetas=[];
 var resultadosarchivos=[];
 var searchfor="";
 var resizefromimage = "no"; // para poder diferenciar cuando se hace resize desde imagen o de la propia ventana
+var alreadyAleatorized = false;
+// para paginación:
+var numElemsPerPage = 0;
+var necesaryPages = "";
+var actualPage = 0;
 
 $(document).ready(function () {
 
@@ -174,6 +179,9 @@ $(document).ready(function () {
 		ph_alr_07b = "'</em> and will be not copied.";
 		ph_alr_08 = "No elements selected to delete.";
 		ph_alr_09 = "With this tool you can copy to the elements that you selected the tags from the element that you choose later, but you don't have any element selected.";
+		ph_alr_10 = "Entered page is out of range, please enter a page in the available range (1-";
+		ph_alr_11a = "Unable to access to the defined folder <em>'";
+		ph_alr_11b = "'</em> it goes back to the folder defined previously.";
 		ph_alc_01a = "Attention, the folder <em>'";
 		ph_alc_01b = "'</em> is on the search results, but it can't be read (probably don't exists because it was deleted in some way). Do you want to remove it from database?. If you choose Yes, click again on Search to see results.";
 		ph_alc_02 = "When the <em>Copy</em> is made, do you want the associated tags to be copied too?";
@@ -218,6 +226,9 @@ $(document).ready(function () {
 		ph_alr_07b = "'</em> y no se copiará.";
 		ph_alr_08 = "No hay elementos seleccionados para eliminar.";
 		ph_alr_09 = "Con esta herramienta puede copiar a los elementos que seleccionó las etiquetas del elemento que elija más adelante, pero no tiene ningún elemento seleccionado.";
+		ph_alr_10 = "La página ingresada está fuera de rango, ingrese una página en el rango disponible (1-";
+		ph_alr_11a = "No se puede acceder a la carpeta definida <em>'";
+		ph_alr_11b = "'</em> se vuelve a la carpeta definida anteriormente.";
 		ph_alc_01a = "Atención, la carpeta <em>'";
 		ph_alc_01b = "'</em> está en los resultados de búsqueda, pero no se puede leer (probablemente no existe porque se ha eliminado de alguna manera). ¿Desea eliminarlo de la base de datos ?. Si selecciona Sí, haga clic de nuevo en Buscar para ver los resultados.";
 		ph_alc_02 = "Cuando se realice la <em>Copia</em>, ¿también desea copiar las etiquetas asociadas?";
@@ -262,6 +273,9 @@ $(document).ready(function () {
 		ph_alr_07b = "'</em> et ne sera pas copié.";
 		ph_alr_08 = "Aucun élément sélectionné pour supprimer.";
 		ph_alr_09 = "Avec cet outil, vous pouvez copier vers les éléments que vous avez sélectionnés les étiquettes de l'élément que vous choisissez plus tard, mais vous n'avez aucun élément sélectionné.";
+		ph_alr_10 = "La page saisie est hors de portée, veuillez entrer une page dans la plage disponible (1-";
+		ph_alr_11a = "Impossible d'accéder au dossier défini <em>'";
+		ph_alr_11b = "'</em> il retourne au dossier défini précédemment.";
 		ph_alc_01a = "Attention, the folder <em>'";
 		ph_alc_01b = "'</em> est sur les résultats de la recherche, mais il ne peut pas être lu (probablement il n'existe pas car il a été supprimé d'une façon ou d'une autre). Voulez-vous le supprimer de la base de données? Si vous choisissez Oui, cliquez à nouveau sur Rechercher pour voir les résultats.";
 		ph_alc_02 = "Lors de la <em>Copie</em>, souhaitez-vous également copier les étiquettes associées?";
@@ -778,6 +792,8 @@ $(document).ready(function () {
 
 	$(".searchorder").on('change', function() {
 
+		alreadyAleatorized = false;
+
 		searchorder = $(this)["0"].value;
 
 		copytagson = "off";
@@ -790,6 +806,52 @@ $(document).ready(function () {
 		$("#eraseron").removeClass("on");
 
 		readsearchredresults();
+
+	});
+
+
+	$(".elempperpage").on('change', function() {
+
+		numElemsPerPage = parseInt($(this)["0"].value);
+
+		copytagson = "off";
+		$("#copytags img").removeClass('activated');
+		$("#copieron").removeClass("on");
+
+		eraseron = "off";
+		$(".tags > div").draggable( 'enable' );
+		$("#eraser img").removeClass('activated');
+		$("#eraseron").removeClass("on");
+
+		
+		document.getElementById("actualpage").value = 1;
+		actualPage = 0;
+
+		readsearchredresults();
+
+	});
+
+
+	$("#actualpage").on('change', function() {
+
+		if ($(this)["0"].value <= necesaryPages) {
+
+			actualPage = $(this)["0"].value - 1;
+
+			copytagson = "off";
+			$("#copytags img").removeClass('activated');
+			$("#copieron").removeClass("on");
+
+			eraseron = "off";
+			$(".tags > div").draggable( 'enable' );
+			$("#eraser img").removeClass('activated');
+			$("#eraseron").removeClass("on");
+
+			readsearchredresults();
+
+		} else {
+			alertify.alert(ph_alr_10 + necesaryPages + ").");
+		}
 
 	});
 
@@ -948,6 +1010,49 @@ $(document).ready(function () {
 	    document.getElementsByTagName('head')[0].appendChild(ls);
 
 	}
+
+	// Cuando se cambia la carpeta a partir de la que se busca de manera manual
+
+	// para prevenir que se pueda hacer un linebreak
+	$("#searchininput").keypress(function(e){ return e.which != 13; });
+
+
+	$("#searchininput").focusout(function(){
+
+
+		if (selectedFolder == "\/") {
+			selectedFolder = "";
+		}
+
+
+		if ($("#searchininput")[0].innerText != driveunit + selectedFolder) { // si se ha cambiado	
+
+			var doesExist = fs.existsSync($("#searchininput")[0].innerText)
+			
+			if (doesExist) {
+
+				// siempre se usará contrabarra
+				$("#searchininput")[0].innerText = $("#searchininput")[0].innerText.replace('\\','\/');
+
+				selectedFolder = $("#searchininput")[0].innerText.replace(driveunit,'');
+				if (selectedFolder == "") {
+					selectedFolder = "\/";
+				}
+
+			} else { // si la carpeta no existe
+
+				if (selectedFolder == "") {
+					selectedFolder = "\/";
+				}
+
+				alertify.alert(ph_alr_11a + $("#searchininput")[0].innerText + ph_alr_11b);
+				// se vuelve a la carpeta definida anteriormente
+				$("#searchininput")[0].innerText = driveunit + selectedFolder;
+			}
+
+		}
+
+	});
 
 	// los placekeys del los imputs del search
 	$(".foldertaginput").html("<span class='placehold'>" + ph_tagshere + "</span>");
@@ -1443,6 +1548,9 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 		$("#eraser img").removeClass('activated');
 		$("#eraseron").removeClass("on");
 
+		document.getElementById("actualpage").value = 1;
+		actualPage = 0;
+
 		window.foldertaggroup = []; // para los filtros de buscar en carpetas con tag..
 		window.taggroup= [];
 		window.nottaggroup= []; // para los tags que no devén estar
@@ -1466,6 +1574,8 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 
 		window.resultadosarchivos=[];
 		window.resultadoscarpetas=[];
+
+		alreadyAleatorized = false;
 
 
 		$.each ($(".foldertaginput"), function(u) {
@@ -1557,6 +1667,9 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 	});
 
 }, 500);
+
+
+
 
 
 // botón añadir nuevo folder tag input
@@ -1732,9 +1845,6 @@ function addfoldertagfield(thisbutton){
 	});
 
 };
-
-
-
 
 
 // botón añadir nuevo tag input field
@@ -2595,8 +2705,6 @@ function searchinfolders() {
 
 }
 
-
-
 // búsquedas de todas las carpetas para cuando solo se definen tags que NO deben tener los resultados (luego se filtrarán en el concentrador).
 function searchnoinfolders() {
 
@@ -2751,14 +2859,17 @@ function searchinfiles() {
 				selectedFolder = "";
 			}
 
-			if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+			if (cursor.value.folder){ // lo pongo porque en alguna bd antigua sino me daba error
 
-				folderidintosearch[i] = cursor.value.folderid;
-				foldernametoserach[i] = cursor.value.folder;
-				foldertagstosearch[i] = cursor.value.foldertags; //solo para el filtro
+				if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
 
-				i++;
+					folderidintosearch[i] = cursor.value.folderid;
+					foldernametoserach[i] = cursor.value.folder;
+					foldertagstosearch[i] = cursor.value.foldertags; //solo para el filtro
 
+					i++;
+
+				}
 			}
 
 			cursor.continue();
@@ -2909,14 +3020,17 @@ function searchnoinfiles() {
 				selectedFolder = "";
 			}
 
-			if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
+			if (cursor.value.folder){ // lo pongo porque en alguna bd antigua sino me daba error
 
-				folderidintosearch[i] = cursor.value.folderid;
-				foldernametoserach[i] = cursor.value.folder;
-				foldertagstosearch[i] = cursor.value.foldertags; //solo para el filtro
+				if (cursor.value.folder == selectedFolder || cursor.value.folder.substring(0, selectedFolder.length+1) == selectedFolder+"\/") { // carpetas que comienzan con el string de la carpeta a partir de la cual se busca (inclusive)
 
-				i++;
+					folderidintosearch[i] = cursor.value.folderid;
+					foldernametoserach[i] = cursor.value.folder;
+					foldertagstosearch[i] = cursor.value.foldertags; //solo para el filtro
 
+					i++;
+
+				}
 			}
 
 			cursor.continue();
@@ -3157,7 +3271,7 @@ function concetradoresultadosarchivos(entradas) {
 }
 
 
-function readsearchredresults() {
+function readsearchredresults() {	
 
 	$.each (resultadoscarpetas, function(n) {
 
@@ -3360,22 +3474,29 @@ function SortByLastmodDesc(a,b) {
 	return ((aLastmod > bLastmod) ? -1 : ((aLastmod < bLastmod) ? 1 : 0));
 }
 function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
+	if (alreadyAleatorized == false) {
+	
+	  	var currentIndex = array.length, temporaryValue, randomIndex;
 
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
+	  	// While there remain elements to shuffle...
+	  	while (0 !== currentIndex) {
 
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
+		    // Pick a remaining element...
+		    randomIndex = Math.floor(Math.random() * currentIndex);
+		    currentIndex -= 1;
 
-  return array;
+		    // And swap it with the current element.
+		    temporaryValue = array[currentIndex];
+		    array[currentIndex] = array[randomIndex];
+		    array[randomIndex] = temporaryValue;
+	  	}
+
+	  	alreadyAleatorized = true;
+
+	}
+
+  	return array;
 }
 
 
@@ -3564,10 +3685,61 @@ function drawSearchArchives (searchviewmode, order) {
 
 
 
-function drawSearchAfter() {
+function paginar() {
 
-	document.getElementById('searchdirectoryview').innerHTML = t;
+	document.getElementById('searchdirectoryview').innerHTML = "";
 
+	// se crea un DOM virtual que no se renderizará pero me permite trabajar con el
+	var frag = document.createDocumentFragment();
+	var div = document.createElement('div');
+	div.innerHTML = t;
+	while (div.firstChild) frag.appendChild(div.firstChild);
+	
+	var numElems = frag.querySelectorAll('.exploelement').length; // numero de resultados buscados
+	necesaryPages = Math.ceil(numElems / numElemsPerPage); // paginas necesarias segun elemntos por página
+	var theElems = frag.querySelectorAll('.exploelement'); // todos los exploelemts del DOM virtual
+	firstElement = 0+(actualPage*numElemsPerPage); // a partir de que numero de elemento buscado se mostrara
+
+	for (i=firstElement;i<(firstElement+numElemsPerPage);i++) {
+		if (theElems[i]){
+
+			document.getElementById('searchdirectoryview').appendChild(theElems[i])
+		}
+
+	}
+
+	// se actualizan valores mostrados
+	document.getElementById('necesarypages').innerHTML = necesaryPages;
+	document.getElementById("actualpage").max = necesaryPages;
+
+}
+
+
+
+function drawSearchAfter() {	
+
+	// si no hay paginación
+	if (numElemsPerPage == 0) {
+
+		document.getElementById('searchdirectoryview').innerHTML = t;
+		// se actualizan valores mostrados por si hiciera falta
+		document.getElementById('necesarypages').innerHTML = "1"
+		document.getElementById("actualpage").max = "1";
+
+		drawSearchAfterAfter();
+
+	// si hay paginación	
+	} else {		
+
+		paginar();
+		drawSearchAfterAfter();
+
+	}	
+
+} // --fin drawSearchAfter()
+
+
+function drawSearchAfterAfter() {
 	$("#viewmodenumber").html(searchviewmode + ".")
 
 	$('#numeroderesultados').html("")
@@ -4171,7 +4343,7 @@ function drawSearchAfter() {
 							zip.extractEntryTo(/*entry name*/ "OEBPS/Images/cover.jpg", /*target path*/ filepath + "\/temp-epubcover"+u+ filenamesinbarra+"", /*maintainEntryPath*/false, /*overwrite*/true);
 
 						}
-						if (s.os.name == "linux") {
+						if (s.os.name == "linux" || s.os.name == "macos") {
 
 							var test = zip.getEntry("OEBPS/Images/cover.jpg")
 							if (test) {
@@ -4658,8 +4830,7 @@ function drawSearchAfter() {
 
 
 	}
-
-} // --fin drawSearchAfter()
+} //--fin drawSearchAfterAfer()
 
 
 function drawdirectoryviewtags (){
@@ -12182,6 +12353,10 @@ window.parent.$("#delete").on('click', function() {
 			});
 
 		});
+
+		if (numElemsPerPage != 0) {
+			$( "#searchaction" ).trigger( "click" );
+		}
 
 	}
 
