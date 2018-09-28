@@ -30,7 +30,7 @@
   <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
   <script src="js/jquery-latest.min.js"></script>
-  <script src="js/jquery-ui.min.js"></script> <!-- para select y drag -->
+  <script src="js/jquery-ui.min.js"></script> <!-- para select, drag y tooltips -->
   <script src="js/interact.min.js"></script> <!-- para adaptar anchuras -->
   <script src="js/jquery.pressAndHold.js"></script>
   <script src="js/alertify.js"></script>
@@ -45,6 +45,7 @@
   <!-- Insert this line after script imports -->
   <script>if (window.module) module = window.module;</script>
   
+  <link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css">
   <link href="css/tinycolorpicker.css" rel="stylesheet" type="text/css">
   <link href="css/alertify.core.css" rel="stylesheet" type="text/css">
   <link href="css/alertify.default.css" rel="stylesheet" type="text/css">
@@ -79,7 +80,7 @@
 
     <div id="search">
 
-      <a id="selectFolder" class="medium button yellow">
+      <a id="selectFolder" class="medium button yellow" title="">
         <span class="lang_en">Select to search from..</span>
         <span class="lang_es">Seleccionar para buscar desde..</span>
         <span class="lang_fr">Sélectionnez pour chercher à partir de..</span>
@@ -91,22 +92,23 @@
         <span class="lang_fr_b">Chercher à partir de: </span>
       </span>
       <div id="searchin">
-      <div contenteditable id="searchininput"></div>
+      <div contenteditable id="searchininput" title=""></div>
       </div>
 
 
       <div class="searchfolderinput">
         <span class="lang_en">Inside folders that have:</span>
         <span class="lang_es">Dentro de carpetas que tienen:</span>
-        <span class="lang_fr">Dossiers à l'intérieur qui ont:</span>
+        <!-- <span class="lang_fr">Dossiers à l'intérieur qui ont:</span> -->
+        <span class="lang_fr">À l'intérieur des dossiers qui ont:</span>
 
-        <div class="foldertaginput" value=""></div>
-        <a class="clearfoldertagfield small button red">
+        <div class="foldertaginput" value="" title=""></div>
+        <a class="clearfoldertagfield small button red" title="">
           <span class="lang_en">Remove last</span>
           <span class="lang_es">Quitar última</span>
           <span class="lang_fr">Enlever dernier</span>
         </a>
-        <a class="addtagfield small button green" onclick="addfoldertagfield(this)">
+        <a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)" title="">
           <span class="lang_en">Another (That have) filter...</span>
           <span class="lang_es">Otro filtro (Que tienen)...</span>
           <span class="lang_fr">Autre filtre (Qui ont)...</span>
@@ -123,7 +125,7 @@
 
         <br>
 
-        <div class="container">
+        <div class="container tooltipfiles">
 
           <input type = "radio"
                  name = "searchfor"
@@ -138,7 +140,7 @@
 
         </div>
 
-        <div class="container">
+        <div class="container tooltipfolders">
 
           <input type = "radio"
                  name = "searchfor"
@@ -152,7 +154,7 @@
 
         </div>
 
-        <div class="container">
+        <div class="container tooltipfodersandfiles">
         
           <input type = "radio"
                  name = "searchfor"
@@ -174,13 +176,13 @@
             <span class="lang_es">Que tienen:</span>
             <span class="lang_fr">Qui ont:</span>
 
-            <div class="taginput" value=""></div>
+            <div class="taginput" value="" title=""></div>
             <a class="cleartagfield small button red">
               <span class="lang_en">Remove last</span>
               <span class="lang_es">Quitar última</span>
               <span class="lang_fr">Enlever dernier</span>
             </a>
-            <a class="addtagfield small button green" onclick="addtagfield(this)">
+            <a class="addtagfield small button green tooltipaddtagf" onclick="addtagfield(this)" title="">
               <span class="lang_en">Another (That have) filter...</span>
               <span class="lang_es">Otro filtro (Que tienen)...</span>
               <span class="lang_fr">Autre filtre (Qui ont)...</span>
@@ -193,13 +195,13 @@
             <span class="lang_es_b">Que no tienen:</span>
             <span class="lang_fr_b">Qui n'ont pas:</span>
             
-            <div class="nottaginput" value=""></div><br>
+            <div class="nottaginput" value="" title=""></div><br>
             <a class="clearnottagfield small button red">
               <span class="lang_en">Remove last</span>
               <span class="lang_es">Quitar última</span>
               <span class="lang_fr">Enlever dernier</span>
             </a>
-            <a class="addtagfield small button green" onclick="addnottagfield(this)">
+            <a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)" title="">
               <span class="lang_en">Another (That don't have) filter...</span>
               <span class="lang_es">Otro filtro (Que no tienen)...</span>
               <span class="lang_fr">Autre filtre (Qui n'ont pas)...</span>
@@ -212,6 +214,18 @@
             <span class="lang_es">Buscar</span>
             <span class="lang_fr">Chercher</span>
           </a>
+
+          <div id="clearresults">
+            <img src="img/clear.png" alt="" title="In selected copy tags from...">
+          </div>
+          
+<!--           <br>
+
+<a id="clearresults" class="large button red">
+  <span class="lang_en">Clean results</span>
+  <span class="lang_es">Limpiar resultados</span>
+  <span class="lang_fr">Nettoyer résultats</span>
+</a> -->
 
         </div>
 
@@ -226,18 +240,19 @@
     <div id="searchlocationinfonotfixed">
 
       <span id="numeroderesultadoscarpetas"></span><span id="numeroderesultadosarchivos"></span>
+      
       <label for="searchviewmode">
       <span class="lang_en">S.Viewmode: </span>
       <span class="lang_es">B.Vista modo: </span>
       <span class="lang_fr">C.Vue mode: </span>
-      <span id="viewmodenumber">1.</span></label>
-      <input id="searchviewmode" name="searchviewmode" type="range" min="1" max="9" step="1" value="1">
+      <span id="viewmodenumber">1.</span></label>      
+      <input id="searchviewmode" name="searchviewmode" type="range" min="1" max="9" step="1" value="1" title="">
+
       <span class="toptext lang_en">S.Order by: </span>
       <span class="toptext lang_es">B.Ordernar por: </span>
       <span class="toptext lang_fr">C.Trier par: </span>
-
-     <span class="lang_en">
-          <select class="searchorder">          
+      <span class="lang_en">
+          <select class="searchorder" title="">          
             <option value="nameasc" selected>Name A-Z</option>
             <option value="namedesc">Name Z-A</option>
             <option value="extasc">Extension A-Z</option>
@@ -250,7 +265,7 @@
           </select>
         </span>
         <span class="lang_es">
-          <select class="searchorder">          
+          <select class="searchorder" title="">          
             <option value="nameasc" selected>Nombre A-Z</option>
             <option value="namedesc">Nombre Z-A</option>
             <option value="extasc">Extensión A-Z</option>
@@ -263,7 +278,7 @@
           </select>
         </span>
         <span class="lang_fr">
-          <select class="searchorder">          
+          <select class="searchorder" title="">          
             <option value="nameasc" selected>Nom A-Z</option>
             <option value="namedesc">Nom Z-A</option>
             <option value="extasc">Extension A-Z</option>
@@ -275,7 +290,7 @@
             <option value="aleator">Aléatoire!</option>
           </select>
         </span>
-      <span id="tolist"><img src="img/listaicon.png" title="Display printable friendly list..."></span>
+      <span id="tolist"><img src="img/listaicon.png" title=""></span>
       &nbsp;
       <span id="status"></span>
 
@@ -285,7 +300,7 @@
       <span class="toptext lang_fr">Éléments par page: </span>
       <span class="lang_en">
 
-        <select class="elempperpage">          
+        <select class="elempperpage" title="">          
               <option value="0" selected>All</option>
               <option value="5">5</option>
               <option value="10">10</option>
@@ -301,7 +316,7 @@
 
       <span class="lang_es">
 
-        <select class="elempperpage">          
+        <select class="elempperpage" title="">          
               <option value="0" selected>Todos</option>
               <option value="5">5</option>
               <option value="10">10</option>
@@ -317,7 +332,7 @@
 
       <span class="lang_fr">
 
-        <select class="elempperpage">          
+        <select class="elempperpage" title="">          
               <option value="0" selected>Tout</option>
               <option value="5">5</option>
               <option value="10">10</option>
@@ -335,19 +350,15 @@
       <span class="toptext lang_es">Página: </span>
       <span class="toptext lang_fr">Page: </span>
 
-      <input type="number" name="actualpage" id="actualpage" min="1" max="1" value="1" size="3">
+      <input type="number" name="actualpage" id="actualpage" min="1" max="1" value="1" size="3" title="">
       /
-      <span id="necesarypages">1</span>
+      <span id="necesarypages">1</span>      
 
-
-
-
-
-    </div>
-
-    
+    </div> 
 
   </div>
+
+
 
   <div id="copieron">
     <span class="lang_en"><img src="img/tagcopieron_EN.gif" alt=""></span>

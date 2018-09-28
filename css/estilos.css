@@ -17,6 +17,12 @@
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+
+
+
+
+
 /*  Panel desarrollo    */
   	#panel {
 
@@ -2021,7 +2027,7 @@ header h1 {
 #popup.options {
 
 	display: initial;
-	top: 15%;
+	top: 12%;
 	left: 0;
 	right: 0;
 	margin-left: auto;
@@ -2743,6 +2749,19 @@ span.labele {
   margin-bottom: -16px;
 }
 
+
+
+/**
+ * UI-Tooltip Styles (se usa en el initalselect, el main, el explorer, el searcher, + una copia para printfriendly_***_sup.htm)
+ */
+
+.ui-tooltip {
+	font-size:12px !important;
+	background-image: url(../img/sneaker_mesh_fabric.png);
+	border: 3px solid rgba(0,0,0,.7) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 3px 3px rgba(0,0,0,.3) !important;
+}
 
 
 

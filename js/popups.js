@@ -31,7 +31,7 @@ if (language == 'EN') {
 	ph_p_cantloaddrive = "(Can't load this drive, select an available one.)";
 	ph_p_localdisk_nbsp = "&nbsp;(local disk)";
 	ph_p_localdisk = "local disk";
-    ph_p_exterdisk = "external disk";
+	ph_p_exterdisk = "external disk";
 	ph_p_copy = "COPY";
 	ph_p_move = "MOVE";
 	ph_p_alr_01 = "Time between images must be more than 0!. Time not saved.";
@@ -70,7 +70,7 @@ if (language == 'EN') {
 	ph_p_cantloaddrive = "(No se puede cargar esta unidad, seleccione una disponible.)";
 	ph_p_localdisk_nbsp = "&nbsp;(disco local)";
 	ph_p_localdisk = "disco local"
-    ph_p_exterdisk = "disco externo";
+	ph_p_exterdisk = "disco externo";
 	ph_p_copy = "COPIAR";
 	ph_p_move = "MOVER";
 	ph_p_alr_01 = "¡El tiempo entre imágenes debe ser mayor de 0!. Tiempo no guardado.";
@@ -109,7 +109,7 @@ if (language == 'EN') {
 	ph_p_cantloaddrive = "(Cet appareil ne peut pas être chargé, sélectionnez une disponible.)";
 	ph_p_localdisk_nbsp = "&nbsp;(disque local)";
 	ph_p_localdisk = "disque local";
-    ph_p_exterdisk = "disque externe";
+	ph_p_exterdisk = "disque externe";
 	ph_p_copy = "COPIER";
 	ph_p_move = "DÉPLACER";
 	ph_p_alr_01 = "Le temps entre les images doit être supérieur à 0!. Temps non enregistré.";
@@ -266,6 +266,28 @@ function saveoptions() {
 		localStorage["mostrartips"] = "no";
 	}
 
+	// la opción del mostrar tooltips
+	if ($("#showtooltips").is(":checked")) {	
+
+		localStorage["showtooltips"] = "yes";
+		window.top.showtooltips = true;
+
+		window.top.loadTooltips();
+		top.explorer.loadTooltips();
+		top.searcher.loadTooltips();
+
+	} else {
+
+		localStorage["showtooltips"] = "no";
+		window.top.showtooltips = false;
+
+		window.top.loadTooltips();
+		top.explorer.loadTooltips();
+		top.searcher.loadTooltips();
+
+	}
+
+	// preguntar al etiquetar carpetas
 	if($("#asktagsubelements").is(":checked")) {
 		localStorage["asktagsubeleents"] = "no";
 	} else {
@@ -279,7 +301,6 @@ function saveoptions() {
 	}
 
 	// la opcion de slideshow
-
 	if ($("#autoslideshow").is(":checked")) {
 
 		localStorage["autoslideshow"] = "yes";
@@ -787,14 +808,14 @@ function deletetag() { // borrar tag
 	if (selectedtag != "") {
 
 		alertify.confirm(ph_p_alc_01, function (e) {
-            if (!e) {
-	            x = "You pressed Cancel!";
-	            console.log(x);
-            } else {
-              	x = "You pressed OK!";
-              	console.log(x);
+			if (!e) {
+				x = "You pressed Cancel!";
+				console.log(x);
+			} else {
+				x = "You pressed OK!";
+				console.log(x);
 
-              	var updatefile = {};
+				var updatefile = {};
 
 				// se va a ir eliminando el tag de todos los elementos que lo tengan
 
@@ -1926,35 +1947,35 @@ function optionspreload() {
 
 	// tomar nombres de las bases de datos indexdb:
 	window.databaselistdb = [];
-    var request = window.indexedDB.open("tagstoo_databaselist_1100", 1);
-    request.onerror = function(event) {  };
+	var request = window.indexedDB.open("tagstoo_databaselist_1100", 1);
+	request.onerror = function(event) {  };
 
-    request.onupgradeneeded = function(event) {
+	request.onupgradeneeded = function(event) {
 
-      	var objectStore;
-	    databaselistdb = event.target.result;
+		var objectStore;
+		databaselistdb = event.target.result;
 
-	    objectStore = databaselistdb.createObjectStore("databases", { keyPath: "dbid", autoIncrement:true });
-	    objectStore.createIndex("dbname", "dbname", { unique: true });
+		objectStore = databaselistdb.createObjectStore("databases", { keyPath: "dbid", autoIncrement:true });
+		objectStore.createIndex("dbname", "dbname", { unique: true });
 
-    }
+	}
 
-    request.onsuccess = function(event) {
+	request.onsuccess = function(event) {
 
-	    databaselistdb = request.result;
-	    var objectStore = databaselistdb.transaction("databases").objectStore("databases");
+		databaselistdb = request.result;
+		var objectStore = databaselistdb.transaction("databases").objectStore("databases");
 
-	    objectStore.openCursor().onsuccess = function(event) {
+		objectStore.openCursor().onsuccess = function(event) {
 
-	        var cursor = event.target.result;
-	        if (cursor) {
+			var cursor = event.target.result;
+			if (cursor) {
 
-	          listadofiltradodeDB.push(cursor.value.dbname)
-	          cursor.continue();
+			  listadofiltradodeDB.push(cursor.value.dbname)
+			  cursor.continue();
 
-	        } else { // cuando haya llegado al último
+			} else { // cuando haya llegado al último
 
-	        	var currentlydatabaseused = localStorage["currentlydatabaseused"];
+				var currentlydatabaseused = localStorage["currentlydatabaseused"];
 
 				$('#selecteddb').html(currentlydatabaseused);		
 
@@ -1976,54 +1997,62 @@ function optionspreload() {
 				loaddriveslist();
 
 				// el checkbox closeconfirmation
-				if(localStorage["closeconfirmation"]=="no") {
-			        $('#closeconfirmation').prop('checked', false);
-			    } else {
-			        $('#closeconfirmation').prop('checked', true);
-			    }
-			    // el checkbox demotags
-			    if(localStorage["demotags"]=="no") {
-			        $('#demotags').prop('checked', false);
-			    } else {
-			        $('#demotags').prop('checked', true);
-			    }
-			    // el checkbox previewimgonviewmode1 (y epubs)
-			    if(localStorage["previewimgonviewmode1"]=="yes") {
-			    	$('#previewimgonviewmode1').prop('checked', true);
-			    } else {
-			    	$('#previewimgonviewmode1').prop('checked', false);
-			    }
-			    
+				if(localStorage["closeconfirmation"]=="no" || !localStorage["closeconfirmation"]) {
+					$('#closeconfirmation').prop('checked', false);
+				} else {
+					$('#closeconfirmation').prop('checked', true);
+				}
+				// el checkbox demotags
+				if(localStorage["demotags"]=="no") {
+					$('#demotags').prop('checked', false);
+				} else {
+					$('#demotags').prop('checked', true);
+				}
+				// el checkbox previewimgonviewmode1 (y epubs)
+				if(localStorage["previewimgonviewmode1"]=="yes") {
+					$('#previewimgonviewmode1').prop('checked', true);
+				} else {
+					$('#previewimgonviewmode1').prop('checked', false);
+				}
+				
 
-			    if(localStorage["mostrartips"]=="yes") {
-			    	$('#showtips').prop('checked', true);
-			    } else {
-			    	$('#showtips').prop('checked', false);
-			    }
+				if(localStorage["mostrartips"]=="yes") {
+					$('#showtips').prop('checked', true);
+				} else {
+					$('#showtips').prop('checked', false);
+				}
 
-			    if(localStorage["asktagsubeleents"]=="yes"){
-			    	$('#asktagsubelements').prop('checked', false);
-			    } else {
-			    	$('#asktagsubelements').prop('checked', true);
-			    }
 
-			    if(localStorage["searchforupdates"]=="yes"){
-			    	$('#asksearchforupdates').prop('checked', true);
-			    } else {
-			    	$('#asksearchforupdates').prop('checked', false);
-			    }
+				if(localStorage["showtooltips"]=="yes") {
+					$('#showtooltips').prop('checked', true);
+				} else {
+					$('#showtooltips').prop('checked', false);
+				}
 
-			    if (localStorage["autoslideshow"]=="yes") {
-			    	$('#autoslideshow').prop('checked', true);
-			    } else {
-			    	$('#autoslideshow').prop('checked', false);
-			    }
 
-			    if (!localStorage["autoslideshowtime"]) {
-			    	$('#autoslideshowtime').val("6")
-			    } else {
-			    	$('#autoslideshowtime').val(localStorage["autoslideshowtime"])
-			    }
+				if(localStorage["asktagsubeleents"]=="yes"){
+					$('#asktagsubelements').prop('checked', false);
+				} else {
+					$('#asktagsubelements').prop('checked', true);
+				}
+
+				if(localStorage["searchforupdates"]=="yes"){
+					$('#asksearchforupdates').prop('checked', true);
+				} else {
+					$('#asksearchforupdates').prop('checked', false);
+				}
+
+				if (localStorage["autoslideshow"]=="yes") {
+					$('#autoslideshow').prop('checked', true);
+				} else {
+					$('#autoslideshow').prop('checked', false);
+				}
+
+				if (!localStorage["autoslideshowtime"]) {
+					$('#autoslideshowtime').val("6")
+				} else {
+					$('#autoslideshowtime').val(localStorage["autoslideshowtime"])
+				}
 
 
 				$("#databaseselect").change(function() {
@@ -2222,105 +2251,105 @@ function optionspreload() {
 
 					if (s.os.name == "macos") {
 
-			          console.log($("#unitselect").val())
+					  console.log($("#unitselect").val())
 
-			          if ($("#unitselect").val() != "") {
-			            $('#selecteddrive').html( "/" + $("#unitselect").val() );
-			          } else {
-			            $('#selecteddrive').html("/")
-			          }
+					  if ($("#unitselect").val() != "") {
+						$('#selecteddrive').html( "/" + $("#unitselect").val() );
+					  } else {
+						$('#selecteddrive').html("/")
+					  }
 
-			          drives = [""];
+					  drives = [""];
 
-			          // Detectar y añadir unidades
+					  // Detectar y añadir unidades
 
-			          var dirtoread = "/Volumes" ;
-			          var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+					  var dirtoread = "/Volumes" ;
+					  var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
 
-			          var directoryelement = [];
-			          var directorycontent = [];
-			          window.directoryarchives = [];
-			          window.directoryfolders = [];
+					  var directoryelement = [];
+					  var directorycontent = [];
+					  window.directoryarchives = [];
+					  window.directoryfolders = [];
 
-			          var readedElements = fs.readdirSync(dirtoread)
-			          var iteratentimes = readedElements.length;
+					  var readedElements = fs.readdirSync(dirtoread)
+					  var iteratentimes = readedElements.length;
 
-			          for (i = 0; i < iteratentimes; i++) {
+					  for (i = 0; i < iteratentimes; i++) {
 
-			            var ext = re.exec(readedElements[i])[1];
-			            if (!ext) {
-			              ext="&nbsp;";
-			            }
+						var ext = re.exec(readedElements[i])[1];
+						if (!ext) {
+						  ext="&nbsp;";
+						}
 
-			            // comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
-			            var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+						// comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+						var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
 
-			            try {
-			              var arorfo = "i_am_an_archive";
-			              var arorfo = fs.readdirSync(dirtoreadcheck);
-			            }
-			            catch(exception) {};
+						try {
+						  var arorfo = "i_am_an_archive";
+						  var arorfo = fs.readdirSync(dirtoreadcheck);
+						}
+						catch(exception) {};
 
-			            directoryelement.name = readedElements[i]
+						directoryelement.name = readedElements[i]
 
-			            var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
-			            directorycontent[i] = copied_directoryelement;
-			          };
+						var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+						directorycontent[i] = copied_directoryelement;
+					  };
 
-			          // separa carpetas y archivos en dos objetos
-			          var i = 0;
-			          var ii = 0;
-			          var iii = 0;
+					  // separa carpetas y archivos en dos objetos
+					  var i = 0;
+					  var ii = 0;
+					  var iii = 0;
 
-			          $.each(directorycontent, function(i) {
+					  $.each(directorycontent, function(i) {
 
-			            if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
-			              directoryfolders[ii] = directorycontent[i];
+						if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+						  directoryfolders[ii] = directorycontent[i];
 
-			              ii++;
-			            } else {
-			              directoryarchives[iii] = directorycontent[i];
-			              iii++;
-			            };
-			          });
+						  ii++;
+						} else {
+						  directoryarchives[iii] = directorycontent[i];
+						  iii++;
+						};
+					  });
 
-			          // se añaden las carpetas detectadas como unidades externas disponibles
-			          $.each(directoryfolders, function(i) {
-			            drives.push("Volumes/" + directoryfolders[i].name);
-			          });
+					  // se añaden las carpetas detectadas como unidades externas disponibles
+					  $.each(directoryfolders, function(i) {
+						drives.push("Volumes/" + directoryfolders[i].name);
+					  });
 
-			          var t="";
-			          var tdesc="";
+					  var t="";
+					  var tdesc="";
 
-			          $.each (drives, function(i){
+					  $.each (drives, function(i){
 
-			            if (drives[i] != ""){
-			              t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
-			              tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
-			            }
+						if (drives[i] != ""){
+						  t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
+						  tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
+						}
 
-			          });
+					  });
 
-			          $("#unitselect").html(t);
-			          $("#unitselect").val("");
+					  $("#unitselect").html(t);
+					  $("#unitselect").val("");
 
-			          $("#drivedesc").css("display","none")
-			          $("#drivedesc").html("("+tdesc+")");
+					  $("#drivedesc").css("display","none")
+					  $("#drivedesc").html("("+tdesc+")");
 
-			          // se pintará solo la info del drive seleccionado
-			          $.each($("#drivedesc div"), function(n) {
+					  // se pintará solo la info del drive seleccionado
+					  $.each($("#drivedesc div"), function(n) {
 
-			            if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+						if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
 
-			              $(this).remove()
+						  $(this).remove()
 
-			            }
+						}
 
-			          });
+					  });
 
-			          $("#drivedesc").css("display","inline-block");
+					  $("#drivedesc").css("display","inline-block");
 
-			        }
+					}
 
 
 				});
@@ -2354,9 +2383,9 @@ function optionspreload() {
 				});
 				// lo mismo si se pulsa enter..
 				$('#newdatabasename').on('keypress', function (e) {
-		     		if(e.which === 13){
+					if(e.which === 13){
 
-		     			if($("#newdatabasename").val() != "" ){
+						if($("#newdatabasename").val() != "" ){
 
 							var preexistingname = "no";
 
@@ -2380,9 +2409,9 @@ function optionspreload() {
 							alertify.alert(ph_p_alr_10);
 						}
 
-		     		};
+					};
 
-		     	});
+				});
 
 
 				$("#exportdata").on('click', function(){
@@ -2420,13 +2449,13 @@ function optionspreload() {
 
 										// console.log("Exported as JSON: " + jsonString);
 										alertify.confirm(ph_p_alc_02a + file + ph_p_alc_02b, function (e) {
-								            if (!e) {
-								              	x = "You pressed Cancel!";
-								              	console.log(x);
-								            } else {
-								              	x = "You pressed OK!";
-								              	console.log(x)
-								            	// se escribe el fichero
+											if (!e) {
+												x = "You pressed Cancel!";
+												console.log(x);
+											} else {
+												x = "You pressed OK!";
+												console.log(x)
+												// se escribe el fichero
 												fs.writeFile(file, jsonString, function (err) {
 													if (err) return console.log(err);
 													alertify.alert("<em>'" + file + ph_p_alr_12);
@@ -2452,112 +2481,112 @@ function optionspreload() {
 
 				$("#inportdata").on('click', function(){
 
-		  			if ($('#selecteddb').html() != "") {
+					if ($('#selecteddb').html() != "") {
 
-		  				alertify.alert(ph_p_alr_13, function () {
+						alertify.alert(ph_p_alr_13, function () {
 
-		  					document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
+							document.getElementById('toinportfile').value = ""; // esto es para que siempre funcione el on change
 
-		  					document.getElementById('toinportfile').click()
+							document.getElementById('toinportfile').click()
 
-		  					$('#toinportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..);
+							$('#toinportfile').off('change'); // para que no se acumulen event handlers (para que no se repita..);
 
-		  					$('#toinportfile').on('change', function(evt) {
+							$('#toinportfile').on('change', function(evt) {
 
-		  						var file = evt.target.files["0"].path;
+								var file = evt.target.files["0"].path;
 
-		  						fs.readFile(file, 'utf8', function (err,data) {
-		  							if (err) {
-		  								return console.log(err);
-		  							}
+								fs.readFile(file, 'utf8', function (err,data) {
+									if (err) {
+										return console.log(err);
+									}
 
-		  							try {
-		  								// se comprueba si es json
-		  								JSON.parse(data);
-		  								// console.log("is JSON");
+									try {
+										// se comprueba si es json
+										JSON.parse(data);
+										// console.log("is JSON");
 
-		  								// y continua
-		  								alertify.confirm(ph_p_alc_03a + $('#selecteddb').html() + ph_p_alc_03b + file + ph_p_alc_03c, function (e) {
-		  									if (!e) {
-		  										x = "You pressed Cancel!";
-		  										console.log(x);
-		  									} else {
-		  										x = "You pressed OK!";
-		  										console.log(x)
+										// y continua
+										alertify.confirm(ph_p_alc_03a + $('#selecteddb').html() + ph_p_alc_03b + file + ph_p_alc_03c, function (e) {
+											if (!e) {
+												x = "You pressed Cancel!";
+												console.log(x);
+											} else {
+												x = "You pressed OK!";
+												console.log(x)
 
-		  										// habrimos la bd
-		  										var tooverwritedb = [];
-		  										var request = window.indexedDB.open($('#selecteddb').html(), 1);
-		  										request.onerror = function(event) {
-		  											console.log("error: database not loaded");
-		  										};
+												// habrimos la bd
+												var tooverwritedb = [];
+												var request = window.indexedDB.open($('#selecteddb').html(), 1);
+												request.onerror = function(event) {
+													console.log("error: database not loaded");
+												};
 
-		  										// aquí realizamos algunas operaciones previas con la bd porque luego si no puede dar fallos a la hora de escribir si está no se ha abierto nunca...
-		  										request.onupgradeneeded = function(event) {
+												// aquí realizamos algunas operaciones previas con la bd porque luego si no puede dar fallos a la hora de escribir si está no se ha abierto nunca...
+												request.onupgradeneeded = function(event) {
 
-		  											var objectStore;
-		  											var db = event.target.result;
+													var objectStore;
+													var db = event.target.result;
 
-		  											tagData = [
-		  												{ tagtext: "Demo1", tagpos: 0, tagcolor: "66B032", tagform: "tag_fruit" },
-		  												{ tagtext: "DemoTag2", tagpos: 1, tagcolor: "3D01A4", tagform: "tag_classicframe1" },
-		  												{ tagtext: "DemoTag3", tagpos: 2, tagcolor: "0391CE", tagform: "tag_cylinder" },
-		  												{ tagtext: "Demo4", tagpos: 3, tagcolor: "FE2914", tagform: "tag_piggybank" },
-		  												{ tagtext: "DemoTag5", tagpos: 4, tagcolor: "FD5308", tagform: "tag_maletin" }
-		  											];
+													tagData = [
+														{ tagtext: "Demo1", tagpos: 0, tagcolor: "66B032", tagform: "tag_fruit" },
+														{ tagtext: "DemoTag2", tagpos: 1, tagcolor: "3D01A4", tagform: "tag_classicframe1" },
+														{ tagtext: "DemoTag3", tagpos: 2, tagcolor: "0391CE", tagform: "tag_cylinder" },
+														{ tagtext: "Demo4", tagpos: 3, tagcolor: "FE2914", tagform: "tag_piggybank" },
+														{ tagtext: "DemoTag5", tagpos: 4, tagcolor: "FD5308", tagform: "tag_maletin" }
+													];
 
-		  											objectStore = db.createObjectStore("tags", { keyPath: "tagid", autoIncrement:true });
-		  											objectStore.createIndex("tagtext", "tagtext", { unique: false });
-		  											objectStore.createIndex("tagpos", "tagpos", { unique: false });
-		  											objectStore.createIndex("tagcolor", "tagcolor", { unique: false });
-		  											objectStore.createIndex("tagform", "tagform", { unique: false });
-		  											if(localStorage["demotags"]=="no") {
-		  												window.demotags = localStorage["demotags"];
-		  											} else {
-		  												window.demotags = "yes";
-		  											}
-		  											if (demotags == "yes") {
-		  												for (var i in tagData) {
-		  													objectStore.add(tagData[i]);
-		  												}
-		  											}
+													objectStore = db.createObjectStore("tags", { keyPath: "tagid", autoIncrement:true });
+													objectStore.createIndex("tagtext", "tagtext", { unique: false });
+													objectStore.createIndex("tagpos", "tagpos", { unique: false });
+													objectStore.createIndex("tagcolor", "tagcolor", { unique: false });
+													objectStore.createIndex("tagform", "tagform", { unique: false });
+													if(localStorage["demotags"]=="no") {
+														window.demotags = localStorage["demotags"];
+													} else {
+														window.demotags = "yes";
+													}
+													if (demotags == "yes") {
+														for (var i in tagData) {
+															objectStore.add(tagData[i]);
+														}
+													}
 
-		  											objectStore = db.createObjectStore("folders", { keyPath: "folderid", autoIncrement:true });
-		  											objectStore.createIndex("folder", "folder", { unique: true });
-		  											objectStore.createIndex("foldertags", "foldertags", { unique: false, multiEntry: true });
+													objectStore = db.createObjectStore("folders", { keyPath: "folderid", autoIncrement:true });
+													objectStore.createIndex("folder", "folder", { unique: true });
+													objectStore.createIndex("foldertags", "foldertags", { unique: false, multiEntry: true });
 
-		  											objectStore = db.createObjectStore("files", { keyPath: "fileid", autoIncrement:true });
-		  											objectStore.createIndex("filefolder", "filefolder", { unique: false });
-		  											objectStore.createIndex("filename", "filename", { unique: false });
-		  											objectStore.createIndex("fileext", "fileext", { unique: false });
-		  											objectStore.createIndex("filetags", "filetags", { unique: false });
+													objectStore = db.createObjectStore("files", { keyPath: "fileid", autoIncrement:true });
+													objectStore.createIndex("filefolder", "filefolder", { unique: false });
+													objectStore.createIndex("filename", "filename", { unique: false });
+													objectStore.createIndex("fileext", "fileext", { unique: false });
+													objectStore.createIndex("filetags", "filetags", { unique: false });
 
-		  											objectStore = db.createObjectStore("favfolds", { keyPath: "favfoldid", autoIncrement:true });
-		  											objectStore.createIndex("favfoldname", "favfoldname", { unique: true });
+													objectStore = db.createObjectStore("favfolds", { keyPath: "favfoldid", autoIncrement:true });
+													objectStore.createIndex("favfoldname", "favfoldname", { unique: true });
 
 
-		  										};
+												};
 
-		  										request.onsuccess = function(event) {
+												request.onsuccess = function(event) {
 
-		  											var db = event.target.result;
+													var db = event.target.result;
 
-		  											tooverwritedb = request.result;
+													tooverwritedb = request.result;
 
-		  											var idbExportImport = window.top.idbExportImport; // to save and load the contents of an IndexedDB database
-		  											// se vaciá y después se escribe en la base de datos
-		  											idbExportImport.clearDatabase(tooverwritedb, function(err) {
+													var idbExportImport = window.top.idbExportImport; // to save and load the contents of an IndexedDB database
+													// se vaciá y después se escribe en la base de datos
+													idbExportImport.clearDatabase(tooverwritedb, function(err) {
 
-		  												if(err) {
-		  													console.log(err)
-		  												} else {
-		  													console.log("data cleared");
+														if(err) {
+															console.log(err)
+														} else {
+															console.log("data cleared");
 
-		  													idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
+															idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
 
-		  													alertify.alert(ph_p_alr_14, function(){
+															alertify.alert(ph_p_alr_14, function(){
 
-		  														// si es el database actualmente en uso recarga tagstoo
+																// si es el database actualmente en uso recarga tagstoo
 																if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) {
 																	setTimeout(function(){
 																		saveoptions();
@@ -2567,21 +2596,21 @@ function optionspreload() {
 
 																}
 
-		  													});
+															});
 
-		  												}
+														}
 
-		  											});
+													});
 
-		  											//se añade la bd al listado de bd existentes
+													//se añade la bd al listado de bd existentes
 													var requestdbnames = window.indexedDB.open("tagstoo_databaselist_1100", 1);
-												    requestdbnames.onerror = function(event) {
-												      // console.log("error: database not loaded");
-												    };
+													requestdbnames.onerror = function(event) {
+													  // console.log("error: database not loaded");
+													};
 
-												    requestdbnames.onsuccess = function(event){
+													requestdbnames.onsuccess = function(event){
 
-												    	var databaselistdb = requestdbnames.result;
+														var databaselistdb = requestdbnames.result;
 														var requestdbadd = databaselistdb.transaction(["databases"], "readwrite")
 																		.objectStore("databases")
 																		.add({ dbname: $('#selecteddb').html() });
@@ -2596,33 +2625,33 @@ function optionspreload() {
 
 														requestdbadd.onerror = function(event) { };
 
-												    }
+													}
 
-		  										}
+												}
 
-		  									}
+											}
 
-		  								});
+										});
 
-		  							} catch (e) {
-		  								console.log("not JSON");
-		  								alertify.alert(ph_p_alr_15a + file + ph_p_alr_15b, function () {
-		  									document.getElementById('toinportfile').click();
-		  								});
+									} catch (e) {
+										console.log("not JSON");
+										alertify.alert(ph_p_alr_15a + file + ph_p_alr_15b, function () {
+											document.getElementById('toinportfile').click();
+										});
 
-		  							}
+									}
 
-		  						});
+								});
 
-		  					});
+							});
 
-		  				});
+						});
 
-		  			} else {
-		  				alertify.alert("You must select a database from where to import first.");
-		  			}
+					} else {
+						alertify.alert("You must select a database from where to import first.");
+					}
 
-		  		}); // --fin importdata onclick
+				}); // --fin importdata onclick
 
 
 				$("#deletedb").on('click', function(){
@@ -2657,57 +2686,57 @@ function optionspreload() {
 								var DBDeleteRequest = window.indexedDB.deleteDatabase($('#selecteddb').html());
 
 								DBDeleteRequest.onerror = function(event) {
-								  	console.log("Error deleting database.");
+									console.log("Error deleting database.");
 								};
 
 								DBDeleteRequest.onsuccess = function(event) {
 
 
 									// se ha de borrar tambien del listado de bases de datos
-					                var requestdblist = window.indexedDB.open("tagstoo_databaselist_1100", 1);
+									var requestdblist = window.indexedDB.open("tagstoo_databaselist_1100", 1);
 
-					                requestdblist.onsuccess = function(event) {
+									requestdblist.onsuccess = function(event) {
 
-					                  var databaselistdb = request.result;
-
-
-					                  var trans = databaselistdb.transaction(["databases"], "readwrite")
-					                  var objectStore = trans.objectStore("databases")
-					                  var req = objectStore.openCursor();
-
-					                  req.onerror = function(event) {
-
-					                    console.log("error: " + event);
-					                  };
-
-					                  req.onsuccess = function(event) {
-
-					                    var cursor = event.target.result;
-
-					                    if(cursor) {
-
-					                      if(cursor.value.dbname == $('#selecteddb').html()) {
-
-					                        var res2 = cursor.delete(cursor.value.dbid);
-
-					                      }
-
-					                      cursor.continue();
-
-					                    }
-
-					                  }
-
-					                }
+									  var databaselistdb = request.result;
 
 
-								  	// console.log("Database deleted successfully");
-						  		  	alertify.alert(ph_p_alr_16, function () {
+									  var trans = databaselistdb.transaction(["databases"], "readwrite")
+									  var objectStore = trans.objectStore("databases")
+									  var req = objectStore.openCursor();
 
-								  	  	cerrar();
-									  	window.parent.document.getElementById('options').click()
+									  req.onerror = function(event) {
 
-								  	});
+										console.log("error: " + event);
+									  };
+
+									  req.onsuccess = function(event) {
+
+										var cursor = event.target.result;
+
+										if(cursor) {
+
+										  if(cursor.value.dbname == $('#selecteddb').html()) {
+
+											var res2 = cursor.delete(cursor.value.dbid);
+
+										  }
+
+										  cursor.continue();
+
+										}
+
+									  }
+
+									}
+
+
+									// console.log("Database deleted successfully");
+									alertify.alert(ph_p_alr_16, function () {
+
+										cerrar();
+										window.parent.document.getElementById('options').click()
+
+									});
 
 								};
 
@@ -2721,88 +2750,88 @@ function optionspreload() {
 
 				// para prevenir la introducción de letras en el autoslideshowtime
 				$("#autoslideshowtime").keydown(function (e) {
-			        // Allow: backspace, delete, tab, escape, enter and .
-			        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-			             // Allow: Ctrl+A, Command+A
-			            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
-			             // Allow: home, end, left, right, down, up
-			            (e.keyCode >= 35 && e.keyCode <= 40)) {
-			                 // let it happen, don't do anything
-			                 return;
-			        }
-			        // Ensure that it is a number and stop the keypress
-			        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-			            e.preventDefault();
-			        }
+					// Allow: backspace, delete, tab, escape, enter and .
+					if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+						 // Allow: Ctrl+A, Command+A
+						(e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+						 // Allow: home, end, left, right, down, up
+						(e.keyCode >= 35 && e.keyCode <= 40)) {
+							 // let it happen, don't do anything
+							 return;
+					}
+					// Ensure that it is a number and stop the keypress
+					if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+						e.preventDefault();
+					}
 
-		    	});
+				});
 
 
-		    	window.colortagstoo = localStorage["colortagstoo"];
+				window.colortagstoo = localStorage["colortagstoo"];
 
 				if (window.colortagstoo == "not") {
 
-				    // para que aparezca chequeado
-				    $(".coloronoffswitch-checkbox").addClass("check");
-				    $(".coloronoffswitch-switch").css("background","#bbb");
+					// para que aparezca chequeado
+					$(".coloronoffswitch-checkbox").addClass("check");
+					$(".coloronoffswitch-switch").css("background","#bbb");
 
 				}
 
 
-			  	$(".coloronoffswitch-inner, .coloronoffswitch-switch").bind('click', function() {
+				$(".coloronoffswitch-inner, .coloronoffswitch-switch").bind('click', function() {
 
-				    if(window.colortagstoo == "yes") {
+					if(window.colortagstoo == "yes") {
 
-				        window.colortagstoo = "not";
-				        $(".coloronoffswitch-checkbox").addClass("check");
-				        $(".coloronoffswitch-switch").css("background","#bbb");
+						window.colortagstoo = "not";
+						$(".coloronoffswitch-checkbox").addClass("check");
+						$(".coloronoffswitch-switch").css("background","#bbb");
 
-				        // hay que definir cada vez que se añade
-				        var ls = document.createElement('link');
-				        ls.rel="stylesheet";
-				        ls.href= "css/version_grey.css";
-				        window.top.$('head')[0].appendChild(ls);
-				        var ls = document.createElement('link');
-				        ls.rel="stylesheet";
-				        ls.href= "css/version_grey.css";
-				        window.$('head')[0].appendChild(ls);
+						// hay que definir cada vez que se añade
+						var ls = document.createElement('link');
+						ls.rel="stylesheet";
+						ls.href= "css/version_grey.css";
+						window.top.$('head')[0].appendChild(ls);
+						var ls = document.createElement('link');
+						ls.rel="stylesheet";
+						ls.href= "css/version_grey.css";
+						window.$('head')[0].appendChild(ls);
 
-				        if($(this)["0"].parentElement.parentElement.parentElement.parentElement.parentElement.children[1].children["dirview-wrapper"]){ //si es el explore (una manera de saberlo)
-				        	var ls = document.createElement('link');
-					        ls.rel="stylesheet";
-					        ls.href= "css/version_grey.css";
-					        top.searcher.$('head')[0].appendChild(ls);
-				        } else { //si es el searcher
-				        	var ls = document.createElement('link');
-					        ls.rel="stylesheet";
-					        ls.href= "css/version_grey.css";
-					        top.explorer.$('head')[0].appendChild(ls);
+						if($(this)["0"].parentElement.parentElement.parentElement.parentElement.parentElement.children[1].children["dirview-wrapper"]){ //si es el explore (una manera de saberlo)
+							var ls = document.createElement('link');
+							ls.rel="stylesheet";
+							ls.href= "css/version_grey.css";
+							top.searcher.$('head')[0].appendChild(ls);
+						} else { //si es el searcher
+							var ls = document.createElement('link');
+							ls.rel="stylesheet";
+							ls.href= "css/version_grey.css";
+							top.explorer.$('head')[0].appendChild(ls);
 
-				        }
+						}
 
-				        localStorage["colortagstoo"] = window.colortagstoo;
+						localStorage["colortagstoo"] = window.colortagstoo;
 
 
-				    } else if (window.colortagstoo == "not") {
+					} else if (window.colortagstoo == "not") {
 
-				        window.colortagstoo = "yes";
-				        $(".coloronoffswitch-checkbox").removeClass("check");
-				        $(".coloronoffswitch-switch").css("background","linear-gradient(315deg,red,yellow,green)");
+						window.colortagstoo = "yes";
+						$(".coloronoffswitch-checkbox").removeClass("check");
+						$(".coloronoffswitch-switch").css("background","linear-gradient(315deg,red,yellow,green)");
 
-				        $('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+						$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
 
-				        window.top.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
-				        window.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
-				        top.searcher.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
-				        top.explorer.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+						window.top.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+						window.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+						top.searcher.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
+						top.explorer.$('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
 
-				        localStorage["colortagstoo"] = window.colortagstoo;
+						localStorage["colortagstoo"] = window.colortagstoo;
 
-				    }
+					}
 
 				});
 
-			  	// un ajuste de estilo porque sino queda demasiado espacio hueco en la versión en ingles para windows
+				// un ajuste de estilo porque sino queda demasiado espacio hueco en la versión en ingles para windows
 				if (s.os.name == "windows") {
 					if (language == 'EN') {
 						$('#databaseselect').css("max-width","29%");
@@ -2811,9 +2840,9 @@ function optionspreload() {
 					}
 				}
 
-	        } //-fin else cursor (cuando ha llegado al último en la carga de bds)
+			} //-fin else cursor (cuando ha llegado al último en la carga de bds)
 
-      	};      	
+		};      	
 
 	};
 
@@ -3039,97 +3068,97 @@ function loaddriveslist() { //se utiliza tanto por el popup de folder a buscar c
 	}
 	if (s.os.name == "macos") {
 
-      drives = [""];
+	  drives = [""];
 
-      // Detectar y añadir unidades
+	  // Detectar y añadir unidades
 
-      var dirtoread = "/Volumes" ;
-      var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+	  var dirtoread = "/Volumes" ;
+	  var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
 
-      var directoryelement = [];
-      var directorycontent = [];
-      window.directoryarchives = [];
-      window.directoryfolders = [];
+	  var directoryelement = [];
+	  var directorycontent = [];
+	  window.directoryarchives = [];
+	  window.directoryfolders = [];
 
-      var readedElements = fs.readdirSync(dirtoread)
-      var iteratentimes = readedElements.length;
+	  var readedElements = fs.readdirSync(dirtoread)
+	  var iteratentimes = readedElements.length;
 
-      for (i = 0; i < iteratentimes; i++) {
+	  for (i = 0; i < iteratentimes; i++) {
 
-        var ext = re.exec(readedElements[i])[1];
-        if (!ext) {
-          ext="&nbsp;";
-        }
+		var ext = re.exec(readedElements[i])[1];
+		if (!ext) {
+		  ext="&nbsp;";
+		}
 
-        // comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
-        var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+		// comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+		var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
 
-        try {
-          var arorfo = "i_am_an_archive";
-          var arorfo = fs.readdirSync(dirtoreadcheck);
-        }
-        catch(exception) {};
+		try {
+		  var arorfo = "i_am_an_archive";
+		  var arorfo = fs.readdirSync(dirtoreadcheck);
+		}
+		catch(exception) {};
 
-        directoryelement.name = readedElements[i]
+		directoryelement.name = readedElements[i]
 
-        var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
-        directorycontent[i] = copied_directoryelement;
-      };
+		var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+		directorycontent[i] = copied_directoryelement;
+	  };
 
-      // separa carpetas y archivos en dos objetos
-      var i = 0;
-      var ii = 0;
-      var iii = 0;
+	  // separa carpetas y archivos en dos objetos
+	  var i = 0;
+	  var ii = 0;
+	  var iii = 0;
 
-      $.each(directorycontent, function(i) {
+	  $.each(directorycontent, function(i) {
 
-        if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
-          directoryfolders[ii] = directorycontent[i];
+		if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
+		  directoryfolders[ii] = directorycontent[i];
 
-          ii++;
-        } else {
-          directoryarchives[iii] = directorycontent[i];
-          iii++;
-        };
-      });
+		  ii++;
+		} else {
+		  directoryarchives[iii] = directorycontent[i];
+		  iii++;
+		};
+	  });
 
-      // se añaden las carpetas detectadas como unidades externas disponibles
-      $.each(directoryfolders, function(i) {
-        drives.push("Volumes/" + directoryfolders[i].name);
-      });
+	  // se añaden las carpetas detectadas como unidades externas disponibles
+	  $.each(directoryfolders, function(i) {
+		drives.push("Volumes/" + directoryfolders[i].name);
+	  });
 
-      var t="";
-      var tdesc="";
+	  var t="";
+	  var tdesc="";
 
-      $.each (drives, function(i){
+	  $.each (drives, function(i){
 
-        if (drives[i] != ""){
-          t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
-          tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
-        }
+		if (drives[i] != ""){
+		  t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
+		  tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
+		}
 
-      });
+	  });
 
-      $("#unitselect").html(t);
-      $("#unitselect").val("");
+	  $("#unitselect").html(t);
+	  $("#unitselect").val("");
 
-      $("#drivedesc").css("display","none")
-      $("#drivedesc").html("("+tdesc+")");
+	  $("#drivedesc").css("display","none")
+	  $("#drivedesc").html("("+tdesc+")");
 
-      // se pintará solo la info del drive seleccionado
-      $.each($("#drivedesc div"), function(n) {
+	  // se pintará solo la info del drive seleccionado
+	  $.each($("#drivedesc div"), function(n) {
 
-        if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+		if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
 
-          $(this).remove()
+		  $(this).remove()
 
-        }
+		}
 
-      });
+	  });
 
-      $("#drivedesc").css("display","inline-block");
+	  $("#drivedesc").css("display","inline-block");
 
-    }
+	}
 
 }
 
@@ -3199,9 +3228,9 @@ function infopreload() {
 
 function showretroagain() {
   if ($('#showretroagain').prop('checked')){
-    localStorage["showretroagain"] = "no"
+	localStorage["showretroagain"] = "no"
   } else {
-    localStorage["showretroagain"] = "yes"
+	localStorage["showretroagain"] = "yes"
   }
 }
 
@@ -3228,10 +3257,10 @@ function shownexttip() {
 
 function mostrartips() {
   if ($('#mostrartips').prop('checked')){
-    localStorage["mostrartips"] = "no"
+	localStorage["mostrartips"] = "no"
 
   } else {
-    localStorage["mostrartips"] = "yes"
+	localStorage["mostrartips"] = "yes"
   }
 }
 
@@ -3273,62 +3302,62 @@ function selectfoldersearchpreload(){
 
 	if(jQuery) (function ($){
 
-	    // el conector transformado en una función, solo se utilizan los folders pero es la misma función de lectura de elementos que la utilizada en el directoryview
+		// el conector transformado en una función, solo se utilizan los folders pero es la misma función de lectura de elementos que la utilizada en el directoryview
 		function getdirlist (tdirtoread) {
 
-		 	var tdirectorycontent = []; // en esta variable se meten archivos y directorios
-		    var tdirectoryarchives = []; // en esta variable se meten los archivos
-		    var tdirectoryfolders = []; // en esta variable se meten los directorios
+			var tdirectorycontent = []; // en esta variable se meten archivos y directorios
+			var tdirectoryarchives = []; // en esta variable se meten los archivos
+			var tdirectoryfolders = []; // en esta variable se meten los directorios
 
 			var tdirtoreadcheck = ""
-		    var tdirectoryelement = {};
-		    var tdirectorycontent = [];
+			var tdirectoryelement = {};
+			var tdirectorycontent = [];
 
-		    if (newrefresh=="yes") {
-		    	tdirtoread = driveunit + "\/";
-		    }
+			if (newrefresh=="yes") {
+				tdirtoread = driveunit + "\/";
+			}
 
-		    var treadedElements = fs.readdirSync(tdirtoread);
+			var treadedElements = fs.readdirSync(tdirtoread);
 
-		    var tre = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
-		    for (i = 0; i < treadedElements.length; i++) {
+			var tre = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+			for (i = 0; i < treadedElements.length; i++) {
 
-		        var text = tre.exec(treadedElements[i])[1];
+				var text = tre.exec(treadedElements[i])[1];
 
-		        // comprobar si es carpeta o archivo
-		        tdirtoreadcheck = tdirtoread + treadedElements[i] + "\/";
-		        try {
-		            var tarorfo = "i_am_an_archive";
-		            var tarorfo = fs.readdirSync(tdirtoreadcheck);
-		        }
-		        catch(exception) {};
+				// comprobar si es carpeta o archivo
+				tdirtoreadcheck = tdirtoread + treadedElements[i] + "\/";
+				try {
+					var tarorfo = "i_am_an_archive";
+					var tarorfo = fs.readdirSync(tdirtoreadcheck);
+				}
+				catch(exception) {};
 
-		        tdirectoryelement.name = treadedElements[i]
-		        tdirectoryelement.ext = text;
-		        tdirectoryelement.arorfo = tarorfo;
+				tdirectoryelement.name = treadedElements[i]
+				tdirectoryelement.ext = text;
+				tdirectoryelement.arorfo = tarorfo;
 
-		        copied_tdirectoryelement = jQuery.extend({}, tdirectoryelement); // necesario trabajar con una copia para actualizar el objeto tdirectorycontent
-		        tdirectorycontent[i] = copied_tdirectoryelement;
-	    	};
+				copied_tdirectoryelement = jQuery.extend({}, tdirectoryelement); // necesario trabajar con una copia para actualizar el objeto tdirectorycontent
+				tdirectorycontent[i] = copied_tdirectoryelement;
+			};
 
-	    	// separa carpetas y archivos en dos objetos (aquí solo son necesarias las carpetas)
-		    ii = 0;
-		    iii = 0;
-		    for (i in tdirectorycontent) {
-		        if (tdirectorycontent[i].arorfo != "i_am_an_archive" || tdirectorycontent[i].arorfo == undefined || tdirectorycontent[i].name == "Documents and Settings") {
-		            tdirectoryfolders[ii] = tdirectorycontent[i];
-		            ii++;
-		        } else {
-		            tdirectoryarchives[iii] = tdirectorycontent[i];
-		            iii++;
-		        }
-		    }
+			// separa carpetas y archivos en dos objetos (aquí solo son necesarias las carpetas)
+			ii = 0;
+			iii = 0;
+			for (i in tdirectorycontent) {
+				if (tdirectorycontent[i].arorfo != "i_am_an_archive" || tdirectorycontent[i].arorfo == undefined || tdirectorycontent[i].name == "Documents and Settings") {
+					tdirectoryfolders[ii] = tdirectorycontent[i];
+					ii++;
+				} else {
+					tdirectoryarchives[iii] = tdirectorycontent[i];
+					iii++;
+				}
+			}
 
 			r = '<ul class="jqueryFileTree" style="display: none;">';
-		   	try {
-		       	r = '<ul class="jqueryFileTree" style="display: none;">';
+			try {
+				r = '<ul class="jqueryFileTree" style="display: none;">';
 				tdirectoryfolders.forEach(function(f){
-		            r += '<li class="directory collapsed"><span rel="\/' + f.name + '" rel2="\/' + f.name + '">' + f.name + '<div class="id"></div><div class="fttags"></div></span></li>';
+					r += '<li class="directory collapsed"><span rel="\/' + f.name + '" rel2="\/' + f.name + '">' + f.name + '<div class="id"></div><div class="fttags"></div></span></li>';
 				});
 				r += '</ul>';
 			} catch(e) { };
@@ -3439,12 +3468,12 @@ function selectfoldersearchpreload(){
 						$(t).find('LI span').bind(o.folderEvent2, function() {
 
 							if ($(this).hasClass("selected")){
-							 	// $(this).removeClass("selected")
+								// $(this).removeClass("selected")
 							} else {
 								$("#filetree ul li span").removeClass("selected")
-							 	$(this).addClass("selected")
+								$(this).addClass("selected")
 
-							 	$("#searchin")["0"].children["0"].innerHTML = selectedDriveUnit + $(this)["0"].attributes[1].value;
+								$("#searchin")["0"].children["0"].innerHTML = selectedDriveUnit + $(this)["0"].attributes[1].value;
 								window.newselectedFolder = $(this)["0"].attributes[1].value;					 	
 
 							}
@@ -3761,108 +3790,108 @@ function selectfolderactionnotagpreload(){
 
 		if (s.os.name == "macos") {
 
-	     	if ($("#unitselect").val() != "") {
-	        	$('#selecteddrive').html( "/" + $("#unitselect").val() );
-	      	} else {
-	        	$('#selecteddrive').html("/")
-	      	}
+			if ($("#unitselect").val() != "") {
+				$('#selecteddrive').html( "/" + $("#unitselect").val() );
+			} else {
+				$('#selecteddrive').html("/")
+			}
 
-		    drives = [""];
+			drives = [""];
 
-		    // Detectar y añadir unidades
+			// Detectar y añadir unidades
 
-		    var dirtoread = "/Volumes" ;
-		    var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+			var dirtoread = "/Volumes" ;
+			var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
 
-		    var directoryelement = [];
-		    var directorycontent = [];
-		    window.directoryarchives = [];
-		    window.directoryfolders = [];
+			var directoryelement = [];
+			var directorycontent = [];
+			window.directoryarchives = [];
+			window.directoryfolders = [];
 
-		    var readedElements = fs.readdirSync(dirtoread)
-		    var iteratentimes = readedElements.length;
+			var readedElements = fs.readdirSync(dirtoread)
+			var iteratentimes = readedElements.length;
 
-	    	for (i = 0; i < iteratentimes; i++) {
+			for (i = 0; i < iteratentimes; i++) {
 
-		        var ext = re.exec(readedElements[i])[1];
-		        if (!ext) {
-		          ext="&nbsp;";
-		        }
+				var ext = re.exec(readedElements[i])[1];
+				if (!ext) {
+				  ext="&nbsp;";
+				}
 
-		        // comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
-		        var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
+				// comprobar si es carpeta o archivo. En principio solo deveria haber carpetas correspondientes a las unidades, pero por si acaso...
+				var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
 
-		        try {
-		          var arorfo = "i_am_an_archive";
-		          var arorfo = fs.readdirSync(dirtoreadcheck);
-		        }
-		        catch(exception) {};
+				try {
+				  var arorfo = "i_am_an_archive";
+				  var arorfo = fs.readdirSync(dirtoreadcheck);
+				}
+				catch(exception) {};
 
-		        directoryelement.name = readedElements[i]
+				directoryelement.name = readedElements[i]
 
-		        var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
-		        directorycontent[i] = copied_directoryelement;
-      		};
+				var copied_directoryelement = jQuery.extend({}, directoryelement); // necesario trabajar con una copia para actualizar el objeto directorycontent
+				directorycontent[i] = copied_directoryelement;
+			};
 
-		    // separa carpetas y archivos en dos objetos
-		    var i = 0;
-		    var ii = 0;
-		    var iii = 0;
+			// separa carpetas y archivos en dos objetos
+			var i = 0;
+			var ii = 0;
+			var iii = 0;
 
 			$.each(directorycontent, function(i) {
 
 				if (directorycontent[i].arorfo != "i_am_an_archive" || directorycontent[i].arorfo == undefined || directorycontent[i].name == "Documents and Settings") {
-				  	directoryfolders[ii] = directorycontent[i];
+					directoryfolders[ii] = directorycontent[i];
 
-				  	ii++;
+					ii++;
 				} else {
-				  	directoryarchives[iii] = directorycontent[i];
-				  	iii++;
+					directoryarchives[iii] = directorycontent[i];
+					iii++;
 				};
 			});
 
-	      	// se añaden las carpetas detectadas como unidades externas disponibles
-	      	$.each(directoryfolders, function(i) {
-	        	drives.push("Volumes/" + directoryfolders[i].name);
-	      	});
+			// se añaden las carpetas detectadas como unidades externas disponibles
+			$.each(directoryfolders, function(i) {
+				drives.push("Volumes/" + directoryfolders[i].name);
+			});
 
-      		var t="";
-      		var tdesc="";
+			var t="";
+			var tdesc="";
 
-      		$.each (drives, function(i){
+			$.each (drives, function(i){
 
-      			if (drives[i] != ""){
-          			t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
-          			tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
-        		}
+				if (drives[i] != ""){
+					t += "<option value='" + drives[i] + "'>" + drives[i] + "</option>";
+					tdesc += "<div value='" + drives[i] + "' class='drivedesc'>" + "" + "</div>"; + "</div>";
+				}
 
-      		});
+			});
 
-      		$("#unitselect").html(t);
-      		$("#unitselect").val("");
+			$("#unitselect").html(t);
+			$("#unitselect").val("");
 
-      		$("#drivedesc").css("display","none")
-      		$("#drivedesc").html("("+tdesc+")");
+			$("#drivedesc").css("display","none")
+			$("#drivedesc").html("("+tdesc+")");
 
-      		// se pintará solo la info del drive seleccionado
-      		$.each($("#drivedesc div"), function(n) {
+			// se pintará solo la info del drive seleccionado
+			$.each($("#drivedesc div"), function(n) {
 
-        		if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
+				if("/" + $(this).attr("value") != $("#selecteddrive").html()) {
 
-          			$(this).remove()
+					$(this).remove()
 
-        		}
+				}
 
-      		});
+			});
 
-      		$("#drivedesc").css("display","inline-block");
+			$("#drivedesc").css("display","inline-block");
 
-    	}
+		}
 
-    	destinationdrive = $("#selecteddrive").html().trim();
+		destinationdrive = $("#selecteddrive").html().trim();
 
 		if (destinationdrive != "/") {
-      		window.treedirecorytolist = destinationdrive + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WINDOWS mirar https://github.com/resin-io-modules/drivelist
+			window.treedirecorytolist = destinationdrive + "\/"; //ESTO CREO QUE SOLO ES EN CASO DE WINDOWS mirar https://github.com/resin-io-modules/drivelist
 		} else {
 			window.treedirecorytolist = destinationdrive;
 		}
@@ -3870,7 +3899,7 @@ function selectfolderactionnotagpreload(){
 		window.carpetas = treedirecorytolist;
 		$("#selectedfolder")["0"].children["0"].innerHTML = treedirecorytolist
 
-        showdrivefolders(); /* definido abajo */
+		showdrivefolders(); /* definido abajo */
 
 	});
 
@@ -3897,62 +3926,62 @@ function showdrivefolders(){ /* usado tanto por selectfolderactionnotagpreload()
 
 	if(jQuery) (function ($){
 
-	    // el conector transformado en una función, solo se utilizan los folders pero es la misma función de lectura de elementos que la utilizada en el  directoryview
+		// el conector transformado en una función, solo se utilizan los folders pero es la misma función de lectura de elementos que la utilizada en el  directoryview
 		function getdirlist (tdirtoread) {
 
-		 	var tdirectorycontent = []; // en esta variable se meten archivos y directorios
-		    var tdirectoryarchives = []; // en esta variable se meten los archivos
-		    var tdirectoryfolders = []; // en esta variable se meten los directorios
+			var tdirectorycontent = []; // en esta variable se meten archivos y directorios
+			var tdirectoryarchives = []; // en esta variable se meten los archivos
+			var tdirectoryfolders = []; // en esta variable se meten los directorios
 
 			var tdirtoreadcheck = ""
-		    var tdirectoryelement = {};
-		    var tdirectorycontent = [];
+			var tdirectoryelement = {};
+			var tdirectorycontent = [];
 
-		    if (newrefresh=="yes") {
-		    	tdirtoread = driveunit + "\/";
-		    }
+			if (newrefresh=="yes") {
+				tdirtoread = driveunit + "\/";
+			}
 
-		    var treadedElements = fs.readdirSync(tdirtoread);
+			var treadedElements = fs.readdirSync(tdirtoread);
 
-		    var tre = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
-		    for (i = 0; i < treadedElements.length; i++) {
+			var tre = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+			for (i = 0; i < treadedElements.length; i++) {
 
-		        var text = tre.exec(treadedElements[i])[1];
+				var text = tre.exec(treadedElements[i])[1];
 
-		        // comprobar si es carpeta o archivo
-		        tdirtoreadcheck = tdirtoread + treadedElements[i] + "\/";
-		        try {
-		            var tarorfo = "i_am_an_archive";
-		            var tarorfo = fs.readdirSync(tdirtoreadcheck);
-		        }
-		        catch(exception) {};
+				// comprobar si es carpeta o archivo
+				tdirtoreadcheck = tdirtoread + treadedElements[i] + "\/";
+				try {
+					var tarorfo = "i_am_an_archive";
+					var tarorfo = fs.readdirSync(tdirtoreadcheck);
+				}
+				catch(exception) {};
 
-		        tdirectoryelement.name = treadedElements[i]
-		        tdirectoryelement.ext = text;
-		        tdirectoryelement.arorfo = tarorfo;
+				tdirectoryelement.name = treadedElements[i]
+				tdirectoryelement.ext = text;
+				tdirectoryelement.arorfo = tarorfo;
 
-		        copied_tdirectoryelement = jQuery.extend({}, tdirectoryelement); // necesario trabajar con una copia para actualizar el objeto tdirectorycontent
-		        tdirectorycontent[i] = copied_tdirectoryelement;
-	    	};
+				copied_tdirectoryelement = jQuery.extend({}, tdirectoryelement); // necesario trabajar con una copia para actualizar el objeto tdirectorycontent
+				tdirectorycontent[i] = copied_tdirectoryelement;
+			};
 
-	    	// separa carpetas y archivos en dos objetos (aquí solo son necesarias las carpetas)
-		    ii = 0;
-		    iii = 0;
-		    for (i in tdirectorycontent) {
-		        if (tdirectorycontent[i].arorfo != "i_am_an_archive" || tdirectorycontent[i].arorfo == undefined || tdirectorycontent[i].name == "Documents and Settings") {
-		            tdirectoryfolders[ii] = tdirectorycontent[i];
-		            ii++;
-		        } else {
-		            tdirectoryarchives[iii] = tdirectorycontent[i];
-		            iii++;
-		        }
-		    }
+			// separa carpetas y archivos en dos objetos (aquí solo son necesarias las carpetas)
+			ii = 0;
+			iii = 0;
+			for (i in tdirectorycontent) {
+				if (tdirectorycontent[i].arorfo != "i_am_an_archive" || tdirectorycontent[i].arorfo == undefined || tdirectorycontent[i].name == "Documents and Settings") {
+					tdirectoryfolders[ii] = tdirectorycontent[i];
+					ii++;
+				} else {
+					tdirectoryarchives[iii] = tdirectorycontent[i];
+					iii++;
+				}
+			}
 
 			r = '<ul class="jqueryFileTree" style="display: none;">';
-		   	try {
-		       	r = '<ul class="jqueryFileTree" style="display: none;">';
+			try {
+				r = '<ul class="jqueryFileTree" style="display: none;">';
 				tdirectoryfolders.forEach(function(f){
-		            r += '<li class="directory collapsed"><span rel="\/' + f.name + '" rel2="\/' + f.name + '">' + f.name + '<div class="id"></div><div class="fttags"></div></span></li>';
+					r += '<li class="directory collapsed"><span rel="\/' + f.name + '" rel2="\/' + f.name + '">' + f.name + '<div class="id"></div><div class="fttags"></div></span></li>';
 				});
 				r += '</ul>';
 			} catch(e) { };
@@ -4066,13 +4095,13 @@ function showdrivefolders(){ /* usado tanto por selectfolderactionnotagpreload()
 						$(t).find('LI span').bind(o.folderEvent2, function() {
 
 							if ($(this).hasClass("selected")){
-							 	// $(this).removeClass("selected")
+								// $(this).removeClass("selected")
 							} else {
 								$("#filetree ul li span").removeClass("selected")
-							 	$(this).addClass("selected")
-							 	rootdeselected = true;
+								$(this).addClass("selected")
+								rootdeselected = true;
 
-							 	$("#selectedfolder")["0"].children["0"].innerHTML = destinationdrive + $(this)["0"].attributes[1].value;
+								$("#selectedfolder")["0"].children["0"].innerHTML = destinationdrive + $(this)["0"].attributes[1].value;
 							}
 
 						});
@@ -4191,8 +4220,8 @@ function storetoprintview() {
 				element["0"].setAttribute("src", img_data_src);
 
 				// varios estilos: quitar fondo, etc.. en tras cada imagen cargada
-			    element.parent().parent().css("background","none"); // quita el icono de imagen
-			 	element.parent().parent().css("display","inline-block");
+				element.parent().parent().css("background","none"); // quita el icono de imagen
+				element.parent().parent().css("display","inline-block");
 				element.parent().parent().css("padding-right","0px");
 
 				element.css("padding-right", "1px");

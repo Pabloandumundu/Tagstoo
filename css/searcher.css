@@ -463,6 +463,25 @@ input[type="radio"]:checked + label span.radio::after {
 	left: calc(83% - 50px);
 }
 
+#clearresults {
+
+	margin-top: 10px;
+	padding-bottom: 6px;
+	margin-left: 78%;
+	cursor: pointer;
+	display: block !important;
+
+}
+
+#clearresults img {
+
+	border: 1px solid grey;
+	border-radius: 50%;
+	padding: 5px;
+	
+}
+
+
 .hide {
 
 	top: -9999px;
@@ -637,7 +656,8 @@ input[type="radio"]:checked + label span.radio::after {
 #popup.options {
 
 	display: initial;
-	top: 15%;
+	/* top: 15%; */
+	top: 12%;
 	left: 0;
 	right: 0;
 	margin-left: auto;

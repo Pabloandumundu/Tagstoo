@@ -30,12 +30,14 @@
 	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
 	<script src="js/jquery-latest.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script> <!-- para los tooltips -->
 	<script src="js/alertify.js"></script>  
 	<script src="js/initialselect.js"></script>
 
 	<!-- Insert this line after script imports -->
 	<script>if (window.module) module = window.module;</script>
-
+	
+	<link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css">
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css">
 	<link href="css/estilos.css" rel="stylesheet" type="text/css">
@@ -86,22 +88,22 @@
 		<span class="lang_en">Change database:</span>
 		<span class="lang_es">Cambiar base de datos:</span>
 		<span class="lang_fr">Changer de base de données:</span>
-		<select name="" id="databaseselect"></select>
+		<select name="" id="databaseselect" title=""></select>
 
 		<span class="lang_en">&nbsp;Change asociated drive:</span>
 		<span class="lang_es">&nbsp;Cambiar unidad asociada:</span>
 		<span class="lang_fr">&nbsp;Changer lecteur associé:</span>
-		<select name="unitselect" id="unitselect" form="initialoptions"></select>
+		<select name="unitselect" id="unitselect" form="initialoptions" title=""></select>
 
 		<br>
 
-		<a id="newdatabase" class="medium button green">
+		<a id="newdatabase" class="medium button green" title="">
 			<span class="lang_en">New database</span>
 			<span class="lang_es">Nueva base de datos</span>
 			<span class="lang_fr">Nouvelle base données</span>
 		</a>
 
-		<input id="newdatabasename" type="text">
+		<input id="newdatabasename" type="text" title="">
 		<span class="lang_en labele"><em>Select this new database</em></span>	
 		<span class="lang_es labele"><em>Selecciona esta nueva base datos</em></span>
 		<span class="lang_fr labele"><em>Sélectionnez cette nouvelle BD</em></span>
@@ -110,7 +112,7 @@
 
 		<!-- Import Data -->
 		<input type="file" id="toinportfile" name="toinportfile" style="display: none;" />
-	     <a id="inportdata" class="medium button orange">
+	     <a id="inportdata" class="medium button orange" title="">
 	     	<span class="lang_en">Import data</span>
 	     	<span class="lang_es">Importar datos</span>
 	     	<span class="lang_fr">Importer données</span>
@@ -135,9 +137,9 @@
 		<div id="flexbox">
 
 			<div id="colorswitch_initial">
-				<div class="coloronoffswitch" id="pasteaction">
+				<div class="coloronoffswitch" id="pasteaction" title="">
 
-					<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
+					<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch"  >
 					<label class="coloronoffswitch-label" for="mycoloronoffswitch" >
 							<span class="coloronoffswitch-inner"></span>
 							<span class="coloronoffswitch-switch"></span>
@@ -147,14 +149,14 @@
 			</div>
 			
 			<div id="launchenvoltorio">
-				<div id="launch" class="large button green" onclick="starttagstoo()">
+				<div id="launch" class="large button green" onclick="starttagstoo()" title="">
 					<span class="lang_en">Launch!</span>
 					<span class="lang_es">¡Iniciar!</span>
 					<span class="lang_fr">Lancer!</span>
 				</div>
 			</div>
 
-			<div id="initalhelp">
+			<div id="initalhelp" title="">
 				<span class="lang_en">
 					<a href="popups/popup-info-help_en.html#1" target="_blank">
 						<img src="img/info.png" alt="">

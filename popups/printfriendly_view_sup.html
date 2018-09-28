@@ -25,14 +25,17 @@
 	<title>Searched List topmenu - (View)</title>
 
 	<script src="../js/jquery-latest.min.js"></script>
+	<script src="../js/jquery-ui.min.js"></script> <!-- para tooltips -->
 	<script src="../js/printfriendly_view_sup.js"></script>
 
+	<link href="../css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 	<link href="../css/printfriendly_view.css" rel="stylesheet" type="text/css">
 
 	<script type="text/javascript">
 		$(document).ready(function() {
 
 	        language = localStorage["language"];
+	        showtooltips = localStorage["showtooltips"];
 
 			if (language == 'EN') {
 				$(".lang_en").css("display", "inline-block");
@@ -46,10 +49,44 @@
 				$(".lang_en").css("display", "none");
 				$(".lang_es").css("display", "none");
 				$(".lang_fr").css("display", "inline-block");					
-			}			
+			}
+
+			$(".lang_en a").tooltip({
+	      		disabled: !showtooltips,
+	      		show: {delay: 800},      		
+	      			position: {
+	          		my: "right", 
+	          		at: "right-43"
+	      		}
+	      	});
+	      	$(".lang_es a").tooltip({
+	      		disabled: !showtooltips,
+	      		show: {delay: 800},      		
+	      		position: {
+	          	my: "right", 
+	          	at: "right-43"
+	      		}
+	      	});
+	      	$(".lang_fr a").tooltip({
+	      		disabled: !showtooltips,
+	      		show: {delay: 800},      		
+	      		position: {
+	          		my: "right", 
+	          		at: "right-43"
+	      		}
+	      	});			
 
 		});
 	</script>
+	<style>
+		.ui-tooltip {
+			font-size:12px !important;
+			background-image: url(../img/sneaker_mesh_fabric.png);
+			border: 3px solid rgba(0,0,0,.7) !important;
+		    border-radius: 8px !important;
+		    box-shadow: 0 3px 3px rgba(0,0,0,.3) !important;
+		}
+	</style>
 
 </head>
 

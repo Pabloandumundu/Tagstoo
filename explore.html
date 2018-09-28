@@ -30,7 +30,7 @@
   <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
   <script src="js/jquery-latest.min.js"></script>  
-  <script src="js/jquery-ui.min.js"></script> <!-- para select y dragg -->
+  <script src="js/jquery-ui.min.js"></script> <!-- para select, dragg y tooltips -->
   <script src="js/interact.min.js"></script> <!-- para adaptar anchuras -->
   <script src="js/jquery.pressAndHold.js"></script>
   <script src="js/alertify.js"></script>
@@ -46,6 +46,7 @@
   <!-- Insert this line after script imports -->
   <script>if (window.module) module = window.module;</script>
 
+  <link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css">
   <link href="css/jqueryFileTree.css" rel="stylesheet" type="text/css">
   <link href="css/tinycolorpicker.css" rel="stylesheet" type="text/css">
   <link href="css/alertify.core.css" rel="stylesheet" type="text/css">
@@ -76,7 +77,7 @@
 
     <div id="treeview">
 
-      <div id="filetreerefresh" onclick="filetreerefresh()"><img src="img/refreshtreeview.png" alt="" title=".Refresh"></div>          
+      <div id="filetreerefresh" onclick="filetreerefresh()"><img src="img/refreshtreeview.png" title=""></div>          
       <div id="filetree"></div>
 
     </div>
@@ -87,8 +88,8 @@
 
         <div id="previousnextleft"> 
 
-          <img class="previousnext" src="img/previous.png" alt="Previous" onclick="previouslocation()">
-          <img class="previousnext" src="img/next.png" alt="Previous" onclick="nextlocation()">
+          <img class="previousnext previouslocation" src="img/previous.png" onclick="previouslocation()">
+          <img class="previousnext nextlocation" src="img/next.png" onclick="nextlocation()">
 
         </div>
 
@@ -96,12 +97,12 @@
 
          <div id="previousnextright" style="display: none"> <!-- para cuando no hay anchura para todo el contenido -->
 
-          <img class="previousnext" src="img/previous.png" alt="Previous" onclick="previouslocation()">
-          <img class="previousnext" src="img/next.png" alt="Previous" onclick="nextlocation()">
+          <img class="previousnext previouslocation" src="img/previous.png" onclick="previouslocation()">
+          <img class="previousnext nextlocation" src="img/next.png" onclick="nextlocation()">
 
         </div>
 
-        <a class="small button green" id="addfastacces" onclick="locationtofav()">
+        <a class="small button green" id="addfastacces" onclick="locationtofav()" title="">
           <span class="lang_en">Add Fast Access</span>
           <span class="lang_es">Añadir Acceso Rápido</span>
           <span class="lang_fr">Ajouter Accès Rapide</span>
@@ -111,22 +112,22 @@
       </div>
       
       <div id="copieron">
-        <span class="lang_en"><img src="img/tagcopieron_EN.gif" alt=""></span>
-        <span class="lang_es"><img src="img/tagcopieron_ES.gif" alt=""></span>
-        <span class="lang_fr"><img src="img/tagcopieron_FR.gif" alt=""></span>
+        <span class="lang_en"><img src="img/tagcopieron_EN.gif"></span>
+        <span class="lang_es"><img src="img/tagcopieron_ES.gif"></span>
+        <span class="lang_fr"><img src="img/tagcopieron_FR.gif"></span>
       </div>
       <div id="copytags">
-       <a><img src="img/copiatags.png" alt="" title="In selected copy tags from..."></a>
+       <a><img src="img/copiatags.png" title=""></a>
       </div>
       <div id="eraseron">
-        <span class="lang_en"><img src="img/tageraseron_EN.gif" alt=""></span>
-        <span class="lang_es"><img src="img/tageraseron_ES.gif" alt=""></span>
-        <span class="lang_fr"><img src="img/tageraseron_FR.gif" alt=""></span>
+        <span class="lang_en"><img src="img/tageraseron_EN.gif"></span>
+        <span class="lang_es"><img src="img/tageraseron_ES.gif"></span>
+        <span class="lang_fr"><img src="img/tageraseron_FR.gif"></span>
       </div>
       <div id="eraser">
-        <a><img src="img/eraser.png" alt="" title="Tag eraser."></a>
+        <a><img src="img/eraser.png" alt="" title=""></a>
       </div>
-      <div id="dirviewrefresh"><img src="img/refresh.png" alt="" title="Refresh."></div>
+      <div id="dirviewrefresh"><img src="img/refresh.png" title=""></div>
 
     </div>
 
@@ -148,15 +149,15 @@
 
         <div id="botonestag">
 
-          <a class="small button green" onclick="newTag()">
-            <span class="lang_en">Add New Tag</span>
-            <span class="lang_es">Añadir Nueva Etiqueta</span>
-            <span class="lang_fr">Ajouter Nouveau Étiquette</span>
+          <a class="small button green" onclick="newTag()" id="newtag">
+            <span class="lang_en" title="">Add New Tag</span>
+            <span class="lang_es" title="">Añadir Nueva Etiqueta</span>
+            <span class="lang_fr" title="">Ajouter Nouveau Étiquette</span>
           </a>
-          <a class="small button orange" onclick="editTag()">
-            <span class="lang_en">Edit/Remove Tag</span>
-            <span class="lang_es">Editar/Suprimir Etiqueta</span>
-            <span class="lang_fr">Éditer/Supprimer Étiquette</span>
+          <a class="small button orange" onclick="editTag()" id="edittag">
+            <span class="lang_en" title="">Edit/Remove Tag</span>
+            <span class="lang_es" title="">Editar/Suprimir Etiqueta</span>
+            <span class="lang_fr" title="">Éditer/Supprimer Étiquette</span>
           </a>
 
         </div>

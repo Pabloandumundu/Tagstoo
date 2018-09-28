@@ -114,6 +114,153 @@ function cargafrases() {
 
 }
 
+// frases tooltip
+function loadtooltips(){
+  
+  if (language == "EN") {
+    ph_tt_01 = "Select interface language, available languages: <br> EN - English <br> ES - Spanish <br> FR - French";
+    ph_tt_02 = "Change the database currently selected by one of the previously created database.";
+    ph_tt_03 = "Change the drive associated to the currently selected database (each database can work with only one drive but this associated drive can be changed at any time, in case the system's drives configuration changes for example).";
+    ph_tt_04 = "Take the entered name for a new database and put it as the currently selected database.";
+    ph_tt_05 = "Import the data from the file that you will be able to choose next in the currently selected database.";
+    ph_tt_06 = "Delete currently selected database, all it's data will be lost (if they have not been exported to any file)."
+    ph_tt_07 = "Toggle the application interface between the color and grayscale modes.";
+    ph_tt_08 = "Launch application with the currently selected database and its associated drive.";
+    ph_tt_09 = "Open help in new window.";
+    ph_tt_04b = "Name for a new database";
+    
+
+  } else if (language == "ES") {
+
+    ph_tt_01 = "Seleccionar el idioma de la interfaz, idiomas disponibles: <br> EN - Inglés <br> ES - Español <br> FR - Francés";
+    ph_tt_02 = "Cambiar la base de datos actualmente seleccionada por una de las bases de datos creadas anteriormente.";
+    ph_tt_03 = "Cambiar la unidad asociada a la base de datos seleccionada actualmente (cada base de datos puede funcionar con una unidad unicamente, pero esta unidad asociada se puede cambiar en cualquier momento, en caso de que la configuración de las unidades del sistema cambie, por ejemplo).";
+    ph_tt_04 = "Tomar el nombre ingresado para una nueva base de datos y ponerla como la base de datos actualmente seleccionada.";
+    ph_tt_05 = "Importe los datos del archivo que podrá elegir a continuación en la base de datos actualmente seleccionada.";
+    ph_tt_06 = "Borre la base de datos actualmente seleccionada, todos sus datos se perderán (si no se han exportado a ningún archivo).";
+    ph_tt_07 = "Alternar la interfaz de la aplicación entre los modos de color y de escala de grises.";
+    ph_tt_08 = "Iniciar la aplicación con la base de datos seleccionada actualmente y su unidad asociada.";
+    ph_tt_09 = "Abrir la ayuda en una nueva ventana.";
+    ph_tt_04b = "Nombre para una nueva base de datos.";
+    
+  } else if (language == "FR") {
+
+    ph_tt_01 = "Sélectionner la langue de l'interface, langues disponibles: <br> EN - Anglais <br> ES - Espagnol <br> FR - Français";
+    ph_tt_02 = "Changer la base de données actuellement sélectionnée par l'une des bases de données créées précédemment.";
+    ph_tt_03 = "Changer l'unité associée à la base de données actuellement sélectionnée (chaque base de données peut fonctionner avec une seule unité, mais cette unité associée peut être changer à n'importe quel moment, par exemple si la configuration des unités du système change).";
+    ph_tt_04 = "Prendre le nom entré pour une nouvelle base de données et mettez-le comme base de données actuellement sélectionnée.";
+    ph_tt_05 = "Importer les données du fichier que vous pouvez choisir ci-dessous dans la base de données actuellement sélectionnée.";
+    ph_tt_06 = "Supprimer la base de données actuellement sélectionnée, toutes ses données seront perdues (si elles n'ont pas été exportées vers un fichier)."
+    ph_tt_07 = "Basculer l'interface de l'application entre les modes couleur et niveaux de gris.";
+    ph_tt_08 = "Lancer l'application avec la base de données actuellement sélectionnée et son unité associée.";
+    ph_tt_09 = "Ouvrir l'aide dans une nouvelle fenêtre.";
+    ph_tt_04b = "Nom pour une nouvelle base de données.";
+
+  }
+
+  $("#languageselect").attr("title", "");
+  $("#languageselect").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_01,
+      position: {
+          my: "right top", 
+          at: "right-48"
+      }
+  });  
+  $("#databaseselect").attr("title", ""); 
+  $("#databaseselect").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_02,
+      position: {
+          my: "left", 
+          at: "left+70"
+      }
+  });
+  $("#unitselect").attr("title", ""); 
+  $("#unitselect").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_03,
+      position: {
+          my: "left top", 
+          at: "left+45"
+      }
+  });
+  $("#newdatabase").attr("title", ""); 
+  $("#newdatabase").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_04,
+      position: {
+          my: "left top", 
+          at: "left+100"
+      }
+  });
+  $("#newdatabasename").attr("title", ""); 
+  $("#newdatabasename").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_04b,
+      position: {
+          my: "left top", 
+          at: "left+100"
+      }
+  });
+  $("#inportdata").attr("title", ""); 
+  $("#inportdata").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_05,
+      position: {
+          my: "left", 
+          at: "left+100"
+      }
+  });
+  $("#deletedb").attr("title", ""); 
+  $("#deletedb").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_06,
+      position: {
+          my: "left", 
+          at: "left+100"
+      }
+  });
+  $(".coloronoffswitch").attr("title", ""); 
+  $(".coloronoffswitch").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_07,
+      position: {
+          my: "left bottom", 
+          at: "left+60"
+      }
+  });
+  $("#launch").attr("title", ""); 
+  $("#launch").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_08,
+      position: {
+          my: "top", 
+          at: "top+40"
+      }
+  });
+  $("#initalhelp").attr("title", ""); 
+  $("#initalhelp").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_09,
+      position: {
+          my: "left bottom", 
+          at: "left+25 bottom-40"
+      }
+  });
+
+}
+
 
 $(document).ready(function() {
 
@@ -140,7 +287,16 @@ $(document).ready(function() {
     $("#languageselect").val(language);
   }
 
+  // variable que dice si mostrar o no los tooltips
+  window.showtooltips = true;
+  if (!localStorage["showtooltips"]){
+    localStorage["showtooltips"] = "yes";
+  } else if (localStorage["showtooltips"] == "no"){
+    window.showtooltips = false;
+  }
+
   cargafrases();
+  loadtooltips();
 
   $("#languageselect").on('change', function() {
 
@@ -162,6 +318,7 @@ $(document).ready(function() {
     }
 
     cargafrases();
+    loadtooltips();
 
   });
 
@@ -179,6 +336,8 @@ $(document).ready(function() {
     $(".lang_fr").css("display", "inline-block");
   }
 
+
+  
 
   // si no existe unidad utilizada por última vez, se selecciona la primera disponible
   if (!localStorage["lastuseddriveunit"]) {
@@ -1257,6 +1416,12 @@ $(document).ready(function() {
         $('link[rel=stylesheet][href~="css/version_grey.css"]').remove();
 
     }
+
+  });
+
+  $("#initalhelp").on('click', function(){ 
+
+    $("#initalhelp").tooltip( "destroy" ); // si no se queda el tootip 'congelado'
 
   });
 

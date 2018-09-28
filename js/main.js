@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.12.4';
+var programversion = '1.12.5';
 
 var fs = window.top.fs;
 var Sniffr = window.top.Sniffr;
@@ -102,8 +102,8 @@ $(document).ready(function () {
 		ph_filesize = "File Size";
 		ph_tagshere = "(Tags Here)";
 		ph_medialenght = "Media Length";
-		ph_alr_00 = "Select a folder from Fast access list first";
-		ph_alr_01 = "Select a folder from Fast access list to remove.";
+		ph_alr_00 = "Select a folder from the 'fast access to folders' list first.";
+		ph_alr_01 = "Select a folder from the 'fast access to folders' list to remove from the list.";
 		ph_alr_02 = "No elements selected to delete.";
 		ph_alr_03a = "Folder <em>'";
 		ph_alr_03b = "'</em> not possible to delete because probably some file is in use.";
@@ -140,8 +140,8 @@ $(document).ready(function () {
 		ph_filesize = "Tamaño Archivo";
 		ph_tagshere = "(Etiquetas Aquí)";
 		ph_medialenght = "Duración de Media";
-		ph_alr_00 = "Primero seleccione una carpeta de la lista de Acceso rápido.";
-		ph_alr_01 = "Seleccione una carpeta de la lista de Acceso rápido para eliminar.";
+		ph_alr_00 = "Primero seleccione una carpeta de la lista de 'acceso rápido a carpetas'.";
+		ph_alr_01 = "Seleccione una carpeta de la lista de 'acceso rápido a carpetas' para eliminarla de la lista.";
 		ph_alr_02 = "No hay elementos seleccionados para eliminar.";
 		ph_alr_03a = "La carpeta <em>'";
 		ph_alr_03b = "'</em> no se puede eliminar porque probablemente algún archivo está en uso.";
@@ -178,8 +178,8 @@ $(document).ready(function () {
 		ph_filesize = "Taille Fichier";
 		ph_tagshere = "(Étiquettes Ici)";
 		ph_medialenght = "Longueur du Média";
-		ph_alr_00 = "Sélectionnez d'abord un dossier dans la liste d'Accès rapide.";
-		ph_alr_01 = "Sélectionnez un dossier de la liste d'Accès rapide pour supprimer.";
+		ph_alr_00 = "Sélectionnez d'abord un dossier dans la liste d'Accès rapide aux dossiers.";
+		ph_alr_01 = "Sélectionnez un dossier de la liste d'Accès rapide aux dossiers pour supprimer.";
 		ph_alr_02 = "Aucun élément sélectionné pour supprimer.";
 		ph_alr_03a = "Le dossier <em>'";
 		ph_alr_03b = "'</em> ne peut pas être supprimé car certains fichiers sont probablement utilisés.";
@@ -220,7 +220,7 @@ $(document).ready(function () {
 			"<b>Tip</b>: When a search has been carried out, you also have the option of creating either a printable list in graphic mode (with labels) or a list in plain text, with the routes and names of the searched elements, which can be used externally (as a playlist for a player, for example)",
 			"<b>Tip</b>: If your tag name is long choose a tag shape that have sharp corners for better fit it.",
 			"<b>Tip</b>: Sometimes depending the action you do (or if you move somethin using external program) the view can not be actualized, to actualize it simply press refresh icons (arrows in circle).",
-			"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and will be ready."
+			"<b>Tip</b>: Because there're versions of Tagstoo for various systems (Windows, Linux and macOS) you can manage the same data, in a external drive for example, from different systems alternatively: Export the data to a file and import it where you need and it will be ready."
 
 		]
 	} else if (language == "ES"){
@@ -258,6 +258,7 @@ $(document).ready(function () {
 	}
 
 
+	loadTooltips();
 
 
 	var bLazy = new Blazy(); // para carga de imágenes según se hace scroll
@@ -983,6 +984,151 @@ $(document).ready(function () {
 }); //--fin onload
 
 
+
+
+function loadTooltips() {
+
+	// frases tooltips
+	if (language == "EN") {
+
+		ph_tt_01 = "Refresh the folders tree view.";
+		ph_tt_02 = "Navigate to the previous location.";
+		ph_tt_03 = "Navigate to the next location.";
+		ph_tt_04 = "Add current location to the 'fast access to folders' list to be readily available.";
+		ph_tt_05 = "Activate/deactivate the tag copier, with this tool activated you can copy the tags that any element have, into the elements that are selected, clicking in the tags area of the element who's tags you want to copy.";
+		ph_tt_06 = "Activate/deactivate the tags eraser, with this tool activated you can delete any tag of the elements by clicking on it. If you are usin a mouse there is an easier way to delete tags without using this tool: simply click with the right mouse button on the tag to be deleted.";
+		ph_tt_07 = "Refresh the directory view.";
+		ph_tt_08 = "Show the window with the options to create a new tag.";
+		ph_tt_09 = "Show the window with the options to edit or remove a previously created tag.";
+
+
+	} else if (language == "ES") {
+
+		ph_tt_01 = "Refrescar la vista de árbol de carpetas.";
+		ph_tt_02 = "Navegar a la ubicación anterior.";
+		ph_tt_03 = "Navegar a la ubicación siguiente.";
+		ph_tt_04 = "Agregar la ubicación actual a la lista de 'Acceso rápido a carpetas' para que esté facilmente disponible.";
+		ph_tt_05 = "Activa/desactiva la copiadora de etiquetas, con esta herramienta activada puede copiar las etiquetas que tiene cualquier elemento, en los elementos seleccionados, haciendo clic en el área de etiquetas del elemento cuyas etiquetas desea copiar.";
+		ph_tt_06 = "Activar/desactivar el borrador de etiquetas, con esta herramienta activada puede eliminar cualquier etiqueta de los elementos haciendo clic en ella. Si utiliza un ratón, existe una forma más fácil de eliminar etiquetas sin usar esta herramienta: simplemente haga clic con el botón derecho del ratón en la etiqueta a eliminar.";
+		ph_tt_07 = "Refrescar la vista de directorio."
+		ph_tt_08 = "Mostrar la ventana con las opciones para crear una nueva etiqueta.";
+		ph_tt_09 = "Mostrar la ventana con las opciones para editar o eliminar una etiqueta creada previamente."
+
+	} else if (language == "FR") {
+
+		ph_tt_01 = "Actualiser l'arborescence des dossiers.";
+		ph_tt_02 = "Naviguer vers l'emplacement précédent.";
+		ph_tt_03 = "Naviguez jusqu'au prochain emplacement.";
+		ph_tt_04 = "Ajoutez l'emplacement actuel à la liste «Accès rapide aux dossiers» pour être facilement accessible.";
+		ph_tt_05 = "Activez/désactivez le copieur de etiquettes, avec cet outil activé vous pouvez copier les etiquettes de tout élément dans les éléments sélectionnés, en cliquant dans la zone des etiquettes de l'élément dont vous souhaitez copier les etiquettes.";
+		ph_tt_06 = "Activer/désactiver le gomme des étiquettes, avec cet outil activé, vous pouvez supprimer n'importe quelle étiquette des éléments en cliquant dessus. Si vous utilisez une souris, il existe un moyen plus simple de supprimer des étiquettes sans utiliser cet outil: faites un clic droit sur l'étiquette à supprimer.";
+		ph_tt_07 = "Actualiser la vue du dossier."
+		ph_tt_08 = "Afficher la fenêtre avec les options pour créer un nouveau étiquette.";
+		ph_tt_09 = "Afficher la fenêtre avec les options pour éditer ou supprimer une étiquette précédemment créée.";
+
+
+
+	}
+
+	$("#filetreerefresh").attr("title", "");
+	$("#filetreerefresh").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_01,
+        position: {
+            my: "right top", 
+            at: "right-30"
+        }
+    });
+	$(".previouslocation").attr("title", "");
+	$(".previouslocation").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_02,
+        position: {
+            my: "right top", 
+            at: "right-25"
+        }
+    });
+	$(".nextlocation").attr("title", "");
+	$(".nextlocation").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_03,
+        position: {
+            my: "left top", 
+            at: "left+25"
+        }
+    });
+    $("#addfastacces").attr("title", "");
+	$("#addfastacces").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_04,
+        position: {
+            my: "top", 
+            at: "top+30"
+        }
+    });
+	$("#copytags img").attr("title", "");
+	$("#copytags img").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_05,
+        position: {
+            my: "right top", 
+            at: "right-25"
+        }
+    });
+    $("#eraser img").attr("title", "");
+	$("#eraser img").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_06,
+        position: {
+            my: "right top", 
+            at: "right-25"
+        }
+    });
+    $("#dirviewrefresh img").attr("title", "");
+	$("#dirviewrefresh img").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_07,
+        position: {
+            my: "right top", 
+            at: "right-30"
+        }
+    });
+	$("#newtag span").attr("title", "");
+	$("#newtag span").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_08,
+        position: {
+            my: "left-35 buttom", 
+            at: "top-37"
+        }
+    });
+    $("#edittag span").attr("title", "");
+	$("#edittag span").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_09,
+        position: {
+            my: "left-35 buttom", 
+            at: "top-37"
+        }
+    });
+
+}
+
+
+
+
+
+
+
 function irdescarga(){ 
 
     window.top.shell.openExternal("https://tagstoo.sourceforge.io#downloadmain");
@@ -1416,7 +1562,7 @@ window.parent.$("#viewmode").on('change', function() {
 	}
 
 	$('#directoryview').html("");
-	t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+	t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title=""><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 						
 	$('#directoryview').append(t);
 	t='';
@@ -1548,7 +1694,7 @@ window.parent.$(".order").on('change', function() {
 	}
 
 	$('#directoryview').html("");
-	t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+	t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title=""><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 						
 	$('#directoryview').append(t);
 	t='';
@@ -2677,7 +2823,7 @@ function readDirectory (dirtoread) {
 								trans3.oncomplete = function() {
 
 									$('#directoryview').html("");
-									t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+									t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title=""><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 									$('#directoryview').append(t);
 
 									t = "";
@@ -2744,7 +2890,7 @@ function readDirectory (dirtoread) {
 					trans.oncomplete = function() {
 
 						$('#directoryview').html("");
-						t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+						t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title=""><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 						$('#directoryview').append(t);
 
 						t = "";
@@ -2824,7 +2970,7 @@ function readDirectory (dirtoread) {
 						trans3.oncomplete = function() {
 
 							$('#directoryview').html("");
-							t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+							t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title=""><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 							$('#directoryview').append(t);
 
 							t = "";
@@ -2843,7 +2989,7 @@ function readDirectory (dirtoread) {
 			else if (directoryarchives.length == 0 && directoryfolders.length == 0) {
 
 				$('#directoryview').html("");
-				var t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title="Create new folder..."><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
+				var t = '<div class="exploelementfolderup"><div class="foldupimgmode'+viewmode+' folder"><img src='+folderupiconurl+' data-src='+folderupiconurl+'></div><div class="" value="..">&nbsp;.. <span class="folderup">(folder up)</span><span class="nuevofolder" title=""><a><img src="img/aniadircarpeta.png" alt=""></a></span></div><div></div><div class="tags" value=""></div> <div class="id"></div></div>';
 				$('#directoryview').append(t);
 
 				t = "";
@@ -3929,6 +4075,42 @@ function drawDirectoryAfter() {
 	}, 50);
 
 
+	// frase tooltip crear carpeta
+	if (language == "EN") {
+
+		ph_tt_newfold = "Create a new folder...";
+
+	} else if (language == "ES") {
+
+		ph_tt_newfold = "Crear una nueva carpeta...";
+		
+	} else if (language == "FR") {
+
+		ph_tt_newfold = "Créer un nouveau dossier...";	
+	}
+
+    $(".nuevofolder").attr("title", "");
+	if (viewmode == 1) {
+		$(".nuevofolder").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_newfold,
+	        position: {
+	            my: "right top", 
+            	at: "right-35"
+	        }
+	    });
+	} else {
+		$(".nuevofolder").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_newfold,
+	        position: {
+	            my: "top", 
+	            at: "top+37"
+	        }
+	    });
+	}
 
 
 	// pequeño ajuste para que la vista de directorio siempre ocupe toda la altura del wraper y así se puedan seleccionar los elementos con la cajetilla del ratón
@@ -10049,24 +10231,28 @@ function activateeditname(item) {
 
 								if(cursor){
 
-									if(cursor.value.folder.substring(0, pathachequear.length) == pathachequear) { // si empieza por el path antiguo
+									if(cursor.value.folder){
+
+										if(cursor.value.folder.substring(0, pathachequear.length) == pathachequear) { // si empieza por el path antiguo
 
 
-										var newname = cursor.value.folder.replace(pathachequear, pathaponer);
+											var newname = cursor.value.folder.replace(pathachequear, pathaponer);
 
-										folderupdate.folderid = cursor.value.folderid;
-										folderupdate.foldertags = cursor.value.foldertags;
-										folderupdate.folder = newname;
+											folderupdate.folderid = cursor.value.folderid;
+											folderupdate.foldertags = cursor.value.foldertags;
+											folderupdate.folder = newname;
 
-										var res20 = objectStore.put(folderupdate);
+											var res20 = objectStore.put(folderupdate);
 
-										res20.onerror = function(event){
-											console.log("error ruta subcarpeta no cambiada: " + event);
-										}
+											res20.onerror = function(event){
+												console.log("error ruta subcarpeta no cambiada: " + event);
+											}
 
-										res20.onsuccess = function(event){
+											res20.onsuccess = function(event){
 
-											// console.log("ruta subcarpeta cambiada");
+												// console.log("ruta subcarpeta cambiada");
+
+											}
 
 										}
 

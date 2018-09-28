@@ -36,6 +36,7 @@
 	<!-- Insert this line after script imports -->
 	<script>if (window.module) module = window.module;</script>
 
+	<link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 	<link href="css/alertify.core.css" rel="stylesheet" type="text/css">
 	<link href="css/alertify.default.css" rel="stylesheet" type="text/css">
 	<link href="css/abigimage.jquery.css" rel="stylesheet" type="text/css">
@@ -56,12 +57,12 @@
 
 				<ul class="tabs">
 
-					<li class="tab-link current" data-tab="tab-1" id="exploretab">
+					<li class="tab-link current" data-tab="tab-1" id="exploretab" title="">
 						<span class="lang_en">EXPLORE</span>
 						<span class="lang_es">EXPLORAR</span>
 						<span class="lang_fr">EXPLORE</span>
 					</li>
-					<li class="tab-link" data-tab="tab-2">
+					<li class="tab-link" data-tab="tab-2" id="searchtab" title="">
 						<span class="lang_en">SEARCH</span>
 						<span class="lang_es">BUSCAR</span>
 						<span class="lang_fr">CHERCHER</span>
@@ -73,7 +74,7 @@
 
 			<div>
 
-				<a href="#" class="action-button shadow animate blue" id="paste">
+				<a href="#" class="action-button shadow animate blue" id="paste" title="">
 					<span class="lang_en">PASTE</span>
 					<span class="lang_es">PEGAR</span>
 					<span class="lang_fr">COLLER</span>
@@ -81,7 +82,7 @@
 
 			</div>
 
-			<div class="onoffswitch" id="pasteaction">
+			<div class="onoffswitch" id="pasteaction" title="">
 
 				<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" >
 				<label class="onoffswitch-label" for="myonoffswitch" >
@@ -93,7 +94,7 @@
 
 			<div id="delete">
 
-				<a href="#" class="action-button shadow animate red" id="deletebutton">
+				<a href="#" class="action-button shadow animate red" id="deletebutton"  title="">
 					<span class="lang_en">DELETE</span>
 					<span class="lang_es">BORRAR</span>
 					<span class="lang_fr">EFFACER</span>
@@ -115,18 +116,18 @@
 						<span class="lang_es">Acceso rápido a carpetas: </span>
 						<span class="lang_fr">Accès rapide aux dossiers: </span>
 					</span><br>
-					<select name="" id="favfolders"></select>
+					<select id="favfolders" title=""></select>
 
 				</div>
 
 				<div>
 
-					<a class="small button orange" id="removefolderselect">
+					<a class="small button orange" id="removefolderselect" title="">
 						<span class="lang_en">Remove selected</span>
 						<span class="lang_es">Borrar selección</span>
 						<span class="lang_fr">Effacer sélec.</span>
 					</a><br>
-					<a class="small button green" id="gotofolderselect">
+					<a class="small button green" id="gotofolderselect" title="">
 						<span class="lang_en">Go to selected</span>
 						<span class="lang_es">Ir a selección</span>
 						<span class="lang_fr">Aller à sélec.</span>
@@ -143,7 +144,7 @@
 					<span class="lang_fr">Vue mode: </span>
 					<span id="viewmodenumber">1 ...</span>
 				</span><br>
-				<input id="viewmode" type="range" min="1" max="9" step="1" value="1">
+				<input id="viewmode" type="range" min="1" max="9" step="1" value="1" title="">
 
 			</div>
 
@@ -154,8 +155,8 @@
 					<span class="lang_es">Ordernar por:</span>
 					<span class="lang_fr">Trier par:</span>
 				</span><br>
-				<span class="lang_en">
-					<select class="order">					
+				<span class="lang_en" >
+					<select class="order" title="">					
 						<option value="nameasc" selected>Name A-Z</option>
 						<option value="namedesc">Name Z-A</option>
 						<option value="extasc">Extension A-Z</option>
@@ -168,7 +169,7 @@
 					</select>
 				</span>
 				<span class="lang_es">
-					<select class="order">					
+					<select class="order" title="">					
 						<option value="nameasc" selected>Nombre A-Z</option>
 						<option value="namedesc">Nombre Z-A</option>
 						<option value="extasc">Extensión A-Z</option>
@@ -181,7 +182,7 @@
 					</select>
 				</span>
 				<span class="lang_fr">
-					<select class="order">					
+					<select class="order" title="">					
 						<option value="nameasc" selected>Nom A-Z</option>
 						<option value="namedesc">Nom Z-A</option>
 						<option value="extasc">Extension A-Z</option>
@@ -200,18 +201,18 @@
 
 				<div>
 					<span class="lang_en">
-						<a href="#" class="action-button shadow animate yellow tooltip-right undo" data-tooltip="UNDO (not action to undo)">UNDO</a>
+						<a href="#" class="action-button shadow animate yellow tooltip-right undo" data-tooltip="UNDO (not action to undo)" title="">UNDO</a>
 					</span>
 					<span class="lang_es">
-						<a href="#" class="action-button shadow animate yellow tooltip-right undo" data-tooltip="DESHACER (no hay acción para deshacer)">DES.</a>
+						<a href="#" class="action-button shadow animate yellow tooltip-right undo" data-tooltip="DESHACER (no hay acción para deshacer)" title="">DES.</a>
 					</span>
 					<span class="lang_fr">
-						<a href="#" class="action-button shadow animate yellow tooltip-right undo" data-tooltip="DÉFAIRE (aucune action à défaire)">DÉF.</a>
+						<a href="#" class="action-button shadow animate yellow tooltip-right undo" data-tooltip="DÉFAIRE (aucune action à défaire)" title="">DÉF.</a>
 					</span>
 				</div>
 
-				<img id="options" src="img/options.png" alt="">
-				<img id="info" src="img/info.png" alt="">
+				<img id="options" src="img/options.png" title="">
+				<img id="info" src="img/info.png" title="">
 
 			</div>
 
@@ -233,8 +234,6 @@
 
 
 	<script>
-
-		
 	
     // Pedir confirmación al cerrar
 	window.onbeforeunload = (e) => {

@@ -182,6 +182,7 @@ $(document).ready(function () {
 		ph_alr_10 = "Entered page is out of range, please enter a page in the available range (1-";
 		ph_alr_11a = "Unable to access to the defined folder <em>'";
 		ph_alr_11b = "'</em> it goes back to the folder defined previously.";
+		ph_alr_12 = "Is necessary to put at least one tag in a field of type '<b>That have</b>' or type '<b>That don't have</b>' to perform the search."
 		ph_alc_01a = "Attention, the folder <em>'";
 		ph_alc_01b = "'</em> is on the search results, but it can't be read (probably don't exists because it was deleted in some way). Do you want to remove it from database?. If you choose Yes, click again on Search to see results.";
 		ph_alc_02 = "When the <em>Copy</em> is made, do you want the associated tags to be copied too?";
@@ -215,7 +216,7 @@ $(document).ready(function () {
 		ph_tagshere = "(Etiquetas Aquí)";
 		ph_taghere = "(Etiqueta Aquí)";
 		ph_medialength = "Duración de Media";
-		ph_alr_01 ="Ha elegido crear una lista de resultados de búsqueda que se puede imprimir, pero no hay resultados de búsqueda en este momento.";
+		ph_alr_01 ="Ha elegido crear una lista de los resultados de búsqueda que se puede imprimir o guardar, pero no hay resultados de búsqueda en este momento.";
 		/*ph_alr_02 = "Se permiten 5 etiquetas como máximo para cada filtro.";*/
 		ph_alr_03 = "Sólo se permite 1 etiqueta en este tipo de filtro.";
 		ph_alr_04 = "No hay elementos seleccionados para copiar.";
@@ -229,6 +230,7 @@ $(document).ready(function () {
 		ph_alr_10 = "La página ingresada está fuera de rango, ingrese una página en el rango disponible (1-";
 		ph_alr_11a = "No se puede acceder a la carpeta definida <em>'";
 		ph_alr_11b = "'</em> se vuelve a la carpeta definida anteriormente.";
+		ph_alr_12 = "Es necesario poner al menos una etiqueta en un campo de tipo 'Que tienen' o de tipo 'Que no tienen' para realizar la búsqueda.";
 		ph_alc_01a = "Atención, la carpeta <em>'";
 		ph_alc_01b = "'</em> está en los resultados de búsqueda, pero no se puede leer (probablemente no existe porque se ha eliminado de alguna manera). ¿Desea eliminarlo de la base de datos ?. Si selecciona Sí, haga clic de nuevo en Buscar para ver los resultados.";
 		ph_alc_02 = "Cuando se realice la <em>Copia</em>, ¿también desea copiar las etiquetas asociadas?";
@@ -262,7 +264,7 @@ $(document).ready(function () {
 		ph_tagshere = "(Étiquettes Ici)";
 		ph_taghere = "(Étiquette Ici)";
 		ph_medialength = "Longueur du Média";
-		ph_alr_01 = "Vous avez choisi de créer une liste des résultats de recherche qui peuvent être imprimés, mais il n'y a pas de résultats de recherche pour le moment.";
+		ph_alr_01 = "Vous avez choisi de créer une liste des résultats de recherche qui peuvent être imprimer ou enregistrer, mais il n'y a pas de résultats de recherche pour le moment.";
 		/*ph_alr_02 = "Un maximum de 5 étiquettes sont autorisés pour chaque filtre";*/
 		ph_alr_03 = "Seulement 1 étiquette est autorisée dans ce type de filtre.";
 		ph_alr_04 = "Aucun élément sélectionné pour copier.";
@@ -276,6 +278,7 @@ $(document).ready(function () {
 		ph_alr_10 = "La page saisie est hors de portée, veuillez entrer une page dans la plage disponible (1-";
 		ph_alr_11a = "Impossible d'accéder au dossier défini <em>'";
 		ph_alr_11b = "'</em> il retourne au dossier défini précédemment.";
+		ph_alr_12 = "Est nécessaire de mettre au moins une balise dans un champ de type 'Qui ont' ou de type 'Qui n'ont pas' pour effectuer la cherche.";
 		ph_alc_01a = "Attention, the folder <em>'";
 		ph_alc_01b = "'</em> est sur les résultats de la recherche, mais il ne peut pas être lu (probablement il n'existe pas car il a été supprimé d'une façon ou d'une autre). Voulez-vous le supprimer de la base de données? Si vous choisissez Oui, cliquez à nouveau sur Rechercher pour voir les résultats.";
 		ph_alc_02 = "Lors de la <em>Copie</em>, souhaitez-vous également copier les étiquettes associées?";
@@ -291,6 +294,9 @@ $(document).ready(function () {
 		ph_dato_erasearchtag = "DÉFAIRE (supprimer étiquette du archive)";
 		ph_dato_no = "DÉFAIRE (aucune action à défaire)";
 	}
+
+
+	loadTooltips();
 
 
 	// para poder regular anchuras divs
@@ -850,6 +856,9 @@ $(document).ready(function () {
 			readsearchredresults();
 
 		} else {
+			if (necesaryPages == "") {
+				necesaryPages = 1;
+			}
 			alertify.alert(ph_alr_10 + necesaryPages + ").");
 		}
 
@@ -1060,7 +1069,525 @@ $(document).ready(function () {
 	$(".nottaginput").html("<span class='placehold'>" + ph_taghere + "</span>");
 
 
+	// El boton de clear results
+	$("#clearresults img").click(function() {
+
+		copytagson = "off";
+		$("#copytags img").removeClass('activated');
+		$("#copieron").removeClass("on");
+
+		eraseron = "off";
+		$(".tags > div").draggable( 'enable' );
+		$("#eraser img").removeClass('activated');
+		$("#eraseron").removeClass("on");
+
+		document.getElementById("actualpage").value = 1;
+		actualPage = 0;
+
+		window.foldertaggroup = []; // para los filtros de buscar en carpetas con tag..
+		window.taggroup= [];
+		window.nottaggroup= []; // para los tags que no devén estar
+
+		window.resultsfolders = [];
+		window.resultsfolderstemp = [];
+		window.resultadopreviovalido = [];
+		window.tagsdelelemento = [];
+		window.arraydetagsabuscar = [];
+
+		window.numerodecamposrellenadosfolder = 0;
+		window.numerodecamposrellenados = 0;
+		window.numerodecamposrellenadosno = 0;
+
+		window.concentradorresultadoscarpetas = [];
+		window.concentradorresultadosarchivos = [];
+
+		window.resultsfiles = [];
+		window.resultsfilestemp = [];
+
+		window.resultadosarchivos=[];
+		window.resultadoscarpetas=[];
+
+		alreadyAleatorized = false;		
+
+		$('#searchdirectoryview').html("");
+
+		$('#numeroderesultadosarchivos').html("");
+		$('#numeroderesultadoscarpetas').html("");
+
+		$("#clearresults img").hide();
+		
+
+	});
+
+	$("#clearresults img").hide();
+
+
 }); // --fin on document ready
+
+
+function loadTooltips() {
+
+	// frases tooltips
+	if (language == "EN") {
+
+		ph_tt_01 = "Open a window to select the folder from where the search should begin, the search will be done within all tagged elements that are inside that folder, including subfolders. The address can also be edited manually in the field below."; /*<br><br>This option can be useful to discriminate searches result but this will not optimize searching times <i>'per se'</i> because searches are done over the tags database not over the disk directly.*/
+		ph_tt_02 = "The folder from where the search should begin, it can be changed pressing the button above or editing it directly.";
+		ph_tt_03 = "Putting tags inside this field, or fields like this, you will specify that the searched elements (files and/or folders) must be inside folders that have certain tags. This specification is totally optional and search will work without it also.";
+		ph_tt_04 = "Remove the last tag of the upper input field.";
+		ph_tt_05 = "Add another input field of the kind 'Inside folders that have'. Several fields can be used to make constructions of the kind: 'that have (tag1 and tag2) <b>or</b> (tag1 and tag3) <b>or</b> ...' ";
+		ph_tt_06 = "Remove upper input field.";
+		ph_tt_07 = "Search for tagged files that have (or don't have) the tags specified below.";
+		ph_tt_08 = "Search for tagged folders that have (or don't have) the tags specified below.";
+		ph_tt_09 = "Search for tagged folders and files that have (or don't have) the tags specified below.";
+		ph_tt_10 = "Putting tags inside this field, or fields like this, you will specify that the searched elements must have those  tags. Is mandatory to put at least one tag in this kind of field or in a field of kind 'That don't have' (below) to perform a search.";
+		ph_tt_11 = "Add another input field of the kind 'That have'. Several fields can be used to make constructions of the kind: 'that have (tag1 and tag2) <b>or</b> (tag1 and tag3) <b>or</b> ...' ";
+		ph_tt_12 = "Putting a tag inside this field, or fields like this, you will specify that the searched elements mustn't have that/those tag(s). Only one tag is allowed in each field of this kind, but as with the other input fields you can put as many fields as you want.";
+		ph_tt_13 = "Add another input field of the kind 'That don't have'. Several fields can be used to make constructions of the kind: 'that don't have (tag1) <b>and don't have</b> (tag2) <b>and don't have</b> ...' ";
+		ph_tt_14 = "Make the search (over the tagged elements).";
+		ph_tt_14 = "Make the search!";
+		ph_tt_15 = "Select viewmode for the view of searched elements; in viewmode 1 elements are displayed in a list, in viewmodes 2-9 elements are displayed as cards of consecutive incremental size.";
+		ph_tt_16 = "Select order by wich elements will be represented in the searched elements view; it's possible to choose to order by name, extension, size, last modified date and in a aleatory way.";
+		ph_tt_17 = "Open 'Display printable friendly list' window where you will be able to choose to generate a plain text list of the current view of the searched results  (to print o to save in a file) or a copy of the current view of the searched results that include tags (with the possibility to print).";
+		ph_tt_18 = "Select the number of searched elements that you want to appear per page (all or a certain number).";
+		ph_tt_19 = "Select the page that is currently viewed (if there are more than one) in the right it can be seen the upper limit of the available page numbers in each moment.";
+		ph_tt_20 = "Activate/deactivate the tag copier, with this tool activated you can copy the tags that any element have, into the elements that are selected, clicking in the tags area of the element who's tags you want to copy.";
+		ph_tt_21 = "Activate/deactivate the tags eraser, with this tool activated you can delete any tag of the elements by clicking on it. If you are usin a mouse there is an easier way to delete tags without using this tool: simply click with the right mouse button on the tag to be deleted.";
+		ph_tt_22 = "Clean the results area.";
+
+	} else if (language == "ES") {
+
+		ph_tt_01 = "Abrir una ventana para seleccionar la carpeta desde donde debe comenzar la búsqueda, la búsqueda que se realizará dentro de todos los elementos etiquetados que están dentro de esa carpeta, incluidas las subcarpetas. La dirección tambien puede editarse manualmente en el campo de abajo."; /*<br><br> Esto puede ser útil para discriminar resultados buscados, pero esto no optimizará los tiempos de búsqueda <i>'per se'</i> porque las búsquedas se realizan sobre la base de datos de etiquetas, no sobre el disco directamente.*/
+		ph_tt_02 = "La carpeta desde donde debe comenzar la búsqueda, se puede cambiar presionando el botón de arriba o editándolo directamente.";
+		ph_tt_03 = "Al colocar etiquetas dentro de este campo, o campos como este, especificará que los elementos buscados (archivos y/o carpetas) deben estar dentro de carpetas que tienen ciertas etiquetas. Esta especificación es totalmente opcional y la búsqueda también funcionará sin ella.";
+		ph_tt_04 = "Retirar la última etiqueta del campo de entrada superior.";
+		ph_tt_05 = "Agregue otro campo de entrada del tipo 'Dentro de carpetas que tienen'. Varios campos pueden usarse para hacer construcciones del tipo: 'que tengan (tag1 y tag2) <b>o</b> (tag1 y tag3) <b>o</b> ...'";
+		ph_tt_06 = "Eliminar el campo de entrada superior.";
+		ph_tt_07 = "Buscar los archivos etiquetados que tienen (o no tienen) las etiquetas especificadas a continuación.";
+		ph_tt_08 = "Buscar las carpetas etiquetados que tienen (o no tienen) las etiquetas especificadas a continuación.";
+		ph_tt_09 = "Buscar las carpetas y archivos etiquetados que tienen (o no tienen) las etiquetas especificadas a continuación.";
+		ph_tt_10 = "Al colocar etiquetas dentro de este campo, o campos como este, especificará que los elementos buscados deben tener esas etiquetas. Es obligatorio poner al menos una etiqueta en este tipo de campo o en un campo de tipo 'Que no tienen' (abajo) para realizar una búsqueda.";
+		ph_tt_11 = "Agregue otro campo de entrada del tipo 'Que tienen'. Varios campos pueden usarse para hacer construcciones del tipo: 'que tengan (tag1 y tag2) <b>o</b> (tag1 y tag3) <b>o</b> ...'";
+		ph_tt_12 = "Poniendo una etiqueta dentro de este campo, o campos como este, especificará que los elementos buscados no deben tener esa/esas etiqueta(s). Solo se permite una etiqueta en cada campo de este tipo, pero al igual que con los demás campos de entrada, puede colocar tantos campos como desee.";
+		ph_tt_13 = "Agregue otro campo de entrada del tipo 'Que no tienen'. Varios campos pueden usarse para hacer construcciones del tipo: 'que no tienen (etiqueta1) <b> y no tienen </b> (etiqueta2) <b> y no tienen </b> ...'";
+		ph_tt_14 = "¡Realizar la búsqueda!";
+		ph_tt_15 = "Seleccionar modo de vista para la vista de los elementos buscados; en el modo de vista 1 los elementos se muestran en una lista, en los modos de vista 2-9 los elementos se muestran como tarjetas de tamaño incremental consecutivo.";
+		ph_tt_16 = "Seleccionar el orden por el cual los elementos serán representados en la vista los elementos buscados; es posible elegir ordenar por nombre, extensión, tamaño, fecha de última modificación y de forma aleatoria.";
+		ph_tt_17 = "Abrir la ventana 'Mostrar versión imprimible de la lista' donde podrá elegir generar una lista de texto sin formato de la vista actual de los resultados buscados (para imprimir o guardar en un archivo) o una copia de la vista actual de los resultados buscados que incluye etiquetas (con la posibilidad de imprimir).";
+		ph_tt_18 = "Seleccionar la cantidad de elementos buscados que desea que aparezcan por página (todos o un número determinado).";
+		ph_tt_19 = "Seleccionar la página que se ve actualmente (si hay más de una) a la derecha se puede ver el límite superior de los números de página disponibles en cada momento.";
+		ph_tt_20 = "Activa/desactiva la copiadora de etiquetas, con esta herramienta activada puede copiar las etiquetas que tiene cualquier elemento, en los elementos seleccionados, haciendo clic en el área de etiquetas del elemento cuyas etiquetas desea copiar.";
+		ph_tt_21 = "Activar/desactivar el borrador de etiquetas, con esta herramienta activada puede eliminar cualquier etiqueta de los elementos haciendo clic en ella. Si utiliza un ratón, existe una forma más fácil de eliminar etiquetas sin usar esta herramienta: simplemente haga clic con el botón derecho del ratón en la etiqueta a eliminar.";
+		ph_tt_22 = "Limpiar el área de resultados.";
+
+	} else if (language == "FR") {
+
+		ph_tt_01 = "Ouvrez une fenêtre pour sélectionner le dossier à partir duquel la cherche doit commencer, la cherche sera effectuée dans tous les éléments étiquetés qui se trouvent dans ce dossier, y compris les sous-dossiers. L'adresse peut également être éditer manuellement dans le champ ci-dessous.";
+		ph_tt_02 = "Le dossier à partir duquel la recherche doit commencer, il peut être modifié en appuyant sur le bouton ci-dessus ou en le editant directement.";
+		ph_tt_03 = "En plaçant des étiquettes dans ce champ ou des champs comme celui-ci, vous spécifiez que les éléments cherchés (fichiers et/ou dossiers) doivent être à l'intérieur des dossiers qui ont certaines étiquettes. Cette spécialisation est complètement facultative et la recherche fonctionnera également sans elle.";
+		ph_tt_04 = "Supprimer la dernière étiquette du champ de saisie supérieur.";
+		ph_tt_05 = "Ajouter un autre champ de saisie du type «À l'intérieur des dossiers qui ont». Plusieurs champs peuvent être utilisés pour faire des constructions du type: «qui ont (étiquette1 et étiquette2) <b>ou</b> (étiquette1 et étiquette3) <b>ou</b>...»";
+		ph_tt_06 = "Supprimer le champ de saisie supérieur.";
+		ph_tt_07 = "Chercher les fichiers étiquetés qui ont (ou n'ont pas) les étiquettes spécifiées ci-dessous.";
+		ph_tt_08 = "Chercher les dossiers étiquetés qui ont (ou n'ont pas) les étiquettes spécifiées ci-dessous.";
+		ph_tt_09 = "Chercher les dossiers et fichiers étiquetés qui ont (ou n'ont pas) les étiquettes spécifiées ci-dessous.";
+		ph_tt_10 = "En plaçant des étiquettes dans ce champ ou des champs comme celui-ci, vous spécifiez que les éléments recherchés doivent avoir ces étiquettes. Il est obligatoire de mettre au moins une étiquette dans ce type de champ ou dans un champ de type «Qui n'ont pas» (ci-dessous) pour effectuer une recherche.";
+		ph_tt_11 = "Ajouter un autre champ de saisie du type «Qui ont». Plusieurs champs peuvent être utilisés pour faire des constructions du type: «qui ont (étiquette1 et étiquette2) <b>ou</b> (étiquette1 et étiquette3) <b>ou</b> ...»";
+		ph_tt_12 = "En plaçant une balise dans ce champ, ou des champs comme celui-ci, vous spécifiez que les éléments recherchés ne doivent pas avoir cette/ceux etiquette(s). Une seule étiquette est autorisée dans chaque champ de ce type, mais comme pour les autres champs de saisie, vous pouvez mettre autant de champs que vous le souhaitez.";
+		ph_tt_13 = "Ajouter un autre champ de saisie du type «Qui n'ont pas». Plusieurs champs peuvent être utilisés pour faire des constructions du type: «qui n'ont pas (étiquette1) <b>et n'ont pas</b> (étiquette2) <b>et n'ont pas</b> ...»";
+		ph_tt_14 = "Effectuer la recherche (sur les éléments étiquetés)."
+		ph_tt_14 = "Effectuer la recherche!";
+		ph_tt_15 = "Sélectionner vue mode pour la vue des éléments cherchés; dans vue mode 1 les éléments sont affichés dans une liste, dans les vue modes 2 à 9 les éléments sont affichés sous forme de cartes de taille incrémentielle consécutive.";
+		ph_tt_16 = "Sélectionner l'ordre par lequel les éléments seront représentés dans la vue des éléments cherchés; il est possible de choisir de commander par nom, extension, taille, date de dernière modification et de manière aléatoire.";
+		ph_tt_17 = "Ouvrez la fenêtre «Show la liste en version d'impression» dans laquelle vous pouvez choisir de générer une liste en texte brut de la vue actuelle des résultats chercher (pour imprimer ou pour enregistrer dans un fichier) ou une copie de la vue actuelle des résultats de la cherche incluant des étiquettes (avec la possibilité d'imprimer).";
+		ph_tt_18 = "Sélectionner la quantité d'éléments cherchés que vous souhaitez voir apparaître par page (tout ou un certain nombre).";
+		ph_tt_19 = "Sélectionner la page actuellement visible (s'il y en a plusieurs) à droite, vous pouvez voir la limite supérieure des numéros de page disponibles à chaque instant.";
+		ph_tt_20 = "Activez/désactivez le copieur de etiquettes, avec cet outil activé vous pouvez copier les etiquettes de tout élément dans les éléments sélectionnés, en cliquant dans la zone des etiquettes de l'élément dont vous souhaitez copier les etiquettes.";
+		ph_tt_21 = "Activer/désactiver le gomme des étiquettes, avec cet outil activé, vous pouvez supprimer n'importe quelle étiquette des éléments en cliquant dessus. Si vous utilisez une souris, il existe un moyen plus simple de supprimer des étiquettes sans utiliser cet outil: faites un clic droit sur l'étiquette à supprimer.";
+		ph_tt_22 = "Nettoyer la zone de résultats.";
+
+	}
+
+	$("#selectFolder").attr("title", "");
+	$("#selectFolder").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_01,
+        position: {
+            my: "right top", 
+            at: "right-147"
+        }
+    });
+    $("#searchininput").attr("title", "");
+	$("#searchininput").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_02,
+        position: {
+            my: "right top", 
+            at: "right-147"
+        }
+    });
+    $(".foldertaginput").attr("title", "");
+	$(".foldertaginput").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_03,
+        position: {
+            my: "right top", 
+            at: "right-147"
+        }
+    });
+    $(".clearfoldertagfield, .cleartagfield, .clearnottagfield").attr("title", "");
+	$(".clearfoldertagfield, .cleartagfield, .clearnottagfield").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_04,
+        position: {
+            my: "right", 
+            at: "right-87"
+        }
+    });
+    if (language == "EN"){
+	    $(".tooltipaddfoldertagf").attr("title", "");
+		$(".tooltipaddfoldertagf").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_05,
+	        position: {
+	            my: "right", 
+	            at: "right-166"
+	        }
+	    });
+	} else {
+		$(".tooltipaddfoldertagf").attr("title", "");
+		$(".tooltipaddfoldertagf").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_05,
+	        position: {
+	            my: "right", 
+	            at: "right-150"
+	        }
+	    });
+	}
+	if (language == "EN"){
+		$(".removefield").attr("title", "");
+		$(".removefield").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_06,
+	        position: {
+	            my: "right", 
+	            at: "right+168"
+	        }
+	    });
+	} else if (language == "ES") {
+		$(".removefield").attr("title", "");
+		$(".removefield").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_06,
+	        position: {
+	            my: "right", 
+	            at: "right+240"
+	        }
+	    });
+	} else if (language == "FR") {
+		$(".removefield").attr("title", "");
+		$(".removefield").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_06,
+	        position: {
+	            my: "right", 
+	            at: "right+250"
+	        }
+	    });
+	} 
+	if (language == "EN"){
+		$(".tooltipfiles").attr("title", "");
+		$(".tooltipfiles").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_07,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+295"
+	        }
+	    });    
+		$(".tooltipfolders").attr("title", "");
+		$(".tooltipfolders").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_08,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+275"
+	        }
+	    });
+	    $(".tooltipfodersandfiles").attr("title", "");
+		$(".tooltipfodersandfiles").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_09,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+220"
+	        }
+	    });
+	} else {
+		$(".tooltipfiles").attr("title", "");
+		$(".tooltipfiles").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_07,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+265"
+	        }
+	    });    
+		$(".tooltipfolders").attr("title", "");
+		$(".tooltipfolders").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_08,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+265"
+	        }
+	    });
+	    $(".tooltipfodersandfiles").attr("title", "");
+		$(".tooltipfodersandfiles").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_09,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+205"
+	        }
+	    });
+	}
+	$(".taginput").attr("title", "");
+	$(".taginput").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_10,
+        position: {
+            my: "right top", 
+            at: "right-147"
+        }
+    });
+    if (language == "EN"){
+	    $(".tooltipaddtagf").attr("title", "");
+		$(".tooltipaddtagf").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_11,
+	        position: {
+	            my: "right", 
+	            at: "right-166"
+	        }
+	    });
+	} else {
+		$(".tooltipaddtagf").attr("title", "");
+		$(".tooltipaddtagf").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_11,
+	        position: {
+	            my: "right", 
+	            at: "right-150"
+	        }
+	    });
+	}
+	$(".nottaginput").attr("title", "");
+	$(".nottaginput").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_12,
+        position: {
+            my: "right top", 
+            at: "right-147"
+        }
+    });
+    if (language == "EN"){
+	    $(".tooltipaddnotagf").attr("title", "");
+		$(".tooltipaddnotagf").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_13,
+	        position: {
+	            my: "right", 
+	            at: "right-166"
+	        }
+	    });
+	} else {
+		$(".tooltipaddnotagf").attr("title", "");
+		$(".tooltipaddnotagf").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_13,
+	        position: {
+	            my: "right", 
+	            at: "right-150"
+	        }
+	    });
+	}
+	if (language == "EN"){
+		$("#searchaction").attr("title", "");
+		$("#searchaction").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_14,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+124"
+	        }
+	    });
+	} else {
+		$("#searchaction").attr("title", "");
+		$("#searchaction").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_14,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+155"
+	        }
+	    });
+	}
+	$("#searchviewmode").attr("title", "");
+    $("#searchviewmode").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_15,
+        position: {
+            my: "left bottom", 
+            at: "left-325"
+        }
+    });
+    $(".searchorder").attr("title", "");
+    $(".searchorder").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_16,
+        position: {
+            my: "left bottom", 
+            at: "left-325"
+        }
+    });
+    $("#tolist img").attr("title", "");
+    $("#tolist img").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_17,
+        position: {
+            my: "left bottom", 
+            at: "left-325"
+        }
+    });
+    if (language != "EN"){
+	    $(".elempperpage").attr("title", "");
+	    $(".elempperpage").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_18,
+	        position: {
+	            my: "left", 
+		        at: "left-325 bottom+21"
+	        }
+	    });
+	} else {
+		$(".elempperpage").attr("title", "");
+	    $(".elempperpage").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_18,
+	        position: {
+	            my: "left", 
+		        at: "left-325 bottom+16"
+	        }
+	    });
+	}
+    if (language != "EN"){
+	    $("#actualpage").attr("title", "");
+	    $("#actualpage").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_19,
+	        position: {
+	            my: "left bottom", 
+	            at: "left-325"
+	        }
+	    });
+	} else {
+		$("#actualpage").attr("title", "");
+	    $("#actualpage").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_19,
+	        position: {
+	            my: "left", 
+	            at: "left-325 bottom+21"
+	        }
+	    });
+	}
+    $("#copytags img").attr("title", "");
+	$("#copytags img").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_20,
+        position: {
+            my: "right top", 
+            at: "right-25"
+        }
+    });
+    $("#eraser img").attr("title", "");
+	$("#eraser img").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_21,
+        position: {
+            my: "right top", 
+            at: "right-25"
+        }
+    });
+    if (language == 'EN') {
+	    $("#clearresults img").attr("title", "");
+		$("#clearresults img").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_22,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+154"
+	        }
+	    });
+	} else if (language == 'FR') {
+		$("#clearresults img").attr("title", "");
+		$("#clearresults img").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_22,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+188"
+	        }
+	    });
+	} else if (language == 'ES') {
+		$("#clearresults img").attr("title", "");
+		$("#clearresults img").tooltip({
+	        disabled: !window.top.showtooltips,
+	        show: {delay: 800},
+	        content: ph_tt_22,
+	        position: {
+	            my: "right bottom", 
+	            at: "right+194"
+	        }
+	    });
+	}
+
+};
 
 
 
@@ -1209,6 +1736,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						trans2.oncomplete = function(event) {
 
 							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+							loadTooltips();
 
 						}
 
@@ -1353,6 +1881,7 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 						trans2.oncomplete = function(event) {
 
 							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+							loadTooltips();
 
 						}
 
@@ -1663,6 +2192,10 @@ setTimeout(function() { // acciones que de realizan pasado un tiempo, cuando las
 			}
 
 		}
+		// no se han introducido tags en los campos alternativamente necesarios (he decidido no poner nada ya pone el tooltip)
+		else if (numerodecamposrellenados == 0 && numerodecamposrellenadosno == 0) {
+			//alertify.alert(ph_alr_12);
+		}
 
 	});
 
@@ -1679,27 +2212,28 @@ function addfoldertagfield(thisbutton){
 
 	var previoustags = thisbutton.previousElementSibling.previousElementSibling.innerHTML;
 	var previoustagsvalues = thisbutton.previousElementSibling.previousElementSibling.getAttribute("value");
-	$(thisbutton).next('span').remove() //se quita la x de eliminar campo para que no se acumule
+	$(thisbutton).next('span').remove(); //se quita la x de eliminar campo para que no se acumule
 	$(thisbutton).remove(); //se quita boton previamente existente	
 
 	var lastcleartagbutton = $( ".clearfoldertagfield" ).last();
+	//var lastcleartagbutton = $( ".searchfolderinput" ).last(); // tambien funcionaria pero lo dejo como estaba para no liarla
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchfolderinput"><span>..or have:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchfolderinput"><span>..or have:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Remove last</a><a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchfolderinput"><span>..o tienen:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchfolderinput"><span>..o tienen:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Quitar última</a><a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchfolderinput"><span>..ou ont:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchfolderinput"><span>..ou ont:</span><div class="foldertaginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="clearfoldertagfield small button red">Enlever dernier</a><a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 	}
 
 	$(htmltoadd).insertAfter(lastcleartagbutton);
 
-	inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+	
 
 	// Aquí hay que volver a activar el dragg and drop en los nuevos input añadidos
 	$('.foldertaginput').droppable({
@@ -1798,7 +2332,8 @@ function addfoldertagfield(thisbutton){
 
 						trans2.oncomplete = function(event) {
 
-							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)						
+							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+							loadTooltips();						
 
 						}
 
@@ -1821,9 +2356,10 @@ function addfoldertagfield(thisbutton){
 	});
 
 	// boton limpiar campos (nuevos botones)
-	$( ".clearfoldertagfield" ).unbind(); // para que no se acumule
-	$( ".clearfoldertagfield" ).click(function() {
+	$( ".clearfoldertagfield" ).unbind("click"); // para que no se acumule
+	$( ".clearfoldertagfield" ).click(function(e) {
 
+		e.preventDefault();
 		var taginput = $(this).prev(".foldertaginput")["0"];
 
 		var taginputvalue = taginput.getAttribute("value");
@@ -1844,6 +2380,9 @@ function addfoldertagfield(thisbutton){
 
 	});
 
+	inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)	
+	loadTooltips();
+
 };
 
 
@@ -1854,28 +2393,26 @@ function addtagfield(thisbutton){
 
 	var previoustags = thisbutton.previousElementSibling.previousElementSibling.innerHTML;
 	var previoustagsvalues = thisbutton.previousElementSibling.previousElementSibling.getAttribute("value");
-	$(thisbutton).next('span').remove() //se quita la x de eliminar campo para que no se acumule
+	$(thisbutton).next('span').remove(); //se quita la x de eliminar campo para que no se acumule
 	$(thisbutton).remove(); //se quita boton previamente existente	
 
 	var lastcleartagbutton = $( ".cleartagfield" ).last();
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchinput"><span>..or have:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..or have:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Remove last</a><a class="addtagfield small button green  tooltipaddtagf" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchinput"><span>..o tienen:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..o tienen:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Quitar última</a><a class="addtagfield small button green  tooltipaddtagf" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchinput"><span>..ou ont:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchinput"><span>..ou ont:</span><div class="taginput" value="' + previoustagsvalues + '">' + previoustags + '</div><a class="cleartagfield small button red">Enlever dernier</a><a class="addtagfield small button green tooltipaddtagf" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	}
 
-	$(htmltoadd).insertAfter(lastcleartagbutton);
-
-	inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+	$(htmltoadd).insertAfter(lastcleartagbutton);	
 
 	// Aquí hay que volver a activar el dragg and drop en los nuevos input añadidos
 	$('.taginput').droppable({
@@ -1975,6 +2512,7 @@ function addtagfield(thisbutton){
 						trans2.oncomplete = function(event) {
 
 							inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+							loadTooltips();
 						}
 
 					};
@@ -1996,7 +2534,7 @@ function addtagfield(thisbutton){
 	});
 
 	// boton limpiar campos (nuevos botones)
-	$( ".cleartagfield" ).unbind(); // para que no se acumule
+	$( ".cleartagfield" ).unbind("click"); // para que no se acumule
 	$( ".cleartagfield" ).click(function() {
 
 		var taginput = $(this).prev(".taginput")["0"];
@@ -2019,27 +2557,30 @@ function addtagfield(thisbutton){
 
 	});
 
+	inputtagsorder(); // activa interacciones tagtickets de los input-fields (para poder cambiar orden)
+	loadTooltips();
+
 };
 
 
 function addnottagfield(thisbutton){
 
-	$(thisbutton).next('span').remove() //se quita la x de eliminar campo para que no se acumule
+	$(thisbutton).next('span').remove(); //se quita la x de eliminar campo para que no se acumule
 	$(thisbutton).remove(); //se quita boton previamente existente
 
 	var lastclearnottagbutton = $( ".clearnottagfield" ).last();
 
 	if (language == 'EN') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..and don\'t have:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..and don\'t have:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Remove last</a><a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'ES') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..y no tienen:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Quitar última</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..y no tienen:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Quitar última</a><a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	} else if (language == 'FR') {
 
-		var htmltoadd = '<div class="searchnotinput"><span>..et n\'ont pas:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Enlever dernier</a><a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
+		var htmltoadd = '<div class="searchnotinput"><span>..et n\'ont pas:</span><div class="nottaginput" value=""><span class="placehold">' + ph_taghere + '</span></div><br><a class="clearnottagfield small button red">Enlever dernier</a><a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span></div>';
 
 	}
 
@@ -2164,7 +2705,7 @@ function addnottagfield(thisbutton){
 	});
 
 	// boton limpiar campos (nuevos botones)
-	$( ".clearnottagfield" ).unbind(); // para que no se acumule
+	$( ".clearnottagfield" ).unbind("click"); // para que no se acumule
 	$( ".clearnottagfield" ).click(function() {
 
 		// var nottaginput = $(this).prev(".nottaginput")  // no funciona así, asi que utilizo :
@@ -2174,21 +2715,25 @@ function addnottagfield(thisbutton){
 
 	});
 
+	loadTooltips();
+
 };
 
 
 function removefoldertagfield(removebutton) {
+
+	$(".removefield").tooltip("destroy");
 
 	var removebuttonpreviosfieldclear = removebutton.parentElement.previousSibling;
 
 	if ($(".searchfolderinput").length == 2) { // si solo queda este y el 1er field no se le añade la x para borrar
 
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Another (That have) filter...</a>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a>';	
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a>';	
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a>';		
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a>';		
 		}
 
 
@@ -2197,11 +2742,11 @@ function removefoldertagfield(removebutton) {
 	} else { // si quedan más campos se le añade la x
 
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';	
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';	
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';		
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddfoldertagf" onclick="addfoldertagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removefoldertagfield(this)"><img src="img/eliminar_input.png"></span>';		
 		}
 
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
@@ -2211,22 +2756,26 @@ function removefoldertagfield(removebutton) {
 	// se quita el div
 	var parentelement = removebutton.parentElement;
 	parentelement.parentNode.removeChild(parentelement);
+
+	loadTooltips();
 
 }
 
 
 function removetagfield(removebutton) {
 
+	$(".removefield").tooltip("destroy");
+
 	var removebuttonpreviosfieldclear = removebutton.parentElement.previousSibling;
 
 	if ($(".searchinput").length == 2) { // si solo queda este y el 1er field no se le añade la x para borrar
 
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddtagf" onclick="addtagfield(this)">Another (That have) filter...</a>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a>';	
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddtagf" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a>';	
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a>';		
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddtagf" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a>';		
 		}
 
 
@@ -2235,11 +2784,11 @@ function removetagfield(removebutton) {
 	} else { // si quedan más campos se le añade la x
 
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddtagf" onclick="addtagfield(this)">Another (That have) filter...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';	
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddtagf" onclick="addtagfield(this)">Otro filtro (Que tienen)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';	
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';		
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddtagf" onclick="addtagfield(this)">Autre filtre (Qui ont)...</a> <span class="removefield" onclick="removetagfield(this)"><img src="img/eliminar_input.png"></span>';		
 		}
 
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
@@ -2249,33 +2798,37 @@ function removetagfield(removebutton) {
 	// se quita el div
 	var parentelement = removebutton.parentElement;
 	parentelement.parentNode.removeChild(parentelement);
+
+	loadTooltips();
 
 }
 
 
 function removenottagfield(removebutton) {
 
+	$(".removefield").tooltip("destroy");
+
 	var removebuttonpreviosfieldclear = removebutton.parentElement.previousSibling
 
 	if ($(".searchnotinput").length == 2) { // si solo queda este y el 1er field no se le añade la x para borrar
 
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a>';
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a>';
 		}
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
 
 	} else { // si quedan más campos se le añade la x
 		
 		if (language == 'EN') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Another (That don\'t have) filter...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
 		} else if (language == 'ES') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Otro filtro (Que no tienen)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
 		} else if (language == 'FR') {
-			var htmltoadd = '<a class="addtagfield small button green" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
+			var htmltoadd = '<a class="addtagfield small button green tooltipaddnotagf" onclick="addnottagfield(this)">Autre filtre (Qui n\'ont pas)...</a> <span class="removefield" onclick="removenottagfield(this)"><img src="img/eliminar_input.png"></span>';
 		}
 		$(htmltoadd).insertAfter(removebuttonpreviosfieldclear);
 
@@ -2284,6 +2837,8 @@ function removenottagfield(removebutton) {
 	// se quita el div
 	var parentelement = removebutton.parentElement;
 	parentelement.parentNode.removeChild(parentelement);
+
+	loadTooltips();
 
 }
 
@@ -3189,6 +3744,8 @@ function concetradoresultadoscarpetas(entradas) {
 		if (resultadoscarpetas.length == 0) {
 
 			$('#numeroderesultadoscarpetas').html(ph_nofoldersfound)
+		} else {
+			$("#clearresults img").show();
 		}
 
 		readsearchredresults();
@@ -3262,6 +3819,8 @@ function concetradoresultadosarchivos(entradas) {
 		if (resultadosarchivos.length == 0) {
 
 			$('#numeroderesultadosarchivos').html(ph_nofilesfound)
+		} else {
+			$("#clearresults img").show();
 		}
 
 		readsearchredresults();
