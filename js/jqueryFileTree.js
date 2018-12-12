@@ -3254,11 +3254,9 @@ window.parent.$("#paste").on('click', function() {
 		var targetfolder = $("#filetree ul li span.selected")["0"].attributes[1].value;
 	}
 
-	var alldroppedelement = $(".exploelement.ui-selecting");
 
-	if (alldroppedelement.length == 0) {
-		alldroppedelement = $(".exploelement.ui-selected"); // para que lo haga con los selected si no hay selecting
-	}
+	var alldroppedelement = $(".exploelement.ui-selected");
+	
 
 	if (alldroppedelement.length == 0) { // si no hay elementos seleccionados
 
@@ -3338,9 +3336,9 @@ window.parent.$("#paste").on('click', function() {
 				  el.style.filter = "opacity(46%)";
 				});
 				if (viewmode==1){
-					$(".ui-selected, .ui-selecting").next().remove(); // los <br>
+					$(".ui-selected").next().remove(); // los <br>
 				}
-				$(".ui-selected, .ui-selecting").remove();
+				$(".ui-selected").remove();
 
 				$("#filetree ul li span.selected").addClass("animateonce");
 
@@ -4461,7 +4459,6 @@ window.parent.$("#paste").on('click', function() {
 									$('.exploelement, .exploelementfolderup').css("filter","none");
 									updatedestitems();
 									$(".ui-selected").removeClass("ui-selected");
-									$(".ui-selecting").removeClass("ui-selecting");
 
 								}, timetowait);
 
@@ -4471,7 +4468,6 @@ window.parent.$("#paste").on('click', function() {
 								$('.exploelement, .exploelementfolderup').css("filter","none");
 								updatedestitems();
 								$(".ui-selected").removeClass("ui-selected");
-								$(".ui-selecting").removeClass("ui-selecting");
 
 							}
 
@@ -5071,7 +5067,6 @@ window.parent.$("#paste").on('click', function() {
 																$('.exploelement, .exploelementfolderup').css("filter","none");
 																updatedestitems();
 																$(".ui-selected").removeClass("ui-selected");
-																$(".ui-selecting").removeClass("ui-selecting");
 
 															}, timetowait);
 
@@ -5082,7 +5077,6 @@ window.parent.$("#paste").on('click', function() {
 															$('.exploelement, .exploelementfolderup').css("filter","none");
 															updatedestitems();
 															$(".ui-selected").removeClass("ui-selected");
-															$(".ui-selecting").removeClass("ui-selecting");
 														}
 
 													}
@@ -5240,7 +5234,6 @@ window.parent.$("#paste").on('click', function() {
 													$('.exploelement, .exploelementfolderup').css("filter","none");
 													updatedestitems();
 													$(".ui-selected").removeClass("ui-selected");
-													$(".ui-selecting").removeClass("ui-selecting");
 
 												}, timetowait);
 
@@ -5250,7 +5243,6 @@ window.parent.$("#paste").on('click', function() {
 												$('.exploelement, .exploelementfolderup').css("filter","none");
 												updatedestitems();
 												$(".ui-selected").removeClass("ui-selected");
-												$(".ui-selecting").removeClass("ui-selecting");
 											}
 
 										}
@@ -5307,7 +5299,6 @@ window.parent.$("#paste").on('click', function() {
 											$('.exploelement, .exploelementfolderup').css("filter","none");
 											updatedestitems();
 											$(".ui-selected").removeClass("ui-selected");
-											$(".ui-selecting").removeClass("ui-selecting");
 
 										}, timetowait);
 
@@ -5316,7 +5307,6 @@ window.parent.$("#paste").on('click', function() {
 										$('.exploelement, .exploelementfolderup').css("filter","none");
 										updatedestitems();
 										$(".ui-selected").removeClass("ui-selected");
-										$(".ui-selecting").removeClass("ui-selecting");
 									}
 
 								}
@@ -5347,5 +5337,7 @@ window.parent.$("#paste").on('click', function() {
 		} //-- fin Copiar
 
     }
+
+    top.explorer.focus();
 
 }); //-- fin Copiar y Mover usando la botonera de arriba

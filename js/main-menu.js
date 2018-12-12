@@ -29,7 +29,9 @@ window.driveLetters = require('windows-drive-letters'); // utilizado en popups.j
 window.username = require('username'); // utilizado en popups.js
 window.idbExportImport = require("indexeddb-export-import"); // utilizado en popups.js
 window.shell = require('electron').shell;
+window.remote = require('electron').remote; // utilizado en popups.js
 window.CurrentWindow = require('electron').remote.getCurrentWindow(); // utilizado en main.js, searcher.js
+
 //window.rec_jquery = require("jquery"); // utilizado en jquery.tinycolorpicker.js
 
 
@@ -93,6 +95,13 @@ $(document).ready(function () {
 
         loadTooltips(); // porque no son los mismos tips en el explorer que en el searcher
 
+        var tabseleccionado = $(".current").attr("id");
+        if (tabseleccionado == "exploretab") {
+            explorer.focus();
+        } else if (tabseleccionado == "searchtab") {
+            searcher.focus();
+        }
+
 	});    
 
 
@@ -140,6 +149,13 @@ $(document).ready(function () {
             pasteaction = "cut";
         } else {
             pasteaction = "copy";
+        }
+
+        var tabseleccionado = $(".current").attr("id");
+        if (tabseleccionado == "exploretab") {
+            explorer.focus();
+        } else if (tabseleccionado == "searchtab") {
+            searcher.focus();
         }
 
     });
@@ -190,8 +206,8 @@ function loadTooltips() {
         ph_tt_01 = "View the explorer section.";
         ph_tt_02 = "View the searcher section.";
         if ($("#exploretab").hasClass("current")){ // cuando está seleccionado el explorador
-            ph_tt_03 = "Paste selected elements from the directorys view on the right into selected folder (the double-clicked one) on to the treeview on the left, alternatively you can dragg and drop the elements into any folder.";
-            ph_tt_04 = "Switch between 'Copy' and 'Cut'; depending on what is selected, when you paste selected elements into selected folder or you dragg and drop elements into any folder those elements will be copied or will be moved, and their correspondent tags, if they have, will be copied/moved also.";
+            ph_tt_03 = "Paste selected elements from the directory view on the right into selected folder (the double-clicked one) on to the treeview on the left, alternatively you can drag and drop the elements into any folder.";
+            ph_tt_04 = "Switch between 'Copy' and 'Cut'; depending on what is selected, when you paste selected elements into selected folder or you drag and drop elements into any folder those elements will be copied or will be moved, and their correspondent tags, if they have, will be copied/moved also.";
             ph_tt_05 = "Delete the selected elements in the directory view.";
         } else { // cuando está seleccionado el buscador
             ph_tt_03 = "Paste selected elements from the search results into a directory that you will be prompted to select, first you will be able to choose if you want to paste the tags associated to the elements too or not.";
@@ -202,7 +218,7 @@ function loadTooltips() {
         ph_tt_07 = "Remove folder selected in the 'fast access to folders' list from the list.";
         ph_tt_08 = "Open the folder selected in the 'fast access to folders' list in the directory view.";
         ph_tt_09 = "Select viewmode for the directory view; in viewmode 1 elements are displayed in a list, in viewmodes 2-9 elements are displayed as cards of consecutive incremental size.";
-        ph_tt_10 = "Select order by wich elements will be represented in the directory view; it's possible to choose to order by name, extension, size, last modified date and in a aleatory way.";
+        ph_tt_10 = "Select order by which elements will be represented in the directory view; it's possible to choose to order by name, extension, size, last modified date and in a aleatory way.";
         ph_tt_11 = "Undo previously performed action, there are possible to undo tagging operations and the filesystem's rename, copy and move elements operations, but it's not possible to undo deleting operations.";
         ph_tt_12 = "Open the database management and options menu.";
         ph_tt_13 = "Open the help and product info window.";
@@ -216,12 +232,12 @@ function loadTooltips() {
             ph_tt_04 = "Cambiar entre 'Copiar' y 'Cortar'; dependiendo de lo que se seleccione, cuando pegue los elementos seleccionados en la carpeta seleccionada o arrastre y suelte elementos en cualquier carpeta, dichos elementos se copiarán o se moverán, y sus etiquetas correspondientes, si las tienen, también se copiarán/moverán.";
             ph_tt_05 = "Eliminar los elementos seleccionados en la vista de directorio.";
         } else { // cuando está seleccionado el buscador
-            ph_tt_03 = "Pegar los elementos seleccionados de los resultados de la búsqueda en un directorio que se le pedirá que seleccione, primero podrá elegir si desea pegar tambien las etiquetas asociadas a los elementos o no.";
+            ph_tt_03 = "Pegar los elementos seleccionados de los resultados de la búsqueda en un directorio que se le pedirá que seleccione, primero podrá elegir si desea pegar también las etiquetas asociadas a los elementos o no.";
             ph_tt_04 = "Cambiar entre 'Copiar' y 'Cortar'; según lo que se seleccione, al pegar los elementos seleccionados en una carpeta que podrá elegir, esos elementos seleccionados se moverán o se copiarán.";
             ph_tt_05 = "Eliminar los elementos buscados seleccionados.";
         }
         ph_tt_06 = "Seleccionar entre los accesos rápidos a carpetas previamente añadidos.";
-        ph_tt_07 = "Borar de la lista de 'acceso rápido a carpetas' el acceso rapido seleccionado."
+        ph_tt_07 = "Borrar de la lista de 'acceso rápido a carpetas' el acceso rápido seleccionado."
         ph_tt_08 = "Abrir la carpeta seleccionada en la lista de 'acceso rápido a carpetas' en la vista de directorio.";
         ph_tt_09 = "Seleccionar modo de vista para la vista de directorio; en el modo de vista 1 los elementos se muestran en una lista, en los modos de vista 2-9 los elementos se muestran como tarjetas de tamaño incremental consecutivo.";
         ph_tt_10 = "Seleccionar el orden por el cual los elementos serán representados en la vista de directorio; es posible elegir ordenar por nombre, extensión, tamaño, fecha de última modificación y de forma aleatoria.";

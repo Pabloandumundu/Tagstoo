@@ -53,6 +53,9 @@ var numElemsPerPage = 0;
 var necesaryPages = "";
 var actualPage = 0;
 
+var seleccionadoCopiadorTags = false; // para mantener el tool seleccionado entre diferentes vistas o busquedas
+var seleccionadoBorradorTags = false; // para mantener el tool seleccionado entre diferentes vistas o busquedas
+
 $(document).ready(function () {
 
 	// panel de desarrollo ////\\\\
@@ -168,7 +171,7 @@ $(document).ready(function () {
 		ph_tagshere = "(Tags Here)";
 		ph_taghere = "(Tag Here)";
 		ph_medialength = "Media Length";
-		ph_alr_01 = "You choosed to create a printable friendly list of searched results, but there are not searched results at this moment.";
+		ph_alr_01 = "You have chosen to create a printable friendly list of searched results, but there are not searched results at this moment.";
 		/*ph_alr_02 = "Maximum 5 tags are permitted for each filter.";*/
 		ph_alr_03 = "Only 1 tag is permitted in this kind of filter.";
 		ph_alr_04 = "No elements selected to copy.";
@@ -951,6 +954,9 @@ $(document).ready(function () {
 				}
 
 			});
+			// para mantener el tool seleccionado entre diferentes vistas o busquedas
+			seleccionadoCopiadorTags = true;
+			seleccionadoBorradorTags = false;
 
 		}
 
@@ -961,7 +967,10 @@ $(document).ready(function () {
 			$("#copieron").removeClass("on");
 			document.querySelectorAll(".tags").forEach(function(el) {
 				el.style.cursor = "pointer"
-			});			
+			});
+			// para mantener el tool seleccionado entre diferentes vistas o busquedas
+			seleccionadoCopiadorTags = false;
+			seleccionadoBorradorTags = false;			
 		}
 
 	});
@@ -988,9 +997,12 @@ $(document).ready(function () {
 				el.style.cursor = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAYAAAAmaHdCAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QIFERIkBcGckAAAA2FJREFUOMuNlFtIqmkUhldaXnSYps0QA151YMjAPyEmf/DX0JIug80M1EVz6ES3ETU0SWxKC4O6CbIco4GoIJkhhgmpC0WSopkkJCoCy1Ism8ZOlpWZ71ztf3LbPqy79X3v+3zrWyxWmkajIbvdTiqV6geJRPJ9YWGhRCQSfbG9vf3H5uZmg9vtvqVPiZqamteNjY0IBoN4Hi0tLZDJZK8+5heIxeKskpKS30pLS0kkEiVdms1mqqio+Jdl2c8+CMnKylK2trYSAMrNzU0RTExMpCkUCh8RkUajeRGSXl5ezmZnZ5PL5aJwOEzp6emk1WpJpVLxIqPR+CoQCPw9Pz//tVqtJofDkUypra21NTQ0oLe3l+/F+vo6dDpdUn9CoRBYlrW8WFFfX9/NxcUFZmZm4PF4eNPd3R0GBweTQE6nEwqF4puU/2g0mp8fHx/hcrnQ09ODk5MT3nR5eQmr1crn3d3dWFpaQllZ2VcpoLq6uksA6O/vh9FoTHp9ZWUFi4uLOD4+htPpBADodLoYEVF1dfX/ELlcLh4bGwMAjI6OYnJyMgk0NTWF8fHxpLO2trallGpYlv3u4OAAt7e30Ov1MJvNvMHr9aKjowNPT0/8md/vB8Mwb5735e3kuu7v77G/vw+TyYTd3V0EAgHMzs4CAPR6fVI1NpstJpVKM1IqMhgMVwCwtraGgYEBWCwW3pRIJDA8PMzn4XAYHMf9kgRQq9Ukk8nUVqsVkUgE9fX16OzsxLths9kAAPF4HBzHXQufQw4PDykUCh1eXV3FiKjKYDDQxsYG+f1+YhiG10WjUdrb26OCggKam5sTCF6YG1peXh7yer1hIqL29nY6PT2l6elpXsMwDAWDQSIiKioqShe+C/H5fEREiMViFrFY/JNEIqGcnBxyu92Ul5dH+fn5REQUiURIJBLR6urqh/eEVCp9fXR0xA/d0NAQotEo35uRkREolcqY4H2Aqqoq2tra+r2pqenPRCJBHMfRw8MDdXV18Zrz83MSCAR/Cd8H8fl8pFaryW63zwmFwh8rKys/5ziOHA4HnZ2dEcMw5PV6aWdnp/6jq1OpVFJxcXHR27GPx+MwmUxYWFhAc3NziIgojT4xtFrtt3K5fCAjI+NLj8cjvLm5+fX6+vpNZmbmP/8BN8ZmaONW+JwAAAAASUVORK5CYII='),auto"
 			});
 
-			$(".tags > div").draggable( 'disable' );
+			/*$(".tags > div").draggable( 'disable' );*/
 			$("#eraser img").addClass('activated');
 			$("#eraseron").addClass("on");
+			// para mantener el tool seleccionado entre diferentes vistas o busquedas
+			seleccionadoCopiadorTags = false;
+			seleccionadoBorradorTags = true;
 
 		} else {
 
@@ -1003,6 +1015,9 @@ $(document).ready(function () {
 			$(".tags > div").draggable( 'enable' );
 			$("#eraser img").removeClass('activated');
 			$("#eraseron").removeClass("on");
+			// para mantener el tool seleccionado entre diferentes vistas o busquedas
+			seleccionadoCopiadorTags = false;
+			seleccionadoBorradorTags = false;
 
 		}
 
@@ -1146,12 +1161,12 @@ function loadTooltips() {
 		ph_tt_14 = "Make the search (over the tagged elements).";
 		ph_tt_14 = "Make the search!";
 		ph_tt_15 = "Select viewmode for the view of searched elements; in viewmode 1 elements are displayed in a list, in viewmodes 2-9 elements are displayed as cards of consecutive incremental size.";
-		ph_tt_16 = "Select order by wich elements will be represented in the searched elements view; it's possible to choose to order by name, extension, size, last modified date and in a aleatory way.";
+		ph_tt_16 = "Select order by which elements will be represented in the searched elements view; it's possible to choose to order by name, extension, size, last modified date and in a aleatory way.";
 		ph_tt_17 = "Open 'Display printable friendly list' window where you will be able to choose to generate a plain text list of the current view of the searched results  (to print o to save in a file) or a copy of the current view of the searched results that include tags (with the possibility to print).";
 		ph_tt_18 = "Select the number of searched elements that you want to appear per page (all or a certain number).";
 		ph_tt_19 = "Select the page that is currently viewed (if there are more than one) in the right it can be seen the upper limit of the available page numbers in each moment.";
-		ph_tt_20 = "Activate/deactivate the tag copier, with this tool activated you can copy the tags that any element have, into the elements that are selected, clicking in the tags area of the element who's tags you want to copy.";
-		ph_tt_21 = "Activate/deactivate the tags eraser, with this tool activated you can delete any tag of the elements by clicking on it. If you are usin a mouse there is an easier way to delete tags without using this tool: simply click with the right mouse button on the tag to be deleted.";
+		ph_tt_20 = "Activate/deactivate the tag copier, with this tool activated you can copy the tags that any element have, into the elements that are selected, clicking in the tags area of the element who's tags you want to copy.<br><br>Remember that you can deselect everything selected by pressing Esc (or twice Ctrl-a).";
+		ph_tt_21 = "Activate/deactivate the tags eraser, with this tool activated you can delete any tag of the elements by clicking on it. If you are using a mouse there is an easier way to delete tags without using this tool: simply click with the right mouse button on the tag to be deleted.";
 		ph_tt_22 = "Clean the results area.";
 
 	} else if (language == "ES") {
@@ -1175,7 +1190,7 @@ function loadTooltips() {
 		ph_tt_17 = "Abrir la ventana 'Mostrar versión imprimible de la lista' donde podrá elegir generar una lista de texto sin formato de la vista actual de los resultados buscados (para imprimir o guardar en un archivo) o una copia de la vista actual de los resultados buscados que incluye etiquetas (con la posibilidad de imprimir).";
 		ph_tt_18 = "Seleccionar la cantidad de elementos buscados que desea que aparezcan por página (todos o un número determinado).";
 		ph_tt_19 = "Seleccionar la página que se ve actualmente (si hay más de una) a la derecha se puede ver el límite superior de los números de página disponibles en cada momento.";
-		ph_tt_20 = "Activa/desactiva la copiadora de etiquetas, con esta herramienta activada puede copiar las etiquetas que tiene cualquier elemento, en los elementos seleccionados, haciendo clic en el área de etiquetas del elemento cuyas etiquetas desea copiar.";
+		ph_tt_20 = "Activa/desactiva la copiadora de etiquetas, con esta herramienta activada puede copiar las etiquetas que tiene cualquier elemento, en los elementos seleccionados, haciendo clic en el área de etiquetas del elemento cuyas etiquetas desea copiar.<br><br>Recuerda que puedes deseleccionar todo lo seleccionado pulsando Esc (o dos veces Ctrl-a).";
 		ph_tt_21 = "Activar/desactivar el borrador de etiquetas, con esta herramienta activada puede eliminar cualquier etiqueta de los elementos haciendo clic en ella. Si utiliza un ratón, existe una forma más fácil de eliminar etiquetas sin usar esta herramienta: simplemente haga clic con el botón derecho del ratón en la etiqueta a eliminar.";
 		ph_tt_22 = "Limpiar el área de resultados.";
 
@@ -1201,7 +1216,7 @@ function loadTooltips() {
 		ph_tt_17 = "Ouvrez la fenêtre «Show la liste en version d'impression» dans laquelle vous pouvez choisir de générer une liste en texte brut de la vue actuelle des résultats chercher (pour imprimer ou pour enregistrer dans un fichier) ou une copie de la vue actuelle des résultats de la cherche incluant des étiquettes (avec la possibilité d'imprimer).";
 		ph_tt_18 = "Sélectionner la quantité d'éléments cherchés que vous souhaitez voir apparaître par page (tout ou un certain nombre).";
 		ph_tt_19 = "Sélectionner la page actuellement visible (s'il y en a plusieurs) à droite, vous pouvez voir la limite supérieure des numéros de page disponibles à chaque instant.";
-		ph_tt_20 = "Activez/désactivez le copieur de etiquettes, avec cet outil activé vous pouvez copier les etiquettes de tout élément dans les éléments sélectionnés, en cliquant dans la zone des etiquettes de l'élément dont vous souhaitez copier les etiquettes.";
+		ph_tt_20 = "Activez/désactivez le copieur de etiquettes, avec cet outil activé vous pouvez copier les etiquettes de tout élément dans les éléments sélectionnés, en cliquant dans la zone des etiquettes de l'élément dont vous souhaitez copier les etiquettes.<br><br>Rappelez-vous que vous pouvez désélectionner tous sélectionnés en appuyant sur Echap (ou deux fois sur Ctrl-a).";
 		ph_tt_21 = "Activer/désactiver le gomme des étiquettes, avec cet outil activé, vous pouvez supprimer n'importe quelle étiquette des éléments en cliquant dessus. Si vous utilisez une souris, il existe un moyen plus simple de supprimer des étiquettes sans utiliser cet outil: faites un clic droit sur l'étiquette à supprimer.";
 		ph_tt_22 = "Nettoyer la zone de résultats.";
 
@@ -4370,6 +4385,7 @@ function drawSearchAfterAfter() {
         onclose: function(){
         	resizefromimage = "yes";
         	CurrentWindow.setFullScreen(false);
+        	top.searcher.focus();
         }
 
 	});
@@ -4385,6 +4401,7 @@ function drawSearchAfterAfter() {
         onclose: function(){
         	resizefromimage = "yes";
         	CurrentWindow.setFullScreen(false);
+        	top.searcher.focus();
         }
 
 	});
@@ -4702,7 +4719,7 @@ function drawSearchAfterAfter() {
 
 	// para evitar selección del elemento cuando se le da a una imagen
 	$(".archive a img").on('click', function(){
-		$(this)[0].parentElement.parentElement.parentElement.classList.toggle("ui-selecting")
+		$(this)[0].parentElement.parentElement.parentElement.classList.toggle("ui-selected")
 	})
 
 	// para pintar diferentes carpetas según contenido mayoritario
@@ -5087,20 +5104,20 @@ function drawSearchAfterAfter() {
 					   	if (audio.paused || audio.ended) {
 					      	playpause.title = "pause";
 					      	playpause.classList.toggle("down");
-					      	parent.classList.toggle("ui-selecting"); // para evitar selección exploelement
+					      	parent.classList.toggle("ui-selected"); // para evitar selección exploelement
 					      	audio.play();
 					   	}
 					   	else {
 					      	playpause.title = "play";
 					     	playpause.classList.toggle("down");
-					     	parent.classList.toggle("ui-selecting"); // para evitar selección exploelement
+					     	parent.classList.toggle("ui-selected"); // para evitar selección exploelement
 					      	audio.pause();
 					   	}
 					}
 					volume.onchange = function() {
 
 	   					audio.volume = volume.value;
-	   					parent.classList.toggle("ui-selecting"); // para evitar selección exploelement
+	   					parent.classList.toggle("ui-selected"); // para evitar selección exploelement
 					}
 
 					volume.onmousedown = function(e) {
@@ -5131,7 +5148,7 @@ function drawSearchAfterAfter() {
 						if (playpause.title == "pause") { //si ya estaba ejecutándose
 					  		audio.play();
 						}
-						parent.classList.toggle("ui-selecting"); // para evitar selección exploelement
+						parent.classList.toggle("ui-selected"); // para evitar selección exploelement
 					})
 					seekbar.onmousedown = function(e) {
 						e.stopPropagation(); // para evitar que actué el trigger action del padre (es decir, el pressandHold), mientras se tenga pulsado el mouse button en este elemento
@@ -5269,20 +5286,20 @@ function drawSearchAfterAfter() {
 					   	if (video.paused || video.ended) {
 					      	playpause.title = "pause";
 					      	playpause.classList.toggle("down");
-					      	parent.classList.toggle("ui-selecting"); // para evitar selección exploelement
+					      	parent.classList.toggle("ui-selected"); // para evitar selección exploelement
 					      	video.play();
 					   	}
 					   	else {
 					      	playpause.title = "play";
 					     	playpause.classList.toggle("down");
-					     	parent.classList.toggle("ui-selecting"); // para evitar selección exploelement
+					     	parent.classList.toggle("ui-selected"); // para evitar selección exploelement
 					      	video.pause();
 					   	}
 					}
 					volume.onchange = function() {
 
 	   					video.volume = volume.value;
-						parent.classList.toggle("ui-selecting"); // para evitar seleccion exploelement
+						parent.classList.toggle("ui-selected"); // para evitar seleccion exploelement
 					}
 
 					volume.onmousedown = function(e) {
@@ -5315,7 +5332,7 @@ function drawSearchAfterAfter() {
 						if (playpause.title == "pause") { // si ya estaba ejecutándose
 					  		video.play();
 						}
-						parent.classList.toggle("ui-selecting"); // para evitar selección exploelement
+						parent.classList.toggle("ui-selected"); // para evitar selección exploelement
 					})
 					seekbar.onmousedown = function(e) {
 						e.stopPropagation(); // para evitar que actué el trigger action del padre (es decir, el pressandHold), mientras se tenga pulsado el mouse button en este elemento
@@ -5354,6 +5371,15 @@ function drawSearchAfterAfter() {
 
 		drawdirectoryviewtags();
 		interactinsforsearchdir();
+
+
+		// para mantener el tool seleccionado entre diferentes vistas o busquedas
+		if (seleccionadoCopiadorTags == true){
+			$("#copytags img").trigger( "click" );
+		} else if (seleccionadoBorradorTags == true) {
+			$("#eraser img").trigger( "click" );
+
+		}
 
 		// para cargar, segun se hace scroll, las imágenes (y videos)
 		setTimeout(function(){ //se le pone un pequeño delay sino a veces no hace todas a la primera
@@ -5475,6 +5501,7 @@ function drawdirectoryviewtags (){
 				elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 				elemetstagdelete(); // activa sistema borrado tags
 				elementstagcopier(); // activa sistema de copiado de tags
+				mantenerimagenpointer();
 
 			}
 
@@ -5486,6 +5513,7 @@ function drawdirectoryviewtags (){
 		elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 		elemetstagdelete(); // activa sistema borrado tags
 		elementstagcopier(); // activa sistema de copiado de tags
+		mantenerimagenpointer();
 
 	}
 
@@ -5697,6 +5725,7 @@ function interactinsforsearchdir() {
 													elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 													elemetstagdelete(); // activa sistema borrado tags
 													elementstagcopier(); // activa sistema de copiado de tags
+													mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 												}
 
@@ -5869,6 +5898,7 @@ function interactinsforsearchdir() {
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
 											elementstagcopier(); // activa sistema de copiado de tags
+											mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 										}
 
@@ -5958,6 +5988,7 @@ function interactinsforsearchdir() {
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
 											elementstagcopier(); // activa sistema de copiado de tags
+											mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 										}
 
@@ -6209,6 +6240,7 @@ function interactinsforsearchdir() {
 											elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 											elemetstagdelete(); // activa sistema borrado tags
 											elementstagcopier(); // activa sistema de copiado de tags
+											mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 											if(localStorage["asktagsubeleents"]=="yes"){
 												popup("addtagtosubelements");
 											}
@@ -6357,6 +6389,7 @@ function interactinsforsearchdir() {
 										elementstagsorder(); // activa interacciones tagtickets del directorio (para poder cambiar orden)
 										elemetstagdelete(); // activa sistema borrado tags
 										elementstagcopier(); // activa sistema de copiado de tags
+										mantenerimagenpointer(); // restaura imagen del pointer si fuera necesario (borrador, copiador de tags)
 
 										if(localStorage["asktagsubeleents"]=="yes"){
 											popup("addtagtosubelements");
@@ -6432,10 +6465,7 @@ function interactinsforsearchdir() {
 
 			//para que no se seleccione con el press and hold
 			window.estadoprevioseleccion = "";
-			if ($(this).parent().hasClass("ui-selecting")) {
-				estadoprevioseleccion = "selecting"
-			}
-			else if ($(this).parent().hasClass("ui-selected")) {
+			if ($(this).parent().hasClass("ui-selected")) {
 				estadoprevioseleccion = "selected"
 			}
 
@@ -6470,14 +6500,10 @@ function interactinsforsearchdir() {
 		// para que no se seleccione con el press and hold
 		window.elementoestadoprevioseleccion = $(elemento).parent();
 		setTimeout(function() {
-			if (estadoprevioseleccion == "selecting") {
-				elementoestadoprevioseleccion.addClass("ui-selecting",65)
-			}
-			else if (estadoprevioseleccion == "selected") {
+			if (estadoprevioseleccion == "selected") {
 				elementoestadoprevioseleccion.addClass("ui-selected",65)
 			}
 			else if (estadoprevioseleccion == "") {
-				elementoestadoprevioseleccion.removeClass("ui-selecting",65);
 				elementoestadoprevioseleccion.removeClass("ui-selected",65);
 			}
 		}, 275);
@@ -6525,6 +6551,8 @@ function interactinsforsearchdir() {
 					window.top.exec.execFile(aejecutar);
 				}
 				catch(exception) { }
+
+				top.searcher.focus();
 
 			}
 
@@ -6602,6 +6630,8 @@ function interactinsforsearchdir() {
 					catch(exception) { }
 				}
 
+				top.searcher.focus();
+
 			}
 
 			if ($(elemento).next().hasClass("explofolder")) {
@@ -6643,22 +6673,22 @@ function interactinsforsearchdir() {
 	$("#searchdirectoryview > div").on('mouseup', function(e) {
 
 				
-		var cursoractual = $(".tags > div").css('cursor');
+		/*var cursoractual = $(".tags > div").css('cursor');
 
-		if (cursoractual == "pointer" || cursoractual == undefined ){
+		if (cursoractual == "pointer" || cursoractual == undefined ){*/
 
 			if (!$(this)["0"].children[1].children[0].classList.contains("editing")) { // si no se está editando el span
 
-				var els = document.getElementsByClassName("ui-selected");
+				/*var els = document.getElementsByClassName("ui-selected");
 				var i = 0;
 
 				while (i < els.length) {
-				    els[i].classList.add('ui-selecting');
+				    els[i].classList.add('ui-selected');
 				    i++
-				}
+				}*/
 
-				if ($(this).hasClass("ui-selecting")) {
-					$(this).removeClass("ui-selecting");
+				if ($(this).hasClass("ui-selected")) {
+					$(this).removeClass("ui-selected");
 
 				}
 				else {
@@ -6666,7 +6696,7 @@ function interactinsforsearchdir() {
 					if ($(this).children()[1].classList.contains("explofolder") || $(this).children()[1].classList.contains("explofile")) { // si no es ".."
 
 						// console.log($(this))
-						$(this).addClass("ui-selecting");
+						$(this).addClass("ui-selected");
 						$(this).removeClass("whitebackground");
 
 						var nombreelemento = $(this)["0"].children[1].attributes[1].nodeValue
@@ -6700,7 +6730,7 @@ function interactinsforsearchdir() {
 								$.each ($("#searchdirectoryview > div"), function(u) {
 
 									if (u >= elementcurrentindex && u <= elementpreviousindex) {
-										$("#searchdirectoryview > div:eq("+u+")")["0"].classList.add("ui-selecting");
+										$("#searchdirectoryview > div:eq("+u+")")["0"].classList.add("ui-selected");
 										$("#searchdirectoryview > div:eq("+u+")")["0"].classList.remove("whitebackground");
 
 									}
@@ -6712,7 +6742,7 @@ function interactinsforsearchdir() {
 								$.each ($("#searchdirectoryview > div"), function(u) {
 
 									if (u <= elementcurrentindex && u >= elementpreviousindex) {
-										$("#searchdirectoryview > div:eq("+u+")")["0"].classList.add("ui-selecting");
+										$("#searchdirectoryview > div:eq("+u+")")["0"].classList.add("ui-selected");
 										$("#searchdirectoryview > div:eq("+u+")")["0"].classList.remove("whitebackground");
 
 									}
@@ -6739,7 +6769,7 @@ function interactinsforsearchdir() {
 
 			}
 
-		}
+		/*}*/
 
 	});
 
@@ -6748,6 +6778,9 @@ function interactinsforsearchdir() {
 
 		filter: '.exploelement',
 		cancel: '.tagticket, .mmcontrols',
+		start: function(e) {
+            e.originalEvent.ctrlKey = true; // para que simule que tiene la tecla cntrl pulsada (seleccionar multiples grupos)
+        },
 		selecting: function(e, ui) { // on select
 			elementpreviousindex = 0; // restear la selección múltiple con shift
 		}
@@ -6838,11 +6871,19 @@ function KeyPress(e) {
 
 	    }
 	    else if (evtobj.keyCode == 65 && evtobj.ctrlKey) { // Ctrl+a
-	    	document.querySelectorAll(".exploelement").forEach(function(el) {
-	    		el.classList.remove("ui-selected");
-	    		el.classList.remove("ui-selecting");
-	    		el.classList.add("ui-selecting");
-	    	});
+	    	
+	    	if (document.querySelectorAll(".exploelement.ui-selected").length == document.querySelectorAll(".exploelement").length)
+	    		document.querySelectorAll(".ui-selected").forEach(function(el){
+	    			el.classList.remove("ui-selected");
+	    		});
+	    	else {
+	    		document.querySelectorAll(".exploelement").forEach(function(el) {
+		    		el.classList.remove("ui-selected");		    		
+		    		el.classList.add("ui-selected");
+	    		});
+
+	    	}
+
 	    	return false; //para que no seleccione otras cosas (por defecto)
 
 	    }
@@ -7623,18 +7664,11 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 		start: function(ev, ui) {
 
+			// Con la siguiente línea se evita que cambie el estado de selección cuando se hace drag sin alcanzar un destino final.
+			ui.helper.bind("click.prevent", function(event) { event.preventDefault(); event.stopPropagation();}); 
+
 			window.elementtagorder = $(this).parent().attr("value"); // orden de los tags original
 			window.elementtags = $(this).parent(); // el div tags (para realizar campos en la modificación visual)
-
-			// para que no se vea selección de todo el elemento cuando se hace dragg de los tagticket
-			if ($(this).parent().parent().hasClass("ui-selecting")) {
-				$(this).parent().parent().removeClass("ui-selecting");
-			}
-			else {
-				// add selecting class if not
-				$(this).parent().parent().addClass("ui-selecting");
-				$(this).parent().parent().addClass("whitebackground");
-			}
 
 		}
 
@@ -7646,10 +7680,15 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 		drop: function( event, ui ) {
 
-			if(ui.draggable["0"].classList.contains("tagticket")){
+			// Para que no cambie el estado de selección al soltar el tag en un destino correcto.
+			if ($(this).parent().parent().hasClass("ui-selected")) {
+				$(this).parent().parent().removeClass("ui-selected");
+			}
+			else {
+				$(this).parent().parent().addClass("ui-selected");
+			}
 
-				// se quita la clase especial que se habia puesto para que no se viera selección durante reposicionamiento tags
-				$(this).parent().parent().removeClass("whitebackground");
+			if(ui.draggable["0"].classList.contains("tagticket")){
 
 				var draggid = ui.draggable["0"].attributes[1].value; // el id del dragg
 				var droppid = $(this).attr("value"); // el id del dropp
@@ -7913,8 +7952,6 @@ function elementstagsorder() { // activa interacciones tagtickets del directorio
 
 							trans.oncomplete = function(event) {
 
-								console.log(idcarpetadelarchivo);
-
 								// ahora localizamos el archivo en la base de datos y actualizamos sus datos
 								var trans = db.transaction(["files"], "readonly")
 								var objectStore = trans.objectStore("files")
@@ -8123,21 +8160,16 @@ function elementstagcopier() {
 		if (copytagson == "on" && $(this).has('div').length>0){
 
 			// para que no se vea selección de todo el elemento cuando se selecciona para copiar los tags
-			if ($(this).parent().hasClass("ui-selecting")) {
-				$(this).parent().removeClass("ui-selecting");
+			if ($(this).parent().hasClass("ui-selected")) {
+				$(this).parent().removeClass("ui-selected");
 			}
 			else {
-				$(this).parent().addClass("ui-selecting");
+				$(this).parent().addClass("ui-selected");
 				$(this).parent().addClass("whitebackground");
 			}
 
 			// se recogen los seleccionados en este momento
-			if (document.querySelectorAll(".ui-selecting").length > 0) {
-
-				var tocopyonelements = document.querySelectorAll(".ui-selecting");
-
-			}
-			else if (document.querySelectorAll(".ui-selected").length > 0) {
+			if (document.querySelectorAll(".ui-selected").length > 0) {
 
 				var tocopyonelements = document.querySelectorAll(".ui-selected");
 			}
@@ -8903,6 +8935,8 @@ function elemetstagdelete() {
 
 		if (cursoractual != "pointer"){
 
+			$(this)["0"].parentElement.parentElement.classList.toggle("ui-selected"); // para que no se seleccione elemento
+
 			var tagaborrar = $(this);
 			borrartag(tagaborrar);
 			
@@ -8914,7 +8948,7 @@ function elemetstagdelete() {
 	// con boton derecho
 	$(".tags > div").on('contextmenu', function() {
 
-		$(this)["0"].parentElement.parentElement.classList.toggle("ui-selecting"); // para que no se seleccione elemento
+		$(this)["0"].parentElement.parentElement.classList.toggle("ui-selected"); // para que no se seleccione elemento
 
 		var tagaborrar = $(this);
 		borrartag(tagaborrar);
@@ -9705,11 +9739,9 @@ window.parent.$("#paste").on('click', function() {
 		var targetfolder = top.explorer.$("#filetree ul li span.selected")["0"].attributes[1].value;
 	}
 
-	alldroppedelement = $(".exploelement.ui-selecting");
-
-	if (alldroppedelement.length == 0) {
-		alldroppedelement = $(".exploelement.ui-selected"); // para que lo haga con los selected si no hay selecting
-	}
+	
+	alldroppedelement = $(".exploelement.ui-selected");
+	
 
 	if (alldroppedelement.length == 0) {
 
@@ -9763,6 +9795,8 @@ window.parent.$("#paste").on('click', function() {
     	}
 
     }
+
+    top.searcher.focus();
 
 });
 
@@ -9857,7 +9891,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 						$("#status").html("");
 						$('.exploelement').css("filter","none");
-						$('.exploelement').removeClass('ui-selecting');
 						$('.exploelement').removeClass('ui-selected');
 
 					}
@@ -10383,7 +10416,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 													$("#status").html("");
 													$('.exploelement').css("filter","none");
-													$('.exploelement').removeClass('ui-selecting');
 													$('.exploelement').removeClass('ui-selected');
 
 												}
@@ -10400,7 +10432,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 												$("#status").html("");
 												$('.exploelement').css("filter","none");
-												$('.exploelement').removeClass('ui-selecting');
 												$('.exploelement').removeClass('ui-selected');
 
 											}
@@ -10527,7 +10558,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 										$("#status").html("");
 										$('.exploelement').css("filter","none");
-										$('.exploelement').removeClass('ui-selecting');
 										$('.exploelement').removeClass('ui-selected');
 
 									}
@@ -10544,7 +10574,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 									$("#status").html("");
 									$('.exploelement').css("filter","none");
-									$('.exploelement').removeClass('ui-selecting');
 									$('.exploelement').removeClass('ui-selected');
 
 								}
@@ -10576,7 +10605,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 								$("#status").html("");
 								$('.exploelement').css("filter","none");
-								$('.exploelement').removeClass('ui-selecting');
 								$('.exploelement').removeClass('ui-selected');
 
 							}
@@ -10593,7 +10621,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 							$("#status").html("");
 							$('.exploelement').css("filter","none");
-							$('.exploelement').removeClass('ui-selecting');
 							$('.exploelement').removeClass('ui-selected');
 
 						}
@@ -10634,7 +10661,7 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 						$("#status").html("");
 						$('.exploelement').css("filter","none");
-						$('.exploelement').removeClass('ui-selecting')
+						$('.exploelement').removeClass('ui-selected')
 
 					}
 
@@ -10665,7 +10692,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 						$("#status").html("");
 						$('.exploelement').css("filter","none");
-						$('.exploelement').removeClass('ui-selecting');
 						$('.exploelement').removeClass('ui-selected');
 
 					}
@@ -10682,7 +10708,6 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 					$("#status").html("");
 					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting');
 					$('.exploelement').removeClass('ui-selected');
 
 				}
@@ -11137,7 +11162,6 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 								$("#status").html("");
 								$('.exploelement').css("filter","none");
-								$('.exploelement').removeClass('ui-selecting');
 								$('.exploelement').removeClass('ui-selected');
 
 							}
@@ -11299,7 +11323,6 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 																			if (flagg == droppedarchive.length) { //para que lo lance al final
 																			$("#status").html("");
 																			$('.exploelement').css("filter","none");
-																			$('.exploelement').removeClass('ui-selecting');
 																			$('.exploelement').removeClass('ui-selected');
 
 																			}
@@ -11311,7 +11334,6 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 																			$("#status").html("");
 																			$('.exploelement').css("filter","none");
-																			$('.exploelement').removeClass('ui-selecting');
 																			$('.exploelement').removeClass('ui-selected');
 
 																		}
@@ -11328,7 +11350,6 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 																		$("#status").html("");
 																		$('.exploelement').css("filter","none");
-																		$('.exploelement').removeClass('ui-selecting');
 																		$('.exploelement').removeClass('ui-selected');
 
 																	}
@@ -11534,7 +11555,6 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 																$("#status").html("");
 																$('.exploelement').css("filter","none");
-																$('.exploelement').removeClass('ui-selecting');
 																$('.exploelement').removeClass('ui-selected');
 
 															}
@@ -11649,7 +11669,6 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 								$("#status").html("");
 								$('.exploelement').css("filter","none");
-								$('.exploelement').removeClass('ui-selecting');
 								$('.exploelement').removeClass('ui-selected');
 
 							}
@@ -12105,17 +12124,17 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 		};
 
 
-		$.each($('.ui-selecting'), function(u) {
+		$.each($('.ui-selected'), function(u) {
 
 			// para poder mover/eliminar los videos hay que quitarlos del DOM (es decir de la memoria)
 			try {
 				if (viewmode == 1) {
 
-					// console.log($('.ui-selecting:eq('+u+')'))
-					if ($('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[0]){
-						if ($('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[0].nodeName == "VIDEO") {//para viewmode = 1
+					// console.log($('.ui-selected:eq('+u+')'))
+					if ($('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[0]){
+						if ($('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[0].nodeName == "VIDEO") {//para viewmode = 1
 
-							var videoElement = $('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[0];
+							var videoElement = $('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[0];
 							videoElement.pause();
 							videoElement.currentSrc =""; // empty source
 							videoElement.src="";
@@ -12129,11 +12148,11 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 				}
 				else {
 
-					if ($('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[1]){
-						if ($('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[1].nodeName == "VIDEO") {//para viewmodes !=1
+					if ($('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[1]){
+						if ($('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[1].nodeName == "VIDEO") {//para viewmodes !=1
 
-							var videoElement = $('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[1];
-							$('.ui-selecting:eq('+u+')').children().children('video').attr('src','')
+							var videoElement = $('.ui-selected:eq('+u+')')["0"].childNodes["0"].childNodes[1];
+							$('.ui-selected:eq('+u+')').children().children('video').attr('src','')
 							videoElement.pause();
 							videoElement.currentSrc =""; // empty source
 							videoElement.src="";
@@ -12148,7 +12167,7 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 
 			// se aprobecha a quitar de la pantalla lo seleccionado (porque es necesario para que borre/mueva los videos y porque quizas queda mejor)
-			$('.ui-selecting:eq('+u+')')[0].style.display = "none";
+			$('.ui-selected:eq('+u+')')[0].style.display = "none";
 			contadorarchivosseleccionados++;
 
 		});
@@ -12175,7 +12194,6 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 					$("#status").html("");
 					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting');
 					$('.exploelement').removeClass('ui-selected');
 
 				}
@@ -12202,7 +12220,6 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 					$("#status").html("");
 					$('.exploelement').css("filter","none");
-					$('.exploelement').removeClass('ui-selecting');
 					$('.exploelement').removeClass('ui-selected');
 
 					//si se han "borrado" carpetas de la bd  por si acaso se vuelve a lanzar el search para que no se muestren archivos inexistentes
@@ -12229,9 +12246,9 @@ window.parent.$("#delete").on('click', function() {
 
 	}
 
-	if (document.querySelectorAll(".ui-selecting").length > 0 || document.querySelectorAll(".ui-selected").length > 0) {
+	if (document.querySelectorAll(".ui-selected").length > 0) {
 
-		alldroppedelement = document.querySelectorAll(".ui-selecting, .ui-selected");
+		alldroppedelement = document.querySelectorAll(".ui-selected");
 
 	}	
 
@@ -12743,54 +12760,7 @@ window.parent.$("#delete").on('click', function() {
 			}
 
 		};
-
-		$.each($('.ui-selecting'), function(u) {
-
-			// para poder mover/eliminar los videos hay que quitarlos del DOM (es decir de la memoria)
-			try {
-				if (viewmode == 1) {
-
-					// console.log($('.ui-selecting:eq('+u+')'))
-					if ($('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[0]){
-						if ($('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[0].nodeName == "VIDEO") {//para viewmode = 1
-
-							var videoElement = $('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[0];
-							videoElement.pause();
-							videoElement.currentSrc =""; // empty source
-							videoElement.src="";
-							videoElement.load();
-							var parenteee = videoElement.parentNode
-							parenteee.removeChild(parenteee.childNodes[0])
-							// parenteee.removeChild(parenteee.childNodes[0])
-
-						}
-					}
-				}
-				else {
-
-					if ($('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[1]){
-						if ($('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[1].nodeName == "VIDEO") {//para viewmodes !=1
-
-							var videoElement = $('.ui-selecting:eq('+u+')')["0"].childNodes["0"].childNodes[1];
-							$('.ui-selecting:eq('+u+')').children().children('video').attr('src','')
-							videoElement.pause();
-							videoElement.currentSrc =""; // empty source
-							videoElement.src="";
-							videoElement.load();
-							var parenteee = videoElement.parentNode
-							parenteee.removeChild(parenteee.childNodes[0])
-							// parenteee.removeChild(parenteee.childNodes[0])
-						}
-					}
-				}
-			} catch (err) {console.log(err)}
-
-
-			// se aprobecha a quitar de la pantalla lo seleccionado (porque es necesario para que borre/mueva los videos y porque quizas queda mejor)
-			$('.ui-selecting:eq('+u+')')[0].style.display = "none";
-			contadorarchivosseleccionados++
-
-		});
+		
 		$.each($('.ui-selected'), function(u) {
 
 			// para poder mover/eliminar los videos hay que quitarlos del DOM (es decir de la memoria)
@@ -12863,10 +12833,9 @@ window.parent.$("#delete").on('click', function() {
 					document.querySelectorAll(".exploelement").forEach(function(el) {
 						el.style.filter = "none";
 					})
-					var elems = document.querySelectorAll(".ui-selecting, .ui-selected");
+					var elems = document.querySelectorAll(".ui-selected");
 
 					[].forEach.call(elems, function(el) {
-					    el.classList.remove("ui-selecting");
 					    el.classList.remove("ui-selected");
 					});
 
@@ -12896,11 +12865,10 @@ window.parent.$("#delete").on('click', function() {
 					document.querySelectorAll(".exploelement").forEach(function(el) {
 						el.style.filter = "none";
 					})
-					var elems = document.querySelectorAll(".ui-selecting, .ui-selected");
+					var elems = document.querySelectorAll(".ui-selected");
 
 					[].forEach.call(elems, function(el) {
 						el.style.filter = "none";
-					    el.classList.remove("ui-selecting");
 					    el.classList.remove("ui-selected");
 					});
 

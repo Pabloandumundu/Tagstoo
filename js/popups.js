@@ -44,9 +44,9 @@ if (language == 'EN') {
 	ph_p_alr_08 = "First select the tag you want to remove.";
 	ph_p_alr_09 = "The name you chosen already exists, first delete the database that uses this name if you want to use it.";
 	ph_p_alr_10 = "You must enter a name for the database first.";
-	ph_p_alr_11 = "A file open dialog will be open, you can either select a pre existing file or, for example in Windows, create a new one (right mouse button), be careful, data in the selected file will be overwritten.";
+	ph_p_alr_11 = "A file open dialog will be open, you can either select a pre-existing file or, for example in Windows, create a new one (right mouse button), be careful, data in the selected file will be overwritten.";
 	ph_p_alr_12 = "'</em> written successfully.";
-	ph_p_alr_13 = "An open file dialogue will open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.";
+	ph_p_alr_13 = "An open file dialog will open, select the file where database is saved, be careful, data in the selected database will be overwritten by the content of the file.";
 	ph_p_alr_14 = "Data successfully imported.";
 	ph_p_alr_15a = "It appears that <em>'";
 	ph_p_alr_15b = "'</em> do not have a valid data format, please select a valid data file.";
@@ -2675,7 +2675,10 @@ function optionspreload() {
 										x = "You pressed OK!";
 										console.log(x)
 
-										window.parent.location.assign("initialselect.html");
+										// Se relanza la aplicación
+										var remote = window.top.remote;
+										remote.app.relaunch();
+										remote.app.exit(0);
 
 									}
 

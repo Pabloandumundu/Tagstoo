@@ -68,7 +68,7 @@ $(document).ready(function () {
 
 
 	language = localStorage["language"];
-"UNDO (not undo action)"
+
 	if (language == 'EN') {
 
 		ph_dato_no = "UNDO (not action to undo)";
@@ -841,11 +841,11 @@ $(document).ready(function () {
 					if (dirtoexec == undo.rename.folder) { // si estámos dentro de la carpeta en la vista de directorio
 
 						// se actualiza el elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
-						$.each (directoryarchives, function(dra){
+						/*$.each (directoryarchives, function(dra){
 							if (directoryarchives[dra].name == "\/" + undo.rename.nuevo){
 								directoryarchives[dra].name = "\/" + undo.rename.original;							
 							}
-						});
+						});*/
 
 						var explofiles = $(".explofile")
 						$.each($(".explofile"), function(i) {
@@ -1331,11 +1331,11 @@ $(document).ready(function () {
 						elementtagsinview[0].setAttribute("value", carraydetags);
 
 						// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
-						$.each (directoryarchives, function(dra){										
+						/*$.each (directoryarchives, function(dra){										
 							if (directoryarchives[dra].name  == undo.taggaarch.archive){
 								directoryarchives[dra].tagsid = carraydetags;						
 							}
-						});
+						});*/
 			
 						// y ahora redibujamos los tags..										
 						carraydetags = carraydetags.split(','); // volvemos a convertirlo en array
@@ -3833,7 +3833,12 @@ $(document).ready(function () {
 
 		} // -- fin switch
 
-
+		var tabseleccionado = $('.current', window.parent.document).attr("id");
+        if (tabseleccionado == "exploretab") {
+            top.explorer.focus();
+        } else if (tabseleccionado == "searchtab") {
+            top.searcher.focus();
+        }
 
 	});	//--fin undo click
 

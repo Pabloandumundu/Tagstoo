@@ -35,20 +35,20 @@ function createWindow () {
   }))
 
   // abre las herramientas de desarrollador
-  // win.webContents.openDevTools({mode: 'detach'})
+  /*win.webContents.openDevTools({mode: 'detach'});*/
 
   // evento que se emite cuando la ventana se cierra
   win.on('closed', () => {
     // Quitar la referencia del objeto window, habitualmente se guardan 
     // las ventanas en un array si nuestra app tiene más de una
-    win = null
+    win = null;
   })
 }
 
 // Este método se invoca cuando Electron finaliza la inicialización y está preparado
 // para crear browser windows.
 // Algunas APIs sólo se pueden usar después de que se dispare este evento.
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 // Salir cuando todas las ventanas se cierran
 app.on('window-all-closed', () => {

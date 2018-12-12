@@ -44,12 +44,59 @@
 	margin-left: 4px;
 }
 
+/* Estilos especiales para el input de numero de pagina paginada */
 
-#actualpage {
-	width: 47px;
+.number-input input[type="number"] {
+
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
-#actualpage::-webkit-outer-spin-button {
-   opacity: 1;
+
+.number-input input[type=number]::-webkit-inner-spin-button,
+.number-input input[type=number]::-webkit-outer-spin-button {
+	
+  -webkit-appearance: none;
+}
+
+.number-input {
+  border: 1px solid rgb(169, 169, 169);
+  display: inline-flex !important;
+  display: inline !important;
+  margin-right: 5px;
+  border-radius: 5px;
+}
+
+.number-input, .number-input * {
+  box-sizing: border-box;
+}
+
+.number-input button {
+  outline:none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+}
+.number-input button:first-of-type {
+	padding-right: 2px;
+}
+.number-input button:last-of-type {
+	padding-left: 3px;
+}
+.number-input input[type=number] {
+
+  font-family: sans-serif;
+  border: solid rgb(169, 169, 169);
+  border-width: 0 1px;
+  height: 16px;
+  text-align: center;
 }
 
 
@@ -151,10 +198,6 @@
 	vertical-align: sub;
 	cursor: pointer;
 }
-
-
-
-
 
 
 .holdButtonProgress {
@@ -689,3 +732,6 @@ input[type="radio"]:checked + label span.radio::after {
 	position: absolute;
 	margin-top: -3px;
 }
+
+
+

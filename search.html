@@ -346,11 +346,15 @@
 
       </span>
 
-      <span class="toptext lang_en">Page: </span>
-      <span class="toptext lang_es">Página: </span>
-      <span class="toptext lang_fr">Page: </span>
+      <span class="toptext lang_en">&nbsp;Page: </span>
+      <span class="toptext lang_es">&nbsp;Página: </span>
+      <span class="toptext lang_fr">&nbsp;Page: </span>
 
-      <input type="number" name="actualpage" id="actualpage" min="1" max="1" value="1" size="3" title="">
+      <div class="number-input">
+        <button onclick="this.parentNode.querySelector('input[type=number]').stepDown(); $('#actualpage').trigger('change');" >&ndash;</button>
+        <input type="number" name="actualpage" id="actualpage" min="1" max="1" value="1" size="3" title="">
+        <button onclick="this.parentNode.querySelector('input[type=number]').stepUp(); $('#actualpage').trigger('change');" class="plus">+</button>
+      </div>
       /
       <span id="necesarypages">1</span>      
 

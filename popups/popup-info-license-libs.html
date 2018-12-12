@@ -82,6 +82,15 @@ body {
 .dialog .homepage {
   display: none;
 }
+
+.resaltar {
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
 </style>
 
 <script type="text/javascript">
@@ -202,7 +211,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 
 <div class="product">
-<span class="title">Electron</span>
+<span class="title">Electron <span class="resaltar">&lt;-- THE CORE OF THE APPLICATION!</span></span>
 <span class="homepage"><a href="https://electronjs.org/">homepage</a></span>
 <div class="licence">
 <pre>
@@ -565,6 +574,17 @@ Creative Commons CC-BY 3.0 License.
 </pre>
 </div>
 </div>
+
+<div class="product">
+<div class="licence"><pre>
+Clear searched results icon:
+
+Ahkâm from <a href="https://www.freeiconspng.com/">Free icons PNG</a>.
+
+</pre>
+</div>
+</div>
+
 <br>
 
 </div>
