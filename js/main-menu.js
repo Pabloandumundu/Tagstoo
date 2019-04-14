@@ -218,7 +218,7 @@ function loadTooltips() {
         ph_tt_07 = "Remove folder selected in the 'fast access to folders' list from the list.";
         ph_tt_08 = "Open the folder selected in the 'fast access to folders' list in the directory view.";
         ph_tt_09 = "Select viewmode for the directory view; in viewmode 1 elements are displayed in a list, in viewmodes 2-9 elements are displayed as cards of consecutive incremental size.";
-        ph_tt_10 = "Select order by which elements will be represented in the directory view; it's possible to choose to order by name, extension, size, last modified date and in a aleatory way.";
+        ph_tt_10 = "Select order by which elements will be represented in the directory view; it's possible to choose to order by name, extension, size, last modified date, number of tags and in an aleatory way.";
         ph_tt_11 = "Undo previously performed action, there are possible to undo tagging operations and the filesystem's rename, copy and move elements operations, but it's not possible to undo deleting operations.";
         ph_tt_12 = "Open the database management and options menu.";
         ph_tt_13 = "Open the help and product info window.";
@@ -240,7 +240,7 @@ function loadTooltips() {
         ph_tt_07 = "Borrar de la lista de 'acceso rápido a carpetas' el acceso rápido seleccionado."
         ph_tt_08 = "Abrir la carpeta seleccionada en la lista de 'acceso rápido a carpetas' en la vista de directorio.";
         ph_tt_09 = "Seleccionar modo de vista para la vista de directorio; en el modo de vista 1 los elementos se muestran en una lista, en los modos de vista 2-9 los elementos se muestran como tarjetas de tamaño incremental consecutivo.";
-        ph_tt_10 = "Seleccionar el orden por el cual los elementos serán representados en la vista de directorio; es posible elegir ordenar por nombre, extensión, tamaño, fecha de última modificación y de forma aleatoria.";
+        ph_tt_10 = "Seleccionar el orden por el cual los elementos serán representados en la vista de directorio; es posible elegir ordenar por nombre, extensión, tamaño, fecha de última modificación, número de tags y de forma aleatoria.";
         ph_tt_11 = "Deshacer la acción realizada anteriormente, es posible deshacer las operaciones de etiquetado y las operaciones del sistema de archivos de cambiar el nombre, copiar y mover elementos, sin embargo no es posible deshacer las operaciones de eliminación.";
         ph_tt_12 = "Abrir el menú de gestión de las base de datos y opciones.";
         ph_tt_13 = "Abrir la ventana de ayuda e información del producto.";           
@@ -262,7 +262,7 @@ function loadTooltips() {
         ph_tt_07 = "Supprimer le dossier sélectionné dans la liste «Accès rapide aux dossiers» de la liste.";
         ph_tt_08 = "Ouvrez le dossier sélectionné dans la liste «Accès rapide aux dossiers» de la vue du dossier.";
         ph_tt_09 = "Sélectionner vue mode pour la vue du répertoire; dans vue mode 1 les éléments sont affichés dans une liste, dans les vue modes 2 à 9 les éléments sont affichés sous forme de cartes de taille incrémentielle consécutive.";
-        ph_tt_10 = "Sélectionner l'ordre par lequel les éléments seront représentés dans la vue du dossier; il est possible de choisir de commander par nom, extension, taille, date de dernière modification et de manière aléatoire.";
+        ph_tt_10 = "Sélectionner l'ordre par lequel les éléments seront représentés dans la vue du dossier; il est possible de choisir de commander par nom, extension, taille, date de dernière modification,  nombre de étiquetés et de manière aléatoire.";
         ph_tt_11 = "Annuler l'action effectuée précédemment, il est possible d'annuler les opérations de étiqueter et les opérations du système de fichiers de renommer, copier et déplacer les éléments , mais il n'est pas possible d'annuler les opérations de suppression.";
         ph_tt_12 = "Ouvrez le menu de gestion de base de données et options.";
         ph_tt_13 = "Ouvrez la fenêtre d'aide et d'informations sur le produit.";

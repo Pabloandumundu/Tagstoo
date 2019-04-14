@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.12.6';
+var programversion = '1.12.7';
 
 var fs = window.top.fs;
 var Sniffr = window.top.Sniffr;
@@ -1589,11 +1589,11 @@ window.parent.$("#viewmode").on('change', function() {
 	$('#directoryview').append(t);
 	t='';
 
-	if (order == "nameasc" || order == "extasc" || order == "sizeasc" || order == "lastdesc" || order == "aleator") {
+	if (order == "nameasc" || order == "extasc" || order == "sizeasc" || order == "lastdesc" || order == "numtagsno" || order == "aleator") {
 		drawDirectoryFolders(viewmode, order)
 		drawDirectoryArchives(viewmode, order)
 	}
-	else if (order == "namedesc" || order == "extdesc" || order == "sizedesc" || order == "lastasc") {
+	else if (order == "namedesc" || order == "extdesc" || order == "sizedesc" || order == "lastasc" || order == "numtagson") {
 		drawDirectoryArchives(viewmode, order)
 		drawDirectoryFolders(viewmode, order)
 	}
@@ -1721,11 +1721,11 @@ window.parent.$(".order").on('change', function() {
 	$('#directoryview').append(t);
 	t='';
 
-	if (order == "nameasc" || order == "extasc" || order == "sizeasc" || order == "lastdesc" || order == "aleator") {
+	if (order == "nameasc" || order == "extasc" || order == "sizeasc" || order == "lastdesc" || order == "numtagsno" || order == "aleator") {
 		drawDirectoryFolders(viewmode, order)
 		drawDirectoryArchives(viewmode, order)
 	}
-	else if (order == "namedesc" || order == "extdesc" || order == "sizedesc" || order == "lastasc") {
+	else if (order == "namedesc" || order == "extdesc" || order == "sizedesc" || order == "lastasc" || order == "numtagson") {
 		drawDirectoryArchives(viewmode, order)
 		drawDirectoryFolders(viewmode, order)
 	}
@@ -2811,11 +2811,11 @@ function readDirectory (dirtoread) {
 
 									t = "";
 
-									if (order == "nameasc" || order == "extasc" || order == "sizeasc" || order == "lastdesc" || order == "aleator") {
+									if (order == "nameasc" || order == "extasc" || order == "sizeasc" || order == "lastdesc" || order == "numtagsno" || order == "aleator") {
 										drawDirectoryFolders(viewmode, order)
 										drawDirectoryArchives(viewmode, order)
 									}
-									else if (order == "namedesc" || order == "extdesc" || order == "sizedesc" || order == "lastasc") {
+									else if (order == "namedesc" || order == "extdesc" || order == "sizedesc" || order == "lastasc" || order == "numtagson") {
 										drawDirectoryArchives(viewmode, order)
 										drawDirectoryFolders(viewmode, order)
 									}
@@ -3083,6 +3083,16 @@ function SortByLastmodDesc(a,b) {
 	var bLastmod = b.lastmod;
 	return ((aLastmod > bLastmod) ? -1 : ((aLastmod < bLastmod) ? 1 : 0));
 }
+function SortByNumtagsAsc(a,b){
+	var aTags = a.tagsid.length;
+	var bTags = b.tagsid.length;
+	return ((aTags < bTags) ? -1 : ((aTags > bTags) ? 1 : 0));
+}
+function SortByNumtagsDesc(a,b){
+	var aTags = a.tagsid.length;
+	var bTags = b.tagsid.length;
+	return ((aTags > bTags) ? -1 : ((aTags < bTags) ? 1 : 0));
+}
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -3113,22 +3123,28 @@ function drawDirectoryFolders (viewmode, order) {
 			directoryfolders.sort(SortByNameDesc);
 			break;
 		case "extasc":
-			directoryfolders.sort(SortByNameAsc);
+			directoryfolders.sort(SortByExtAsc);
 			break;
 		case "extdesc":
-			directoryfolders.sort(SortByNameDesc);
+			directoryfolders.sort(SortByExtDesc);
 			break;
 		case "sizeasc":
-			directoryfolders.sort(SortByElemAsc);
+			directoryfolders.sort(SortBySizeAsc);
 			break;
 		case "sizedesc":
-			directoryfolders.sort(SortByElemDesc);
+			directoryfolders.sort(SortBySizeDesc);
 			break;
 		case "lastasc":
 			directoryfolders.sort(SortByLastmodAsc);
 			break;
 		case "lastdesc":
 			directoryfolders.sort(SortByLastmodDesc);
+			break;
+		case "numtagson":
+			directoryfolders.sort(SortByNumtagsAsc);
+			break;
+		case "numtagsno":
+			directoryfolders.sort(SortByNumtagsDesc);
 			break;
 		case "aleator":
 			directoryfolders = shuffle(directoryfolders);
@@ -3192,6 +3208,12 @@ function drawDirectoryArchives (viewmode, order) {
 			break;
 		case "lastdesc":
 			directoryarchives.sort(SortByLastmodDesc);
+			break;
+		case "numtagson":
+			directoryarchives.sort(SortByNumtagsAsc);
+			break;
+		case "numtagsno":
+			directoryarchives.sort(SortByNumtagsDesc);
 			break;
 		case "aleator":
 			directoryarchives = shuffle(directoryarchives);
@@ -4706,7 +4728,7 @@ function elementstagcopier() {
 												var treviewvisible = "no";
 
 												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-												undo.class == "";
+												undo.class = "";
 
 												// Actualizar visual
 												elementtagsinview = $('.explofolder').filter('[value="' + carpeta + '"]').siblings('.tags');
@@ -4857,7 +4879,7 @@ function elementstagcopier() {
 										var treviewvisible = "no";
 										treeelementtagsinview = [];
 										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-									    undo.class == "";
+									    undo.class = "";
 
 										// actualizar visual
 										var elementtagsinview = $('.explofolder').filter('[value="' + carpeta + '"]').siblings('.tags');
@@ -5069,7 +5091,7 @@ function elementstagcopier() {
 														// console.log("datos nuevo fichero añadidos");
 
 														$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-														undo.class == ""
+														undo.class = ""
 
 														// Actualizar visual
 
@@ -5212,7 +5234,7 @@ function elementstagcopier() {
 												// console.log("datos nuevo fichero añadidos");
 
 												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-												undo.class == "";
+												undo.class = "";
 
 												// Actualizar visual
 												var elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');
@@ -5282,7 +5304,7 @@ function elementstagcopier() {
 												// console.log("datos nuevo fichero añadidos");
 
 												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-												undo.class == "";
+												undo.class = "";
 
 												// Actualizar visual
 												elementtagsinview = $('.explofile').filter('[value="' + filename + '"]').siblings('.tags');												
@@ -9452,6 +9474,7 @@ function interactions() {
 				aejecutar = aejecutar.replace(/\(/g, "^(");
 				aejecutar = aejecutar.replace(/\)/g, "^)");
 				window.top.exec.exec(aejecutar);
+				
 			}
 			if (s.os.name == "linux" || s.os.name == "macos") {
 

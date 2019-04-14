@@ -222,7 +222,7 @@ $(document).ready(function () {
 								trans2.oncomplete = function(event) {
 
 									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-									undo.class == "";
+									undo.class = "";
 									elementstagsorder(); // activa posibilidad de cambiar orden en tags
 									elemetstagdelete(); // activa posibilidad de borrar tags
 
@@ -231,7 +231,7 @@ $(document).ready(function () {
 							} else { // si no hay que actualizar visual
 
 								$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-								undo.class == "";
+								undo.class = "";
 
 							}
 
@@ -368,7 +368,7 @@ $(document).ready(function () {
 										trans2.oncomplete = function(event) {
 
 											$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);	
-											undo.class == "";
+											undo.class = "";
 											elementstagsorder(); // activa posibilidad de cambiar orden en tags
 											elemetstagdelete(); // activa posibilidad de borrar tags
 
@@ -376,7 +376,7 @@ $(document).ready(function () {
 
 									} else { // si no hay que actualizar visual
 										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-										undo.class == "";
+										undo.class = "";
 
 									}
 								}
@@ -488,7 +488,7 @@ $(document).ready(function () {
 										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 									
 
-										undo.class == "";
+										undo.class = "";
 										elementstagsorder(); // activa posibilidad de camgiar orden en tags
 										elemetstagdelete(); // activa posibilidad de borrar tags
 
@@ -501,7 +501,7 @@ $(document).ready(function () {
 									$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
 									
 
-									undo.class == "";
+									undo.class = "";
 
 								}
 
@@ -666,7 +666,7 @@ $(document).ready(function () {
 						});
 
 						$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-						undo.class == "";
+						undo.class = "";
 
 					}
 
@@ -1432,7 +1432,7 @@ $(document).ready(function () {
 
 					for (i in arraydetags) {
 
-						if (arraydetags[i] == taganadir) { // cuando coincide el tag
+						if (arraydetags[i] == undo.taggaarch.tagid) { // cuando coincide el tag
 
 							var index = arraydetags.indexOf(arraydetags[i]); // encontramos la posición index del tag dentro del array
 							arraydetags.splice(index, 1); // eliminamos el item del array

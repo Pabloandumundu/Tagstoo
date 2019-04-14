@@ -1161,7 +1161,7 @@ function loadTooltips() {
 		ph_tt_14 = "Make the search (over the tagged elements).";
 		ph_tt_14 = "Make the search!";
 		ph_tt_15 = "Select viewmode for the view of searched elements; in viewmode 1 elements are displayed in a list, in viewmodes 2-9 elements are displayed as cards of consecutive incremental size.";
-		ph_tt_16 = "Select order by which elements will be represented in the searched elements view; it's possible to choose to order by name, extension, size, last modified date and in a aleatory way.";
+		ph_tt_16 = "Select order by which elements will be represented in the searched elements view; it's possible to choose to order by name, extension, size, last modified date, number of tags and in an aleatory way.";
 		ph_tt_17 = "Open 'Display printable friendly list' window where you will be able to choose to generate a plain text list of the current view of the searched results  (to print o to save in a file) or a copy of the current view of the searched results that include tags (with the possibility to print).";
 		ph_tt_18 = "Select the number of searched elements that you want to appear per page (all or a certain number).";
 		ph_tt_19 = "Select the page that is currently viewed (if there are more than one) in the right it can be seen the upper limit of the available page numbers in each moment.";
@@ -1186,7 +1186,7 @@ function loadTooltips() {
 		ph_tt_13 = "Agregue otro campo de entrada del tipo 'Que no tienen'. Varios campos pueden usarse para hacer construcciones del tipo: 'que no tienen (etiqueta1) <b> y no tienen </b> (etiqueta2) <b> y no tienen </b> ...'";
 		ph_tt_14 = "¡Realizar la búsqueda!";
 		ph_tt_15 = "Seleccionar modo de vista para la vista de los elementos buscados; en el modo de vista 1 los elementos se muestran en una lista, en los modos de vista 2-9 los elementos se muestran como tarjetas de tamaño incremental consecutivo.";
-		ph_tt_16 = "Seleccionar el orden por el cual los elementos serán representados en la vista los elementos buscados; es posible elegir ordenar por nombre, extensión, tamaño, fecha de última modificación y de forma aleatoria.";
+		ph_tt_16 = "Seleccionar el orden por el cual los elementos serán representados en la vista los elementos buscados; es posible elegir ordenar por nombre, extensión, tamaño, fecha de última modificación, número de tags y de forma aleatoria.";
 		ph_tt_17 = "Abrir la ventana 'Mostrar versión imprimible de la lista' donde podrá elegir generar una lista de texto sin formato de la vista actual de los resultados buscados (para imprimir o guardar en un archivo) o una copia de la vista actual de los resultados buscados que incluye etiquetas (con la posibilidad de imprimir).";
 		ph_tt_18 = "Seleccionar la cantidad de elementos buscados que desea que aparezcan por página (todos o un número determinado).";
 		ph_tt_19 = "Seleccionar la página que se ve actualmente (si hay más de una) a la derecha se puede ver el límite superior de los números de página disponibles en cada momento.";
@@ -1212,7 +1212,7 @@ function loadTooltips() {
 		ph_tt_14 = "Effectuer la recherche (sur les éléments étiquetés)."
 		ph_tt_14 = "Effectuer la recherche!";
 		ph_tt_15 = "Sélectionner vue mode pour la vue des éléments cherchés; dans vue mode 1 les éléments sont affichés dans une liste, dans les vue modes 2 à 9 les éléments sont affichés sous forme de cartes de taille incrémentielle consécutive.";
-		ph_tt_16 = "Sélectionner l'ordre par lequel les éléments seront représentés dans la vue des éléments cherchés; il est possible de choisir de commander par nom, extension, taille, date de dernière modification et de manière aléatoire.";
+		ph_tt_16 = "Sélectionner l'ordre par lequel les éléments seront représentés dans la vue des éléments cherchés; il est possible de choisir de commander par nom, extension, taille, date de dernière modification, nombre de étiquetés et de manière aléatoire.";
 		ph_tt_17 = "Ouvrez la fenêtre «Show la liste en version d'impression» dans laquelle vous pouvez choisir de générer une liste en texte brut de la vue actuelle des résultats chercher (pour imprimer ou pour enregistrer dans un fichier) ou une copie de la vue actuelle des résultats de la cherche incluant des étiquettes (avec la possibilité d'imprimer).";
 		ph_tt_18 = "Sélectionner la quantité d'éléments cherchés que vous souhaitez voir apparaître par page (tout ou un certain nombre).";
 		ph_tt_19 = "Sélectionner la page actuellement visible (s'il y en a plusieurs) à droite, vous pouvez voir la limite supérieure des numéros de page disponibles à chaque instant.";
@@ -3974,11 +3974,11 @@ function readsearchredresults() {
 
 	else if (searchfor == "foldersandfiles") {
 
-		if (searchorder == "nameasc" || searchorder == "extasc" || searchorder == "sizeasc" || searchorder == "lastdesc" || searchorder == "aleator") {
+		if (searchorder == "nameasc" || searchorder == "extasc" || searchorder == "sizeasc" || searchorder == "lastdesc" || searchorder == "numtagsno" || searchorder == "aleator") {
 			drawSearchFolders(searchviewmode, searchorder);
 			drawSearchArchives(searchviewmode, searchorder);
 		}
-		else if (searchorder == "namedesc" || searchorder == "extdesc" || searchorder == "sizedesc" || searchorder == "lastasc") {
+		else if (searchorder == "namedesc" || searchorder == "extdesc" || searchorder == "sizedesc" || searchorder == "lastasc" || searchorder == "numtagson") {
 			drawSearchArchives(searchviewmode, searchorder);
 			drawSearchFolders(searchviewmode, searchorder);
 		}
@@ -4047,6 +4047,16 @@ function SortByLastmodDesc(a,b) {
 	var bLastmod = b.lastmod;
 	return ((aLastmod > bLastmod) ? -1 : ((aLastmod < bLastmod) ? 1 : 0));
 }
+function SortByNumtagsAsc(a,b){
+	var aTags = a.tagsid.length;
+	var bTags = b.tagsid.length;
+	return ((aTags < bTags) ? -1 : ((aTags > bTags) ? 1 : 0));
+}
+function SortByNumtagsDesc(a,b){
+	var aTags = a.tagsid.length;
+	var bTags = b.tagsid.length;
+	return ((aTags > bTags) ? -1 : ((aTags < bTags) ? 1 : 0));
+}
 function shuffle(array) {
 
 	if (alreadyAleatorized == false) {
@@ -4102,6 +4112,12 @@ function drawSearchFolders (searchviewmode, order) {
 		case "lastdesc":
 			resultadoscarpetas.sort(SortByLastmodDesc);
 			break;
+		case "numtagson":
+			resultadoscarpetas.sort(SortByNumtagsAsc);
+			break;
+		case "numtagsno":
+			resultadoscarpetas.sort(SortByNumtagsDesc);
+			break;	
 		case "aleator":
 			resultadoscarpetas = shuffle(resultadoscarpetas);
 			break;			
@@ -4165,6 +4181,12 @@ function drawSearchArchives (searchviewmode, order) {
 			break;
 		case "lastdesc":
 			resultadosarchivos.sort(SortByLastmodDesc);
+			break;
+		case "numtagson":
+			resultadosarchivos.sort(SortByNumtagsAsc);
+			break;
+		case "numtagsno":
+			resultadosarchivos.sort(SortByNumtagsDesc);
 			break;
 		case "aleator":
 			resultadosarchivos = shuffle(resultadosarchivos);
@@ -8288,7 +8310,7 @@ function elementstagcopier() {
 												var treviewvisible = "no";
 
 												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-												undo.class == "";
+												undo.class = "";
 
 												// Actualizar visual
 												elementtagsinview = $('.explofolder').filter('[value="' + folder + '"]').siblings('.tags');
@@ -8425,7 +8447,7 @@ function elementstagcopier() {
 										var treviewvisible = "no";
 										treeelementtagsinview = [];
 										$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-									    undo.class == "";
+									    undo.class = "";
 
 										// actualizar visual
 										var elementtagsinview = $('.explofolder').filter('[value="' + folder + '"]').siblings('.tags');
@@ -8637,7 +8659,7 @@ function elementstagcopier() {
 														// console.log("datos nuevo fichero añadidos");
 
 														$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-														undo.class == ""
+														undo.class = ""
 
 														// Actualizar visual
 
@@ -8780,7 +8802,7 @@ function elementstagcopier() {
 												// console.log("datos nuevo fichero añadidos");
 
 												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-												undo.class == "";
+												undo.class = "";
 
 												// Actualizar visual
 												var elementtagsinview = $('.explofile').filter('[value="' + filename + '"][filepath="' + folder + '"]').siblings('.tags');
@@ -8851,7 +8873,7 @@ function elementstagcopier() {
 												// console.log("datos nuevo fichero añadidos");
 
 												$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-												undo.class == "";
+												undo.class = "";
 
 												// Actualizar visual
 												elementtagsinview = $('.explofile').filter('[value="' + filename + '"][filepath="' + folder + '"]').siblings('.tags')												
@@ -9858,7 +9880,7 @@ function searchercopyaction(selectedactionFolder, selecteddrive) {
 
 	// para que no haya ningun tipo de conflicto se limpia el undo
 	$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-	undo.class == "";
+	undo.class = "";
 
 
 	if (alsotags=="yes") {
@@ -10751,7 +10773,7 @@ function searchermoveaction(selectedactionFolder, selecteddrive) {
 
 	// para que no haya ningun tipo de conflicto se limpia el undo
 	$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-	undo.class == "";
+	undo.class = "";
 
 
 	if (alsotags=="yes") {
@@ -12327,7 +12349,7 @@ window.parent.$("#delete").on('click', function() {
 
 		// para que no haya ningun tipo de conflicto se limpia el undo
 		$(".undo", window.parent.document).attr("data-tooltip", ph_dato_no);
-		undo.class == "";
+		undo.class = "";
 
 		var arraydecarpetas = {};
 		var posicion = 0;

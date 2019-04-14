@@ -35,7 +35,7 @@ function createWindow () {
   }))
 
   // abre las herramientas de desarrollador
-  /*win.webContents.openDevTools({mode: 'detach'});*/
+/*  win.webContents.openDevTools({mode: 'detach'});*/
 
   // evento que se emite cuando la ventana se cierra
   win.on('closed', () => {

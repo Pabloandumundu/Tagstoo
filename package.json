@@ -2,7 +2,7 @@
   "name": "TAGSTOO",
   "description": "Tagstoo tagging application",
   "author": "Pablo Andueza Munduate",
-  "version": "1.12.6",
+  "version": "1.12.7",
   "main": "app.js",
   "build": {
     "appId": "io.sourceforge.tagstoo",
