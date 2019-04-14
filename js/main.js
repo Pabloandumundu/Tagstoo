@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.12.7';
+var programversion = '1.12.8';
 
 var fs = window.top.fs;
 var Sniffr = window.top.Sniffr;
