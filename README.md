@@ -24,7 +24,7 @@ FEATURES
 - Multimedia file preview in explorer/searcher. Also Epubs.
 - Integrated image viewer that can be launched alternatively to the system's default viewer.
 - Tags positions are interchangeable.
-- If you want a softer interface you have the option to choose a 'grayscale' mode.
+- You can combine between COLOR, GREY, DAY and  NIGHT modes to change interface colors to best fit your like.
 
 
 **Distributable version, as a stand-alone and portable executable can be downloaded from [https://tagstoo.sourceforge.io/](https://tagstoo.sourceforge.io)**
