@@ -1,5 +1,5 @@
 /*
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -128,6 +128,7 @@ function loadtooltips(){
     ph_tt_08 = "Launch application with the currently selected database and its associated drive.";
     ph_tt_09 = "Open help in new window.";
     ph_tt_04b = "Name for a new database";
+    ph_tt_10 = "Toggle the application interface between the day and night modes.";
     
 
   } else if (language == "ES") {
@@ -142,6 +143,7 @@ function loadtooltips(){
     ph_tt_08 = "Iniciar la aplicación con la base de datos seleccionada actualmente y su unidad asociada.";
     ph_tt_09 = "Abrir la ayuda en una nueva ventana.";
     ph_tt_04b = "Nombre para una nueva base de datos.";
+    ph_tt_10 = "Alternar la interfaz de la aplicación entre los modos de dia y de noche.";
     
   } else if (language == "FR") {
 
@@ -155,6 +157,7 @@ function loadtooltips(){
     ph_tt_08 = "Lancer l'application avec la base de données actuellement sélectionnée et son unité associée.";
     ph_tt_09 = "Ouvrir l'aide dans une nouvelle fenêtre.";
     ph_tt_04b = "Nom pour une nouvelle base de données.";
+    ph_tt_10 = "Basculer l'interface de l'application entre les modes jour et nuit.";
 
   }
 
@@ -233,6 +236,16 @@ function loadtooltips(){
       disabled: !window.showtooltips,
       show: {delay: 800},
       content: ph_tt_07,
+      position: {
+          my: "left bottom", 
+          at: "left+60"
+      }
+  });
+  $(".naturalonoffswitch").attr("title", ""); 
+  $(".naturalonoffswitch").tooltip({
+      disabled: !window.showtooltips,
+      show: {delay: 800},
+      content: ph_tt_10,
       position: {
           my: "left bottom", 
           at: "left+60"
@@ -1419,6 +1432,60 @@ $(document).ready(function() {
 
   });
 
+
+  if (!localStorage["naturaltagstoo"]) {
+    localStorage["naturaltagstoo"] = "yes";
+  }
+
+  window.naturaltagstoo = localStorage["naturaltagstoo"];
+
+  if (window.naturaltagstoo == "not") {
+
+    var ls = document.createElement('link');
+    ls.rel="stylesheet";
+    ls.href= "css/inv-init.css";
+    document.getElementsByTagName('head')[0].appendChild(ls);
+
+    // para que aparezca chequeado
+    $(".naturalonoffswitch-checkbox").addClass("check");
+    //$(".naturalonoffswitch-switch").css("background","#bbb");
+
+  }
+
+  $("#mynaturalonoffswitch").bind('click', function() {
+
+    if(window.naturaltagstoo == "yes") {
+
+        window.naturaltagstoo = "not";
+        $(".naturalonoffswitch-checkbox").addClass("check");
+        //$(".naturalonoffswitch-switch").css("background","#bbb");
+
+        var ls = document.createElement('link');
+        ls.rel="stylesheet";
+        ls.href= "css/inv-init.css";
+        document.getElementsByTagName('head')[0].appendChild(ls);
+
+    } else if (window.naturaltagstoo == "not") {
+
+        window.naturaltagstoo = "yes";
+        $(".naturalonoffswitch-checkbox").removeClass("check");
+        //$(".naturalonoffswitch-switch").css("background","radial-gradient(red, green, blue)");
+
+        $('link[rel=stylesheet][href~="css/inv-init.css"]').remove();
+
+    }
+
+  });
+
+
+
+
+
+
+
+
+
+
   $("#initalhelp").on('click', function(){ 
 
     $("#initalhelp").tooltip( "destroy" ); // si no se queda el tootip 'congelado'
@@ -1435,6 +1502,7 @@ function starttagstoo() {
       if($("#drivedesc").html() != ph_cantloaddrive) {
 
         localStorage["colortagstoo"] = window.colortagstoo;
+        localStorage["naturaltagstoo"] = window.naturaltagstoo;
         localStorage["currentlydatabaseused"] = $("#selecteddb").html();
 
         if (s.os.name == "windows" || s.os.name == "macos") {

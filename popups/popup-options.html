@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -163,10 +163,9 @@
 
 	<hr>
 
-
-	<span style="vertical-align: middle !important" class="lang_en">Toggle between color and greyscale modes: </span>
-	<span style="vertical-align: middle !important" class="lang_es">Cambia entre los modos color y escala de grises: </span>
-	<span style="vertical-align: middle !important" class="lang_fr">Bascule entre les modes couleur et nuances de gris: </span>
+	<span style="vertical-align: middle !important" class="lang_en">Toggle between <small>COLOR</small>, <small>GREY</small>, <small>DAY</small> and <small>NIGHT</small> modes: </span>
+	<span style="vertical-align: middle !important" class="lang_es">Cambia entre los modos <small>COLOR</small>, <small>GRIS</small>, <small>DÍA</small> y <small>NOCHE</small>: </span>
+	<span style="vertical-align: middle !important" class="lang_fr">Bascule entre les modes <small>COULEUR</small>, <small>GRIS</small>, <small>JOUR</small> et <small>NUIT</small>: </span>
 	<div class="coloronoffswitch optionsswitch" id="pasteaction">
 
 		<input type="checkbox" name="coloronoffswitch" class="coloronoffswitch-checkbox" id="mycoloronoffswitch" >
@@ -177,7 +176,17 @@
 
 	</div>
 
-	<br>
+	<div class="naturalonoffswitch optionsswitch" id="pasteaction" title="">
+
+		<input type="checkbox" name="naturalonoffswitch" class="naturalonoffswitch-checkbox" id="mynaturalonoffswitch"  >
+		<label class="naturalonoffswitch-label" for="mynaturalonoffswitch" >
+				<span class="naturalonoffswitch-inner"></span>
+				<span class="naturalonoffswitch-switch"></span>
+		</label>
+
+	</div>
+
+	<hr>
 
 	<span class="lang_en_m">Confirmation at the close of the program: </span>
 	<span class="lang_es_m">Confirmación al cerrar el programa: </span>

@@ -1,5 +1,5 @@
 /*
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -2833,6 +2833,119 @@ function optionspreload() {
 					}
 
 				});
+
+
+
+				window.naturaltagstoo = localStorage["naturaltagstoo"];
+
+				if (window.naturaltagstoo == "not") {
+
+					// para que aparezca chequeado
+					$(".naturalonoffswitch-checkbox").addClass("check");
+					//$(".naturalonoffswitch-switch").css("background","#bbb");
+
+				}
+
+
+				$(".naturalonoffswitch-inner, .naturalonoffswitch-switch").bind('click', function() {
+
+					if(window.naturaltagstoo == "yes") {
+
+						window.naturaltagstoo = "not";
+						$(".naturalonoffswitch-checkbox").addClass("check");
+						//$(".naturalonoffswitch-switch").css("background","#bbb");
+
+						// hay que definir cada vez que se añade
+						var ls = document.createElement('link');
+						ls.rel="stylesheet";
+						ls.href= "css/inv-main_menu.css";
+						window.top.$('head')[0].appendChild(ls);
+						var ls = document.createElement('link');
+						ls.rel="stylesheet";
+						ls.href= "css/inv-main.css";
+						window.$('head')[0].appendChild(ls);
+
+						if($(this)["0"].parentElement.parentElement.parentElement.parentElement.parentElement.children[1].children["dirview-wrapper"]){ //si es el explore (una manera de saberlo)
+							var ls = document.createElement('link');
+							ls.rel="stylesheet";
+							ls.href= "css/inv-main.css";
+							top.searcher.$('head')[0].appendChild(ls);
+
+							$(".fttags .tagticket").each(function() {
+
+								let color = $(this).css("color");
+								let bcolor = $(this).css("background-color");
+								$(this).css("color", bcolor);
+								$(this).css("background-color", color);
+
+							})
+
+						} else { //si es el searcher
+							var ls = document.createElement('link');
+							ls.rel="stylesheet";
+							ls.href= "css/inv-main.css";
+							top.explorer.$('head')[0].appendChild(ls);
+
+							top.explorer.$(".fttags .tagticket").each(function() {
+
+								let color = $(this).css("color");
+								let bcolor = $(this).css("background-color");
+								$(this).css("color", bcolor);
+								$(this).css("background-color", color);
+
+							})
+
+						}
+
+						localStorage["naturaltagstoo"] = window.naturaltagstoo;
+
+
+					} else if (window.naturaltagstoo == "not") {
+
+						window.naturaltagstoo = "yes";
+						$(".naturalonoffswitch-checkbox").removeClass("check");
+						//$(".coloronoffswitch-switch").css("background","linear-gradient(315deg,red,yellow,green)");
+
+						$('link[rel=stylesheet][href~="css/inv-main.css"]').remove();
+
+						window.top.$('link[rel=stylesheet][href~="css/inv-main_menu.css"]').remove();
+						window.$('link[rel=stylesheet][href~="css/inv-main.css"]').remove();
+						top.searcher.$('link[rel=stylesheet][href~="css/inv-main.css"]').remove();
+						top.explorer.$('link[rel=stylesheet][href~="css/inv-main.css"]').remove();
+
+						if($(this)["0"].parentElement.parentElement.parentElement.parentElement.parentElement.children[1].children["dirview-wrapper"]){ //si es el explore (una manera de saberlo)
+
+							$(".fttags .tagticket").each(function() {
+
+								let color = $(this).css("color");
+								let bcolor = $(this).css("background-color");
+								$(this).css("color", bcolor);
+								$(this).css("background-color", color);
+
+							})
+
+						} else { //si es el searcher
+
+							top.explorer.$(".fttags .tagticket").each(function() {
+
+								let color = $(this).css("color");
+								let bcolor = $(this).css("background-color");
+								$(this).css("color", bcolor);
+								$(this).css("background-color", color);
+
+							})
+
+						}
+
+						localStorage["naturaltagstoo"] = window.naturaltagstoo;
+
+					}
+
+				});
+
+
+
+
 
 				// un ajuste de estilo porque sino queda demasiado espacio hueco en la versión en ingles para windows
 				if (s.os.name == "windows") {

@@ -1,5 +1,5 @@
 /* 
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -64,6 +64,9 @@ div#filetree {
 #filetree ul li span:hover {
 
     background-color: #63B0C3;
+}
+.coloreado { 
+    background-color: #63B0C3
 }
 
 #filetree span {
@@ -148,3 +151,16 @@ div#filetree {
 .jqueryFileTree LI.directory { background: url(../img/icons/folders_16px/Glossy_Generic.png) left top no-repeat; }
 
 .jqueryFileTree LI.expanded { background: url(../img/icons/folders_16px/Glossy_Open.png) left top no-repeat; }
+
+
+/* Parpadeo mientras expande carpeta */
+
+.blink_me {
+  animation: blinker 0.55s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

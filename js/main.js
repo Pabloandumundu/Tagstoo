@@ -1,5 +1,5 @@
 /*
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -16,7 +16,7 @@
 * You should have received a copy of the GNU General Public License
 * along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var programversion = '1.12.8';
+var programversion = '1.13.0';
 
 var fs = window.top.fs;
 var Sniffr = window.top.Sniffr;
@@ -49,6 +49,8 @@ var leftcolumnslimit = "";
 
 var arraylocations = [];
 var arraylocationposition = "";
+
+var arraylocationscrolls = [];
 
 var selectedtagcolor = "";
 var selectedtagtext = "";
@@ -995,6 +997,17 @@ $(document).ready(function () {
 
 	}
 
+
+/*	invertcolors = true;
+
+	if (invertcolors == true) {
+		$("#locationinfo").css( "background-color", "black" );
+		$("#locationinfonotfixed").css( "background-color", "black" );
+
+	}*/
+
+
+
 }); //--fin onload
 
 
@@ -1230,6 +1243,19 @@ function iniciarfolderview() { // ejecuta readidrectory() tras inicializar la ba
 
 		}
 
+
+		// cuando esta seleccionado no natural tagstoo se pone invertido
+		window.naturaltagstoo = localStorage["naturaltagstoo"];
+
+		if (window.naturaltagstoo == "not") {
+
+		    var ls = document.createElement('link');
+		    ls.rel="stylesheet";
+		    ls.href= "css/inv-main.css";
+		    document.getElementsByTagName('head')[0].appendChild(ls);
+
+		}
+
 		//se añade la bd al listado de bd existentes
 		var requestdbnames = window.indexedDB.open("tagstoo_databaselist_1100", 1);
 	    requestdbnames.onerror = function(event) {
@@ -1361,6 +1387,18 @@ function previouslocation() {
 	var previouslocation = arraylocations[arraylocationposition-1];
 	if (previouslocation) {
 		previousornext = "previous";
+
+		var currentscroll = $("#dirview-wrapper").scrollTop();
+		var encontradoscroll = false;
+		for (i=0; i<arraylocationscrolls.length; i++) {
+			if (arraylocationscrolls[i][0] === dirtoexec) {
+				arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+				encontradoscroll = true;
+			}
+		}
+		if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
+
 		readDirectory(previouslocation);
 	}
 
@@ -1370,6 +1408,17 @@ function nextlocation() {
 	var nextlocation = arraylocations[arraylocationposition+1];
 	if (nextlocation) {
 		previousornext = "next";
+
+		var currentscroll = $("#dirview-wrapper").scrollTop();
+		var encontradoscroll = false;
+		for (i=0; i<arraylocationscrolls.length; i++) {
+			if (arraylocationscrolls[i][0] === dirtoexec) {
+				arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+				encontradoscroll = true;
+			}
+		}
+		if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
 		readDirectory(nextlocation);
 	}
 }
@@ -1480,6 +1529,17 @@ window.parent.$("#gotofolderselect").on('click', function() {
 	if (foldertogo != undefined) {
 
 		previousornext = "normal";
+
+		var currentscroll = $("#dirview-wrapper").scrollTop();
+		var encontradoscroll = false;
+		for (i=0; i<arraylocationscrolls.length; i++) {
+			if (arraylocationscrolls[i][0] === dirtoexec) {
+				arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+				encontradoscroll = true;
+			}
+		}
+		if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
 		readDirectory(foldertogo);
 	}
 	else {
@@ -2506,80 +2566,148 @@ function readDirectory (dirtoread) {
 		$("#copieron").removeClass("on");			
 
 
-		try {
+		//var readedElements = fs.readdirSync(dirtoread);
+		i=0;
+		window.t="";
 
-			var readedElements = fs.readdirSync(dirtoread);
-			window.t="";
+		window.rootdirectory = dirtoread.replace(driveunit,''); //quitamos la letra de la unidad (entre otras cosas sirve para meter datos en la base de datos).
 
-			window.rootdirectory = dirtoread.replace(driveunit,''); //quitamos la letra de la unidad (entre otras cosas sirve para meter datos en la base de datos).
+		if (rootdirectory=="\/") {
+			rootdirectory="";
+		}
 
-			if (rootdirectory=="\/") {
-				rootdirectory="";
-			}
+		rootdirectory =  rootdirectory.slice(0);
 
-			rootdirectory =  rootdirectory.slice(0);
+		window.dirtoexec = dirtoread;
 
-			window.dirtoexec = dirtoread;
+		var dirtoreadcheck = "";
+		var folderidtosearch = "";
+		var directoryelement = [];
 
-			var dirtoreadcheck = "";
-			var folderidtosearch = "";
-			var directoryelement = [];
+		var directorycontent = []; // en esta variable se meten archivos y directorios
+		window.directoryarchives = []; // en esta variable se meten los archivos
+		window.directoryfolders = []; // en esta variable se meten los directorios
 
-			var directorycontent = []; // en esta variable se meten archivos y directorios
-			window.directoryarchives = []; // en esta variable se meten los archivos
-			window.directoryfolders = []; // en esta variable se meten los directorios
+		switch(previousornext){
 
-			switch(previousornext){
+		    case "normal":
 
-			    case "normal":
+		        if (arraylocationposition < arraylocations.length -1) {
+					// borrar todas las entradas a partir de la posición
+					arraylocations.length = arraylocationposition + 1;
+				}
+				arraylocations.push(dirtoread);
+				arraylocationposition = arraylocations.length -1;
+				break;
 
-			        if (arraylocationposition < arraylocations.length -1) {
-						// borrar todas las entradas a partir de la posición
-						arraylocations.length = arraylocationposition + 1;
-					}
-					arraylocations.push(dirtoread);
-					arraylocationposition = arraylocations.length -1;
-					break;
+		    case "previous":
 
-			    case "previous":
+		        arraylocationposition = arraylocationposition - 1;
+		        break;
 
-			        arraylocationposition = arraylocationposition - 1;
-			        break;
+		    case "next":
 
-			    case "next":
+		        arraylocationposition = arraylocationposition + 1;
+		        break;
 
-			        arraylocationposition = arraylocationposition + 1;
-			        break;
+		    case "refresh":
 
-			    case "refresh":
+		        break;
 
-			        break;
+		    case "refreshundo":
 
-			    case "refreshundo":
+		        arraylocations.length = arraylocationposition;
+				arraylocations.push(dirtoread);
+				break;
 
-			        arraylocations.length = arraylocationposition;
-					arraylocations.push(dirtoread);
-					break;
+		}
 
-			}
+		var notdeletedvideoerror = "no";
+		var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
 
-			var notdeletedvideoerror = "no";
+		var AsyncArrayProcessor = function (inArray, inEntryProcessingFunction) {
+		   	var elemNum = 0;
+		   	var arrLen = inArray.length;
+		   	var ArrayIterator = function(){
+		      	inEntryProcessingFunction(inArray[elemNum]);
+		      	elemNum++;
+		      	if (elemNum < arrLen) setTimeout(ArrayIterator);
+		   	}
+		   	if (elemNum < arrLen) setTimeout(ArrayIterator);
+		}
+		var readedElements = fs.readdir(dirtoread, function(err, flist){
+		   	if (err) {
+
+		      	console.log('Error reading directory ' + dirtoread);
+		      	console.log(err);
+
+		      	$("#folderreadstatus").html("Can't access selected folder.");
+
+				switch(previousornext){
+
+				    case "normal":
+
+				        if (arraylocationposition < arraylocations.length -1) {
+							// borrar todas las entradas a partir de la posición
+							arraylocations.length = arraylocationposition + 1;
+						}
+						arraylocations.push(dirtoread);
+						arraylocationposition = arraylocations.length -1;
+						break;
+
+				    case "previous":
+
+				        arraylocationposition = arraylocationposition - 1;
+				        break;
+
+				    case "next":
+
+				        arraylocationposition = arraylocationposition + 1;
+				        break;
+
+				    case "refresh":
+
+				        break;
+
+				    case "refreshundo":
+
+				        arraylocations.length = arraylocationposition;
+						arraylocations.push(dirtoread);
+						break;
+
+				}
+
+		      	return;
+		   	}
+		
+		   	var ProcessDirectoryEntry = function(entry){
+
+		      	// This may be as complex as you may fit in a single event loop
+		      	// console.log('Processing a directory entry: ' + entry);			      	
+
+		   	}
+
+		   	AsyncArrayProcessor(flist, ProcessDirectoryEntry);
+		   	//console.log('.readdir() callback is finished, event loop continues...');
+		   	// console.log(flist)
+
 			var re = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
-			var iteratentimes = readedElements.length;
+			var iteratentimes = flist.length;
 			for (i = 0; i < iteratentimes; i++) {
 
-				var ext = re.exec(readedElements[i])[1];
+				var ext = re.exec(flist[i])[1];
 				if (!ext) {
 					ext="&nbsp;";
 				}
 
+				var arorfo = "i_am_an_archive";
 				statsofelement();
 
 				function statsofelement() {
 
 					try {
 
-						var stats = fs.statSync(dirtoread + "\/" + readedElements[i])
+						var stats = fs.statSync(dirtoread + "\/" + flist[i])
 
 						// obtener tamaño
 						var fileSize = stats["size"]
@@ -2610,6 +2738,10 @@ function readDirectory (dirtoread) {
 							directoryelement.sizeterm = "&nbsp;";
 							directoryelement.sizetodraw = "&nbsp;";
 
+						}						
+
+						if (stats.isDirectory()) {
+							arorfo = fs.readdirSync(dirtoread + "\/" + flist[i]).length;
 						}
 
 						// obtener última modificación
@@ -2630,31 +2762,20 @@ function readDirectory (dirtoread) {
 
 						console.log('An unaccesible file');
 						// console.log(err)
-						var lastfour = readedElements[i].substr(readedElements[i].length - 4);
+						var lastfour = flist[i].substr(flist[i].length - 4);
 						if(lastfour == ".mp4" || lastfour=="m4v" || lastfour=="webm" || lastfour==".ogv" ) {
 
 							notdeletedvideoerror="yes"
 						}
 
-						readedElements.splice(i, 1);
+						flist.splice(i, 1);
 						iteratentimes --;
 
 					}
 
 				}
 
-
-				// comprobar si es carpeta o archivo
-				var dirtoreadcheck = dirtoread + "\/" + readedElements[i];
-
-				try {
-					var arorfo = "i_am_an_archive";
-					arorfo = fs.readdirSync(dirtoreadcheck).length;
-
-				}
-				catch(exception) {};
-
-				directoryelement.name = "\/" + readedElements[i]
+				directoryelement.name = "\/" + flist[i]
 				directoryelement.ext = ext;
 				directoryelement.arorfo = arorfo;
 				directoryelement.id = ""; // se lo metemos después de separar carpetas y archivos (y estará oculto en la vista, de hecho no se utiliza pero se deja por si acaso en un futuro viene bien)
@@ -2679,6 +2800,8 @@ function readDirectory (dirtoread) {
 			var i = 0;
 			var ii = 0;
 			var iii = 0;
+
+
 
 			$.each(directorycontent, function(i) {
 
@@ -2982,49 +3105,12 @@ function readDirectory (dirtoread) {
 
 			}
 
-		}
-		catch (err) {
 
-			$("#folderreadstatus").html("Can't access selected folder.");
-
-			switch(previousornext){
-
-			    case "normal":
-
-			        if (arraylocationposition < arraylocations.length -1) {
-						// borrar todas las entradas a partir de la posición
-						arraylocations.length = arraylocationposition + 1;
-					}
-					arraylocations.push(dirtoread);
-					arraylocationposition = arraylocations.length -1;
-					break;
-
-			    case "previous":
-
-			        arraylocationposition = arraylocationposition - 1;
-			        break;
-
-			    case "next":
-
-			        arraylocationposition = arraylocationposition + 1;
-			        break;
-
-			    case "refresh":
-
-			        break;
-
-			    case "refreshundo":
-
-			        arraylocations.length = arraylocationposition;
-					arraylocations.push(dirtoread);
-					break;
-
-			}
-
-		}
+		})
 
 
 	}, 25);
+	
 
 }; //--- fin readdirectory
 
@@ -4083,7 +4169,35 @@ function drawDirectoryAfter() {
 	            at: "top+37"
 	        }
 	    });
-	}	
+	}
+
+
+
+	var prevloc = arraylocations[arraylocationposition-1];
+	if (prevloc == undefined) prevloc = "";
+	var nextloc = arraylocations[arraylocationposition+1];
+	if (nextloc == undefined) nextloc = "";
+
+	$(".previouslocation").attr("title", "");
+	$(".previouslocation").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_02 + "<br>" + prevloc,
+        position: {
+            my: "right top", 
+            at: "right-25"
+        }
+    });
+	$(".nextlocation").attr("title", "");
+	$(".nextlocation").tooltip({
+        disabled: !window.top.showtooltips,
+        show: {delay: 800},
+        content: ph_tt_03 + "<br>" + nextloc,
+        position: {
+            my: "left top", 
+            at: "left+25"
+        }
+    });	
 
 
 	// para mantener el tool seleccionado entre diferentes vistas
@@ -4100,6 +4214,20 @@ function drawDirectoryAfter() {
 		$("#dirview").css("height", "97%")
 	} else {
 		$("#directoryview").css("padding-bottom", "10px")
+
+	}
+
+
+	// Scroll inicialmente arriba
+	$("#dirview-wrapper").scrollTop(0);
+	// Si  hay scroll guardado para esta carpeta con el viewmode se recupera posición
+	for (i=0; i<arraylocationscrolls.length; i++) {
+
+		if (arraylocationscrolls[i][0] === dirtoexec && arraylocationscrolls[i][1] === viewmode) {
+			
+			$("#dirview-wrapper").scrollTop(arraylocationscrolls[i][2]);
+			break;
+		}
 
 	}
 
@@ -4446,6 +4574,9 @@ function elementstagsorder() {
 														tagsdelfolder[n].className += " verysmall " + cursor2.value.tagform;
 														tagsdelfolder[n].setAttribute("value", cursor2.value.tagid);
 														tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														if (window.naturaltagstoo == "not") {
+															tagsdelfolder[n].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+														}
 														tagsdelfolder[n].innerHTML = cursor2.value.tagtext;
 
 													}
@@ -5539,6 +5670,9 @@ function borrartag(tagaborrar) {
 												treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
 												treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
 												treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+												if (window.naturaltagstoo == "not") {
+													treeelementosdirectoriotags[u].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+												}
 												treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
 
 											}
@@ -7025,6 +7159,9 @@ function interactions() {
 														treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
 														treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
 														treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														if (window.naturaltagstoo == "not") {
+															treeelementosdirectoriotags[u].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+														}
 														treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
 
 													}
@@ -7177,6 +7314,9 @@ function interactions() {
 													treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
 													treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
 													treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+													if (window.naturaltagstoo == "not") {
+														treeelementosdirectoriotags[u].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+													}
 													treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
 
 												}
@@ -9513,17 +9653,26 @@ function interactions() {
 
 		if ($(elemento).hasClass("explofolder")) {
 
-			if (dirtoexec == driveunit + "\/") {
-				dirtoexec = driveunit;
-			}
-
 			// acceder a la carpeta
-
 			
 			var carpeta = $(elemento)["0"].attributes[1].nodeValue;
 			previousornext = "normal"
-			readDirectory(dirtoexec + carpeta);
+
+			var currentscroll = $("#dirview-wrapper").scrollTop();
+			var encontradoscroll = false;
+			for (i=0; i<arraylocationscrolls.length; i++) {
+				if (arraylocationscrolls[i][0] === dirtoexec) {
+					arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+					encontradoscroll = true;
+				}
+			}
+			if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
+			if (dirtoexec == driveunit + "\/") {
+				dirtoexec = driveunit;
+			}
 			
+			readDirectory(dirtoexec + carpeta);			
 
 		}
 
@@ -9538,10 +9687,33 @@ function interactions() {
 
 			if (directoryup.indexOf('\/') > -1) { // si la ruta ya tiene algún /
 				previousornext = "normal";
+
+				var currentscroll = $("#dirview-wrapper").scrollTop();
+				var encontradoscroll = false;
+				for (i=0; i<arraylocationscrolls.length; i++) {
+					if (arraylocationscrolls[i][0] === dirtoexec) {
+						arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+						encontradoscroll = true;
+					}
+				}
+				if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
 				readDirectory(directoryup);
+
 			} else { // si no, se le añade / al final (pues sera la carpeta raiz por ejemplo c: y necesita ser C:/)
 				directoryup = directoryup + "\/";
 				previousornext = "normal";
+
+				var currentscroll = $("#dirview-wrapper").scrollTop();
+				var encontradoscroll = false;
+				for (i=0; i<arraylocationscrolls.length; i++) {
+					if (arraylocationscrolls[i][0] === dirtoexec) {
+						arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+						encontradoscroll = true;
+					}
+				}
+				if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) }
+
 				readDirectory(directoryup);
 			}
 
@@ -9606,13 +9778,27 @@ function interactions() {
 
 			if ($(elemento).next().hasClass("explofolder")) {
 
-				if (dirtoexec == driveunit + "\/") {
-					dirtoexec = driveunit;
-				}
+				
 
 				// acceder a la carpeta
 				var carpeta = $(elemento)["0"].nextElementSibling.attributes[1].nodeValue;
 				previousornext = "normal"
+
+				var currentscroll = $("#dirview-wrapper").scrollTop();
+				var encontradoscroll = false;
+				for (i=0; i<arraylocationscrolls.length; i++) {
+					if (arraylocationscrolls[i][0] === dirtoexec) {
+						arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+						encontradoscroll = true;
+					}
+				}
+				if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
+
+				if (dirtoexec == driveunit + "\/") {
+					dirtoexec = driveunit;
+				}
+
 				readDirectory(dirtoexec + carpeta);
 
 			}
@@ -10265,7 +10451,10 @@ function activateeditname(item) {
 
 													treeelementosdirectoriotags[u].className = "tagticket verysmall " + cursor2.value.tagform;
 													treeelementosdirectoriotags[u].setAttribute("value", cursor2.value.tagid);
-													treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+													treeelementosdirectoriotags[u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";");
+													if (window.naturaltagstoo == "not") {
+															treeelementosdirectoriotags[u].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+														}
 													treeelementosdirectoriotags[u].innerHTML = cursor2.value.tagtext;
 
 												}
@@ -10655,6 +10844,18 @@ function drawfootertags() {
 		}
 
 	});
+
+/*	invertcolors = true;
+
+    if (invertcolors == true) {
+
+        $("<link/>", {
+            rel: "stylesheet",
+            type: "text/css",
+            href: "css/inv-main.css"
+        }).appendTo("head");
+
+    }*/
 
 }; // --fin drawfootertags()
 

@@ -1,0 +1,8 @@
+.tagticket, .footertagticket, .edittagticket, .fttags, .track, .colorInner, .b-lazy, .abigimage-bottomBox { /* El .track es del colorpicker */
+	filter: invert(100%) !important;
+}
+
+option {
+	color: white;
+	background-color: black;
+}

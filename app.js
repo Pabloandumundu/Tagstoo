@@ -8,11 +8,11 @@ let win
 
 function createWindow () {
 
-
-  // Crea la ventana del navegador
+// Crea la ventana del navegador
   win = new BrowserWindow({
     /*minWidth: 680, 
     minHeight: 220,*/
+    /*backgroundColor: "#fff",*/
     width: 680,
     height: 400,
     center: true,
@@ -23,6 +23,7 @@ function createWindow () {
       nodeIntegration: true
     }
   })
+
 
   // quita el menu de electron (si bien en la versión compilada ya no se ve)
   win.setMenu(null);
@@ -35,7 +36,7 @@ function createWindow () {
   }))
 
   // abre las herramientas de desarrollador
-/*  win.webContents.openDevTools({mode: 'detach'});*/
+  /*win.webContents.openDevTools({mode: 'detach'});*/
 
   // evento que se emite cuando la ventana se cierra
   win.on('closed', () => {

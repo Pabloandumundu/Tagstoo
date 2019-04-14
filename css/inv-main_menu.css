@@ -1,0 +1,8 @@
+html {
+	filter: invert(100%);
+	background: black;
+}
+option {
+	color: white;
+	background-color: black;
+}

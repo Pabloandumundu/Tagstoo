@@ -1,5 +1,5 @@
 /*
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -587,6 +587,7 @@ header h1 {
 	width: 75%;
 	overflow-y: auto;
 	user-select: none;
+	background-color: white;
 }
 
 #locationinfo > div {
@@ -730,6 +731,7 @@ header h1 {
 #filetree {
 	direction: ltr;
 	background: none;
+	min-height:100%;
 }
 
 
@@ -774,7 +776,6 @@ header h1 {
 	opacity: 0.8;
 	opacity: 1;
 }
-
 
 #directoryview .ui-selecting, #searchdirectoryview .ui-selecting {
 
@@ -2027,7 +2028,7 @@ header h1 {
 #popup.options {
 
 	display: initial;
-	top: 12%;
+	top: 11%;
 	left: 0;
 	right: 0;
 	margin-left: auto;
@@ -2260,6 +2261,7 @@ span.labele {
 }
 
 
+/* Switch color */
 
 .coloronoffswitch {
 
@@ -2335,6 +2337,88 @@ span.labele {
 	right: 0;
 }
 
+
+/* Switch invert */
+
+
+.naturalonoffswitch {
+
+	position: relative;
+	 width: 56px;
+	-webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+	display: inline-block;
+	margin-top: 11px; /* importante para que deje una altura mínima de la sección (que incluye tabs) en pantallas estrechas */
+	margin-bottom: 11px; /* importante para que deje una altura mínima de la sección (que incluye tabs) en pantallas estrechas */
+	margin-left: 5px;
+	vertical-align: middle;
+}
+
+.naturalonoffswitch-checkbox {
+
+	display: none;
+}
+
+.naturalonoffswitch-label {
+
+	display: block; overflow: hidden; cursor: pointer;
+	border: 2px solid #999999; border-radius: 20px;
+}
+
+.naturalonoffswitch-inner {
+
+	display: block; width: 200%; margin-left: -100%;
+	transition: margin 0.3s ease-in 0s;
+}
+
+.naturalonoffswitch-inner:before, .naturalonoffswitch-inner:after {
+
+	display: block; float: left; width: 50%; height: 20px; padding: 0; line-height: 20px;
+	font-size: 8px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+	box-sizing: border-box;
+}
+
+.naturalonoffswitch-inner:before {
+
+	content: "NIGHT";
+	padding-left: 7px;
+	/*background-color: rgb(249,225,201);*/
+	background-color: #ff9;
+	/*background-color: #ffe799;*/
+	color: #999;
+}
+
+.naturalonoffswitch-inner:after {
+
+	content: "DAY";
+	padding-right: 12px;
+	/*background-color: rgb(249,225,201); */
+	background-color: #ff9; 
+	/*background-color: #ffe799; */
+	color: #999;
+	text-align: right;
+}
+
+.naturalonoffswitch-switch {
+
+	display: block; width: 8px; margin: 6px;
+	background: radial-gradient(red, yellow, lightblue);
+	background: radial-gradient(lightred, lightblue, blue);
+	position: absolute; top: 0; bottom: 0;
+	right: 32px;
+	border: 2px solid #999999; border-radius: 20px;
+	transition: all 0.3s ease-in 0s;
+}
+
+.naturalonoffswitch-checkbox.check + .naturalonoffswitch-label .naturalonoffswitch-inner {
+
+	margin-left: 0;
+}
+.naturalonoffswitch-checkbox.check + .naturalonoffswitch-label .naturalonoffswitch-switch {
+
+	right: 0;
+}
+
+
 .noneyet {
 	font-family: monospace;
 	animation: blinker 2.25s linear infinite;
@@ -2349,7 +2433,7 @@ span.labele {
 /* popup options */
 
 .coloronoffswitch.optionsswitch {
-	margin: 0;
+	margin: 0 0 0 3px;
 	vertical-align: middle !important;
 }
 
@@ -2440,12 +2524,14 @@ span.labele {
 	width: 56px;
 }
 
+
 #launchenvoltorio{
 
 	position: relative;
 	display: inline-block;
 	flex: 1;
-	-webkit-flex: 1;	
+	-webkit-flex: 1;
+	margin-right: 50px; /* tras añadir segundo conmutador para que quede más centrado, en realidad son 61px */	
 }
 #launch {
 	

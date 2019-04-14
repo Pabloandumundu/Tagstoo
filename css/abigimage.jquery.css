@@ -1,5 +1,5 @@
 /* 
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -79,9 +79,13 @@
     transform: translate3d(0, 0, 0);
 }
 
-.abigimage-overlay-active {
+.abigimage-overlay-active, .abigimage-overlay-activeinvert {
     height: 100%;
     opacity: 1;
+}
+
+.abigimage-overlay-activeinvert {
+    filter: invert(100%) !important;
 }
 
 .abigimage-wrapper {
@@ -152,7 +156,7 @@
     opacity: 1;
 }
 
-.abigimage-img,
+.abigimage-img, .abigimage-imginvert,
 .abigimage-imgNext,
 .abigimage-imgPrev {
     position: absolute;
@@ -175,6 +179,13 @@
     right: 0;
     left: 0;
     cursor: pointer;
+}
+
+.abigimage-imginvert {
+    right: 0;
+    left: 0;
+    cursor: pointer;
+    filter: invert(100%) !important;
 }
 
 .abigimage-imgNext {
@@ -229,12 +240,16 @@
 .abigimage-filename:hover {
     opacity: 1;
 }
-.abigimage-bottomBox {
+.abigimage-bottomBox, .abigimage-bottomBoxInvert {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     height: 2.5em;
+}
+
+.abigimage-bottomBoxInvert {
+    filter: invert(100%) !important;
 }
 
 .abigimage-bottom {

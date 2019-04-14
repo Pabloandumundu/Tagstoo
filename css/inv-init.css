@@ -1,0 +1,10 @@
+html {
+	filter: invert(100%);
+}
+#initialbody {
+	background: black !important;
+}
+option {
+	color: white;
+	background-color: black;
+}

@@ -1,5 +1,5 @@
 /* 
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -31,6 +31,8 @@
 
 (function ($) {
 
+    window.naturaltagstoo = localStorage["naturaltagstoo"];
+
     var last,
         current,
         timer = 0,
@@ -51,6 +53,7 @@
         closeBtn    = $('<div>').addClass('abigimage-closeBtn')   .appendTo(bottomBox),
         zoomOutBtn  = $('<div>').addClass('abigimage-zoomOutBtn') .appendTo(bottomBox),
         zoomInBtn   = $('<div>').addClass('abigimage-zoomInBtn')  .appendTo(bottomBox),
+        
         //spinner     = $('<div>').addClass('abigimage-spinner')    .appendTo(top),
         // bottom      = $('<div>').addClass('abigimage-bottom')     .appendTo(top),
         //under       = $('<div>').addClass('abigimage-under')      .appendTo(layout),
@@ -61,10 +64,14 @@
         //cssLayoutSlide = 'abigimage-layout-slide',
         cssLayoutZoom = 'abigimage-layout-zoom',
         cssOverlayActive = 'abigimage-overlay-active',
+        cssOverlayActiveInvert = 'abigimage-overlay-activeinvert',
+        cssbottomBoxInvert = "abigimage-bottomBoxInvert",
         cssPrevBtnHover = 'abigimage-prevBtn-hover',
         cssNextBtnHover = 'abigimage-nextBtn-hover',
         cssCloseBtnHover = 'abigimage-closeBtn-hover',
         //cssSpinnerActive = 'abigimage-spinner-active',
+
+
 
         boxe        = box[0],
         //bboxe       = bottomBox[0],
@@ -116,6 +123,9 @@
         bs = boxe.style,
         os = overlay[0].style;
 
+   
+
+
     $.fn.abigimage = function(options) {
         //console.log(this)
         var plugin = new ABigImage(this, options);        
@@ -138,8 +148,12 @@
                     }, autoslideshowtime * 1000);
                 }
 
+
+
+
             });
         });
+
     };
 
     $.fn.abigimage.defaults = {
@@ -184,7 +198,7 @@
         //under:       under,
 
         open: function(src, index, sel) {            
-            ((sel && sel._abigimage) || current || last).open(src, index);            
+            ((sel && sel._abigimage) || current || last).open(src, index); 
         },
         close: function(sel) {
             ((sel && sel._abigimage) || current || last).close();            
@@ -318,7 +332,9 @@
     }
 
     function ABigImage(elements, options) {
+
         $.extend(this, $.fn.abigimage.defaults, options);
+        
 
         /*this.elements    = elements;*/
         this.elements    = elements;
@@ -348,6 +364,9 @@
     }
 
     ABigImage.prototype.open = function(src, index) {
+
+
+        window.naturaltagstoo = localStorage["naturaltagstoo"];
         current = this;
 
         var currLink;
@@ -382,13 +401,29 @@
 
         fadeReset();
         //overscroll.addClass('abigimage-overscroll-active');
-        this.overlay.addClass(cssOverlayActive)
+
+        
+
+        if(window.naturaltagstoo == "yes") {
+
+            this.overlay.addClass(cssOverlayActive);
+
+
+        } else if(window.naturaltagstoo == "not") {
+
+            this.overlay.addClass(cssOverlayActiveInvert);
+            this.bottomBox.addClass(cssbottomBoxInvert);
+
+        }
+
             /*.removeClass('abigimage-overlay-fadeout')*/;
         this.layout.addClass(cssLayoutActive)
             //.removeClass(cssLayoutSlide)
             .removeClass(cssLayoutFadeout)
             .scrollTop(0);
         slideAnimate(0, 0, 1);
+
+        if(window.naturaltagstoo == "yes") {
 
         this.img = createImage('abigimage-img', src)
             .click(function(event) {
@@ -402,6 +437,22 @@
             })
             .one('load', function() { checkImagesLoaded(); });
 
+        } else if(window.naturaltagstoo == "not") {
+
+
+            this.img = createImage('abigimage-imginvert', src)
+            .click(function(event) {
+                prevent(event);
+                if (current) current.next();
+            })
+            .hover(function() {
+                nextBtn.addClass(cssNextBtnHover);
+            }, function() {
+                nextBtn.removeClass(cssNextBtnHover);
+            })
+            .one('load', function() { checkImagesLoaded(); });
+        }
+
         var nextElement = $(this.elements[this.nextIndex()]);
         this.imgNext = createImage('abigimage-imgNext', nextElement.data('href') || nextElement.attr('href'))
             .hide()
@@ -410,6 +461,9 @@
         this.imgPrev = createImage('abigimage-imgPrev', prevElement.data('href') || prevElement.attr('href'))
             .hide()
             .one('load', function() { checkImagesLoaded(); });
+
+
+
 
         //this.spinner.toggleClass(cssSpinnerActive, !this.img[0].complete);
         checkImagesLoaded(true);
@@ -433,7 +487,7 @@
 
         // a Fullscreen cuando se ve abre el visor
         var tofullscreen = $(this)["0"].wrapper["0"].parentNode.parentNode.parentNode
-        tofullscreen.webkitRequestFullScreen()
+        tofullscreen.webkitRequestFullScreen();                   
 
     };
 
@@ -486,7 +540,10 @@
 
         //fadeReset();
         overlay.removeClass(cssOverlayActive);
+        overlay.removeClass(cssOverlayActiveInvert);
         layout.removeClass(cssLayoutActive);
+        bottomBox.removeClass(cssbottomBoxInvert);        
+
 
         if (this.onclose) this.onclose.call(this, this.opened);
 

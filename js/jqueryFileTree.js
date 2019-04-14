@@ -1,5 +1,5 @@
 /*
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -69,11 +69,14 @@ window.s = "";
 s = new Sniffr();
 s.sniff(agent);
 
+
 if(jQuery) (function ($){
 
     // el conector transformado en una función, solo se utilizan los folders pero es la misma función de lectura de elementos que la utilizada en el  directoryview
 	function getdirlist (tdirtoread) {
 
+	 	
+		var r="";
 	 	var tdirectorycontent = []; // en esta variable se meten archivos y directorios
 	    var tdirectoryarchives = []; // en esta variable se meten los archivos
 	    var tdirectoryfolders = []; // en esta variable se meten los directorios
@@ -86,53 +89,95 @@ if(jQuery) (function ($){
 	    	tdirtoread = driveunit + "\/";
 	    }
 
-	    var treadedElements = fs.readdirSync(tdirtoread);
+	    var AsyncArrayProcessor = function (inArray, inEntryProcessingFunction) {
+			   	var elemNum = 0;
+			   	var arrLen = inArray.length;
+			   	var ArrayIterator = function(){
+			      	inEntryProcessingFunction(inArray[elemNum]);
+			      	elemNum++;
+			      	if (elemNum < arrLen) setTimeout(ArrayIterator);
+			   	}
+			   	if (elemNum < arrLen) setTimeout(ArrayIterator);
+			}
 
-	    var tre = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
-	    for (i = 0; i < treadedElements.length; i++) {
 
-	        var text = tre.exec(treadedElements[i])[1];
+	    let treehtml = () =>{
 
-	        // comprobar si es carpeta o archivo
-	        tdirtoreadcheck = tdirtoread + treadedElements[i] + "\/";
-	        try {
-	            var tarorfo = "i_am_an_archive";
-	            var tarorfo = fs.readdirSync(tdirtoreadcheck).length;
-	        }
-	        catch(exception) {};
+		    return new Promise((resolve, reject) => {
 
-	        tdirectoryelement.name = treadedElements[i]
-	        tdirectoryelement.ext = text;
-	        tdirectoryelement.arorfo = tarorfo;
+			    fs.readdir(tdirtoread, function(err, flist){
 
-	        copied_tdirectoryelement = jQuery.extend({}, tdirectoryelement); // necesario trabajar con una copia para actualizar el objeto tdirectorycontent
-	        tdirectorycontent[i] = copied_tdirectoryelement;
-    	};
+			    	var ProcessDirectoryEntry = function(entry){
 
-    	// separa carpetas y archivos en dos objetos (aquí solo son necesarias las carpetas)
-	    ii = 0;
-	    iii = 0;
-	    for (i in tdirectorycontent) {
-	        if (tdirectorycontent[i].arorfo != "i_am_an_archive" || tdirectorycontent[i].arorfo == undefined || tdirectorycontent[i].name == "Documents and Settings") {
-	            tdirectoryfolders[ii] = tdirectorycontent[i];
-	            ii++;
-	        } else {
-	            tdirectoryarchives[iii] = tdirectorycontent[i];
-	            iii++;
-	        }
-	    }
+				      	// This may be as complex as you may fit in a single event loop
+				      	// console.log('Processing a directory entry: ' + entry);			      	
 
-		r = '<ul class="jqueryFileTree" style="display: none;">';
-	   	try {
-	       	r = '<ul class="jqueryFileTree" style="display: none;">';
-			tdirectoryfolders.forEach(function(f){
-	            r += '<li class="directory collapsed"><span rel="\/' + f.name + '" rel2="\/' + f.name + '">' + f.name + '<div class="id"></div><div class="fttags"></div></span></li>';
-			});
-			r += '</ul>';
-		} catch(e) { };
+				   	}
+			    	AsyncArrayProcessor(flist, ProcessDirectoryEntry);
 
-		return r;
-	};
+
+				    var tre = /(?:\.([^.]+))?$/; // expresión regular para detectar si un string tiene extensión
+				    for (i = 0; i < flist.length; i++) {
+
+				        var text = tre.exec(flist[i])[1];
+
+				        // comprobar si es carpeta o archivo
+				        tdirtoreadcheck = tdirtoread + flist[i] + "\/";
+				        try {
+				            var tarorfo = "i_am_an_archive";
+				            var tarorfo = fs.readdirSync(tdirtoreadcheck).length;
+				        }
+				        catch(exception) {};
+
+				        tdirectoryelement.name = flist[i]
+				        tdirectoryelement.ext = text;
+				        tdirectoryelement.arorfo = tarorfo;
+
+				        copied_tdirectoryelement = jQuery.extend({}, tdirectoryelement); // necesario trabajar con una copia para actualizar el objeto tdirectorycontent
+				        tdirectorycontent[i] = copied_tdirectoryelement;
+			    	};
+
+			    	// separa carpetas y archivos en dos objetos (aquí solo son necesarias las carpetas)
+				    ii = 0;
+				    iii = 0;
+
+				    for (i in tdirectorycontent) {
+				        if (tdirectorycontent[i].arorfo != "i_am_an_archive" || tdirectorycontent[i].arorfo == undefined || tdirectorycontent[i].name == "Documents and Settings") {
+				            tdirectoryfolders[ii] = tdirectorycontent[i];
+				            ii++;
+				        } else {
+				            tdirectoryarchives[iii] = tdirectorycontent[i];
+				            iii++;
+				        }
+				    }
+
+				    function SortByNameAsc(a, b){
+					  var aName = a.name.toLowerCase();
+					  var bName = b.name.toLowerCase();
+					  return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+					}
+					tdirectoryfolders.sort(SortByNameAsc);
+
+					r = '<ul class="jqueryFileTree" style="display: none;">';
+				   	try {
+				       	r = '<ul class="jqueryFileTree" style="display: none;">';
+						tdirectoryfolders.forEach(function(f){
+				            r += '<li class="directory collapsed"><span rel="\/' + f.name + '" rel2="\/' + f.name + '">' + f.name + '<div class="id"></div><div class="fttags"></div></span></li>';
+						});
+						r += '</ul>';
+					} catch(e) { };
+
+					resolve(r);
+
+				});
+
+			}); //promise
+
+		}
+
+		return(treehtml());
+
+ 	};
 
 
 	$.extend($.fn, {
@@ -154,287 +199,325 @@ if(jQuery) (function ($){
 			if( o.multiFolder == undefined ) o.multiFolder = true;
 			if( o.loadMessage == undefined ) o.loadMessage = 'Loading...';
 
-			$(this).each( function() {
-				function showTree(c, carpeta) {
+			let iteracion = () => {
 
-					$(c).addClass('wait');
-					$(".jqueryFileTree.start").remove();
-					datadir = getdirlist(carpetas);
+				return new Promise((resolve, reject) => {
 
-					function display (datadir) {
+					$(this).each( function() {
+						async function showTree(c, carpeta) {
 
-						$(c).find('.start').html('');
-						$(c).removeClass('wait').append(datadir);
-						if( o.root == "t" ) $(c).find('UL:hidden').show(); else $(c).find('UL:hidden').slideDown({ duration: o.expandSpeed, easing: o.expandEasing });
-						bindTree(c);
-					};
+							$(c).addClass('wait');
+							$(".jqueryFileTree.start").remove();
+							datadir = await getdirlist(carpetas);
 
-					display(datadir);
+							function display (datadir) {
 
-				}
+								$(c).find('.start').html('');
+								$(c).removeClass('wait').append(datadir);
+								if( o.root == "t" ) $(c).find('UL:hidden').show(); else $(c).find('UL:hidden').slideDown({ duration: o.expandSpeed, easing: o.expandEasing });
+								bindTree(c);
+							};
 
-				function bindTree(t) {
+							display(datadir);
 
-					// folderEvent -> clic (Expandir y contraer arbol)
-					$(t).find('LI span').bind(o.folderEvent, function() {
-						if( $(this).parent().hasClass('directory') ) {
-							if( $(this).parent().hasClass('collapsed') ) {
+						}
 
-								// Expand
-								if( !o.multiFolder ) {
-									$(this).parent().parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
-									$(this).parent().parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
-								}
-								$(this).parent().find('UL').remove(); //cleanup
+						function bindTree(t) {
 
-								var expandedspans = $(this).parents('.directory').children('span'); // los span de la/las carpetas expandidas (la carpeta expandida, no los hijos)
-
-								carpetas = ""; // variable global usada para abrir subcarpetas en el árbol
-								carpetas2 = ""; // variable global para usarla con la base de datos y meter datos del atributo rel2
-
-									for (i=0; i<expandedspans.length; i++) {
-										var item = expandedspans[i].attributes["0"].value; // se toma el valor del atributo rel
-										carpetas2 = item + carpetas2; // se usa para la base de datos con los tags y meter datos del atributo rel2
-
-										// para abrir subcarpetas en el árbol:
-										item = item.substring(1); // le quitamos la / del principio
-										item = item + "\/" // se lo metemos al principio
-										carpetas = item + carpetas;
-										newrefresh = "no";
-									}
-
-								carpetas = treedirecorytolist + carpetas;
-
-								showTree( $(this).parent(), carpetas); // muestra carpetas descendientes
-
-								$(this).parent().removeClass('collapsed').addClass('expanded');
-
-								var subcarpetas = $(this).siblings("ul").children("li").children(); // subcarpetas
-
-								for (i=0; i<subcarpetas.length; i++) {
-
-									var relativosubcarpeta = subcarpetas[i].attributes["0"].value; // se toma el valor del rel (direc. relativa)
-									subcarpetas[i].setAttribute("rel2", carpetas2 + relativosubcarpeta); // se utiliza para crear el rel2 (direc. completa) en cada una de las subcarpetas
-
-								}
-
-
-								// Activar Press And Hold para cada uno de los spans añadidos
-								$(this).siblings("ul").children("li").children().pressAndHold({
-
-									holdTime: 200,
-									progressIndicatorRemoveDelay: 0,
-									progressIndicatorColor: "blue",
-									progressIndicatorOpacity: 1
-
-								});
-
-								$(this).siblings("ul").children("li").children().on('start.pressAndHold', function(event) {
-
-							 		if (window.colortagstoo=="not") {
-							 			$(this)["0"].children["0"].style.borderRight = "5px solid white";
-							 		} else {
-							 		$(this)["0"].children["0"].style.borderRight = "5px solid yellow";
-							 		}
-
-
-								});
-
-								$(this).siblings("ul").children("li").children().on('end.pressAndHold', function(event) {
-
-									$(this)["0"].children["0"].style.borderRight = "";
-
-								});
-
-								$(this).siblings("ul").children("li").children().on('complete.pressAndHold', function(event) {						
-
+							// folderEvent -> clic (Expandir y contraer arbol)
+							$(t).find('LI span').bind(o.folderEvent, function() {
+								if( $(this).parent().hasClass('directory') ) {
 									if( $(this).parent().hasClass('collapsed') ) {
-										$(this).parent().removeClass('collapsed').addClass('expanded');
-									} else if( $(this).parent().hasClass('expanded') ) {
-										$(this).parent().removeClass('expanded').addClass('collapsed');
-									}
-									var expandedspans = $(this).parents('.directory').children('span');
-									var carpetas = "";
-									for (i=0; i<expandedspans.length; i++) {
-										var item = expandedspans[i].attributes["0"].value;
-										item = item.substring(1); // le quitamos la / del principio
-										item = item + "\/"; // se lo metemos al principio
-										carpetas = item + carpetas;
-									}
+										$(this).addClass('coloreado');
+										$(this).addClass('blink_me');
+										// Expand
+										if( !o.multiFolder ) {
+											$(this).parent().parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
+											$(this).parent().parent().find('LI.directory').removeClass('expanded').addClass('collapsed');
+										}
+										$(this).parent().find('UL').remove(); //cleanup
 
-									carpetas = carpetas.slice(0,-1); // quitarle la barra del final
+										var expandedspans = $(this).parents('.directory').children('span'); // los span de la/las carpetas expandidas (la carpeta expandida, no los hijos)
 
-									// console.log(driveunit + "\/" + carpetas);
+										carpetas = ""; // variable global usada para abrir subcarpetas en el árbol
+										carpetas2 = ""; // variable global para usarla con la base de datos y meter datos del atributo rel2
 
-									window.previousornext = "normal";
-									readDirectory(driveunit + "\/" + carpetas);
+											for (i=0; i<expandedspans.length; i++) {
+												var item = expandedspans[i].attributes["0"].value; // se toma el valor del atributo rel
+												carpetas2 = item + carpetas2; // se usa para la base de datos con los tags y meter datos del atributo rel2
 
-								});
-
-
-								// Pintar tags para cada uno de los span añadidos
-								carpetas = carpetas.substring(1); // le quitamos la / inicial
-								subcarpetas = $(this).siblings("ul").children("li").children(); // los subcarpetas (spans)
-
-								var trans = db.transaction(["folders"], "readonly");
-								var objectStore = trans.objectStore("folders");
-								var req = objectStore.openCursor();
-
-								req.onerror = function(event) {
-									console.log("error: " + event);
-								};
-								req.onsuccess = function(event) {
-
-									var cursor = event.target.result;
-
-									if (cursor) {
-
-										$.each(subcarpetas, function(i) {
-
-											subcarpetarel2 = subcarpetas[i].getAttribute("rel2"); // el atributo rel2 de cada subcarpeta
-
-											if (cursor.value.folder == subcarpetarel2) { // si es igual a ruta completa de la subcarpeta
-
-												// metemos los tags (solo array) en el div tagas del span
-												subcarpetas[i].getElementsByClassName("fttags")[0].innerHTML = cursor.value.foldertags;
-
+												// para abrir subcarpetas en el árbol:
+												item = item.substring(1); // le quitamos la / del principio
+												item = item + "\/" // se lo metemos al principio
+												carpetas = item + carpetas;
+												newrefresh = "no";
 											}
 
-										});
+										carpetas = treedirecorytolist + carpetas;
 
-										cursor.continue();
-									}
+										showTree( $(this).parent(), carpetas).then(() => { // muestra carpetas descendientes
 
-								}
+										$(this).parent().removeClass('collapsed').addClass('expanded');
+										$(this).removeClass('blink_me');
+										$(this).removeClass('coloreado');
 
-								trans.oncomplete = function(e) {
+										var subcarpetas = $(this).siblings("ul").children("li").children(); // subcarpetas
 
-									var elementostree = [];
-									var elementostreetags = [];
-									var tagvalue = [];
-									var tagsdivs = [];
-									var tagticket = [];
+										for (i=0; i<subcarpetas.length; i++) {
 
-									// ahora se pintan los tags
-									// primero creamos divs independientes para cada tags (pero solo con el id)
-									var trans = db.transaction(["tags"], "readonly")
-									var objectStore = trans.objectStore("tags")
-
-									$.each(subcarpetas, function(i) {
-
-										elementostree[i] = subcarpetas[i].children[2];
-
-										tagsdivs[i]="";
-
-										if (elementostree[i].innerHTML!="") {
-
-											// separamos cada elemento del array (separados por coma) y los metemos en un objeto
-											tagticket[i] = elementostree[i].innerHTML.split(',');
-
-											// recorremos el objeto
-											for(var k = 0; k < tagticket[i].length; k += 1){
-
-												tagsdivs[i] += "<div class='tagticket' value='"+ tagticket[i][k] +"'> " + tagticket[i][k] +  "</div>" ;
-											};
-
-											elementostree[i].innerHTML = tagsdivs[i];
-
-
-											// ahora se pintarán los estilos de las etiquetas
-											elementostreetags[i] = elementostree[i].getElementsByClassName("tagticket");
-											$.each(elementostreetags[i], function(n) {
-
-												var req = objectStore.openCursor();
-
-												req.onerror = function(event) {
-													console.log("error: " + event);
-												};
-												req.onsuccess = function(event) {
-
-													var cursor = event.target.result;
-
-													if (cursor) {
-
-														if (cursor.value.tagid == elementostreetags[i][n].attributes[1].value) {
-
-															var color = "#" + cursor.value.tagcolor;
-															var complecolor = hexToComplimentary(color);
-
-															elementostreetags[i][n].className += " verysmall " + cursor.value.tagform;
-															elementostreetags[i][n].setAttribute("value", cursor.value.tagid);
-															elementostreetags[i][n].setAttribute("style", "background-color: #" + cursor.value.tagcolor + ";" + "color: " + complecolor + ";")
-															elementostreetags[i][n].innerHTML = cursor.value.tagtext;
-
-														}
-
-														cursor.continue();
-
-													}
-
-												};
-
-											});
+											var relativosubcarpeta = subcarpetas[i].attributes["0"].value; // se toma el valor del rel (direc. relativa)
+											subcarpetas[i].setAttribute("rel2", carpetas2 + relativosubcarpeta); // se utiliza para crear el rel2 (direc. completa) en cada una de las subcarpetas
 
 										}
 
-									});
 
-								}; // -- fin trans oncomplete
-								// -- fin pintar tags
+										// Activar Press And Hold para cada uno de los spans añadidos
+										$(this).siblings("ul").children("li").children().pressAndHold({
+
+											holdTime: 200,
+											progressIndicatorRemoveDelay: 0,
+											progressIndicatorColor: "blue",
+											progressIndicatorOpacity: 1
+
+										});
+
+										$(this).siblings("ul").children("li").children().on('start.pressAndHold', function(event) {
+
+									 		if (window.colortagstoo=="not") {
+									 			$(this)["0"].children["0"].style.borderRight = "5px solid white";
+									 		} else {
+									 		$(this)["0"].children["0"].style.borderRight = "5px solid yellow";
+									 		}
 
 
-								filetreeinteractions(); // activar interacciones para cada uno de los spans añadidos
+										});
 
-							// -- fin expandir (si estába colapsado)
-							} else { // colapsar si estába extendido
-								// Collapse
-								$(this).parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
-								$(this).parent().removeClass('expanded').addClass('collapsed');
-							}
+										$(this).siblings("ul").children("li").children().on('end.pressAndHold', function(event) {
+
+											$(this)["0"].children["0"].style.borderRight = "";
+
+										});
+
+										$(this).siblings("ul").children("li").children().on('complete.pressAndHold', function(event) {						
+
+											if( $(this).parent().hasClass('collapsed') ) {
+												$(this).parent().removeClass('collapsed').addClass('expanded');
+											} else if( $(this).parent().hasClass('expanded') ) {
+												$(this).parent().removeClass('expanded').addClass('collapsed');
+											}
+											var expandedspans = $(this).parents('.directory').children('span');
+											var carpetas = "";
+											for (i=0; i<expandedspans.length; i++) {
+												var item = expandedspans[i].attributes["0"].value;
+												item = item.substring(1); // le quitamos la / del principio
+												item = item + "\/"; // se lo metemos al principio
+												carpetas = item + carpetas;
+											}
+
+											carpetas = carpetas.slice(0,-1); // quitarle la barra del final
+
+											// console.log(driveunit + "\/" + carpetas);
+
+											window.previousornext = "normal";
+
+											var currentscroll = $("#dirview-wrapper").scrollTop();
+											var encontradoscroll = false;
+											for (i=0; i<arraylocationscrolls.length; i++) {
+												if (arraylocationscrolls[i][0] === dirtoexec) {
+													arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+													encontradoscroll = true;
+												}
+											}
+											if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
+											readDirectory(driveunit + "\/" + carpetas);
+
+										});
 
 
-						} else { //fin si es directorio, en la versión original del filetree se podían ver ficheros
+										// Pintar tags para cada uno de los span añadidos
+										carpetas = carpetas.substring(1); // le quitamos la / inicial
+										subcarpetas = $(this).siblings("ul").children("li").children(); // los subcarpetas (spans)
+
+										var trans = db.transaction(["folders"], "readonly");
+										var objectStore = trans.objectStore("folders");
+										var req = objectStore.openCursor();
+
+										req.onerror = function(event) {
+											console.log("error: " + event);
+										};
+										req.onsuccess = function(event) {
+
+											var cursor = event.target.result;
+
+											if (cursor) {
+
+												$.each(subcarpetas, function(i) {
+
+													subcarpetarel2 = subcarpetas[i].getAttribute("rel2"); // el atributo rel2 de cada subcarpeta
+
+													if (cursor.value.folder == subcarpetarel2) { // si es igual a ruta completa de la subcarpeta
+
+														// metemos los tags (solo array) en el div tagas del span
+														subcarpetas[i].getElementsByClassName("fttags")[0].innerHTML = cursor.value.foldertags;
+
+													}
+
+												});
+
+												cursor.continue();
+											}
+
+										}
+
+										trans.oncomplete = function(e) {
+
+											var elementostree = [];
+											var elementostreetags = [];
+											var tagvalue = [];
+											var tagsdivs = [];
+											var tagticket = [];
+
+											// ahora se pintan los tags
+											// primero creamos divs independientes para cada tags (pero solo con el id)
+											var trans = db.transaction(["tags"], "readonly")
+											var objectStore = trans.objectStore("tags")
+
+											$.each(subcarpetas, function(i) {
+
+												elementostree[i] = subcarpetas[i].children[2];
+
+												tagsdivs[i]="";
+
+												if (elementostree[i].innerHTML!="") {
+
+													// separamos cada elemento del array (separados por coma) y los metemos en un objeto
+													tagticket[i] = elementostree[i].innerHTML.split(',');
+
+													// recorremos el objeto
+													for(var k = 0; k < tagticket[i].length; k += 1){
+
+														tagsdivs[i] += "<div class='tagticket' value='"+ tagticket[i][k] +"'> " + tagticket[i][k] +  "</div>" ;
+													};
+
+													elementostree[i].innerHTML = tagsdivs[i];
+
+
+													// ahora se pintarán los estilos de las etiquetas
+													elementostreetags[i] = elementostree[i].getElementsByClassName("tagticket");
+													$.each(elementostreetags[i], function(n) {
+
+														var req = objectStore.openCursor();
+
+														req.onerror = function(event) {
+															console.log("error: " + event);
+														};
+														req.onsuccess = function(event) {
+
+															var cursor = event.target.result;
+
+															if (cursor) {
+
+																if (cursor.value.tagid == elementostreetags[i][n].attributes[1].value) {
+
+																	var color = "#" + cursor.value.tagcolor;
+																	var complecolor = hexToComplimentary(color);
+
+																	elementostreetags[i][n].className += " verysmall " + cursor.value.tagform;
+																	elementostreetags[i][n].setAttribute("value", cursor.value.tagid);
+																	elementostreetags[i][n].setAttribute("style", "background-color: #" + cursor.value.tagcolor + ";" + "color: " + complecolor + ";")
+																	if (window.naturaltagstoo == "not") {
+																		elementostreetags[i][n].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor.value.tagcolor + ";")
+																	}
+																	elementostreetags[i][n].innerHTML = cursor.value.tagtext;
+
+																}
+
+																cursor.continue();
+
+															}
+
+														};
+
+													});
+
+												}
+
+											});
+
+										}; // -- fin trans oncomplete
+										// -- fin pintar tags
+
+
+										filetreeinteractions(); // activar interacciones para cada uno de los spans añadidos
+										})
+
+									// -- fin expandir (si estába colapsado)
+									} else { // colapsar si estába extendido
+										// Collapse
+										$(this).parent().find('UL').slideUp({ duration: o.collapseSpeed, easing: o.collapseEasing });
+										$(this).parent().removeClass('expanded').addClass('collapsed');
+									}
+
+
+								} else { //fin si es directorio, en la versión original del filetree se podían ver ficheros
+								}
+
+								return false;
+
+							}); // --fin folderevent click
+
+							// folderEvent2 -> dblclick
+							$(t).find('LI span').bind(o.folderEvent2, function() {
+
+								if ($(this).hasClass("selected")){
+								 	$(this).removeClass("selected")
+								} else {
+									$("#filetree ul li span").removeClass("selected")
+								 	$(this).addClass("selected")
+								}
+
+							});
+
 						}
 
-						return false;
+						// Loading message
+						$(this).html('<ul class="jqueryFileTree start"><li class="wait">' + o.loadMessage + '<li></ul>');
+						// Get the initial file list
+						showTree( $(this), escape(o.root) );
 
-					}); // --fin folderevent click
+					}); // --fin each
 
-					// folderEvent2 -> dblclick
-					$(t).find('LI span').bind(o.folderEvent2, function() {
+				})
 
-						if ($(this).hasClass("selected")){
-						 	$(this).removeClass("selected")
-						} else {
-							$("#filetree ul li span").removeClass("selected")
-						 	$(this).addClass("selected")
-						}
+			}
 
-					});
+			iteracion(); // tenia intención de usar iteration().then() pero no consigo implementarlo correctamente
 
-				}
+			setTimeout(function(){
+		
+				pressandholdfiletree();
+				filetrerefreshtags(); // para cargar los tags por primera vez
+				filetreeinteractions();
 
-				// Loading message
-				$(this).html('<ul class="jqueryFileTree start"><li class="wait">' + o.loadMessage + '<li></ul>');
-				// Get the initial file list
-				showTree( $(this), escape(o.root) );
+				// para quitar la carpeta "Document and Setings" si la creara pues no es capaz de abrir desde aquí				
+				var recorrercarpetas = $("#filetree li span")			
+				
+				$.each(recorrercarpetas, function(i) {
 
-			}); // --fin each
+					if (recorrercarpetas[i].attributes["1"].value == "\/Documents and Settings" ) {
+						recorrercarpetas[i].parentElement.style.display = "none";
+					}
 
-			pressandholdfiletree(); // para activar el press and hold por primera vez una vez se ha cargado el filetree
-			filetrerefreshtags(); // para cargar los tags por primera vez
-			filetreeinteractions();
+				});
 
-			// para quitar la carpeta "Document and Setings" si la creara pues no es capaz de abrir desde aquí
-			var recorrercarpetas = $("#filetree li span")
-			$.each(recorrercarpetas, function(i) {
 
-				if (recorrercarpetas[i].attributes["1"].value == "\/Documents and Settings" ) {
-					recorrercarpetas[i].parentElement.style.display = "none";
-				}
+				
 
-			});
 
+
+			}, 100);
+			
 
 
 			// Función activar Press And Hold para filetree (para la primera vez que se carga)
@@ -484,6 +567,18 @@ if(jQuery) (function ($){
 					carpetas = carpetas.slice(0,-1); // quitarle la barra del final
 
 					window.previousornext = "normal";
+
+					var currentscroll = $("#dirview-wrapper").scrollTop();
+					var encontradoscroll = false;
+					for (i=0; i<arraylocationscrolls.length; i++) {
+						if (arraylocationscrolls[i][0] === dirtoexec) {
+							arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+							encontradoscroll = true;
+						}
+					}
+					if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
+
 					readDirectory(driveunit + "\/" + carpetas);
 
 				});
@@ -493,6 +588,7 @@ if(jQuery) (function ($){
 		}
 
 	});
+
 
 })(jQuery);
 
@@ -544,6 +640,17 @@ function filetrerefreshtags() {
 		);
 	}
 	$('.treeviewinfo').on('click', function() {
+
+		var currentscroll = $("#dirview-wrapper").scrollTop();
+		var encontradoscroll = false;
+		for (i=0; i<arraylocationscrolls.length; i++) {
+			if (arraylocationscrolls[i][0] === dirtoexec) {
+				arraylocationscrolls[i] = [dirtoexec, viewmode, currentscroll];
+				encontradoscroll = true;
+			}
+		}
+		if (!encontradoscroll) { arraylocationscrolls.push([dirtoexec, viewmode, currentscroll]) };
+
 		readDirectory(driveunit + "\/")
 	});
 
@@ -706,6 +813,10 @@ function filetrerefreshtags() {
 						elementostreetags[i].className = "tagticket verysmall " + cursor.value.tagform;
 						elementostreetags[i].setAttribute("value", cursor.value.tagid);
 						elementostreetags[i].setAttribute("style", "background-color: #" + cursor.value.tagcolor + ";" + "color: " + complecolor + ";")
+    					if (window.naturaltagstoo == "not") {
+							elementostreetags[i].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor.value.tagcolor + ";")
+						}
+
 						elementostreetags[i].innerHTML = cursor.value.tagtext;
 
 					}
@@ -717,6 +828,19 @@ function filetrerefreshtags() {
 			};
 
 		});
+
+
+		// cuando esta seleccionado no natural tagstoo se pone invertido
+		//window.naturaltagstoo = localStorage["naturaltagstoo"];
+
+		if (window.naturaltagstoo == "not") {
+
+		    var ls = document.createElement('link');
+		    ls.rel="stylesheet";
+		    ls.href= "css/inv-main.css";
+		    document.getElementsByTagName('head')[0].appendChild(ls);
+
+		}
 
 	};
 

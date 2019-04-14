@@ -209,7 +209,7 @@ input[type="radio"]:checked + label span.radio::after {
 	filter: grayscale(85%);
 }
 
-#popup .coloronoffswitch {
+#popup .coloronoffswitch, #popup .naturalonoffswitch {
 	filter: grayscale(85%);
 }
 

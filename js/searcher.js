@@ -1,5 +1,5 @@
 /*
-* Copyright 2017-2018, Pablo Andueza pabloandumundu@gmail.com
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
 
 * This file is part of Tagstoo.
 
@@ -1031,6 +1031,18 @@ $(document).ready(function () {
 	    var ls = document.createElement('link');
 	    ls.rel="stylesheet";
 	    ls.href= "css/version_grey.css";
+	    document.getElementsByTagName('head')[0].appendChild(ls);
+
+	}
+
+	// cuando esta seleccionado no natural tagstoo se pone invertido
+	window.naturaltagstoo = localStorage["naturaltagstoo"];
+
+	if (window.naturaltagstoo == "not") {
+
+	    var ls = document.createElement('link');
+	    ls.rel="stylesheet";
+	    ls.href= "css/inv-main.css";
 	    document.getElementsByTagName('head')[0].appendChild(ls);
 
 	}
