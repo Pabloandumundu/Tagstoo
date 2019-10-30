@@ -197,6 +197,13 @@ function popup (popupclass, data) {
 			$("#toppopupbackground", window.parent.document).addClass("display");
 			break;
 
+		case "selectcopyormove":
+			$("#popup").load( "popups/popup-selectcopyormove.html" );
+			$("#popup").addClass("selectcopyormove");
+			$("#popupbackground").addClass("display");
+			$("#toppopupbackground", window.parent.document).addClass("display");
+			break;
+
 		case "selectfolderactionnotag":
 			$("#popup").load( "popups/popup-selectfolderactionnotag.html" );
 			$("#popup").addClass("selectfolderactionnotag");
@@ -294,6 +301,16 @@ function saveoptions() {
 		localStorage["asktagsubeleents"] = "yes";
 	}
 
+	// mostrar numero de elementos en subcarpetas
+	if($("#showsubfoldelem").is(":checked")) {
+		localStorage["showsubfoldelem"] = "no";
+		top.explorer.showsubfoldelem = "no";
+	} else {
+		localStorage["showsubfoldelem"] = "yes";
+		top.explorer.showsubfoldelem = "yes";
+	}
+
+
 	if($("#asksearchforupdates").is(":checked")) {
 		localStorage["searchforupdates"] = "yes";
 	} else {
@@ -350,6 +367,7 @@ function cerrar() {
 	$("#popup").removeClass("newtag");
 	$("#popup").removeClass("edittag");
 	$("#popup").removeClass("selectfoldersearch");
+	$("#popup").removeClass("selectcopyormove");
 	$("#popup").removeClass("selectfolderactionnotag");
 	$("#popup").removeClass("selectfolderactiontag");
 	$("#popup").removeClass("listchoose");
@@ -2036,6 +2054,13 @@ function optionspreload() {
 					$('#asktagsubelements').prop('checked', true);
 				}
 
+				if(localStorage["showsubfoldelem"]=="yes"){
+					$('#showsubfoldelem').prop('checked', false);
+				} else {
+					$('#showsubfoldelem').prop('checked', true);
+				}
+
+
 				if(localStorage["searchforupdates"]=="yes"){
 					$('#asksearchforupdates').prop('checked', true);
 				} else {
@@ -2582,21 +2607,27 @@ function optionspreload() {
 														} else {
 															console.log("data cleared");
 
-															idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
+															idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { 
+																if (!err) {
 
-															alertify.alert(ph_p_alr_14, function(){
+																	console.log("Imported data successfully");
+																	alertify.alert(ph_p_alr_14, function(){
 
-																// si es el database actualmente en uso recarga tagstoo
-																if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) {
-																	setTimeout(function(){
-																		saveoptions();
-																		cerrar();
-																		restarttagstoo();
-																	}, 1000);
+																		// si es el database actualmente en uso recarga tagstoo
+																		if ($('#selecteddb').html() == localStorage["currentlydatabaseused"]) {
+																			setTimeout(function(){
+																				saveoptions();
+																				cerrar();
+																				restarttagstoo();
+																			}, 1000);
 
+																		}
+
+																	});
 																}
 
-															});
+
+															});															
 
 														}
 

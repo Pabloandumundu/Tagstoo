@@ -649,7 +649,10 @@ $(document).ready(function () {
 
 												tagsdelfolder[n].className += " verysmall " + cursor2.value.tagform;
 												tagsdelfolder[n].setAttribute("value", cursor2.value.tagid);
-												tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+												tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";");
+												if (window.naturaltagstoo == "not") {
+													tagsdelfolder[n].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+												}
 												tagsdelfolder[n].innerHTML = cursor2.value.tagtext;
 
 											}
@@ -804,7 +807,10 @@ $(document).ready(function () {
 
 												tagsdelfolder[n].className += " verysmall " + cursor2.value.tagform;
 												tagsdelfolder[n].setAttribute("value", cursor2.value.tagid);
-												tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+												tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";");
+												if (window.naturaltagstoo == "not") {
+													tagsdelfolder[n].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+												}
 												tagsdelfolder[n].innerHTML = cursor2.value.tagtext;
 
 											}
@@ -1564,20 +1570,25 @@ $(document).ready(function () {
 										carraydetags = carraydetagsorig.toString() // de array a string
 
 										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
-										// $.each (directoryfolders, function(drf){										
+										// $.each (directoryfolders, function(drf){
+										if (typeof directoryfolders !== 'undefined'){										
 											if (directoryfolders[i].name  == carpeta){
 												directoryfolders[i].tagsid = carraydetags;						
 											}
+										}
 										//});
 
 										elementtagsinview[0].setAttribute("value", carraydetags);
 
 										// se cambian los tags del elemento del array de elementos (para no tener que recargar la carpeta si se cambia viewmode o order)
+										if (typeof directoryfolders !== 'undefined'){	
 										$.each (directoryfolders, function(drf){										
 											if (directoryfolders[drf].name  == undo.taggfold.folder){
 												directoryfolders[drf].tagsid = carraydetags;						
 											}
 										});
+										}
+
 							
 										// y ahora redibujamos los tags..										
 										carraydetags = carraydetags.split(','); //volvemos a convertirlo en array
@@ -1684,7 +1695,10 @@ $(document).ready(function () {
 
 													tagsdelfolder[n].className += " verysmall " + cursor2.value.tagform;
 													tagsdelfolder[n].setAttribute("value", cursor2.value.tagid);
-													tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+													tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";");
+													if (window.naturaltagstoo == "not") {
+														tagsdelfolder[n].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+													}
 													tagsdelfolder[n].innerHTML = cursor2.value.tagtext;
 
 												}
@@ -2041,7 +2055,10 @@ $(document).ready(function () {
 
 														treeelementosdirectoriotags[i][u].className += " verysmall " + cursor2.value.tagform;
 														treeelementosdirectoriotags[i][u].setAttribute("value", cursor2.value.tagid);
-														treeelementosdirectoriotags[i][u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+														treeelementosdirectoriotags[i][u].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";");
+														if (window.naturaltagstoo == "not") {
+															treeelementosdirectoriotags[i][u].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+														}
 														treeelementosdirectoriotags[i][u].innerHTML = cursor2.value.tagtext;
 
 													}
@@ -2640,7 +2657,10 @@ $(document).ready(function () {
 
 													tagsdelfolder[n].className += " verysmall " + cursor2.value.tagform;
 													tagsdelfolder[n].setAttribute("value", cursor2.value.tagid);
-													tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";")
+													tagsdelfolder[n].setAttribute("style", "background-color: #" + cursor2.value.tagcolor + ";" + "color: " + complecolor + ";");
+													if (window.naturaltagstoo == "not") {
+														tagsdelfolder[n].setAttribute("style", "background-color: " + complecolor + ";" + "color: #" + cursor2.value.tagcolor + ";")
+													}
 													tagsdelfolder[n].innerHTML = cursor2.value.tagtext;
 
 												}

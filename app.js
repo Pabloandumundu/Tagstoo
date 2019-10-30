@@ -4,7 +4,7 @@ const url = require('url')
 
 // Hay que guardar una referencia global el objeto window, porque sino la ventana 
 // se cerrará cuando el garbage collector quite esa referencia
-let win
+let win;
 
 function createWindow () {
 
@@ -36,7 +36,7 @@ function createWindow () {
   }))
 
   // abre las herramientas de desarrollador
-  /*win.webContents.openDevTools({mode: 'detach'});*/
+/*  win.webContents.openDevTools({mode: 'detach'});*/
 
   // evento que se emite cuando la ventana se cierra
   win.on('closed', () => {

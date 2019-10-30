@@ -25,9 +25,17 @@ header {
 
 }
 
-/* las imagenes de carpetas */
+/* las imagenes de carpetas y otros */
 #directoryview .folder img, #searchdirectoryview .folder img, .nuevofolder {
 	filter: grayscale(85%) brightness(104%);
+}
+
+.directoryonhover {
+	filter: grayscale(85%) brightness(80%) !important;
+}
+
+.filetreespanhover {
+	filter: grayscale(100%) brightness(109%) !important;
 }
 
 /* el separador de las columnas */

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<!--
+* Copyright 2017-2019, Pablo Andueza pabloandumundu@gmail.com
+
+* This file is part of Tagstoo.
+
+* Tagstoo is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* Tagstoo is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+
+* You should have received a copy of the GNU General Public License
+* along with Tagstoo.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Tag folder</title>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+	        language = localStorage["language"];
+
+			if (language == 'EN') {
+				$(".lang_en").css("display", "inline-block");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "none");
+				} else if (language =='ES') {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "inline-block");
+				$(".lang_fr").css("display", "none");		
+			} else if (language == "FR") {
+				$(".lang_en").css("display", "none");
+				$(".lang_es").css("display", "none");
+				$(".lang_fr").css("display", "inline-block");					
+			}			
+
+		});
+	</script>
+
+</head>
+<body>
+
+	<div id="popuptitle">
+		<span class="lang_en">COPY OR MOVE ELEMENTS?</span>
+		<span class="lang_es">¿COPIAR O MOVER ELEMENTOS?</span>
+		<span class="lang_fr">COPIER OU DÉPLACER ÉLÉMENTS?</span>
+	</div><br>
+
+	<hr>
+
+	<a class="medium button blue" onclick="window.top.pasteaction='copy'; cerrar()">
+		<span class="lang_en"><i class="icon ion-ios-browsers-outline"></i> Copy elements</span>
+		<span class="lang_es"><i class="icon ion-ios-browsers-outline"></i> Copiar elementos</span>
+		<span class="lang_fr"><i class="icon ion-ios-browsers-outline"></i> Copier elements</span>
+	</a>
+
+	<label><em>
+		<span class="lang_en">Copy the elements within the folder.</span>
+		<span class="lang_es">Copiar los elementos dentro de la carpeta.</span>
+		<span class="lang_fr">Copier des éléments dans l'intérieur dossier.</span>
+	</em></label><br>
+
+	<a class="medium button blue" onclick="window.top.pasteaction='move'; cerrar()">
+		<span class="lang_en"><i class="icon ion-android-boat"></i> Move elements</span>
+		<span class="lang_es"><i class="icon ion-android-boat"></i> Mover elementos</span>
+		<span class="lang_fr"><i class="icon ion-android-boat"></i> Déplacer elements</span>
+	</a>
+
+	<label><em>
+		<span class="lang_en">Move the elements within the folder.</span>
+		<span class="lang_es">Mover los elementos dentro de la carpeta.</span>
+		<span class="lang_fr">Déplacer des éléments dans l'intérieur dossier.</span>
+	</em></label><br>	
+
+	<a class="medium button orange" onclick="window.top.pasteaction=''; cerrar()">
+		<span class="lang_en"><i class="icon ion-close"></i> Cancel</span>
+		<span class="lang_es"><i class="icon ion-close"></i> Cancelar</span>
+		<span class="lang_fr"><i class="icon ion-close"></i> Annuler</span>
+	</a>
+	<label><em>
+		<span class="lang_en">Cancel and do nothing.</span>
+		<span class="lang_es">Cancelar y no hacer nada.</span>
+		<span class="lang_fr">Annuler et ne rien faire.</span>
+	</em></label>
+	
+</body>
+</html>

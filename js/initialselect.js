@@ -943,9 +943,16 @@ $(document).ready(function() {
                               } else {
                                 console.log("data cleared");
 
-                                idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { }); // no meto el código dentro porque desafortunadamente no funciona. Sigue el código a continuación y doy por hecho que ha escrito bien.
+                                idbExportImport.importFromJsonString(tooverwritedb, data, function(err2) { 
 
-                                alertify.alert(ph_alr_07);
+                                  if (!err) {
+
+                                    console.log("Imported data successfully");
+                                    alertify.alert(ph_alr_07);
+
+                                  }
+
+                                });                                 
 
                               }
 

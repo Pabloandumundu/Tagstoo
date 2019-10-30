@@ -31,6 +31,7 @@ window.idbExportImport = require("indexeddb-export-import"); // utilizado en pop
 window.shell = require('electron').shell;
 window.remote = require('electron').remote; // utilizado en popups.js
 window.CurrentWindow = require('electron').remote.getCurrentWindow(); // utilizado en main.js, searcher.js
+window.getSize = require('get-folder-size');
 
 //window.rec_jquery = require("jquery"); // utilizado en jquery.tinycolorpicker.js
 

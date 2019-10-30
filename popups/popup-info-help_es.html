@@ -130,13 +130,10 @@
 		&nbsp;<a href="#2_1">2.1. El Explorador</a><br>
 		&nbsp;&nbsp;<a href="#2_1_1">2.1.1. Acceso a carpetas y visualización/ejecución de archivos</a><br>
 		&nbsp;&nbsp;<a href="#2_1_2">2.1.2. Selección de modo de visualización y orden</a><br>
-		&nbsp;&nbsp;<a href="#2_1_3">2.1.3. Selección de archivos y carpetas</a><br>
-		&nbsp;&nbsp;<a href="#2_1_4">2.1.4. Copiar y mover archivos y carpetas</a><br>
-		&nbsp;&nbsp;<a href="#2_1_5">2.1.5. Borrar</a><br>
-		&nbsp;&nbsp;<a href="#2_1_6">2.1.6. Renombrar</a><br>
-		&nbsp;&nbsp;<a href="#2_1_7">2.1.7. Deshacer</a><br>
-		&nbsp;&nbsp;<a href="#2_1_8">2.1.8. Acceso rápido a carpetas</a><br>
-		&nbsp;&nbsp;<a href="#2_1_9">2.1.9. Refrescar</a><br>
+		&nbsp;&nbsp;<a href="#2_1_3">2.1.3. Acciones del sistema de archivos (mover, copiar, renombrar, borrar)</a><br>
+		&nbsp;&nbsp;<a href="#2_1_4">2.1.4. Deshacer</a><br>
+		&nbsp;&nbsp;<a href="#2_1_5">2.1.5. Acceso rápido a carpetas</a><br>
+		&nbsp;&nbsp;<a href="#2_1_6">2.1.6. Refrescar</a><br>
 		&nbsp;<a href="#2_2">2.2. Etiquetas</a><br>
 		&nbsp;&nbsp;<a href="#2_2_1">2.2.1. Crear una nueva etiqueta</a><br>
 		&nbsp;&nbsp;<a href="#2_2_2">2.2.2. Editar/Suprimir etiqueta</a><br>
@@ -149,9 +146,7 @@
 		&nbsp;&nbsp;<a href="#2_3_3">2.3.3. Opciones de visualización del buscador</a><br>
 		&nbsp;&nbsp;<a href="#2_3_4">2.3.4. Acceso a carpetas y visualización o lanzamiento de archivos/programas desde el buscador</a><br>
 		&nbsp;&nbsp;<a href="#2_3_5">2.3.5. Etiquetado sobre los resultados de la búsqueda</a><br>
-		&nbsp;&nbsp;<a href="#2_3_6">2.3.6. Copiar y mover los resultados de la búsqueda</a><br>
-		&nbsp;&nbsp;<a href="#2_3_7">2.3.7. Borrar los resultados de la búsqueda</a><br>
-		&nbsp;&nbsp;<a href="#2_3_8">2.3.8. Renombrar los resultados de la búsqueda</a><br>
+		&nbsp;&nbsp;<a href="#2_3_6">2.3.6. Acciones del sistema de archivos sobre los elementos buscados</a><br>
 		<a href="#3">3. Gestión de Bases de Datos y Opciones</a><br>
 		&nbsp;<a href="#3_1">3.1. Importar/exportar bases de datos</a><br>
 		&nbsp;<a href="#3_2">3.2. Otras opciones</a><br>
@@ -168,8 +163,8 @@
 	<p>También están disponibles dos conmutadores para combinar los modos de color o "escala de grises" con los modos de día o noche, además de un selector de idioma, en esta ventana de opciones inicial.</p>
 	<p>Más información sobre importación/exportación y bases de datos en la ayuda sobre opciones generales.</p>
 
-	<a name="importantnote"></a>
-	<p><b><i style="color:#333">Nota importante:</i></b> <em>Cuando haya utilizado alguna versión del programa y lo haya actualizado a una versión más reciente, no hay ningún problema, pero, si actualizó la versión y más tarde se utiliza la versión más antigua es posible (no siempre) que la lista de base de datos desaparezca. Debido a esto, se recomienda exportar la base de datos a un archivo de vez en cuando, ya que la importación de datos desde el archivo siempre funciona bien independientemente de la versión.</em></p>
+	<!-- <a name="importantnote"></a>
+	<p><b><i style="color:#333">Nota importante:</i></b> <em>Cuando haya utilizado alguna versión del programa y lo haya actualizado a una versión más reciente, no hay ningún problema, pero, si actualizó la versión y más tarde se utiliza la versión más antigua es posible (no siempre) que la lista de base de datos desaparezca. Debido a esto, se recomienda exportar la base de datos a un archivo de vez en cuando, ya que la importación de datos desde el archivo siempre funciona bien independientemente de la versión.</em></p> -->
 
 	<a name="2"></a><h3>2. Interfaz general del programa</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 	<p>Después de ejecutar el programa y pulsar ‘¡Iniciar!’ En las opciones iniciales de base de datos, se inicia la interfaz general del programa.</p>
@@ -209,38 +204,29 @@
 	<p>Los otros modos de visualización, ‘2’ a ‘9’, presentan los elementos como tarjetas de diferentes tamaños desde los más pequeños ‘2’ a los más grandes ‘9’.</p>
 	<p>Cualquiera de los modos de visualización seleccionados puede mostrar elementos ordenados en el modo que se puede seleccionar en el selector ‘Ordenar por:’ en la parte superior, por defecto los elementos se ordenan inicialmente por nombre en orden ascendente (A-Z) las otras opciones son; por nombre descendiente (Z-A), por extensión (A-Z) y (Z-A), tamaño de pequeño a grande y de grande a pequeño , último modificado de nuevo a más antiguo y de más antiguo a más nuevo, número de tags de N a 0 y de 0 a N, y de manera aleatoria.</p>
 
-	<a name="2_1_3"></a><h3>2.1.3. Selección de archivos y carpetas</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<a name="2_1_3"></a><h3>2.1.3. Acciones del sistema de archivos (mover, copiar, renombrar, borrar)</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 
-	<p>Esto se utiliza para aplicar, después, alguna acción del sistema de archivos (es decir, copiar, mover o eliminar) a los elementos que elija. En el panel derecho, utilice el ratón para seleccionar varios elementos o también puede seleccionar uno a uno o usar la tecla shift para seleccionar todos los elementos entre dos clics y combinar selecciones para elegir fácilmente lo que desea.</p>
+	<br><br>	
 
-	<a name="2_1_4"></a><h3>2.1.4. Copiar y mover archivos y carpetas</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<img class="capture" src="../img/help/cutcopy.png" alt="Contextual filesystem menu">
 
-	<p>Hay dos maneras de copiar y mover los elementos seleccionados, en ambas hay que tener en cuenta qué opción está seleccionada en el interruptor ‘COPIA/CORTA’ en la parte superior.</p>
+	<p>Las acciones habituales de cualquier sistema de archivos sobre archivos y carpeta, esto es, mover o copiar elementos, renombrarlos o borrarlos, están accesibles desde el menú contextual al hacer click derecho sobre el elemento o elementos (si hay varios seleccionados). También otras opciones están disponibles tal como ver tamaño de archivos o carpetas o ver el numero de subelementos en una carpeta.</p>
 
-	<img class="capture" src="../img/help/cutcopy_ES.png" alt="Interruptor Copia/Corta">
-
-	<p>La primera forma es arrastrar y soltar elementos del lado derecho a una carpeta en el lado izquierdo, copiará o moverá los archivos dependiendo de la opción seleccionada en el conmutador de la parte superior.</p>
-	<p>Otra forma de copiar o mover es seleccionar una carpeta en el lado izquierdo, haciendo doble clic en ella, y luego presionando el botón ‘PEGAR’ en la parte superior. Mueve o copia elementos seleccionados a la derecha, dependiendo de la opción seleccionada en el interruptor de la parte superior.</p>
-
-	<a name="2_1_5"></a><h3>2.1.5. Borrar</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
-	<p>Simplemente elija los elementos que desea eliminar en el panel derecho y presione el botón ‘BORRAR’ en la parte superior, tenga cuidado, no hay acción de deshacer para borrar archivo o carpetas (por seguridad hay una pregunta de confirmación cuando se presiona este botón).</p>
-
-	<a name="2_1_6"></a><h3>2.1.6. Renombrar</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
-	<p>Para cambiar el nombre de un archivo o carpeta, haga doble clic en el nombre del elemento seleccionado y escriba el nuevo nombre.</p>
-
-	<a name="2_1_7"></a><h3>2.1.7. Deshacer</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Las acciones de mover y copiar pueden realizarse además seleccionando y arrastrando el elemento o elementos seleccionados a la carpeta destino (posteriormente se preguntara si se quería mover o copiar).</p>
+	
+	<a name="2_1_4"></a><h3>2.1.4. Deshacer</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 	<p>Hay deshacer para la mayoría de las posibles acciones sobre los elementos, excepto para eliminar carpetas o archivos, es decir; mover o copiar archivos y carpetas, cambiar el nombre de un archivo o carpeta, agregar una etiqueta a un archivo, a una carpeta o a una carpeta y sus subelementos y eliminar una etiqueta del elemento.</p>
 	<p>Para deshacer la acción no deseada simplemente haga clic en el botón ‘DES.’ en la parte superior.</p>
 
-	<a name="2_1_8"></a><h3>2.1.8. Acceso rápido a carpetas</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<a name="2_1_5"></a><h3>2.1.5. Acceso rápido a carpetas</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 	<p>En cada base de datos aparte de la información sobre las etiquetas también se guardan los accesos rápidos a las rutas de las carpetas.</p>
 
-	<img class="capture" src="../img/help/fastaccess_ES.png" alt="Acceso rápido a carpetas">
+	<img class="capture" src="../img/help/fastaccess.png" alt="Acceso rápido a carpetas">
 
 	<p>Puede agregar una carpeta a esta lista ingresando en la carpeta deseada y haciendo clic en ‘Añadir Acceso Rápido’, así que ahora desde donde quiera que esté si selecciona la carpeta de la lista y hace clic en ‘Ir a selección’ se abrirá la carpeta en el explorador.</p>
 	<p>También puede eliminar la carpeta seleccionada de la lista haciendo clic en ‘Borrar selección’.</p>
 
-	<a name="2_1_9"></a><h3>2.1.9. Refrescar</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<a name="2_1_6"></a><h3>2.1.6. Refrescar</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 
 	<p>Hay un par de botones de actualización, uno para la vista de árbol a la izquierda y otro para la vista de directorio a la derecha, que actualizarán el contenido de sus respectivos ámbitos.</p>
 	<p>Esto es útil si por alguna razón la información no se visualiza correctamente o si no se actualiza (por ejemplo, si realiza un cambio en el sistema de archivos con un programa fuera de Tagstoo, y la carpeta afectada está abierta).</p>
@@ -327,17 +313,11 @@
 	<a name="2_3_5"></a><h3>2.3.5. Etiquetado sobre los resultados de la búsqueda</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 	<p>Puede agregar etiquetas o borrar etiquetas de los elementos buscados (y cambiar el orden de las etiquetas) igual que en el explorador.</p>
 
-	<a name="2_3_6"></a><h3>2.3.6. Copiar y mover los resultados de la búsqueda</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
-	<p>Para copiar o mover archivos y carpetas buscados, primero seleccione los elementos sobre los que desea actuar haciendo clic en ellos, luego chequee el conmutador copia/corta en la parte superior si está en su posición deseada; "corta" si desea mover elementos o "copia" si desea copiarlos. A continuación, pulse el botón ‘PEGAR’.</p>
-	<p>Se le preguntará si desea copiar / mover las etiquetas también. Por ejemplo, imagine que desea copiar los resultados de la búsqueda en un directorio o unidad aparte, para una presentación que no tiene nada que ver con este programa, en ese caso puede seleccionar no copiar etiquetas.</p>
+	<a name="2_3_6"></a><h3>2.3.6. Acciones del sistema de archivos sobre los elementos buscados</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
+	<p>Se pueden mover o copiar los elementos buscados, tras seleccionar la opción oportuna en el menú contextual del click derecho del ratón se le preguntará si desea copiar / mover las etiquetas también. Por ejemplo, imagine que desea copiar los resultados de la búsqueda en un directorio o unidad aparte, para una presentación que no tiene nada que ver con este programa, en ese caso puede seleccionar no copiar etiquetas.</p>
 	<p>Tanto en la acción de copia como en la de movimiento, en el caso de que elija copiar/mover las etiquetas también, debe seleccionar una carpeta que esté dentro de la unidad asociada a la base de datos en ese momento. Por otro lado, si elige no copiar/mover etiquetas, puede elegir cualquier carpeta o unidad disponible.</p>
 	<p>Probablemente, será un caso raro si se elige mover elementos sin etiquetas, pero tenga en cuenta que en este caso las etiquetas asociadas a esos elementos se perderán.</p>
-
-	<a name="2_3_7"></a><h3>2.3.7. Borrar los resultados de la búsqueda</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
-	<p>De la misma forma que en el explorardor: Simplemente elija los elementos que desea eliminar y pulse el botón ‘BORRAR’ en la parte superior, por seguridad hay una pregunta de confirmación cuando se pulsa este botón.</p>
-
-	<a name="2_3_8"></a><h3>2.3.8. Renombrar los resultados de la búsqueda</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
-	<p>Al igual que en el explorardor, puede cambiar el nombre de un archivo haciendo doble clic en él y escribiendo el nuevo. En este momento no es posible cambiar el nombre de las carpetas buscadas desde aquí (pero puede cambiarlas en el explorador).</p>
+	<p>Para renombrar o borrar elementos simplemente seleccione y elija la opción deseada en el menú contextual del click derecho del ratón.</p>
 
 	<a name="3"></a><h3>3. Gestión de Bases de Datos y Opciones</h3><a href="#index"><img src="../img/help/up-254090_1920.png" alt=""></a>
 	<p>Al hacer clic en el icono de opciones (la pieza de máquina azul dentada en la parte superior) aparecerá una ventana con opciones de base de datos y opciones generales.</p>
@@ -362,6 +342,7 @@
 	<p>&#8226; <span style="color:#363636">Mostrar tooltips (ayuda en línea)</span>; que por defecto está activo.</p>
 	<p>&#8226; <span style="color:#363636">Cargar etiquetas de demostración cuando se inicia una nueva base de datos</span>; que por defecto está activo, pero se recomienda que, cuando sepa acerca de la interfaz básica, desactive.</p>
 	<p>&#8226; <span style="color:#363636"><a name="tagsub"></a>Automáticamente no añadir etiquetas a subelementos de carpetas</span>; por defecto está desactivado, si está marcado cuando se agrega una etiqueta a una carpeta, el programa no preguntará si desea agregar la etiqueta a los subelementos de la carpeta y no agregará la etiqueta a los subelementos.</p>
+	<p>&#8226; <span style="color:#363636"><a name="tagsub"></a>No mostrar número de elementos de subcarpetas (cargas más rápidas)</span>; por defecto está desactivado, si está marcado el número de elementos en las subcarpetas no se mostrará y también se mostrarán íconos de carpetas genéricos, esto hace que los tiempos de carga de carpetas sean más rápidos.</p>
 	<p>&#8226; <span style="color:#363636">Vista previa de imágenes y epubs en Vista modo 1</span>; por defecto está desactivado, es porque las miniaturas son realmente muy pequeñas en este modo de visualización, pero para alguien puede ser de todos modos útil por lo que esta opción está disponible.</p>	
 	<p>&#8226; <span style="color:#363636">En el visor de imágenes cambia a la siguiente imagen cada X segundos</span>; se puede activar para cambiar automáticamente la imagen cada X segundos, a la siguiente, cuando el visor de imágenes se inicia con cualquier imagen.</p>
 

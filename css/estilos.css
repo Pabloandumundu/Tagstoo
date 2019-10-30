@@ -557,9 +557,8 @@ header h1 {
 #undo-wrap {
 	height: 50px;
 	padding-left: 10px;
-
 	border-left: 1px solid grey;
-	padding-right: 80px; /* para dejar espacio para el tooltip (mesnaje ayuda) */
+	padding-right: 85px; /* para dejar espacio para el tooltip (mesnaje ayuda) */
 }
 
 #undo-wrap > div {
@@ -796,6 +795,33 @@ header h1 {
 
 	background-color: #ffff46 !important; /* amarillo */
 }
+
+
+.pulseb, .pulseb2 {
+  	-webkit-animation: pulseb 1s infinite;
+    animation: pulseb 1s infinite;
+  	box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
+   	--color: #ef6eae;
+  	--hover: #ef8f6e;
+}
+
+.pulseb2 {
+  	box-shadow: 0 0 0 1em rgba(255, 255, 255, 0);
+}
+
+@-webkit-keyframes pulseb {
+  0% {
+    box-shadow: 0 0 0 0 var(--hover);
+  }
+}
+
+@keyframes pulseb {
+  0% {
+    box-shadow: 0 0 0 0 var(--hover);
+  }
+}
+
+
 
 
 .editing {
@@ -1914,6 +1940,7 @@ header h1 {
 
 	height: auto;
 	max-height: calc(100% - 160px);
+	max-height: calc(100% - 147px);
 	overflow-y: auto;
 
 	border: 1px dashed #444;
@@ -1999,6 +2026,22 @@ header h1 {
 	-webkit-box-shadow: inset 0px 0px 8px 0px #331a00;
 }
 
+#popup.selectcopyormove {
+
+	display: initial;
+	left: calc(50% - 150px);
+	top: 20%;
+	width: 320px;
+	-webkit-box-shadow: inset 0px 0px 8px 0px #331a00;
+	/* background-image: none;
+	background-color: #ddd; */
+}
+
+#popup.selectcopyormove a {
+	margin-bottom: 10px;
+	margin-right: 3px;
+}
+
 #popup.newtag {
 
 	display: initial;
@@ -2028,7 +2071,7 @@ header h1 {
 #popup.options {
 
 	display: initial;
-	top: 11%;
+	top: 8.5%; 
 	left: 0;
 	right: 0;
 	margin-left: auto;
@@ -2853,16 +2896,16 @@ span.labele {
 
 /* media quueries del menu superior para pantallas estrechas */
 
-@media (max-width: 1312px) {
+/* @media (max-width: 1312px) {
 
  #undo-wrap {
 
 	  padding-right: 7px;
   }
 
-};
+}; */
 
-@media (max-width: 1339px) { /* válido hasta 1313px */
+/* @media (max-width: 1339px) { válido hasta 1313px
 
 	.animatedtabs {
 
@@ -2903,4 +2946,4 @@ span.labele {
 		margin-right: 9px;
 	}
 
-};
+}; */
